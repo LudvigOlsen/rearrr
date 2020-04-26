@@ -1,0 +1,28 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+cache: packages
+
+matrix:
+  include:
+  - r: devel
+  - r: release
+    after_success:
+    - Rscript -e 'covr::codecov()'
+  - name: Strict Latin-1 locale
+    r: release
+    before_script:
+      - sudo locale-gen en_US
+      - export LC_ALL=en_US
+  - r: release
+    name: xpectr-devel
+    before_script: Rscript -e "remotes::install_github('ludvigolsen/xpectr')"
+  - r: release
+    name: multiple-devel
+    before_script: Rscript -e "remotes::install_github(c('ludvigolsen/xpectr', 'r-lib/vctrs', 'tidyverse/dplyr', 'tidyverse/tidyr', 'tidyverse/tibble'), dependencies = TRUE)"
+  - r: release
+    os: osx
+    name: release osx
+  - r: oldrel
+
+# Add checks of R 3.2, 3.3, 3.4, 3.5, and 3.6

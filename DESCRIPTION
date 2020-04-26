@@ -1,0 +1,30 @@
+Package: rearrr
+Title: Rearranging Data
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Ludvig Renbo",
+             family = "Olsen",
+             role = c("aut", "cre"),
+             email = "r-pkgs@ludvigolsen.dk"))
+Description: Arrange data by a set of methods.
+License: MIT + file LICENSE
+URL: https://github.com/ludvigolsen/rearrr
+BugReports: https://github.com/ludvigolsen/rearrr/issues
+Depends:
+    R (>= 3.2.0)
+Imports:
+    checkmate (>= 2.0.0),
+    dplyr (>= 0.8.5),
+    lifecycle,
+    plyr
+Suggests: 
+    graphics,
+    knitr,
+    testthat,
+    xpectr (>= 0.3.0)
+RdMacros: 
+    lifecycle
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
