@@ -11,7 +11,7 @@ pair_extremes(
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
   keep_factor = FALSE,
-  factor_name = ".rearrange_factor"
+  factor_name = ".pair"
 )
 }
 \arguments{

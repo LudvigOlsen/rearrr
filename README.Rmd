@@ -45,8 +45,6 @@ rvers <- substring(dep, 7, nchar(dep)-1)
 
 R package for rearranging data by a set of methods.
 
-* **Position** the min/max value and have values increase/decrease around it.
-
 ### Main functions
 
 | Function              | Description                                                           |
@@ -60,9 +58,9 @@ R package for rearranging data by a set of methods.
 
 ## Table of Contents
 
-<!-- ```{r toc, echo=FALSE} -->
-<!-- rearrr:::render_toc("README.Rmd") -->
-<!-- ``` -->
+```{r toc, echo=FALSE}
+rearrr:::render_toc("README.Rmd")
+```
 
 ## Installation
 
@@ -94,47 +92,10 @@ library(tidyr)        # gather()
 library(ggplot2)
 ```
 
-<!-- Note: The `kable()` function simply **formats** the output and is not required. -->
-
-While we can use the functions with data frames, we showcase them with a vector for simplicity.
-The functions work with grouped data frames and in `magrittr` pipes (`%>%`).
-
-## Center max
-
-```{r}
-center_max(data = 1:10)$Value
-```
-
-## Center min
-
-```{r}
-center_min(data = 1:10)$Value
-```
-
-## Position max
-
-```{r}
-position_max(data = 1:10, position = 3)$Value
-```
-
-## Position min
-
-```{r}
-position_min(data = 1:10, position = 3)$Value
-```
-
-## Pair extremes
-
-```{r}
-pair_extremes(data = 1:10, keep_factor = TRUE, factor_name = "extreme_pairs")$Value
-```
-
-## Visual comparison
-
-```{r}
+```{r include=FALSE}
 vec <- 1:10
 orderings <- data.frame(
-  "x" = as.integer(vec),
+  "Position" = as.integer(vec),
   "center_max" = center_max(vec)$Value,
   "center_min" = center_min(vec)$Value,
   "position_max" = position_max(vec, position = 3)$Value,
@@ -142,39 +103,68 @@ orderings <- data.frame(
   "pair_extremes" = pair_extremes(vec)$Value
 ) 
 
-orderings %>% kable()
-```
-
-```{r fig.align='center', fig.width=6, fig.height=3.5}
 # Convert to long format for plotting
 orderings <- orderings %>% 
   tidyr::gather(key = "Method", value = "Value", 2:6) 
 ```
 
-```{r fig.align='center', fig.width=6, fig.height=3.5}
+
+<!-- Note: The `kable()` function simply **formats** the output and is not required. -->
+
+While we can use the functions with data frames, we showcase them with a vector for simplicity.
+The functions work with grouped data frames and in `magrittr` pipelines (`%>%`).
+
+## Center min/max
+
+```{r}
+center_max(data = 1:10)$Value
+```
+
+```{r}
+center_min(data = 1:10)$Value
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
 # Plot centering methods
 orderings %>% 
   dplyr::filter(Method %in% c("center_min", "center_max")) %>% 
-  ggplot(aes(x = x, y = Value, color = Method)) + 
-  geom_line() + 
-  theme_minimal()
-```
-
-```{r fig.align='center', fig.width=6, fig.height=3.5}
-# Plot positioning methods
-orderings %>% 
-  dplyr::filter(Method %in% c("position_min", "position_max")) %>% 
-  ggplot(aes(x = x, y = Value, color = Method)) + 
-  geom_line() + 
-  theme_minimal()
-```
-
-```{r fig.align='center', fig.width=6, fig.height=3.5}
-# Plot extreme pairing
-orderings %>% 
-  dplyr::filter(Method == "pair_extremes") %>% 
-  ggplot(aes(x = x, y = Value, color = Method)) + 
+  ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_line(alpha = .8) + 
   geom_point() + 
   theme_minimal()
 ```
 
+## Position min/max
+
+```{r}
+position_max(data = 1:10, position = 3)$Value
+```
+
+```{r}
+position_min(data = 1:10, position = 3)$Value
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+# Plot positioning methods
+orderings %>% 
+  dplyr::filter(Method %in% c("position_min", "position_max")) %>% 
+  ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_line(alpha = .8) + 
+  geom_point() +
+  theme_minimal()
+```
+
+## Pair extremes
+
+```{r}
+pair_extremes(data = 1:10, keep_factor = TRUE)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+# Plot extreme pairing
+orderings %>% 
+  dplyr::filter(Method == "pair_extremes") %>% 
+  ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_point() + 
+  theme_minimal()
+```
