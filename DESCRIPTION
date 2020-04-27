@@ -18,9 +18,11 @@ Imports:
     lifecycle,
     plyr
 Suggests: 
+    ggplot2,
     graphics,
     knitr,
     testthat,
+    tidyr,
     xpectr (>= 0.3.0)
 RdMacros: 
     lifecycle
