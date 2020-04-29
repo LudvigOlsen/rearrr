@@ -38,6 +38,7 @@ methods.
 | `position_max()`  | Position the highest value with values decreasing around it.           |
 | `position_min()`  | Position the lowest value with values increasing around it.            |
 | `pair_extremes()` | Arrange values as highest, lowest, second highest, second lowest, etc. |
+| `rev_windows()`   | Reverse order window-wise.                                             |
 
 ## Table of Contents
 
