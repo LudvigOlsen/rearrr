@@ -9,11 +9,11 @@ rev_windows(data, window_size, keep_windows = FALSE, factor_name = ".window")
 \arguments{
 \item{data}{\code{data frame} or \code{vector}.}
 
-\item{window_size}{Size of the windows.}
+\item{window_size}{Size of the windows. (Logical)}
 
 \item{keep_windows}{Whether to keep the factor with window identifiers. (Logical)}
 
-\item{factor_name}{Name of windows factor.
+\item{factor_name}{Name of the factor with window identifiers. (Logical)
 
 N.B. Only used when \code{keep_windows} is \code{TRUE}.}
 }
@@ -82,6 +82,8 @@ plot(x = 1:10,
 Other rearrange functions: 
 \code{\link{center_max}()},
 \code{\link{center_min}()},
+\code{\link{closest_to}()},
+\code{\link{furthest_from}()},
 \code{\link{pair_extremes}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},

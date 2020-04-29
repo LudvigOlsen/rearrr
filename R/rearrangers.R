@@ -149,7 +149,6 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
 }
 
 
-
 ##  .................. #< a9808f16c2edd63f14e1d14ce640be45 ># ..................
 ##  Pairing extremes rearranger                                             ####
 
@@ -268,4 +267,108 @@ extreme_pairing_rearranger <- function(
              )
 }
 
+
+##  .................. #< 4ef3bd62472cbceb75369a8355d9288d ># ..................
+##  Reverse windows rearranger                                              ####
+
+#' Wrapper for running centering rearrange methods
+#'
+#' @inheritParams rearranger
+#' @param window_size Size of the windows. (Logical)
+#' @param keep_windows Whether to keep the factor with window identifiers. (Logical)
+#' @param factor_name Name of the factor with window identifiers. (Logical)
+#'
+#'  N.B. Only used when \code{keep_windows} is \code{TRUE}.
+#' @keywords internal
+#' @return
+#'  The sorted \code{data frame} / \code{vector}.
+#'  Optionally with the windows factor added.
+#'
+#'  When \code{data} is a \code{vector} and \code{keep_windows} is \code{FALSE},
+#'  the output will be a \code{vector}. Otherwise, a \code{data frame}.
+rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, factor_name = ".window"){
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_count(window_size, positive = TRUE, add = assert_collection)
+  checkmate::assert_flag(keep_windows, add = assert_collection)
+  checkmate::assert_string(factor_name, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Rearrange 'data'
+  rearranger(data = data,
+             rearrange_fn = rearrange_rev_windows,
+             check_fn = NULL,
+             window_size = window_size,
+             keep_windows = keep_windows,
+             factor_name = factor_name
+             )
+}
+
+
+##  .................. #< 410de16141fecb8866c8899fa3e4af09 ># ..................
+##  By distance rearranger                                                  ####
+
+
+#' Wrapper for running closest to / furthest from rearrange methods
+#'
+#' @inheritParams rearranger
+#' @param target Target value. (Logical)
+#' @param target_fn Function for extracting target value. (Logical)
+#'
+#'  \strong{N.B.} Either \code{target} or \code{target_fn} should be specified.
+#'
+#'  \strong{N.B.} When \code{data} is grouped,
+#'  the \code{target_fn} function is applied group-wise.
+#' @param shuffle_ties Whether to shuffle elements with the same distance to the target. (Logical)
+#' @param decreasing Whether to prder by decreasing distances to the target. (Logical)
+#' @keywords internal
+#' @return
+#'  The sorted \code{data frame} / \code{vector}.
+by_distance_rearranger <- function(data, col, target = NULL, target_fn = NULL,
+                                   shuffle_ties = FALSE, decreasing = FALSE){
+
+  # TODO Allow target to be on length num_groups and find a way to pass
+  # the groups to the split.
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_function(target_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(shuffle_ties, add = assert_collection)
+  checkmate::assert_flag(decreasing, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (sum(is.null(target), is.null(target_fn)) != 1){
+    assert_collection$push(
+      "exactly one of {target,target_fn} should specified."
+    )
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Specify checks for after calling prepare_input_data()
+  check_fn <- function(data, col, ...){
+    # Check arguments ####
+    assert_collection <- checkmate::makeAssertCollection()
+    if (!is.null(target) && typeof(target) != typeof(data[[col]]) &&
+        !(is.numeric(target) && is.numeric(data[[col]]))){
+      assert_collection$push(
+        "'target' was not of same type as 'data[[col]]'."
+      )
+    }
+    checkmate::reportAssertions(assert_collection)
+    # End of argument checks ####
+  }
+
+  # Rearrange 'data'
+  rearranger(data = data,
+             col = col,
+             rearrange_fn = rearrange_by_distance,
+             check_fn = check_fn,
+             target = target,
+             target_fn = target_fn,
+             shuffle_ties = shuffle_ties,
+             decreasing = decreasing
+  )
+}
 

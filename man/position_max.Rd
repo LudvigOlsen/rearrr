@@ -84,6 +84,8 @@ plot(x = 1:10, y = position_max(df, col = "B", position = 3, shuffle_sides = TRU
 Other rearrange functions: 
 \code{\link{center_max}()},
 \code{\link{center_min}()},
+\code{\link{closest_to}()},
+\code{\link{furthest_from}()},
 \code{\link{pair_extremes}()},
 \code{\link{position_min}()},
 \code{\link{rearrange}()},

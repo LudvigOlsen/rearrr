@@ -13,4 +13,6 @@
 
 * Adds `rev_windows()` for reversing order window-wise.
 
+* Adds `closest_to()` and `furthest_from()`.
+
 * Please welcome `rearrr`! :-)

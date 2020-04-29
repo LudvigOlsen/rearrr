@@ -2,6 +2,8 @@
 
 export(center_max)
 export(center_min)
+export(closest_to)
+export(furthest_from)
 export(pair_extremes)
 export(position_max)
 export(position_min)

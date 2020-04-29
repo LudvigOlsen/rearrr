@@ -24,12 +24,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rearrange
-#' @param window_size Size of the windows.
-#' @param keep_windows Whether to keep the factor with window identifiers. (Logical)
-#' @param factor_name Name of windows factor.
-#'
-#'  N.B. Only used when \code{keep_windows} is \code{TRUE}.
+#' @inheritParams rev_windows_rearranger
 #' @return
 #'  The sorted \code{data frame} / \code{vector}.
 #'  Optionally with the windows factor added.

@@ -78,6 +78,8 @@ plot(x = 1:10, y = center_min(df, col = "B", shuffle_sides = TRUE)$B)
 \seealso{
 Other rearrange functions: 
 \code{\link{center_max}()},
+\code{\link{closest_to}()},
+\code{\link{furthest_from}()},
 \code{\link{pair_extremes}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},

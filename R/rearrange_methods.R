@@ -159,13 +159,13 @@ rearrange_position_at <- function(data,
     n_extra_positions <- size - 2 * (size - position) - 1
     if (n_extra_positions == 0) {
       # position is center
-      # TODO Change to center_*
-      return(rearrange(
-        data = data,
-        col = col,
-        method = paste0("center_", what),
-        shuffle_members = shuffle_sides
-      ))
+      return(
+        centering_rearranger(
+          data = data,
+          col = col,
+          shuffle_sides = shuffle_sides,
+          what = what
+        ))
     }
     data <- data[order(data[[col]], decreasing = what != "max"), , drop = FALSE]
     extra_positions <- seq_len(n_extra_positions)
@@ -180,11 +180,11 @@ rearrange_position_at <- function(data,
   center_rows <- data[-extra_positions, , drop = FALSE]
 
   # Center max or min
-  center_rows <- rearrange(
+  center_rows <- centering_rearranger(
     data = center_rows,
     col = col,
-    method = paste0("center_", what),
-    shuffle_members = shuffle_sides
+    shuffle_sides = shuffle_sides,
+    what = what
   )
 
   # Combine subsets
@@ -205,15 +205,6 @@ rearrange_position_at <- function(data,
 
 rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name){
 
-  # Check arguments ####
-  assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_data_frame(data, add = assert_collection)
-  checkmate::assert_count(window_size, positive = TRUE, add = assert_collection)
-  checkmate::assert_flag(keep_windows, add = assert_collection)
-  checkmate::assert_string(factor_name, add = assert_collection)
-  checkmate::reportAssertions(assert_collection)
-  # End of argument checks ####
-
   size <- nrow(data)
   if (size < 2){
     return(data)
@@ -231,21 +222,31 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name){
 }
 
 
-
 ##  .................. #< 440b147b963f8a7fd202661bfc3b068e ># ..................
 ##  By Distance - closest to / furthest from                                ####
 
 
-rearrange_by_distance <- function(data, col, target, closest = TRUE){
+rearrange_by_distance <- function(data, col, target, target_fn, shuffle_ties, decreasing){
 
   if (nrow(data) < 2){
     return(data)
   }
 
-  if (is.function(target)){
-    target <- target(data[[col]])
+  if (is.null(target) && !is.null(target_fn)){
+    target <- target_fn(data[[col]])
   }
-  data[order(abs(target - data[[col]]), decreasing = !isTRUE(closest)), , drop = FALSE]
+
+  if (isTRUE(shuffle_ties)){
+    # Shuffle the data frame
+    data <- data[sample(seq_len(nrow(data))), , drop = FALSE]
+  } else {
+    # pre-order
+    data <- data[order(data[[col]]), , drop = FALSE]
+  }
+
+  # TODO Handle character vectors as well
+
+  data[order(abs(target - data[[col]]), decreasing = decreasing), , drop = FALSE]
 
 }
 

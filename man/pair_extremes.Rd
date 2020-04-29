@@ -178,6 +178,8 @@ plot(x = rep(1:5, each = 2),
 Other rearrange functions: 
 \code{\link{center_max}()},
 \code{\link{center_min}()},
+\code{\link{closest_to}()},
+\code{\link{furthest_from}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},
 \code{\link{rearrange}()},
