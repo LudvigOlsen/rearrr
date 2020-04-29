@@ -54,6 +54,7 @@ R package for rearranging data by a set of methods.
 |`position_max()`       |Position the highest value with values decreasing around it.           |
 |`position_min()`       |Position the lowest value with values increasing around it.            |
 |`pair_extremes()`      |Arrange values as highest, lowest, second highest, second lowest, etc. |
+|`rev_windows()`        |Reverse order window-wise.                                             |
 
 
 ## Table of Contents
@@ -96,16 +97,17 @@ library(ggplot2)
 vec <- 1:10
 orderings <- data.frame(
   "Position" = as.integer(vec),
-  "center_max" = center_max(vec)$Value,
-  "center_min" = center_min(vec)$Value,
-  "position_max" = position_max(vec, position = 3)$Value,
-  "position_min" = position_min(vec, position = 3)$Value,
-  "pair_extremes" = pair_extremes(vec)$Value
+  "center_max" = center_max(vec),
+  "center_min" = center_min(vec),
+  "position_max" = position_max(vec, position = 3),
+  "position_min" = position_min(vec, position = 3),
+  "pair_extremes" = pair_extremes(vec),
+  "rev_windows" = rev_windows(vec, window_size = 3)
 ) 
 
 # Convert to long format for plotting
 orderings <- orderings %>% 
-  tidyr::gather(key = "Method", value = "Value", 2:6) 
+  tidyr::gather(key = "Method", value = "Value", 2:(ncol(orderings))) 
 ```
 
 
@@ -117,11 +119,11 @@ The functions work with grouped data frames and in `magrittr` pipelines (`%>%`).
 ## Center min/max
 
 ```{r}
-center_max(data = 1:10)$Value
+center_max(data = 1:10)
 ```
 
 ```{r}
-center_min(data = 1:10)$Value
+center_min(data = 1:10)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -137,11 +139,11 @@ orderings %>%
 ## Position min/max
 
 ```{r}
-position_max(data = 1:10, position = 3)$Value
+position_max(data = 1:10, position = 3)
 ```
 
 ```{r}
-position_min(data = 1:10, position = 3)$Value
+position_min(data = 1:10, position = 3)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -164,6 +166,21 @@ pair_extremes(data = 1:10, keep_factor = TRUE)
 # Plot extreme pairing
 orderings %>% 
   dplyr::filter(Method == "pair_extremes") %>% 
+  ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_point() + 
+  theme_minimal()
+```
+
+## Reverse windows
+
+```{r}
+rev_windows(data = 1:10, window_size = 3)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+# Plot extreme pairing
+orderings %>% 
+  dplyr::filter(Method == "rev_windows") %>% 
   ggplot(aes(x = Position, y = Value, color = Method)) + 
   geom_point() + 
   theme_minimal()

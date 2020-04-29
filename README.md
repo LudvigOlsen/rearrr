@@ -50,6 +50,7 @@ methods.
       - [Center min/max](#center-min/max)
       - [Position min/max](#position-min/max)
       - [Pair extremes](#pair-extremes)
+      - [Reverse windows](#reverse-windows)
 
 ## Installation
 
@@ -91,12 +92,12 @@ in `magrittr` pipelines (`%>%`).
 ## Center min/max
 
 ``` r
-center_max(data = 1:10)$Value
+center_max(data = 1:10)
 #>  [1]  1  3  5  7  9 10  8  6  4  2
 ```
 
 ``` r
-center_min(data = 1:10)$Value
+center_min(data = 1:10)
 #>  [1] 10  8  6  4  2  1  3  5  7  9
 ```
 
@@ -105,12 +106,12 @@ center_min(data = 1:10)$Value
 ## Position min/max
 
 ``` r
-position_max(data = 1:10, position = 3)$Value
+position_max(data = 1:10, position = 3)
 #>  [1]  6  8 10  9  7  5  4  3  2  1
 ```
 
 ``` r
-position_min(data = 1:10, position = 3)$Value
+position_min(data = 1:10, position = 3)
 #>  [1]  5  3  1  2  4  6  7  8  9 10
 ```
 
@@ -134,3 +135,12 @@ pair_extremes(data = 1:10, keep_factor = TRUE)
 ```
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="552" style="display: block; margin: auto;" />
+
+## Reverse windows
+
+``` r
+rev_windows(data = 1:10, window_size = 3)
+#>  [1]  3  2  1  6  5  4  9  8  7 10
+```
+
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="552" style="display: block; margin: auto;" />

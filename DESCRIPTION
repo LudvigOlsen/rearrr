@@ -16,7 +16,10 @@ Imports:
     checkmate (>= 2.0.0),
     dplyr (>= 0.8.5),
     lifecycle,
-    plyr
+    plyr,
+    rlang (>= 0.4.0),
+    stats,
+    utils
 Suggests: 
     ggplot2,
     graphics,

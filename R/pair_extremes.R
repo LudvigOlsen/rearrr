@@ -34,7 +34,11 @@
 #' @family rearrange functions
 #' @inheritParams rearrange
 #' @return
-#'  The sorted data frame. Optionally with the sorting factor added.
+#'  The sorted \code{data frame} / \code{vector}.
+#'  Optionally with the sorting factor added.
+#'
+#'  When \code{data} is a \code{vector} and \code{keep_factor} is \code{FALSE},
+#'  the output will be a \code{vector}. Otherwise, a \code{data frame}.
 #' @examples
 #' \donttest{
 #' # Attach packages

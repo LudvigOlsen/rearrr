@@ -163,3 +163,26 @@ is_between_ <- function(x, a, b) {
 `%ni%` <- function(x, table) {
   !(x %in% table)
 }
+
+
+##  .................. #< 76a9352ccecc01349336a01b9a870511 ># ..................
+##  Greedy windows                                                          ####
+
+
+greedy_windows <- function(data, window_size, factor_name = ".window") {
+  size <- nrow(data)
+  num_windows <- ceiling(size / window_size)
+  windows <- rep(seq_len(num_windows), each = window_size)
+  data[[factor_name]] <- head(windows, size)
+  data
+}
+
+
+#   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
+#   ImportFrom                                                              ####
+
+#' @importFrom dplyr %>%
+#' @importFrom rlang .data
+#' @importFrom utils head tail
+#' @importFrom stats quantile runif
+NULL

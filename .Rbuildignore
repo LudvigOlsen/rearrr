@@ -1,6 +1,13 @@
 ^rearrr\.Rproj$
 ^\.Rproj\.user$
+^.*\.Rproj$
 ^LICENSE\.md$
-^README\.Rmd$
 ^cran-comments\.md$
 ^\.github$
+^revdep$
+^README\.Rmd$
+^README-.*\.png$
+^data-raw$
+^CRAN-RELEASE$
+^\.travis\.yml$
+^appveyor\.yml$

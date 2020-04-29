@@ -15,9 +15,9 @@ pair_extremes(
 )
 }
 \arguments{
-\item{data}{Data frame or vector. When a vector, it is converted to a data frame.}
+\item{data}{\code{data frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a data frame,
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
 it uses the row numbers.}
 
 \item{unequal_method}{Method for dealing with an unequal number of rows
@@ -89,7 +89,7 @@ to the right and left of the center / position.}
 \item{shuffle_pairs}{Whether to shuffle the pairs when
 \code{method} is \code{"pair_extremes"}. (Logical)}
 
-\item{keep_factor}{Whether to keep the sorting factor in the data frame. \code{Logical}.
+\item{keep_factor}{Whether to keep the sorting factor in the \code{data frame}. \code{Logical}.
 
 This is mostly useful with the \code{"pair_extremes"} method.}
 
@@ -98,7 +98,11 @@ This is mostly useful with the \code{"pair_extremes"} method.}
 N.B. Only used when \code{keep_factor} is \code{TRUE}.}
 }
 \value{
-The sorted data frame. Optionally with the sorting factor added.
+The sorted \code{data frame} / \code{vector}.
+Optionally with the sorting factor added.
+
+When \code{data} is a \code{vector} and \code{keep_factor} is \code{FALSE},
+the output will be a \code{vector}. Otherwise, a \code{data frame}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -182,7 +186,8 @@ Other rearrange functions:
 \code{\link{center_min}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},
-\code{\link{rearrange}()}
+\code{\link{rearrange}()},
+\code{\link{rev_windows}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

@@ -92,7 +92,7 @@ test_that("rearrange() with method pair_extremes throws expected errors", {
     ), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12655[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'method': Must be a subset of set {pair_extremes,center_max,center_min,position_max,position_min}."),
+    xpectr::strip("1 assertions failed:\n * Variable 'method': Must be a subset of set {pair_extremes,center_max,center_min,position_max,position_min,rev_windows}."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12655[['error_class']]),
@@ -377,37 +377,30 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_12861),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_12861[["Value"]],
-    c(1, 7, 2, 6, 4, 3, 5),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_12861),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_12861),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_12861,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_12861),
-    "double",
+    output_12861,
+    c(1, 7, 2, 6, 4, 3, 5),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_12861),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_12861),
-    c(7L, 1L))
-  # Testing group keys
+    length(output_12861),
+    7L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_12861)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_12861)),
+    7L)
 
   # Testing rearrange(data = c(1, 2, 3, 4), col = NULL, ...
   # Changed from baseline: data = c(1, 2, 3, 4)
@@ -417,76 +410,61 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_18304),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_18304[["Value"]],
-    c(1, 4, 2, 3),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_18304),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_18304),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_18304,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_18304),
-    "double",
+    output_18304,
+    c(1, 4, 2, 3),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_18304),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_18304),
-    c(4L, 1L))
-  # Testing group keys
+    length(output_18304),
+    4L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_18304)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_18304)),
+    4L)
 
   # Testing rearrange(data = factor(c(1, 2, 3, 4, 5, 6, ...
   # Changed from baseline: data = factor(c(1, 2,...
   xpectr::set_test_seed(42)
   # Assigning output
   output_16417 <- rearrange(data = factor(c(1, 2, 3, 4, 5, 6, 7, 1, 2, 3)), col = NULL, method = "pair_extremes", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor")
-  # Testing class
+  # Testing is factor
+  expect_true(
+    is.factor(output_16417))
+  # Testing values
   expect_equal(
-    class(output_16417),
-    "data.frame",
+    as.character(output_16417),
+    c("1", "7", "1", "6", "2", "5", "2", "4", "3", "3"),
     fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_16417[["Value"]],
-    structure(c(1L, 7L, 1L, 6L, 2L, 5L, 2L, 4L, 3L, 3L), .Label = c("1",
-      "2", "3", "4", "5", "6", "7"), class = "factor"))
-  # Testing column names
+  # Testing names
   expect_equal(
     names(output_16417),
-    "Value",
+    NULL,
     fixed = TRUE)
-  # Testing column classes
+  # Testing length
   expect_equal(
-    xpectr::element_classes(output_16417),
-    "factor",
-    fixed = TRUE)
-  # Testing column types
+    length(output_16417),
+    10L)
+  # Testing number of levels
   expect_equal(
-    xpectr::element_types(output_16417),
-    "integer",
-    fixed = TRUE)
-  # Testing dimensions
+    nlevels(output_16417),
+    7L)
+  # Testing levels
   expect_equal(
-    dim(output_16417),
-    c(10L, 1L))
-  # Testing group keys
-  expect_equal(
-    colnames(dplyr::group_keys(output_16417)),
-    character(0),
+    levels(output_16417),
+    c("1", "2", "3", "4", "5", "6", "7"),
     fixed = TRUE)
 
   # Testing rearrange(data = list(1, 2, 3), col = NULL, ...
@@ -527,37 +505,30 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_11346[["Value"]],
-    1,
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_11346),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_11346),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_11346,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_11346),
-    "double",
+    output_11346,
+    1,
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_11346),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_11346),
-    c(1L, 1L))
-  # Testing group keys
+    length(output_11346),
+    1L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_11346)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_11346)),
+    1L)
 
   # Testing rearrange(data = NULL, col = NULL, method = ...
   # Changed from baseline: data = NULL
@@ -799,7 +770,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   side_effects_14622 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "lol", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'method': Must be a subset of set {pair_extremes,center_max,center_min,position_max,position_min}."),
+    xpectr::strip("1 assertions failed:\n * Variable 'method': Must be a subset of set\n * {pair_extremes,center_max,center_min,position_max,position_min,rev_windows}."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error_class']]),
@@ -1265,7 +1236,6 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
 
   ## Finished testing 'rearrange'                                             ####
   #
-
 })
 
 test_that("fuzz testing center_max method for rearrange()", {
@@ -1421,37 +1391,30 @@ test_that("fuzz testing center_max method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_12861),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_12861[["Value"]],
-    c(1, 3, 5, 7, 6, 4, 2),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_12861),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_12861),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_12861,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_12861),
-    "double",
+    output_12861,
+    c(1, 3, 5, 7, 6, 4, 2),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_12861),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_12861),
-    c(7L, 1L))
-  # Testing group keys
+    length(output_12861),
+    7L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_12861)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_12861)),
+    7L)
 
   # Testing rearrange(data = c(1, 2, 3, 4), col = NULL, ...
   # Changed from baseline: data = c(1, 2, 3, 4)
@@ -1461,76 +1424,61 @@ test_that("fuzz testing center_max method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_18304),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_18304[["Value"]],
-    c(1, 3, 4, 2),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_18304),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_18304),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_18304,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_18304),
-    "double",
+    output_18304,
+    c(1, 3, 4, 2),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_18304),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_18304),
-    c(4L, 1L))
-  # Testing group keys
+    length(output_18304),
+    4L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_18304)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_18304)),
+    4L)
 
   # Testing rearrange(data = factor(c(1, 2, 3, 4, 5, 6, ...
   # Changed from baseline: data = factor(c(1, 2,...
   xpectr::set_test_seed(42)
   # Assigning output
   output_16417 <- rearrange(data = factor(c(1, 2, 3, 4, 5, 6, 7, 1, 2, 3)), col = NULL, method = "center_max", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor")
-  # Testing class
+  # Testing is factor
+  expect_true(
+    is.factor(output_16417))
+  # Testing values
   expect_equal(
-    class(output_16417),
-    "data.frame",
+    as.character(output_16417),
+    c("1", "2", "3", "4", "6", "7", "5", "3", "2", "1"),
     fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_16417[["Value"]],
-    structure(c(1L, 2L, 3L, 4L, 6L, 7L, 5L, 3L, 2L, 1L), .Label = c("1",
-      "2", "3", "4", "5", "6", "7"), class = "factor"))
-  # Testing column names
+  # Testing names
   expect_equal(
     names(output_16417),
-    "Value",
+    NULL,
     fixed = TRUE)
-  # Testing column classes
+  # Testing length
   expect_equal(
-    xpectr::element_classes(output_16417),
-    "factor",
-    fixed = TRUE)
-  # Testing column types
+    length(output_16417),
+    10L)
+  # Testing number of levels
   expect_equal(
-    xpectr::element_types(output_16417),
-    "integer",
-    fixed = TRUE)
-  # Testing dimensions
+    nlevels(output_16417),
+    7L)
+  # Testing levels
   expect_equal(
-    dim(output_16417),
-    c(10L, 1L))
-  # Testing group keys
-  expect_equal(
-    colnames(dplyr::group_keys(output_16417)),
-    character(0),
+    levels(output_16417),
+    c("1", "2", "3", "4", "5", "6", "7"),
     fixed = TRUE)
 
   # Testing rearrange(data = list(1, 2, 3), col = NULL, ...
@@ -1571,37 +1519,30 @@ test_that("fuzz testing center_max method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_11346[["Value"]],
-    1,
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_11346),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_11346),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_11346,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_11346),
-    "double",
+    output_11346,
+    1,
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_11346),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_11346),
-    c(1L, 1L))
-  # Testing group keys
+    length(output_11346),
+    1L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_11346)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_11346)),
+    1L)
 
   # Testing rearrange(data = NULL, col = NULL, method = ...
   # Changed from baseline: data = NULL
@@ -1843,7 +1784,7 @@ test_that("fuzz testing center_max method for rearrange()", {
   side_effects_14622 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "lol", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'method': Must be a subset of set {pair_extremes,center_max,center_min,position_max,position_min}."),
+    xpectr::strip("1 assertions failed:\n * Variable 'method': Must be a subset of set\n * {pair_extremes,center_max,center_min,position_max,position_min,rev_windows}."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error_class']]),
@@ -2291,37 +2232,30 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_12861),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_12861[["Value"]],
-    c(7, 5, 3, 1, 2, 4, 6),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_12861),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_12861),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_12861,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_12861),
-    "double",
+    output_12861,
+    c(7, 5, 3, 1, 2, 4, 6),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_12861),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_12861),
-    c(7L, 1L))
-  # Testing group keys
+    length(output_12861),
+    7L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_12861)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_12861)),
+    7L)
 
   # Testing rearrange(data = c(1, 2, 3, 4), col = NULL, ...
   # Changed from baseline: data = c(1, 2, 3, 4)
@@ -2331,76 +2265,61 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_18304),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_18304[["Value"]],
-    c(4, 2, 1, 3),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_18304),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_18304),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_18304,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_18304),
-    "double",
+    output_18304,
+    c(4, 2, 1, 3),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_18304),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_18304),
-    c(4L, 1L))
-  # Testing group keys
+    length(output_18304),
+    4L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_18304)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_18304)),
+    4L)
 
   # Testing rearrange(data = factor(c(1, 2, 3, 4, 5, 6, ...
   # Changed from baseline: data = factor(c(1, 2,...
   xpectr::set_test_seed(42)
   # Assigning output
   output_16417 <- rearrange(data = factor(c(1, 2, 3, 4, 5, 6, 7, 1, 2, 3)), col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor")
-  # Testing class
+  # Testing is factor
+  expect_true(
+    is.factor(output_16417))
+  # Testing values
   expect_equal(
-    class(output_16417),
-    "data.frame",
+    as.character(output_16417),
+    c("7", "5", "3", "2", "1", "1", "2", "3", "4", "6"),
     fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_16417[["Value"]],
-    structure(c(7L, 5L, 3L, 2L, 1L, 1L, 2L, 3L, 4L, 6L), .Label = c("1",
-      "2", "3", "4", "5", "6", "7"), class = "factor"))
-  # Testing column names
+  # Testing names
   expect_equal(
     names(output_16417),
-    "Value",
+    NULL,
     fixed = TRUE)
-  # Testing column classes
+  # Testing length
   expect_equal(
-    xpectr::element_classes(output_16417),
-    "factor",
-    fixed = TRUE)
-  # Testing column types
+    length(output_16417),
+    10L)
+  # Testing number of levels
   expect_equal(
-    xpectr::element_types(output_16417),
-    "integer",
-    fixed = TRUE)
-  # Testing dimensions
+    nlevels(output_16417),
+    7L)
+  # Testing levels
   expect_equal(
-    dim(output_16417),
-    c(10L, 1L))
-  # Testing group keys
-  expect_equal(
-    colnames(dplyr::group_keys(output_16417)),
-    character(0),
+    levels(output_16417),
+    c("1", "2", "3", "4", "5", "6", "7"),
     fixed = TRUE)
 
   # Testing rearrange(data = list(1, 2, 3), col = NULL, ...
@@ -2441,37 +2360,30 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_11346[["Value"]],
-    1,
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_11346),
-    "Value",
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_11346),
     "numeric",
     fixed = TRUE)
-  # Testing column types
+  # Testing type
+  expect_type(
+    output_11346,
+    type = "double")
+  # Testing values
   expect_equal(
-    xpectr::element_types(output_11346),
-    "double",
+    output_11346,
+    1,
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_11346),
+    NULL,
     fixed = TRUE)
-  # Testing dimensions
+  # Testing length
   expect_equal(
-    dim(output_11346),
-    c(1L, 1L))
-  # Testing group keys
+    length(output_11346),
+    1L)
+  # Testing sum of element lengths
   expect_equal(
-    colnames(dplyr::group_keys(output_11346)),
-    character(0),
-    fixed = TRUE)
+    sum(xpectr::element_lengths(output_11346)),
+    1L)
 
   # Testing rearrange(data = NULL, col = NULL, method = ...
   # Changed from baseline: data = NULL
@@ -2705,48 +2617,18 @@ test_that("fuzz testing center_min method for rearrange()", {
     character(0),
     fixed = TRUE)
 
-  # Testing rearrange(data = df, col = NULL, method = "l...
-  # Changed from baseline: method = "lol"
-  xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "lol", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_14622[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'method': Must be a subset of set {pair_extremes,center_max,center_min,position_max,position_min}."),
-    fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_14622[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
-    fixed = TRUE)
-
-  # Testing rearrange(data = df, col = NULL, method = NA...
-  # Changed from baseline: method = NA
-  xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = NA, shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19400[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'method': May not be NA."),
-    fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19400[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
-    fixed = TRUE)
-
   # Testing rearrange(data = df, col = NULL, method = NU...
   # Changed from baseline: method = NULL
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = NULL, shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
+  side_effects_14622 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = NULL, shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19782[['error']]),
+    xpectr::strip(side_effects_14622[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'method': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19782[['error_class']]),
+    xpectr::strip(side_effects_14622[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2754,7 +2636,75 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Changed from baseline: shuffle_members = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11174 <- rearrange(data = df, col = NULL, method = "center_min", shuffle_members = TRUE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor")
+  output_19400 <- rearrange(data = df, col = NULL, method = "center_min", shuffle_members = TRUE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor")
+  # Testing class
+  expect_equal(
+    class(output_19400),
+    "data.frame",
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_19400[["index"]],
+    c(8, 6, 5, 2, 1, 3, 4, 7, 9),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19400[["A"]],
+    c(1, 7, 4, 8, 9, 3, 5, 6, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19400[["B"]],
+    c(0.97823, 0.46229, 0.25543, 0.45774, 0.70506, 0.71911, 0.93467,
+      0.94001, 0.11749),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19400[["C"]],
+    c("H", "F", "E", "B", "A", "C", "D", "G", "I"),
+    fixed = TRUE)
+  # Testing column names
+  expect_equal(
+    names(output_19400),
+    c("index", "A", "B", "C"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19400),
+    c("integer", "integer", "numeric", "character"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19400),
+    c("integer", "integer", "double", "character"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19400),
+    c(9L, 4L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19400)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing rearrange(data = df, col = NULL, method = "c...
+  # Changed from baseline: shuffle_members = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19782 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "center_min", shuffle_members = NULL, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19782[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'shuffle_members': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19782[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing rearrange(data = df, col = NULL, method = "c...
+  # Changed from baseline: shuffle_pairs = TRUE
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_11174 <- rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = TRUE, keep_factor = FALSE, factor_name = ".rearrange_factor")
   # Testing class
   expect_equal(
     class(output_11174),
@@ -2763,20 +2713,20 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing column values
   expect_equal(
     output_11174[["index"]],
-    c(8, 6, 5, 2, 1, 3, 4, 7, 9),
+    c(9, 7, 5, 3, 1, 2, 4, 6, 8),
     tolerance = 1e-4)
   expect_equal(
     output_11174[["A"]],
-    c(1, 7, 4, 8, 9, 3, 5, 6, 2),
+    c(2, 6, 4, 3, 9, 8, 5, 7, 1),
     tolerance = 1e-4)
   expect_equal(
     output_11174[["B"]],
-    c(0.97823, 0.46229, 0.25543, 0.45774, 0.70506, 0.71911, 0.93467,
-      0.94001, 0.11749),
+    c(0.11749, 0.94001, 0.25543, 0.71911, 0.70506, 0.45774, 0.93467,
+      0.46229, 0.97823),
     tolerance = 1e-4)
   expect_equal(
     output_11174[["C"]],
-    c("H", "F", "E", "B", "A", "C", "D", "G", "I"),
+    c("I", "G", "E", "C", "A", "B", "D", "F", "H"),
     fixed = TRUE)
   # Testing column names
   expect_equal(
@@ -2804,14 +2754,14 @@ test_that("fuzz testing center_min method for rearrange()", {
     fixed = TRUE)
 
   # Testing rearrange(data = df, col = NULL, method = "c...
-  # Changed from baseline: shuffle_members = NULL
+  # Changed from baseline: shuffle_pairs = NULL
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "center_min", shuffle_members = NULL, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
+  side_effects_14749 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = NULL, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'shuffle_members': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * Variable 'shuffle_pairs': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error_class']]),
@@ -2819,10 +2769,10 @@ test_that("fuzz testing center_min method for rearrange()", {
     fixed = TRUE)
 
   # Testing rearrange(data = df, col = NULL, method = "c...
-  # Changed from baseline: shuffle_pairs = TRUE
+  # Changed from baseline: keep_factor = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15603 <- rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = TRUE, keep_factor = FALSE, factor_name = ".rearrange_factor")
+  output_15603 <- rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = TRUE, factor_name = ".rearrange_factor")
   # Testing class
   expect_equal(
     class(output_15603),
@@ -2846,25 +2796,29 @@ test_that("fuzz testing center_min method for rearrange()", {
     output_15603[["C"]],
     c("I", "G", "E", "C", "A", "B", "D", "F", "H"),
     fixed = TRUE)
+  expect_equal(
+    output_15603[[".rearrange_factor"]],
+    structure(1:9, .Label = c("1", "2", "3", "4", "5", "6", "7", "8",
+      "9"), class = "factor"))
   # Testing column names
   expect_equal(
     names(output_15603),
-    c("index", "A", "B", "C"),
+    c("index", "A", "B", "C", ".rearrange_factor"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_15603),
-    c("integer", "integer", "numeric", "character"),
+    c("integer", "integer", "numeric", "character", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_15603),
-    c("integer", "integer", "double", "character"),
+    c("integer", "integer", "double", "character", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_15603),
-    c(9L, 4L))
+    c(9L, 5L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_15603)),
@@ -2872,14 +2826,14 @@ test_that("fuzz testing center_min method for rearrange()", {
     fixed = TRUE)
 
   # Testing rearrange(data = df, col = NULL, method = "c...
-  # Changed from baseline: shuffle_pairs = NULL
+  # Changed from baseline: keep_factor = NULL
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19040 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = NULL, keep_factor = FALSE, factor_name = ".rearrange_factor"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = NULL, factor_name = ".rearrange_factor"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'shuffle_pairs': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * Variable 'keep_factor': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error_class']]),
@@ -2887,66 +2841,22 @@ test_that("fuzz testing center_min method for rearrange()", {
     fixed = TRUE)
 
   # Testing rearrange(data = df, col = NULL, method = "c...
-  # Changed from baseline: keep_factor = TRUE
+  # Changed from baseline: factor_name = NULL
   xpectr::set_test_seed(42)
-  # Assigning output
-  output_11387 <- rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = TRUE, factor_name = ".rearrange_factor")
-  # Testing class
+  # Testing side effects
+  # Assigning side effects
+  side_effects_11387 <- xpectr::capture_side_effects(rearrange(data = df, col = NULL, method = "center_min", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factor = FALSE, factor_name = NULL), reset_seed = TRUE)
   expect_equal(
-    class(output_11387),
-    "data.frame",
-    fixed = TRUE)
-  # Testing column values
-  expect_equal(
-    output_11387[["index"]],
-    c(9, 7, 5, 3, 1, 2, 4, 6, 8),
-    tolerance = 1e-4)
-  expect_equal(
-    output_11387[["A"]],
-    c(2, 6, 4, 3, 9, 8, 5, 7, 1),
-    tolerance = 1e-4)
-  expect_equal(
-    output_11387[["B"]],
-    c(0.11749, 0.94001, 0.25543, 0.71911, 0.70506, 0.45774, 0.93467,
-      0.46229, 0.97823),
-    tolerance = 1e-4)
-  expect_equal(
-    output_11387[["C"]],
-    c("I", "G", "E", "C", "A", "B", "D", "F", "H"),
+    xpectr::strip(side_effects_11387[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'factor_name': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    output_11387[[".rearrange_factor"]],
-    structure(1:9, .Label = c("1", "2", "3", "4", "5", "6", "7", "8",
-      "9"), class = "factor"))
-  # Testing column names
-  expect_equal(
-    names(output_11387),
-    c("index", "A", "B", "C", ".rearrange_factor"),
+    xpectr::strip(side_effects_11387[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_11387),
-    c("integer", "integer", "numeric", "character", "factor"),
-    fixed = TRUE)
-  # Testing column types
-  expect_equal(
-    xpectr::element_types(output_11387),
-    c("integer", "integer", "double", "character", "integer"),
-    fixed = TRUE)
-  # Testing dimensions
-  expect_equal(
-    dim(output_11387),
-    c(9L, 5L))
-  # Testing group keys
-  expect_equal(
-    colnames(dplyr::group_keys(output_11387)),
-    character(0),
-    fixed = TRUE)
-
 
   ## Finished testing 'rearrange'                                             ####
   #
-
 })
 
 

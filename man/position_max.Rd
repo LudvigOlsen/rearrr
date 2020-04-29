@@ -7,9 +7,9 @@
 position_max(data, col = NULL, position = NULL, shuffle_members = FALSE)
 }
 \arguments{
-\item{data}{Data frame or vector. When a vector, it is converted to a data frame.}
+\item{data}{\code{data frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a data frame,
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
 it uses the row numbers.}
 
 \item{position}{Index or quantile at which to position,
@@ -21,7 +21,7 @@ For the \code{"center_*"} and \code{"position_*"} methods, this randomizes which
 to the right and left of the center / position.}
 }
 \value{
-The sorted data frame.
+The sorted \code{data frame} / \code{vector}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -90,7 +90,8 @@ Other rearrange functions:
 \code{\link{center_min}()},
 \code{\link{pair_extremes}()},
 \code{\link{position_min}()},
-\code{\link{rearrange}()}
+\code{\link{rearrange}()},
+\code{\link{rev_windows}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

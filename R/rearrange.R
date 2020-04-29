@@ -18,11 +18,12 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @keywords internal
 #' @family rearrange functions
-#' @param data Data frame or vector. When a vector, it is converted to a data frame.
-#' @param col Column to create sorting factor by. When \code{NULL} and \code{data} is a data frame,
+#' @param data \code{data frame} or \code{vector}.
+#' @param col Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
 #'  it uses the row numbers.
 #' @param position Index or quantile at which to position,
 #'  when \code{method} is one of: \code{"position_max"}, \code{"position_min"}.
+#' @param size Depends on \code{method}.
 #' @param method Sorting method.
 #'
 #'  One of: \code{"pair_extremes"}, \code{"center_max"}, or \code{"center_min"}.
@@ -147,7 +148,7 @@
 #'  to the right and left of the center / position.
 #' @param shuffle_pairs Whether to shuffle the pairs when
 #'  \code{method} is \code{"pair_extremes"}. (Logical)
-#' @param keep_factor Whether to keep the sorting factor in the data frame. \code{Logical}.
+#' @param keep_factor Whether to keep the sorting factor in the \code{data frame}. \code{Logical}.
 #'
 #'  This is mostly useful with the \code{"pair_extremes"} method.
 #' @param factor_name Name of sorting factor.
@@ -158,6 +159,7 @@
 rearrange <- function(data,
                       col = NULL,
                       position = NULL,
+                      size = NULL,
                       method = "pair_extremes",
                       unequal_method = "middle",
                       shuffle_members = FALSE,
@@ -195,6 +197,9 @@ rearrange <- function(data,
     data <- data.frame("Value" = data,
                        stringsAsFactors = FALSE)
     col = "Value"
+    was_vector <- TRUE
+  } else {
+    was_vector <- FALSE
   }
 
   # Second check of 'data'
@@ -206,6 +211,7 @@ rearrange <- function(data,
   checkmate::assert_flag(keep_factor, add = assert_collection)
   checkmate::assert_flag(shuffle_members, add = assert_collection)
   checkmate::assert_flag(shuffle_pairs, add = assert_collection)
+  checkmate::assert_numeric(size, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   checkmate::assert(
     checkmate::check_number(x = position, lower = 1e-20, upper = 1,
@@ -217,7 +223,8 @@ rearrange <- function(data,
   checkmate::assert_names(method,
                           subset.of = c("pair_extremes",
                                         "center_max", "center_min",
-                                        "position_max", "position_min"),
+                                        "position_max", "position_min",
+                                        "rev_windows"),
                           add = assert_collection)
   checkmate::assert_names(unequal_method,
                           subset.of = c("first", "middle", "last"),
@@ -284,13 +291,19 @@ rearrange <- function(data,
       )
       current_data[[local_tmp_rearrange_var]] <- seq_len(nrow(current_data))
 
+    } else if (method == "rev_windows"){
+      current_data <- rearrange_rev_windows(
+        data = current_data,
+        window_size = size,
+        keep_windows = keep_factor,
+        factor_name = local_tmp_rearrange_var
+      )
     }
 
     current_data
 
   }) %>%
     base_deselect(cols = tmp_grp_indices)
-
 
   # Remove rearrange factor if it shouldn't be returned
   if (!isTRUE(keep_factor)) {
@@ -307,6 +320,12 @@ rearrange <- function(data,
   # Remove tmp column if 'col' was 'NULL'
   if (isTRUE(rm_col)){
     data[[col]] <- NULL
+  }
+
+  # Return as vector if that is what we were passed
+  if (isTRUE(was_vector) &&
+      ncol(data) == 1) {
+    return(data[[1]])
   }
 
   row.names(data) <- NULL

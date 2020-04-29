@@ -35,11 +35,7 @@ create_rearrange_factor_pair_extremes_ <- function(size, unequal_method = "middl
   } else {
     if (unequal_method == "middle") {
       middle <- ceiling((half_size / 2)) + 1
-      idx <- idx %>%
-        tibble::enframe(name = NULL) %>%
-        dplyr::mutate(value = ifelse(
-          .data$value >= middle, .data$value + 1, .data$value)) %>%
-        dplyr::pull(.data$value)
+      idx <- ifelse(idx >= middle, idx + 1, idx)
       return(c(idx, middle, rev(idx)))
     } else if (unequal_method == "first") {
       return(c(1, c(idx, rev(idx)) + 1))

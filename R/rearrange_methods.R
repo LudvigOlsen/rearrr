@@ -196,3 +196,35 @@ rearrange_position_at <- function(data,
   data
 
 }
+
+
+##  .................. #< 9b7a497230634fb37d1ebff7f7cbd104 ># ..................
+##  Reverse windows                                                         ####
+
+
+rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name){
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_count(window_size, positive = TRUE, add = assert_collection)
+  checkmate::assert_flag(keep_windows, add = assert_collection)
+  checkmate::assert_string(factor_name, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  size <- nrow(data)
+  if (size < 2){
+    return(data)
+  }
+  num_windows <- ceiling(size / window_size)
+  windows <- rep(seq_len(num_windows), each = window_size)
+  rev_indices <- rep(rev(seq_len(window_size)), times = num_windows)
+  new_order <- windows + (rev_indices * (0.5 / window_size))
+  new_order <- head(new_order, size)
+  if (isTRUE(keep_windows)) {
+    data[[factor_name]] <- head(windows, size)
+  }
+
+  data[order(new_order), , drop = FALSE]
+}

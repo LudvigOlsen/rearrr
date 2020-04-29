@@ -30,7 +30,7 @@
 #' @family rearrange functions
 #' @inheritParams rearrange
 #' @return
-#'  The sorted data frame.
+#'  The sorted \code{data frame} / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -114,7 +114,7 @@ position_max <- function(data,
 #' @family rearrange functions
 #' @inheritParams rearrange
 #' @return
-#'  The sorted data frame.
+#'  The sorted \code{data frame} / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages

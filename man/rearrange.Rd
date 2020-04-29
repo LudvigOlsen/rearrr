@@ -8,6 +8,7 @@ rearrange(
   data,
   col = NULL,
   position = NULL,
+  size = NULL,
   method = "pair_extremes",
   unequal_method = "middle",
   shuffle_members = FALSE,
@@ -17,13 +18,15 @@ rearrange(
 )
 }
 \arguments{
-\item{data}{Data frame or vector. When a vector, it is converted to a data frame.}
+\item{data}{\code{data frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a data frame,
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
 it uses the row numbers.}
 
 \item{position}{Index or quantile at which to position,
 when \code{method} is one of: \code{"position_max"}, \code{"position_min"}.}
+
+\item{size}{Depends on \code{method}.}
 
 \item{method}{Sorting method.
 
@@ -153,7 +156,7 @@ to the right and left of the center / position.}
 \item{shuffle_pairs}{Whether to shuffle the pairs when
 \code{method} is \code{"pair_extremes"}. (Logical)}
 
-\item{keep_factor}{Whether to keep the sorting factor in the data frame. \code{Logical}.
+\item{keep_factor}{Whether to keep the sorting factor in the \code{data frame}. \code{Logical}.
 
 This is mostly useful with the \code{"pair_extremes"} method.}
 
@@ -181,7 +184,8 @@ Other rearrange functions:
 \code{\link{center_min}()},
 \code{\link{pair_extremes}()},
 \code{\link{position_max}()},
-\code{\link{position_min}()}
+\code{\link{position_min}()},
+\code{\link{rev_windows}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
