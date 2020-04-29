@@ -335,6 +335,7 @@ by_distance_rearranger <- function(data, col, target = NULL, target_fn = NULL,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_function(target_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_number(target, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(shuffle_ties, add = assert_collection)
   checkmate::assert_flag(decreasing, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -354,6 +355,11 @@ by_distance_rearranger <- function(data, col, target = NULL, target_fn = NULL,
         !(is.numeric(target) && is.numeric(data[[col]]))){
       assert_collection$push(
         "'target' was not of same type as 'data[[col]]'."
+      )
+    }
+    if (!is.numeric(data[[col]])){
+      assert_collection$push(
+        "'data[[col]]' must be numeric."
       )
     }
     checkmate::reportAssertions(assert_collection)

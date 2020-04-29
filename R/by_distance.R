@@ -45,7 +45,6 @@
 #'   "index" = 1:10,
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
-#'   "C" = LETTERS[1:10],
 #'   "G" = c(1, 1, 1, 2, 2,
 #'           2, 3, 3, 3, 3),
 #'   stringsAsFactors = FALSE
@@ -59,7 +58,6 @@
 #' closest_to(df, col = "A", target_fn = median)$A
 #' closest_to(df, col = "B", target = 0.5)$B
 #' closest_to(df, col = "B", target_fn = median)$B
-#' closest_to(df, col = "C", target = "D")$D
 #'
 #' # Shuffle the elements with the same distance to the target
 #' closest_to(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
@@ -137,7 +135,6 @@ closest_to <- function(data,
 #'   "index" = 1:10,
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
-#'   "C" = LETTERS[1:10],
 #'   "G" = c(1, 1, 1, 2, 2,
 #'           2, 3, 3, 3, 3),
 #'   stringsAsFactors = FALSE
@@ -151,7 +148,6 @@ closest_to <- function(data,
 #' furthest_from(df, col = "A", target_fn = median)$A
 #' furthest_from(df, col = "B", target = 0.5)$B
 #' furthest_from(df, col = "B", target_fn = median)$B
-#' furthest_from(df, col = "C", target = "D")$D
 #'
 #' # Shuffle the elements with the same distance to the target
 #' furthest_from(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A

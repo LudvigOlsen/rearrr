@@ -38,6 +38,8 @@ methods.
 | `position_max()`  | Position the highest value with values decreasing around it.           |
 | `position_min()`  | Position the lowest value with values increasing around it.            |
 | `pair_extremes()` | Arrange values as highest, lowest, second highest, second lowest, etc. |
+| `closest_to()`    | Order values by shortest distance to a target.                         |
+| `furthest_from()` | Order values by longest distance to a target.                          |
 | `rev_windows()`   | Reverse order window-wise.                                             |
 
 ## Table of Contents
@@ -51,6 +53,7 @@ methods.
       - [Center min/max](#center-min/max)
       - [Position min/max](#position-min/max)
       - [Pair extremes](#pair-extremes)
+      - [Closest to / furthest from](#closest-to-/-furthest-from)
       - [Reverse windows](#reverse-windows)
 
 ## Installation
@@ -137,6 +140,23 @@ pair_extremes(data = 1:10, keep_factor = TRUE)
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="552" style="display: block; margin: auto;" />
 
+## Closest to / furthest from
+
+The target value/index can be passed as either a specific value or a
+function.
+
+``` r
+closest_to(data = 1:10, target_fn = median)
+#>  [1]  5  6  4  7  3  8  2  9  1 10
+```
+
+``` r
+furthest_from(data = 1:10, target = 5)
+#>  [1] 10  1  9  2  8  3  7  4  6  5
+```
+
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="552" style="display: block; margin: auto;" />
+
 ## Reverse windows
 
 ``` r
@@ -144,4 +164,4 @@ rev_windows(data = 1:10, window_size = 3)
 #>  [1]  3  2  1  6  5  4  9  8  7 10
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" width="552" style="display: block; margin: auto;" />

@@ -54,6 +54,8 @@ R package for rearranging data by a set of methods.
 |`position_max()`       |Position the highest value with values decreasing around it.           |
 |`position_min()`       |Position the lowest value with values increasing around it.            |
 |`pair_extremes()`      |Arrange values as highest, lowest, second highest, second lowest, etc. |
+|`closest_to()`         |Order values by shortest distance to a target.                         |
+|`furthest_from()`      |Order values by longest distance to a target.                          |
 |`rev_windows()`        |Reverse order window-wise.                                             |
 
 
@@ -102,12 +104,18 @@ orderings <- data.frame(
   "position_max" = position_max(vec, position = 3),
   "position_min" = position_min(vec, position = 3),
   "pair_extremes" = pair_extremes(vec),
-  "rev_windows" = rev_windows(vec, window_size = 3)
+  "rev_windows" = rev_windows(vec, window_size = 3),
+  "closest_to" = closest_to(vec, target_fn = median),
+  "furthest_from" = furthest_from(vec, target = 5)
 ) 
 
 # Convert to long format for plotting
 orderings <- orderings %>% 
   tidyr::gather(key = "Method", value = "Value", 2:(ncol(orderings))) 
+
+gg_line_alpha <- .4
+gg_base_line_size <- .3
+
 ```
 
 
@@ -131,9 +139,12 @@ center_min(data = 1:10)
 orderings %>% 
   dplyr::filter(Method %in% c("center_min", "center_max")) %>% 
   ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = .8) + 
+  geom_line(alpha = gg_line_alpha) + 
   geom_point() + 
-  theme_minimal()
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_colour_brewer(palette = "Dark2")
 ```
 
 ## Position min/max
@@ -151,9 +162,12 @@ position_min(data = 1:10, position = 3)
 orderings %>% 
   dplyr::filter(Method %in% c("position_min", "position_max")) %>% 
   ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = .8) + 
+  geom_line(alpha = gg_line_alpha) + 
   geom_point() +
-  theme_minimal()
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_colour_brewer(palette = "Dark2")
 ```
 
 ## Pair extremes
@@ -167,8 +181,37 @@ pair_extremes(data = 1:10, keep_factor = TRUE)
 orderings %>% 
   dplyr::filter(Method == "pair_extremes") %>% 
   ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_line(alpha = gg_line_alpha) + 
   geom_point() + 
-  theme_minimal()
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_colour_brewer(palette = "Dark2")
+```
+
+## Closest to / furthest from
+
+The target value/index can be passed as either a specific value or a function.
+
+```{r}
+closest_to(data = 1:10, target_fn = median)
+```
+
+```{r}
+furthest_from(data = 1:10, target = 5)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+# Plot distanced order
+orderings %>% 
+  dplyr::filter(Method %in% c("closest_to", "furthest_from")) %>% 
+  ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_line(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_colour_brewer(palette = "Dark2")
 ```
 
 ## Reverse windows
@@ -178,10 +221,15 @@ rev_windows(data = 1:10, window_size = 3)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot extreme pairing
+# Plot windowed reversing
 orderings %>% 
   dplyr::filter(Method == "rev_windows") %>% 
   ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_line(alpha = gg_line_alpha) + 
   geom_point() + 
-  theme_minimal()
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_colour_brewer(palette = "Dark2")
 ```
+

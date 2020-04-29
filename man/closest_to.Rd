@@ -63,7 +63,6 @@ df <- data.frame(
   "index" = 1:10,
   "A" = sample(1:10),
   "B" = runif(10),
-  "C" = LETTERS[1:10],
   "G" = c(1, 1, 1, 2, 2,
           2, 3, 3, 3, 3),
   stringsAsFactors = FALSE
@@ -77,7 +76,6 @@ closest_to(df, col = "A", target = 3)$A
 closest_to(df, col = "A", target_fn = median)$A
 closest_to(df, col = "B", target = 0.5)$B
 closest_to(df, col = "B", target_fn = median)$B
-closest_to(df, col = "C", target = "D")$D
 
 # Shuffle the elements with the same distance to the target
 closest_to(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
@@ -107,7 +105,6 @@ Other rearrange functions:
 \code{\link{pair_extremes}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},
-\code{\link{rearrange}()},
 \code{\link{rev_windows}()}
 }
 \author{

@@ -71,12 +71,10 @@ rev_windows <- function(data,
                         window_size,
                         keep_windows = FALSE,
                         factor_name = ".window") {
-  rearrange(
+  rev_windows_rearranger(
     data,
-    col = NULL,
-    size = window_size,
-    method = "rev_windows",
-    keep_factor = keep_windows,
+    window_size = window_size,
+    keep_windows = keep_windows,
     factor_name = factor_name
   )
 }

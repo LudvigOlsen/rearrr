@@ -182,7 +182,6 @@ Other rearrange functions:
 \code{\link{furthest_from}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},
-\code{\link{rearrange}()},
 \code{\link{rev_windows}()}
 }
 \author{

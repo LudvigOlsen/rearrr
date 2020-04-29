@@ -83,7 +83,6 @@ Other rearrange functions:
 \code{\link{pair_extremes}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},
-\code{\link{rearrange}()},
 \code{\link{rev_windows}()}
 }
 \author{

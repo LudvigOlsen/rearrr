@@ -202,8 +202,8 @@ rearrange_position_at <- function(data,
 ##  .................. #< 9b7a497230634fb37d1ebff7f7cbd104 ># ..................
 ##  Reverse windows                                                         ####
 
-
-rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name){
+# 'col' is a required arg in the function but is ignored
+rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, col = NULL){
 
   size <- nrow(data)
   if (size < 2){
@@ -235,6 +235,8 @@ rearrange_by_distance <- function(data, col, target, target_fn, shuffle_ties, de
   if (is.null(target) && !is.null(target_fn)){
     target <- target_fn(data[[col]])
   }
+
+  checkmate::assert_number(target, finite = TRUE, .var.name = "extracted target")
 
   if (isTRUE(shuffle_ties)){
     # Shuffle the data frame

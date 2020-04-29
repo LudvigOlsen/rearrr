@@ -182,7 +182,7 @@ greedy_windows <- function(data, window_size, factor_name = ".window") {
 #   ImportFrom                                                              ####
 
 #' @importFrom dplyr %>%
-#' @importFrom rlang .data
+#' @importFrom rlang .data :=
 #' @importFrom utils head tail
 #' @importFrom stats quantile runif
 NULL
