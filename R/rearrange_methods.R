@@ -9,7 +9,7 @@
 
 
 rearrange_center_by <- function(data, col,
-                                shuffle_members,
+                                shuffle_sides,
                                 what = "max") {
 
   size <- nrow(data)
@@ -42,7 +42,7 @@ rearrange_center_by <- function(data, col,
   extreme_pairs <- create_rearrange_factor_pair_extremes_(
     size = size)
 
-  if (isTRUE(shuffle_members)){
+  if (isTRUE(shuffle_sides)){
     # Add noise to the pair indices to randomize the order
     # of the members
     member_noise <- runif(length(extreme_pairs), -0.1, 0.1)
@@ -115,7 +115,7 @@ order_by_group <- function(data, group_col, shuffle_members, shuffle_pairs){
 rearrange_position_at <- function(data,
                                   col,
                                   position,
-                                  shuffle_members,
+                                  shuffle_sides,
                                   what = "max") {
 
   size <- nrow(data)
@@ -159,11 +159,12 @@ rearrange_position_at <- function(data,
     n_extra_positions <- size - 2 * (size - position) - 1
     if (n_extra_positions == 0) {
       # position is center
+      # TODO Change to center_*
       return(rearrange(
         data = data,
         col = col,
         method = paste0("center_", what),
-        shuffle_members = shuffle_members
+        shuffle_members = shuffle_sides
       ))
     }
     data <- data[order(data[[col]], decreasing = what != "max"), , drop = FALSE]
@@ -183,7 +184,7 @@ rearrange_position_at <- function(data,
     data = center_rows,
     col = col,
     method = paste0("center_", what),
-    shuffle_members = shuffle_members
+    shuffle_members = shuffle_sides
   )
 
   # Combine subsets
@@ -227,4 +228,84 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name){
   }
 
   data[order(new_order), , drop = FALSE]
+}
+
+
+
+##  .................. #< 440b147b963f8a7fd202661bfc3b068e ># ..................
+##  By Distance - closest to / furthest from                                ####
+
+
+rearrange_by_distance <- function(data, col, target, closest = TRUE){
+
+  if (nrow(data) < 2){
+    return(data)
+  }
+
+  if (is.function(target)){
+    target <- target(data[[col]])
+  }
+  data[order(abs(target - data[[col]]), decreasing = !isTRUE(closest)), , drop = FALSE]
+
+}
+
+
+##  .................. #< da4fe0fffb24210b784112591123dcc6 ># ..................
+##  Pair extremes                                                           ####
+
+
+# TODO Add aggregate_fn for recursive pairings
+rearrange_pair_extremes <- function(data, col,
+                                    unequal_method,
+                                    num_pairings,
+                                    shuffle_members,
+                                    shuffle_pairs,
+                                    keep_factors,
+                                    factor_name){
+
+  if (nrow(data) < 2){
+    return(data)
+  }
+
+  # Order data frame
+  data <- data[order(data[[col]]), , drop = FALSE]
+
+  ## First extreme pairing
+
+  # Create
+  local_tmp_rearrange_var <- create_tmp_var(data, ".tmp_rearrange_col")
+  data[[local_tmp_rearrange_var]] <-
+    create_rearrange_factor_pair_extremes_(
+      size = nrow(data), unequal_method = unequal_method
+    )
+
+  # Order data by the pairs
+  data <- order_by_group(
+    data = data,
+    group_col = local_tmp_rearrange_var,
+    shuffle_members = shuffle_members,
+    shuffle_pairs = shuffle_pairs)
+
+  # TODO Perform recursive pairing
+
+  # if (num_pairings > 1){
+  #
+  #
+  #
+  # }
+
+  # TODO Make this work for num_pairings factors
+  # Remove rearrange factor if it shouldn't be returned
+  if (!isTRUE(keep_factors)) {
+    data <- data %>%
+      base_deselect(cols = local_tmp_rearrange_var)
+  } else if (local_tmp_rearrange_var != factor_name) {
+    data <- base_rename(data,
+                        before = local_tmp_rearrange_var,
+                        after = factor_name
+    )
+    data[[factor_name]] <- as.factor(data[[factor_name]])
+  }
+
+  data
 }

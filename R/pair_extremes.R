@@ -32,12 +32,12 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rearrange
+#' @inheritParams extreme_pairing_rearranger
 #' @return
 #'  The sorted \code{data frame} / \code{vector}.
 #'  Optionally with the sorting factor added.
 #'
-#'  When \code{data} is a \code{vector} and \code{keep_factor} is \code{FALSE},
+#'  When \code{data} is a \code{vector} and \code{keep_factors} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data frame}.
 #' @examples
 #' \donttest{
@@ -92,18 +92,20 @@
 pair_extremes <- function(data,
                           col = NULL,
                           unequal_method = "middle",
+                          # num_pairings = 1, # TODO
                           shuffle_members = FALSE,
                           shuffle_pairs = FALSE,
-                          keep_factor = FALSE,
+                          keep_factors = FALSE,
                           factor_name = ".pair"){
-  rearrange(
+
+  extreme_pairing_rearranger(
     data = data,
     col = col,
-    method = "pair_extremes",
     unequal_method = unequal_method,
+    num_pairings = 1,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
-    keep_factor = keep_factor,
+    keep_factors = keep_factors,
     factor_name = factor_name
   )
 }

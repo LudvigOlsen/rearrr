@@ -17,6 +17,7 @@ Imports:
     dplyr (>= 0.8.5),
     lifecycle,
     plyr,
+    purrr (>= 0.3.4),
     rlang (>= 0.4.0),
     stats,
     utils

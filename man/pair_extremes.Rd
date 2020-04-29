@@ -10,7 +10,7 @@ pair_extremes(
   unequal_method = "middle",
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
-  keep_factor = FALSE,
+  keep_factors = FALSE,
   factor_name = ".pair"
 )
 }
@@ -18,10 +18,10 @@ pair_extremes(
 \item{data}{\code{data frame} or \code{vector}.}
 
 \item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
-it uses the row numbers.}
+the row numbers are used.}
 
 \item{unequal_method}{Method for dealing with an unequal number of rows
-in \code{data} when \code{method} is \code{"pair_extremes"}.
+in \code{data}.
 
 One of: \code{first}, \code{middle} or \code{last}
 
@@ -81,27 +81,21 @@ And are \strong{ordered as}:
 
 }}
 
-\item{shuffle_members}{Whether to shuffle the pair members. (Logical)
+\item{shuffle_members}{Whether to shuffle the pair members. (Logical)}
 
-For the \code{"center_*"} and \code{"position_*"} methods, this randomizes which values are
-to the right and left of the center / position.}
+\item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
 
-\item{shuffle_pairs}{Whether to shuffle the pairs when
-\code{method} is \code{"pair_extremes"}. (Logical)}
-
-\item{keep_factor}{Whether to keep the sorting factor in the \code{data frame}. \code{Logical}.
-
-This is mostly useful with the \code{"pair_extremes"} method.}
+\item{keep_factors}{Whether to keep the sorting factor(s) in the \code{data frame}. \code{Logical}.}
 
 \item{factor_name}{Name of sorting factor.
 
-N.B. Only used when \code{keep_factor} is \code{TRUE}.}
+N.B. Only used when \code{keep_factors} is \code{TRUE}.}
 }
 \value{
 The sorted \code{data frame} / \code{vector}.
 Optionally with the sorting factor added.
 
-When \code{data} is a \code{vector} and \code{keep_factor} is \code{FALSE},
+When \code{data} is a \code{vector} and \code{keep_factors} is \code{FALSE},
 the output will be a \code{vector}. Otherwise, a \code{data frame}.
 }
 \description{

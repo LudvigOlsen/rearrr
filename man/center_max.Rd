@@ -4,18 +4,15 @@
 \alias{center_max}
 \title{Centers the highest value with values decreasing around it}
 \usage{
-center_max(data, col = NULL, shuffle_members = FALSE)
+center_max(data, col = NULL, shuffle_sides = FALSE)
 }
 \arguments{
 \item{data}{\code{data frame} or \code{vector}.}
 
 \item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
-it uses the row numbers.}
+the row numbers are used.}
 
-\item{shuffle_members}{Whether to shuffle the pair members. (Logical)
-
-For the \code{"center_*"} and \code{"position_*"} methods, this randomizes which values are
-to the right and left of the center / position.}
+\item{shuffle_sides}{Whether to shuffle which elements are left and right of the center. (Logical)}
 }
 \value{
 The sorted \code{data frame} / \code{vector}.
@@ -65,7 +62,7 @@ center_max(df, col = "B")
 center_max(df, col = "C")
 
 # Randomize which elements are left and right of the center
-center_max(df, col = "A", shuffle_members = TRUE)
+center_max(df, col = "A", shuffle_sides = TRUE)
 
 # Grouped by G
 df \%>\%
@@ -75,7 +72,7 @@ df \%>\%
 
 # Plot the centered values
 plot(x = 1:10, y = center_max(df, col = "B")$B)
-plot(x = 1:10, y = center_max(df, col = "B", shuffle_members = TRUE)$B)
+plot(x = 1:10, y = center_max(df, col = "B", shuffle_sides = TRUE)$B)
 }
 }
 \seealso{

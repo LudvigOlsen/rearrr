@@ -4,21 +4,17 @@
 \alias{position_max}
 \title{Positions the highest values with values decreasing around it}
 \usage{
-position_max(data, col = NULL, position = NULL, shuffle_members = FALSE)
+position_max(data, col = NULL, position = NULL, shuffle_sides = FALSE)
 }
 \arguments{
 \item{data}{\code{data frame} or \code{vector}.}
 
 \item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
-it uses the row numbers.}
+the row numbers are used.}
 
-\item{position}{Index or quantile at which to position,
-when \code{method} is one of: \code{"position_max"}, \code{"position_min"}.}
+\item{position}{Index or quantile (in \code{0-1}) at which to position the element of interest.}
 
-\item{shuffle_members}{Whether to shuffle the pair members. (Logical)
-
-For the \code{"center_*"} and \code{"position_*"} methods, this randomizes which values are
-to the right and left of the center / position.}
+\item{shuffle_sides}{Whether to shuffle which elements are left and right of the position. (Logical)}
 }
 \value{
 The sorted \code{data frame} / \code{vector}.
@@ -71,7 +67,7 @@ position_max(df, col = "B", position = 3)$B
 position_max(df, col = "C", position = 3)$C
 
 # Randomize which elements are left and right of the position
-position_max(df, col = "A", position = 3, shuffle_members = TRUE)$A
+position_max(df, col = "A", position = 3, shuffle_sides = TRUE)$A
 
 # Grouped by G
 df \%>\%
@@ -81,7 +77,7 @@ df \%>\%
 
 # Plot the rearranged values
 plot(x = 1:10, y = position_max(df, col = "B", position = 3)$B)
-plot(x = 1:10, y = position_max(df, col = "B", position = 3, shuffle_members = TRUE)$B)
+plot(x = 1:10, y = position_max(df, col = "B", position = 3, shuffle_sides = TRUE)$B)
 }
 }
 \seealso{

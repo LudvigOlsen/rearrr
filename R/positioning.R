@@ -28,7 +28,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rearrange
+#' @inheritParams positioning_rearranger
 #' @return
 #'  The sorted \code{data frame} / \code{vector}.
 #' @examples
@@ -61,7 +61,7 @@
 #' position_max(df, col = "C", position = 3)$C
 #'
 #' # Randomize which elements are left and right of the position
-#' position_max(df, col = "A", position = 3, shuffle_members = TRUE)$A
+#' position_max(df, col = "A", position = 3, shuffle_sides = TRUE)$A
 #'
 #' # Grouped by G
 #' df %>%
@@ -71,19 +71,18 @@
 #'
 #' # Plot the rearranged values
 #' plot(x = 1:10, y = position_max(df, col = "B", position = 3)$B)
-#' plot(x = 1:10, y = position_max(df, col = "B", position = 3, shuffle_members = TRUE)$B)
+#' plot(x = 1:10, y = position_max(df, col = "B", position = 3, shuffle_sides = TRUE)$B)
 #' }
 position_max <- function(data,
                          col = NULL,
                          position = NULL,
-                         shuffle_members = FALSE) {
-  rearrange(
+                         shuffle_sides = FALSE) {
+  positioning_rearranger(
     data = data,
     col = col,
     position = position,
-    method = "position_max",
-    shuffle_members = shuffle_members,
-    keep_factor = FALSE
+    shuffle_sides = shuffle_sides,
+    what = "max"
   )
 }
 
@@ -112,7 +111,7 @@ position_max <- function(data,
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rearrange
+#' @inheritParams positioning_rearranger
 #' @return
 #'  The sorted \code{data frame} / \code{vector}.
 #' @examples
@@ -145,7 +144,7 @@ position_max <- function(data,
 #' position_min(df, col = "C", position = 3)$C
 #'
 #' # Randomize which elements are left and right of the position
-#' position_min(df, col = "A", position = 3, shuffle_members = TRUE)$A
+#' position_min(df, col = "A", position = 3, shuffle_sides = TRUE)$A
 #'
 #' # Grouped by G
 #' df %>%
@@ -155,18 +154,18 @@ position_max <- function(data,
 #'
 #' # Plot the rearranged values
 #' plot(x = 1:10, y = position_min(df, col = "B", position = 3)$B)
-#' plot(x = 1:10, y = position_min(df, col = "B", position = 3, shuffle_members = TRUE)$B)
+#' plot(x = 1:10, y = position_min(df, col = "B", position = 3, shuffle_sides = TRUE)$B)
 #' }
 position_min <- function(data,
                          col = NULL,
                          position = NULL,
-                         shuffle_members = FALSE) {
-  rearrange(
+                         shuffle_sides = FALSE) {
+  positioning_rearranger(
     data = data,
     col = col,
     position = position,
-    method = "position_min",
-    shuffle_members = shuffle_members,
-    keep_factor = FALSE
+    shuffle_sides = shuffle_sides,
+    what = "min"
   )
 }
+

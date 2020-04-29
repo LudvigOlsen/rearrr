@@ -27,7 +27,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rearrange
+#' @inheritParams centering_rearranger
 #' @return
 #'  The sorted \code{data frame} / \code{vector}.
 #' @examples
@@ -59,7 +59,7 @@
 #' center_max(df, col = "C")
 #'
 #' # Randomize which elements are left and right of the center
-#' center_max(df, col = "A", shuffle_members = TRUE)
+#' center_max(df, col = "A", shuffle_sides = TRUE)
 #'
 #' # Grouped by G
 #' df %>%
@@ -69,17 +69,16 @@
 #'
 #' # Plot the centered values
 #' plot(x = 1:10, y = center_max(df, col = "B")$B)
-#' plot(x = 1:10, y = center_max(df, col = "B", shuffle_members = TRUE)$B)
+#' plot(x = 1:10, y = center_max(df, col = "B", shuffle_sides = TRUE)$B)
 #' }
 center_max <- function(data,
                        col = NULL,
-                       shuffle_members = FALSE){
-  rearrange(
+                       shuffle_sides = FALSE){
+  centering_rearranger(
     data = data,
     col = col,
-    method = "center_max",
-    shuffle_members = shuffle_members,
-    keep_factor = FALSE
+    shuffle_sides = shuffle_sides,
+    what = "max"
   )
 }
 
@@ -107,7 +106,7 @@ center_max <- function(data,
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rearrange
+#' @inheritParams centering_rearranger
 #' @return
 #'  The sorted \code{data frame} / \code{vector}.
 #' @examples
@@ -139,7 +138,7 @@ center_max <- function(data,
 #' center_min(df, col = "C")
 #'
 #' # Randomize which elements are left and right of the center
-#' center_min(df, col = "A", shuffle_members = TRUE)
+#' center_min(df, col = "A", shuffle_sides = TRUE)
 #'
 #' # Grouped by G
 #' df %>%
@@ -149,16 +148,15 @@ center_max <- function(data,
 #'
 #' # Plot the centered values
 #' plot(x = 1:10, y = center_min(df, col = "B")$B)
-#' plot(x = 1:10, y = center_min(df, col = "B", shuffle_members = TRUE)$B)
+#' plot(x = 1:10, y = center_min(df, col = "B", shuffle_sides = TRUE)$B)
 #' }
 center_min <- function(data,
                        col = NULL,
-                       shuffle_members = FALSE){
-  rearrange(
+                       shuffle_sides = FALSE){
+  centering_rearranger(
     data = data,
     col = col,
-    method = "center_min",
-    shuffle_members = shuffle_members,
-    keep_factor = FALSE
+    shuffle_sides = shuffle_sides,
+    what = "min"
   )
 }
