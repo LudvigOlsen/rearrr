@@ -26,8 +26,12 @@ status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/rearrr?br
 
 ## Overview
 
-R package for rearranging data by a set of
-methods.
+R package for rearranging data by a set of methods.
+
+We distinguish between **rearrangers** and **mutators**, where the first
+*reorders* the data points and the second *changes the values* of the
+data
+points.
 
 ### Main functions
 
