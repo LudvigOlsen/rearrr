@@ -8,6 +8,7 @@
 #'
 #' @param data \code{data frame} or \code{vector}.
 #' @param col Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.
+#' @param new_name Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.
 #' @param mutate_fn Mutator to apply.
 #' @param check_fn Function with checks post-preparation of \code{data} and \code{col}.
 #'  Should not return anything.

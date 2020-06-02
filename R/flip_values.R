@@ -61,17 +61,20 @@
 #'               center_fn = median)
 #'
 #' # Plot A and flipped A
+#'
 #' # First find flipped A around the median and around the value 3.
 #' df <- df %>%
 #'   flip_values(col = "A", new_name = "A_flip_median", center_fn = median) %>%
 #'   flip_values(col = "A", new_name = "A_flip_3", center_fn = function(x){3})
 #'
+#' # Plot A and A flipped around its median
 #' ggplot(df, aes(x=index, y=A)) +
 #'     geom_line(aes(color="A")) +
 #'     geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
 #'     geom_hline(aes(color="Median A", yintercept = median(A))) +
 #'     theme_minimal()
 #'
+#' # Plot A and A flipped around the value 3
 #' ggplot(df, aes(x=index, y=A)) +
 #'     geom_line(aes(color="A")) +
 #'     geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
@@ -80,8 +83,8 @@
 #' }
 flip_values <- function(data,
                         col = NULL,
-                        center_fn = median,
-                        new_name = NULL) {
+                        new_name = NULL,
+                        center_fn = median) {
   mutator(
     data = data,
     mutate_fn = flip_mutator_method,
@@ -96,12 +99,13 @@ flip_mutator_method <- function(data,
                                 col,
                                 new_name,
                                 center_fn) {
-  flip_around <- function(vec, around = median(x)) {
+  flip_around <- function(vec, around = median(vec)) {
     2 * around - vec
   }
 
   # Find center value
   center <- center_fn(data[[col]])
-  data[[new_name]] <- flip_around(vec = data[[col]], around = center)
+  data[[new_name]] <- flip_around(vec = data[[col]],
+                                  around = center)
   data
 }

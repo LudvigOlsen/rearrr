@@ -16,6 +16,8 @@ Should not return anything.}
 
 \item{col}{Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.}
 
+\item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.}
+
 \item{...}{Named arguments for the \code{mutate_fn}.}
 }
 \value{

@@ -4,12 +4,14 @@
 \alias{flip_values}
 \title{Flip the values around a center value}
 \usage{
-flip_values(data, col = NULL, center_fn = median, new_name = NULL)
+flip_values(data, col = NULL, new_name = NULL, center_fn = median)
 }
 \arguments{
 \item{data}{\code{data frame} or \code{vector}.}
 
 \item{col}{Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.}
+
+\item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.}
 
 \item{center_fn}{Function for finding the center value to flip the values around.}
 }
@@ -65,17 +67,20 @@ df \%>\%
               center_fn = median)
 
 # Plot A and flipped A
+
 # First find flipped A around the median and around the value 3.
 df <- df \%>\%
   flip_values(col = "A", new_name = "A_flip_median", center_fn = median) \%>\%
   flip_values(col = "A", new_name = "A_flip_3", center_fn = function(x){3})
 
+# Plot A and A flipped around its median
 ggplot(df, aes(x=index, y=A)) +
     geom_line(aes(color="A")) +
     geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
     geom_hline(aes(color="Median A", yintercept = median(A))) +
     theme_minimal()
 
+# Plot A and A flipped around the value 3
 ggplot(df, aes(x=index, y=A)) +
     geom_line(aes(color="A")) +
     geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
