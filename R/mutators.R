@@ -1,4 +1,9 @@
 
+
+#   __________________ #< beae0116fffd26a3055dd7425c5928ad ># __________________
+#   Mutators                                                                ####
+
+
 #' Wrapper for running mutator methods
 #'
 #' @param data \code{data frame} or \code{vector}.
@@ -14,14 +19,15 @@ mutator <- function(data,
                     mutate_fn,
                     check_fn,
                     col = NULL,
+                    new_name=NULL,
                     ...) {
-
 
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, col = col)
+  prepped <- prepare_input_data(data = data, col = col, new_name = new_name)
   data <- prepped[["data"]]
   col <- prepped[["col"]]
+  new_name = prepped[["new_name"]]
   was_vector <- prepped[["was_vector"]]
 
   if (isTRUE(prepped[["use_index"]])){
@@ -31,7 +37,8 @@ mutator <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
-  checkmate::assert_string(col, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(col, min.chars = 1, null.ok = FALSE, add = assert_collection)
+  checkmate::assert_string(new_name, min.chars = 1, null.ok = FALSE, add = assert_collection)
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -41,12 +48,13 @@ mutator <- function(data,
     check_fn(data = data, col = col, ...)
   # End of argument checks ####
 
-  # Apply rearrange method
+  # Apply mutator method
   data <-
     run_by_group(
       data = data,
       fn = mutate_fn,
       col = col,
+      new_name = new_name,
       ...
     )
 

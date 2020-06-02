@@ -41,6 +41,7 @@ methods.
 | `closest_to()`    | Order values by shortest distance to a target.                         |
 | `furthest_from()` | Order values by longest distance to a target.                          |
 | `rev_windows()`   | Reverse order window-wise.                                             |
+| `flip_values()`   | Flip the values around a center value.                                 |
 
 ## Table of Contents
 
@@ -48,13 +49,15 @@ methods.
       - [Overview](#overview)
           - [Main functions](#main-functions)
       - [Installation](#installation)
-  - [Examples](#examples)
       - [Attach packages](#attach-packages)
-      - [Center min/max](#center-min/max)
-      - [Position min/max](#position-min/max)
-      - [Pair extremes](#pair-extremes)
-      - [Closest to / furthest from](#closest-to-/-furthest-from)
-      - [Reverse windows](#reverse-windows)
+      - [Rearrangers](#rearrangers)
+          - [Center min/max](#center-min/max)
+          - [Position min/max](#position-min/max)
+          - [Pair extremes](#pair-extremes)
+          - [Closest to / furthest from](#closest-to-/-furthest-from)
+          - [Reverse windows](#reverse-windows)
+      - [Mutators](#mutators)
+          - [Flip values](#flip-values)
 
 ## Installation
 
@@ -75,9 +78,10 @@ version:
 
 <!-- > `vignette(package = "rearrr")` # for an overview    -->
 
-# Examples
-
 ## Attach packages
+
+Let’s see some **examples**. We start by attaching the necessary
+packages:
 
 ``` r
 library(rearrr)
@@ -85,6 +89,8 @@ library(knitr)        # kable()
 library(dplyr)        # %>% arrange()
 library(tidyr)        # gather()
 library(ggplot2)
+
+xpectr::set_test_seed(1)
 ```
 
 <!-- Note: The `kable()` function simply **formats** the output and is not required. -->
@@ -93,7 +99,11 @@ While we can use the functions with data frames, we showcase them with a
 vector for simplicity. The functions work with grouped data frames and
 in `magrittr` pipelines (`%>%`).
 
-## Center min/max
+## Rearrangers
+
+Rearrangers change the order of the data points.
+
+### Center min/max
 
 ``` r
 center_max(data = 1:10)
@@ -107,7 +117,7 @@ center_min(data = 1:10)
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="552" style="display: block; margin: auto;" />
 
-## Position min/max
+### Position min/max
 
 ``` r
 position_max(data = 1:10, position = 3)
@@ -121,7 +131,7 @@ position_min(data = 1:10, position = 3)
 
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="552" style="display: block; margin: auto;" />
 
-## Pair extremes
+### Pair extremes
 
 ``` r
 pair_extremes(data = 1:10, keep_factor = TRUE)
@@ -140,7 +150,7 @@ pair_extremes(data = 1:10, keep_factor = TRUE)
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="552" style="display: block; margin: auto;" />
 
-## Closest to / furthest from
+### Closest to / furthest from
 
 The target value/index can be passed as either a specific value or a
 function.
@@ -157,7 +167,7 @@ furthest_from(data = 1:10, target = 5)
 
 <img src="man/figures/README-unnamed-chunk-14-1.png" width="552" style="display: block; margin: auto;" />
 
-## Reverse windows
+### Reverse windows
 
 ``` r
 rev_windows(data = 1:10, window_size = 3)
@@ -165,3 +175,29 @@ rev_windows(data = 1:10, window_size = 3)
 ```
 
 <img src="man/figures/README-unnamed-chunk-16-1.png" width="552" style="display: block; margin: auto;" />
+
+## Mutators
+
+Mutators change the values of the data points.
+
+### Flip values
+
+``` r
+# Set seed for reproducibility
+xpectr::set_test_seed(1)
+
+# Draw random numbers 
+random_sample <- round(runif(10), digits=4)
+random_sample
+#>  [1] 0.2655 0.3721 0.5729 0.9082 0.2017 0.8984 0.9447 0.6608 0.6291 0.0618
+
+# The median value to flip around
+median(random_sample)
+#> [1] 0.601
+
+# Flip the random numbers around the median
+flip_values(data = random_sample, center_fn = median)
+#>  [1] 0.9365 0.8299 0.6291 0.2938 1.0003 0.3036 0.2573 0.5412 0.5729 1.1402
+```
+
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="552" style="display: block; margin: auto;" />

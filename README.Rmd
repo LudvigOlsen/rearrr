@@ -57,12 +57,13 @@ R package for rearranging data by a set of methods.
 |`closest_to()`         |Order values by shortest distance to a target.                         |
 |`furthest_from()`      |Order values by longest distance to a target.                          |
 |`rev_windows()`        |Reverse order window-wise.                                             |
+|`flip_values()`        |Flip the values around a center value.                                 |
 
 
 ## Table of Contents
 
 ```{r toc, echo=FALSE}
-rearrr:::render_toc("README.Rmd")
+rearrr:::render_toc("README.Rmd", toc_depth = 4)
 ```
 
 ## Installation
@@ -83,9 +84,9 @@ Development version:
 
 <!-- > `vignette(package = "rearrr")` # for an overview    -->
 
-# Examples
-
 ## Attach packages
+
+Let's see some **examples**. We start by attaching the necessary packages:
 
 ```{r warning=FALSE, message=FALSE}
 library(rearrr)
@@ -93,10 +94,13 @@ library(knitr)        # kable()
 library(dplyr)        # %>% arrange()
 library(tidyr)        # gather()
 library(ggplot2)
+
+xpectr::set_test_seed(1)
 ```
 
 ```{r include=FALSE}
 vec <- 1:10
+random_sample <- runif(10)
 orderings <- data.frame(
   "Position" = as.integer(vec),
   "center_max" = center_max(vec),
@@ -106,7 +110,9 @@ orderings <- data.frame(
   "pair_extremes" = pair_extremes(vec),
   "rev_windows" = rev_windows(vec, window_size = 3),
   "closest_to" = closest_to(vec, target_fn = median),
-  "furthest_from" = furthest_from(vec, target = 5)
+  "furthest_from" = furthest_from(vec, target = 5),
+  "random_sample" = random_sample,
+  "flipped_median" = flip_values(random_sample, center_fn=median)
 ) 
 
 # Convert to long format for plotting
@@ -124,7 +130,11 @@ gg_base_line_size <- .3
 While we can use the functions with data frames, we showcase them with a vector for simplicity.
 The functions work with grouped data frames and in `magrittr` pipelines (`%>%`).
 
-## Center min/max
+## Rearrangers
+
+Rearrangers change the order of the data points.
+
+### Center min/max
 
 ```{r}
 center_max(data = 1:10)
@@ -147,7 +157,7 @@ orderings %>%
   scale_colour_brewer(palette = "Dark2")
 ```
 
-## Position min/max
+### Position min/max
 
 ```{r}
 position_max(data = 1:10, position = 3)
@@ -170,7 +180,7 @@ orderings %>%
   scale_colour_brewer(palette = "Dark2")
 ```
 
-## Pair extremes
+### Pair extremes
 
 ```{r}
 pair_extremes(data = 1:10, keep_factor = TRUE)
@@ -189,7 +199,7 @@ orderings %>%
   scale_colour_brewer(palette = "Dark2")
 ```
 
-## Closest to / furthest from
+### Closest to / furthest from
 
 The target value/index can be passed as either a specific value or a function.
 
@@ -214,7 +224,7 @@ orderings %>%
   scale_colour_brewer(palette = "Dark2")
 ```
 
-## Reverse windows
+### Reverse windows
 
 ```{r}
 rev_windows(data = 1:10, window_size = 3)
@@ -233,3 +243,35 @@ orderings %>%
   scale_colour_brewer(palette = "Dark2")
 ```
 
+## Mutators
+
+Mutators change the values of the data points.
+
+### Flip values
+
+```{r}
+# Set seed for reproducibility
+xpectr::set_test_seed(1)
+
+# Draw random numbers 
+random_sample <- round(runif(10), digits=4)
+random_sample
+
+# The median value to flip around
+median(random_sample)
+
+# Flip the random numbers around the median
+flip_values(data = random_sample, center_fn = median)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+# Plot windowed reversing
+orderings %>% 
+  dplyr::filter(Method %in% c("random_sample", "flipped_median")) %>% 
+  ggplot(aes(x = Position, y = Value, color = Method)) + 
+  geom_line(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  scale_colour_brewer(palette = "Dark2")
+```

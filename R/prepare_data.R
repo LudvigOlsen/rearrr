@@ -4,7 +4,7 @@
 #   Prepare 'data' and 'col'                                                ####
 
 
-prepare_input_data <- function(data, col){
+prepare_input_data <- function(data, col, new_name=NULL){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -50,11 +50,18 @@ prepare_input_data <- function(data, col){
       dplyr::mutate(!!col := dplyr::row_number())
   }
 
+  # New Name can be string or NULL
+  checkmate::assert_string(x = new_name, null.ok = TRUE)
+  if (is.null(new_name)){
+    new_name <- col
+  }
+
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
   list("data" = data,
        "col" = col,
+       "new_name" = new_name,
        "use_index" = use_index,
        "was_vector" = was_vector)
 }
