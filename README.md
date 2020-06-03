@@ -46,12 +46,20 @@ points.
 | `furthest_from()` | Order values by longest distance to a target.                          |
 | `rev_windows()`   | Reverse order window-wise.                                             |
 | `flip_values()`   | Flip the values around a center value.                                 |
+| `rotate2d()`      | Rotate values around an origin in 2 dimensions.                        |
+
+### Helper functions
+
+| Function     | Description                                  |
+| :----------- | :------------------------------------------- |
+| `centroid()` | Calculates the mean of each supplied vector. |
 
 ## Table of Contents
 
   - [rearrr](#rearrr)
       - [Overview](#overview)
           - [Main functions](#main-functions)
+          - [Helper functions](#helper-functions)
       - [Installation](#installation)
       - [Attach packages](#attach-packages)
       - [Rearrangers](#rearrangers)
@@ -62,6 +70,7 @@ points.
           - [Reverse windows](#reverse-windows)
       - [Mutators](#mutators)
           - [Flip values](#flip-values)
+          - [Rotate values](#rotate-values)
 
 ## Installation
 
@@ -205,3 +214,22 @@ flip_values(data = random_sample, center_fn = median)
 ```
 
 <img src="man/figures/README-unnamed-chunk-18-1.png" width="552" style="display: block; margin: auto;" />
+
+### Rotate values
+
+``` r
+rotate2d(random_sample, degrees = 60, origin_fn = centroid)
+#>     Value Index_rotated Value_rotated .degrees
+#> 1  0.2655      3.497701    -3.4886043       60
+#> 2  0.3721      3.905382    -2.5692789       60
+#> 3  0.5729      4.231484    -1.6028535       60
+#> 4  0.9082      4.441106    -0.5691781       60
+#> 5  0.2017      5.552953    -0.0564027       60
+#> 6  0.8984      5.449593     1.1579727       60
+#> 7  0.9447      5.909496     2.0471481       60
+#> 8  0.6608      6.655361     2.7712235       60
+#> 9  0.6291      7.182814     3.6213989       60
+#> 10 0.0618      8.174110     4.2037743       60
+```
+
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />

@@ -1,0 +1,235 @@
+
+
+#   __________________ #< cd1a61becee10db96fdb9c8566818046 ># __________________
+#   rotate2d                                                                ####
+
+
+#' @title Rotate the values around an origin
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  The values are rotated counterclockwise around a specified origin.
+#'
+#'  The origin can be supplied as coordinates or as a function that returns coordinates. The
+#'  latter can be useful when supplying a grouped data frame and rotating around e.g. the centroid
+#'  of each group.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @param degrees Degrees to rotate values counterclockwise. In \code{[-360, 360]}.
+#'  Can be a vector with multiple degrees.
+#' @param x_col Name of x column in \code{data}. If \code{NULL} or \code{data} is a vector,
+#'  the index of \code{data} is used.
+#' @param y_col Name of y column in \code{data}. If \code{data} is a data frame, it must be specified.
+#' @param suffix Suffix to add to the names of the generated columns.
+#' @param origin Coordinates of the origin to rotate around. Must be a vector with 2 elements (orig_x, orig_y).
+#'  Ignored when \code{origin_fn} is not \code{NULL}.
+#' @param origin_fn Function for finding the origin coordinates to rotate the values around.
+#'  Should have 2 input arguments (a vector with x-values, a vector with y-values) and
+#'  return a vector with exactly 2 elements (orig_x, orig_y).
+#' @param degree_col_name Name of new column with the degrees.
+#' @export
+#' @return Data frame with three new columns containing the rotated x- and y-values and the degrees.
+#' @details
+#'  Applies the following rotation matrix:
+#'
+#'  | [ \eqn{cos \theta} |, \eqn{ -sin \theta} ] |
+#'  | :--- | :--- |
+#'  | [ \eqn{sin \theta} |, \eqn{ cos \theta}  ] |
+#'
+#'  That is:
+#'
+#'  \eqn{x' = x cos \theta - y sin \theta}
+#'
+#'  \eqn{y' = x sin \theta + y cos \theta}
+#'
+#'  Where \eqn{\theta} is the angle in radians.
+#'
+#'  As specified at [Wikipedia/Rotation_matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
+#' @family mutate functions
+#' @inheritParams mutator
+#' @examples
+#' \donttest{
+#' # Attach packages
+#' library(rearrr)
+#' library(dplyr)
+#' library(ggplot2)
+#'
+#' # Set seed
+#' set.seed(1)
+#'
+#' # Create a data frame
+#' df <- data.frame(
+#'   "index" = 1:12,
+#'   "A" = c(
+#'     1, 2, 3, 4, 9, 10,
+#'     11, 12, 15, 16, 17, 18
+#'   ),
+#'   "G" = c(1, 1, 1, 1, 2, 2,
+#'           2, 2, 3, 3, 3, 3)
+#' )
+#'
+#' # Rotate values
+#' rotate2d(df, 45, x_col="index", y_col="A")
+#'
+#' # Rotate A around the centroid
+#' df_rotated <- df %>%
+#'   rotate2d(x_col = "index",
+#'            y_col = "A",
+#'            degrees = c(0, 120, 240),
+#'            origin_fn = centroid)
+#' df_rotated
+#'
+#' # Plot A and A rotated around overall centroid
+#' ggplot(df_rotated, aes(x = index_rotated, y = A_rotated, color = factor(.degrees))) +
+#'   geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_vline(xintercept = mean(df$index), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_line(alpha = .4) +
+#'   geom_point() +
+#'   theme_minimal() +
+#'   labs(x = "Index", y="Value", color="Degrees")
+#'
+#' # Rotate around group centroids
+#' df_grouped <- df %>%
+#'   dplyr::group_by(G) %>%
+#'   rotate2d(x_col = "index",
+#'            y_col = "A",
+#'            degrees = c(0, 120, 240),
+#'            origin_fn = centroid)
+#' df_grouped
+#'
+#' # Plot A and A rotated around group centroids
+#' ggplot(df_grouped, aes(x=index_rotated, y=A_rotated, color = factor(.degrees))) +
+#'   geom_point() +
+#'   theme_minimal() +
+#'   labs(x = "Index", y="Value", color="Degrees")
+#'
+#' }
+rotate2d <- function(data,
+                     degrees,
+                     x_col = NULL,
+                     y_col = NULL,
+                     suffix = "_rotated",
+                     origin = c(0, 0),
+                     origin_fn = NULL,
+                     degree_col_name = ".degrees") {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_numeric(degrees,
+                           lower = -360,
+                           upper = 360,
+                           add = assert_collection)
+  checkmate::assert_string(x_col, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(suffix, add = assert_collection)
+  checkmate::assert_string(degree_col_name, add = assert_collection)
+  checkmate::assert_numeric(origin,
+                            len = 2,
+                            any.missing = FALSE,
+                            add = assert_collection)
+  checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
+  if (is.data.frame(data) && is.null(y_col)){
+    assert_collection$push("when 'data' is a data frame, 'y_col' must be specified.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Mutate for each degree
+  purrr::map_dfr(.x = degrees, .f = function(degree){
+    mutator(
+      data = data,
+      mutate_fn = rotate2d_mutator_method,
+      check_fn = NULL,
+      force_df = TRUE,
+      col = y_col,
+      x_col = x_col,
+      degrees = degree,
+      suffix = suffix,
+      origin = origin,
+      origin_fn = origin_fn
+    ) %>%
+      dplyr::mutate(!!degree_col_name := degree)
+  })
+
+}
+
+# col is the y_col
+rotate2d_mutator_method <- function(data,
+                                    col,
+                                    x_col,
+                                    degrees,
+                                    suffix,
+                                    origin,
+                                    origin_fn,
+                                    new_name=NULL) {
+
+  # Make it clear that col is the y_col
+  y_col <- col
+
+  # Create rotation matrix based on the degrees
+  if (degrees %in% c(-360, 0, 360)) {
+    rotation_matrix <- matrix(c(1, 0, 0, 1), nrow = 2, ncol = 2)
+  } else if (degrees == 90) {
+    rotation_matrix <- matrix(c(0, 1, -1, 0), nrow = 2, ncol = 2)
+  } else if (degrees == 180) {
+    rotation_matrix <- matrix(c(-1, 0, 0, -1), nrow = 2, ncol = 2)
+  } else if (degrees == 270) {
+    rotation_matrix <- matrix(c(0, -1, 1, 0), nrow = 2, ncol = 2)
+  } else {
+    # 360 degrees == 2pi
+    radian <- degrees * (pi / 180)
+    rotation_matrix <- matrix(
+      c(cos(radian), sin(radian), -sin(radian), cos(radian)),
+      nrow = 2,
+      ncol = 2
+    )
+  }
+
+  # Extract x and y values
+  if (is.null(x_col)) {
+    x_col <- "Index"
+    x <- seq_len(nrow(data))
+  } else {
+    x <- data[[x_col]]
+  }
+  y <- data[[y_col]]
+
+  # Find origin if specified
+  if (!is.null(origin_fn)){
+    origin <- tryCatch(
+      origin_fn(x, y),
+      error = function(e) {
+        stop(paste0("failed to apply 'origin_fn': ", e))
+      }
+    )
+    if (length(origin) != 2){
+      stop("output of 'origin_fn' did not have length 2.")
+    }
+    if (!is.numeric(origin)){
+      stop("output of 'origin_fn' was not numeric.")
+    }
+  }
+
+  # Move origin
+  x <- x - origin[[1]]
+  y <- y - origin[[2]]
+
+  # Convert to matrix
+  xy_matrix <- rbind(x, y)
+
+  # Apply rotation matrix
+  xy_matrix <- rotation_matrix %*% xy_matrix
+
+  # Extract x and y
+  x <- xy_matrix[1, ]
+  y <- xy_matrix[2, ]
+
+  # Move origin
+  x <- x + origin[[1]]
+  y <- y + origin[[2]]
+
+  # Add rotated columns to data
+  data[[paste0(x_col, suffix)]] <- x
+  data[[paste0(y_col, suffix)]] <- y
+
+  data
+
+}

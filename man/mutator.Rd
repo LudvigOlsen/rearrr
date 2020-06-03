@@ -4,10 +4,18 @@
 \alias{mutator}
 \title{Wrapper for running mutator methods}
 \usage{
-mutator(data, mutate_fn, check_fn, col = NULL, new_name = NULL, ...)
+mutator(
+  data,
+  mutate_fn,
+  check_fn,
+  col = NULL,
+  new_name = NULL,
+  force_df = FALSE,
+  ...
+)
 }
 \arguments{
-\item{data}{\code{data frame} or \code{vector}.}
+\item{data}{\code{data.frame} or \code{vector}.}
 
 \item{mutate_fn}{Mutator to apply.}
 

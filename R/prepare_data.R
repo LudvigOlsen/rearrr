@@ -66,7 +66,7 @@ prepare_input_data <- function(data, col, new_name=NULL){
        "was_vector" = was_vector)
 }
 
-prepare_output_data <- function(data, col, use_index, was_vector){
+prepare_output_data <- function(data, col, use_index, to_vector){
 
   # Remove tmp column if 'col' was 'NULL'
   if (isTRUE(use_index)){
@@ -74,7 +74,7 @@ prepare_output_data <- function(data, col, use_index, was_vector){
   }
 
   # Return as vector if that is what we were passed
-  if (isTRUE(was_vector) &&
+  if (isTRUE(to_vector) &&
       ncol(data) == 1) {
     return(data[[1]])
   }

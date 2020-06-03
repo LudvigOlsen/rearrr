@@ -6,7 +6,7 @@
 
 #' Wrapper for running mutator methods
 #'
-#' @param data \code{data frame} or \code{vector}.
+#' @param data \code{data.frame} or \code{vector}.
 #' @param col Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.
 #' @param new_name Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.
 #' @param mutate_fn Mutator to apply.
@@ -20,7 +20,8 @@ mutator <- function(data,
                     mutate_fn,
                     check_fn,
                     col = NULL,
-                    new_name=NULL,
+                    new_name = NULL,
+                    force_df = FALSE,
                     ...) {
 
   # Prepare 'data' and 'col'
@@ -65,7 +66,7 @@ mutator <- function(data,
       data = data,
       col = col,
       use_index = FALSE,
-      was_vector = was_vector
+      to_vector = was_vector && !force_df
     )
 
   data

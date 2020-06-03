@@ -7,7 +7,7 @@
 flip_values(data, col = NULL, new_name = NULL, center_fn = median)
 }
 \arguments{
-\item{data}{\code{data frame} or \code{vector}.}
+\item{data}{\code{data.frame} or \code{vector}.}
 
 \item{col}{Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.}
 
@@ -75,18 +75,22 @@ df <- df \%>\%
 
 # Plot A and A flipped around its median
 ggplot(df, aes(x=index, y=A)) +
-    geom_line(aes(color="A")) +
-    geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
-    geom_hline(aes(color="Median A", yintercept = median(A))) +
-    theme_minimal()
+  geom_line(aes(color="A")) +
+  geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
+  geom_hline(aes(color="Median A", yintercept = median(A))) +
+  theme_minimal()
 
 # Plot A and A flipped around the value 3
 ggplot(df, aes(x=index, y=A)) +
-    geom_line(aes(color="A")) +
-    geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
-    geom_hline(aes(color="3", yintercept = 3)) +
-    theme_minimal()
+  geom_line(aes(color="A")) +
+  geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
+  geom_hline(aes(color="3", yintercept = 3)) +
+  theme_minimal()
 }
+}
+\seealso{
+Other mutate functions: 
+\code{\link{rotate2d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

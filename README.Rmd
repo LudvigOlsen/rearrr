@@ -60,7 +60,13 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`furthest_from()`      |Order values by longest distance to a target.                          |
 |`rev_windows()`        |Reverse order window-wise.                                             |
 |`flip_values()`        |Flip the values around a center value.                                 |
+|`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |
 
+### Helper functions
+
+| Function              | Description                                                           |
+|:----------------------|:----------------------------------------------------------------------|
+|`centroid()`           |Calculates the mean of each supplied vector.                           |
 
 ## Table of Contents
 
@@ -267,7 +273,7 @@ flip_values(data = random_sample, center_fn = median)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot windowed reversing
+# Plot flipped values
 orderings %>% 
   dplyr::filter(Method %in% c("random_sample", "flipped_median")) %>% 
   ggplot(aes(x = Position, y = Value, color = Method)) + 
@@ -276,4 +282,27 @@ orderings %>%
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
   scale_colour_brewer(palette = "Dark2")
+```
+
+### Rotate values
+
+```{r}
+rotate2d(random_sample, degrees = 60, origin_fn = centroid)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+
+rotate_df <- rotate2d(random_sample, degrees = c(0, 72, 144, 216, 288), origin_fn = centroid)
+
+# Plot rotated values
+rotate_df %>% 
+  ggplot(aes(x = Index_rotated, y = Value_rotated, color = factor(.degrees))) +
+  geom_hline(yintercept = mean(random_sample), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_vline(xintercept = mean(seq_len(length(random_sample))), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_line(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "Index", y="Value", color="Degrees")
+
 ```
