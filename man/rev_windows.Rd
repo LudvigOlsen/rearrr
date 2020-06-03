@@ -7,7 +7,7 @@
 rev_windows(data, window_size, keep_windows = FALSE, factor_name = ".window")
 }
 \arguments{
-\item{data}{\code{data frame} or \code{vector}.}
+\item{data}{\code{data.frame} or \code{vector}.}
 
 \item{window_size}{Size of the windows. (Logical)}
 

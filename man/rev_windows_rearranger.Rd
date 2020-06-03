@@ -12,7 +12,7 @@ rev_windows_rearranger(
 )
 }
 \arguments{
-\item{data}{\code{data frame} or \code{vector}.}
+\item{data}{\code{data.frame} or \code{vector}.}
 
 \item{window_size}{Size of the windows. (Logical)}
 

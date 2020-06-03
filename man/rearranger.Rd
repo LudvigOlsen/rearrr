@@ -7,7 +7,7 @@
 rearranger(data, rearrange_fn, check_fn, col = NULL, ...)
 }
 \arguments{
-\item{data}{\code{data frame} or \code{vector}.}
+\item{data}{\code{data.frame} or \code{vector}.}
 
 \item{rearrange_fn}{Rearrange function to apply.}
 
