@@ -117,6 +117,8 @@ rotate2d <- function(data,
   checkmate::assert_numeric(degrees,
                            lower = -360,
                            upper = 360,
+                           any.missing = FALSE,
+                           min.len = 1,
                            add = assert_collection)
   checkmate::assert_string(x_col, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)

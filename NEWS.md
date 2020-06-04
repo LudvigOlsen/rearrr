@@ -1,6 +1,8 @@
 
 # rearrr 0.0.0.9000
 
+* Adds `rotate2d()` for rotating values around an origin. (Mutator)
+
 * Adds `flip_values()` for flipping values around a center value. (Mutator)
 
 * Adds `center_max()` for centering the highest value with values decreasing around it. (Rearranger)

@@ -90,6 +90,7 @@ ggplot(df, aes(x=index, y=A)) +
 }
 \seealso{
 Other mutate functions: 
+\code{\link{expand2d}()},
 \code{\link{rotate2d}()}
 }
 \author{
