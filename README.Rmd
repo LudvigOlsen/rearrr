@@ -47,7 +47,7 @@ R package for rearranging data by a set of methods.
 
 We distinguish between **rearrangers** and **mutators**, where the first *reorders* the data points and the second *changes the values* of the data points.
 
-### Main functions
+### Rearrangers
 
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
@@ -59,6 +59,11 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`closest_to()`         |Order values by shortest distance to a target.                         |
 |`furthest_from()`      |Order values by longest distance to a target.                          |
 |`rev_windows()`        |Reverse order window-wise.                                             |
+
+### Mutators
+
+| Function              | Description                                                           |
+|:----------------------|:----------------------------------------------------------------------|
 |`flip_values()`        |Flip the values around a center value.                                 |
 |`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |
 
@@ -138,7 +143,7 @@ gg_base_line_size <- .3
 While we can use the functions with data frames, we showcase them with a vector for simplicity.
 The functions work with grouped data frames and in `magrittr` pipelines (`%>%`).
 
-## Rearrangers
+## Rearranger examples
 
 Rearrangers change the order of the data points.
 
@@ -251,7 +256,7 @@ orderings %>%
   scale_colour_brewer(palette = "Dark2")
 ```
 
-## Mutators
+## Mutator examples
 
 Mutators change the values of the data points.
 

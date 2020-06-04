@@ -16,7 +16,6 @@ Imports:
     checkmate (>= 2.0.0),
     dplyr (>= 0.8.5),
     lifecycle,
-    plyr,
     purrr (>= 0.3.4),
     rlang (>= 0.4.0),
     stats,
@@ -25,6 +24,7 @@ Suggests:
     ggplot2,
     graphics,
     knitr,
+    plyr,
     testthat,
     tidyr,
     xpectr (>= 0.3.0)

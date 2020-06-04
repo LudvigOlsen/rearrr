@@ -1427,6 +1427,8 @@ test_that("position_min always have legal outputs()", {
   )
 
   xpectr::set_test_seed(42)
+  # TODO Convert to purrr call so we don't need
+  # to suggest plyr
   orders <- plyr::ldply(seq_len(df_length), function(pos){
     plyr::ldply(1:10, function(rep){
       setNames(position_min(df, col = "A", position = pos, shuffle_sides = TRUE)$A,

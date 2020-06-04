@@ -117,7 +117,7 @@ df_grouped <- df \%>\%
 df_grouped
 
 # Plot A and A rotated around group centroids
-ggplot(df_grouped, aes(x=index_rotated, y=A_rotated, color = .degrees)) +
+ggplot(df_grouped, aes(x=index_rotated, y=A_rotated, color = factor(.degrees))) +
   geom_point() +
   theme_minimal() +
   labs(x = "Index", y="Value", color="Degrees")

@@ -33,7 +33,7 @@ We distinguish between **rearrangers** and **mutators**, where the first
 data
 points.
 
-### Main functions
+### Rearrangers
 
 | Function          | Description                                                            |
 | :---------------- | :--------------------------------------------------------------------- |
@@ -45,8 +45,13 @@ points.
 | `closest_to()`    | Order values by shortest distance to a target.                         |
 | `furthest_from()` | Order values by longest distance to a target.                          |
 | `rev_windows()`   | Reverse order window-wise.                                             |
-| `flip_values()`   | Flip the values around a center value.                                 |
-| `rotate2d()`      | Rotate values around an origin in 2 dimensions.                        |
+
+### Mutators
+
+| Function        | Description                                     |
+| :-------------- | :---------------------------------------------- |
+| `flip_values()` | Flip the values around a center value.          |
+| `rotate2d()`    | Rotate values around an origin in 2 dimensions. |
 
 ### Helper functions
 
@@ -58,17 +63,18 @@ points.
 
   - [rearrr](#rearrr)
       - [Overview](#overview)
-          - [Main functions](#main-functions)
+          - [Rearrangers](#rearrangers)
+          - [Mutators](#mutators)
           - [Helper functions](#helper-functions)
       - [Installation](#installation)
       - [Attach packages](#attach-packages)
-      - [Rearrangers](#rearrangers)
+      - [Rearranger examples](#rearranger-examples)
           - [Center min/max](#center-min/max)
           - [Position min/max](#position-min/max)
           - [Pair extremes](#pair-extremes)
           - [Closest to / furthest from](#closest-to-/-furthest-from)
           - [Reverse windows](#reverse-windows)
-      - [Mutators](#mutators)
+      - [Mutator examples](#mutator-examples)
           - [Flip values](#flip-values)
           - [Rotate values](#rotate-values)
 
@@ -112,7 +118,7 @@ While we can use the functions with data frames, we showcase them with a
 vector for simplicity. The functions work with grouped data frames and
 in `magrittr` pipelines (`%>%`).
 
-## Rearrangers
+## Rearranger examples
 
 Rearrangers change the order of the data points.
 
@@ -189,7 +195,7 @@ rev_windows(data = 1:10, window_size = 3)
 
 <img src="man/figures/README-unnamed-chunk-16-1.png" width="552" style="display: block; margin: auto;" />
 
-## Mutators
+## Mutator examples
 
 Mutators change the values of the data points.
 
