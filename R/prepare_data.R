@@ -66,7 +66,7 @@ prepare_input_data <- function(data, col, new_name=NULL){
        "was_vector" = was_vector)
 }
 
-prepare_output_data <- function(data, col, use_index, to_vector){
+prepare_output_data <- function(data, col, use_index, to_vector, exclude_cols=NULL){
 
   # Remove tmp column if 'col' was 'NULL'
   if (isTRUE(use_index)){
@@ -79,8 +79,14 @@ prepare_output_data <- function(data, col, use_index, to_vector){
     return(data[[1]])
   }
 
+  if (!is.null(exclude_cols) && length(exclude_cols) > 0){
+    data <- data[, names(data) %ni% exclude_cols, drop = FALSE]
+  }
+
   # Reset index
   row.names(data) <- NULL
 
   data
 }
+
+

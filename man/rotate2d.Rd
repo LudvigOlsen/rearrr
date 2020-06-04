@@ -127,6 +127,7 @@ ggplot(df_grouped, aes(x=index_rotated, y=A_rotated, color = factor(.degrees))) 
 \seealso{
 Other mutate functions: 
 \code{\link{expand2d}()},
+\code{\link{expand}()},
 \code{\link{flip_values}()}
 }
 \author{

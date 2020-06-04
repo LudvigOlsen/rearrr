@@ -31,7 +31,5 @@
 #' centroid(x, y, z)
 #' }
 centroid <- function(...) {
-  list(...) %>%
-    purrr::map(mean) %>%
-    unlist(recursive = TRUE, use.names = FALSE)
+  create_origin_fn(mean)(...)
 }

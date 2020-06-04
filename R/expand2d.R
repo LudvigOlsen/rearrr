@@ -4,7 +4,7 @@
 #   rotate2d                                                                ####
 
 
-#' @title Expand the values around an origin
+#' @title Expand the values around an origin in 2 dimensions
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
@@ -130,154 +130,50 @@
 expand2d <- function(data,
                      x_col = NULL,
                      y_col = NULL,
-                     suffix = "_expanded",
-                     multiplier = 1,
+                     multipliers = 1,
                      multiplier_fn = NULL,
                      origin = c(0, 0),
                      origin_fn = NULL,
                      exponentiate = FALSE,
                      add_one_exp = TRUE,
-                     mult_col_name = ifelse(isTRUE(exponentiate), ".exponent", ".multiplier"),
+                     suffix = "_expanded",
+                     keep_original = TRUE,
+                     mult_col_name = ifelse(isTRUE(exponentiate), ".exponent", ".multipliers"),
                      origin_col_name = ".origin") {
-
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(x_col, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_string(suffix, add = assert_collection)
-  checkmate::assert_string(mult_col_name, add = assert_collection)
-  checkmate::assert_string(origin_col_name, add = assert_collection)
-  checkmate::assert_numeric(origin,
-                            len = 2,
-                            any.missing = FALSE,
-                            add = assert_collection)
-  checkmate::assert_numeric(multiplier, any.missing = FALSE, min.len = 1, add = assert_collection)
-  checkmate::assert_flag(exponentiate, add = assert_collection)
-  checkmate::assert_flag(add_one_exp, add = assert_collection)
-  checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_function(multiplier_fn, null.ok = TRUE, add = assert_collection)
-  if (is.data.frame(data) && is.null(y_col)){
-    assert_collection$push("when 'data' is a data frame, 'y_col' must be specified.")
+  if (is.data.frame(data)){
+    if (!checkmate::test_string(x_col, min.chars = 1)){
+      assert_collection$push("when 'data' is a data.frame, x_col must be a non-empty string.")
+    }
+    if (!checkmate::test_string(y_col, min.chars = 1)){
+      assert_collection$push("when 'data' is a data.frame, y_col must be a non-empty string.")
+    }
+  } else {
+    if (!checkmate::test_null(x_col)){
+      assert_collection$push("when 'data' is a vector, x_col must be 'NULL'.")
+    }
+    if (!checkmate::test_null(y_col)){
+      assert_collection$push("when 'data' is a vector, y_col must be 'NULL'.")
+    }
   }
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  # Mutate with each multiplier
-  purrr::map_dfr(.x = multiplier, .f = function(mult){
-    mutator(
-      data = data,
-      mutate_fn = expand2d_mutator_method,
-      check_fn = NULL,
-      force_df = TRUE,
-      col = y_col,
-      x_col = x_col,
-      suffix = suffix,
-      multiplier = mult,
-      multiplier_fn = multiplier_fn,
-      origin = origin,
-      origin_fn = origin_fn,
-      exponentiate = exponentiate,
-      add_one_exp = add_one_exp,
-      mult_col_name = mult_col_name,
-      origin_col_name = origin_col_name
-    )
-  })
-
-
-}
-
-# col is the y_col
-expand2d_mutator_method <- function(data,
-                                    col,
-                                    x_col,
-                                    suffix,
-                                    multiplier,
-                                    multiplier_fn,
-                                    origin,
-                                    origin_fn,
-                                    exponentiate,
-                                    add_one_exp,
-                                    mult_col_name,
-                                    origin_col_name,
-                                    new_name=NULL) {
-
-  # Make it clear that col is the y_col
-  y_col <- col
-
-  # Extract x and y values
-  if (is.null(x_col)) {
-    x_col <- "Index"
-    x <- seq_len(nrow(data))
-  } else {
-    x <- data[[x_col]]
-  }
-  y <- data[[y_col]]
-
-  # Find origin if specified
-  if (!is.null(origin_fn)){
-    origin <- tryCatch(
-      origin_fn(x, y),
-      error = function(e) {
-        stop(paste0("failed to apply 'origin_fn': ", e))
-      }
-    )
-    if (length(origin) != 2){
-      stop("output of 'origin_fn' did not have length 2.")
-    }
-    if (!is.numeric(origin)){
-      stop("output of 'origin_fn' was not numeric.")
-    }
-  }
-
-  # Find multiplier if specified
-  if (!is.null(multiplier_fn)){
-    multiplier <- tryCatch(
-      multiplier_fn(x, y),
-      error = function(e) {
-        stop(paste0("failed to apply 'multiplier_fn': ", e))
-      }
-    )
-    if (length(multiplier) != 1){
-      stop("output of 'multiplier_fn' did not have length 1.")
-    }
-    if (!is.numeric(multiplier)){
-      stop("output of 'multiplier_fn' was not numeric.")
-    }
-  }
-
-  # Move origin
-  x <- x - origin[[1]]
-  y <- y - origin[[2]]
-
-  # Apply expansion
-  if (isTRUE(exponentiate)){
-    if (isTRUE(add_one_exp)){
-      x <- x + sign(x)
-      y <- y + sign(y)
-    }
-    x <- sign(x) * abs(x) ^ multiplier
-    y <- sign(y) * abs(y) ^ multiplier
-    if (isTRUE(add_one_exp)){
-      x <- x - sign(x)
-      y <- y - sign(y)
-    }
-  } else {
-    x <- x * multiplier
-    y <- y * multiplier
-  }
-
-  # Move origin
-  x <- x + origin[[1]]
-  y <- y + origin[[2]]
-
-  # Add expanded columns to data
-  data[[paste0(x_col, suffix)]] <- x
-  data[[paste0(y_col, suffix)]] <- y
-
-  # Add info columns
-  data[[mult_col_name]] <- multiplier
-  data[[origin_col_name]] <- list(origin)
-  data[[origin_col_name]] <- list(origin)
-
-  data
+  # Expansion!!!
+  expand(
+    data = data,
+    cols = c(x_col, y_col),
+    multipliers = multipliers,
+    multipliers_fn = multiplier_fn,
+    origin = origin,
+    origin_fn = origin_fn,
+    exponentiate = exponentiate,
+    add_one_exp = add_one_exp,
+    suffix = suffix,
+    keep_original = keep_original,
+    mult_col_name = mult_col_name,
+    origin_col_name = origin_col_name
+  )
 
 }

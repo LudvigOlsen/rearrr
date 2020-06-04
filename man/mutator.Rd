@@ -26,6 +26,8 @@ Should not return anything.}
 
 \item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.}
 
+\item{force_df}{Whether to return a \code{data.frame} when \code{data} is a \code{vector}.}
+
 \item{...}{Named arguments for the \code{mutate_fn}.}
 }
 \value{
