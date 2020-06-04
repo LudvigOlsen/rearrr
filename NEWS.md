@@ -1,6 +1,8 @@
 
 # rearrr 0.0.0.9000
 
+* Adds `expand_values()` for expanding values around an origin in any number of dimensions. (Mutator)
+
 * Adds `rotate2d()` for rotating values around an origin. (Mutator)
 
 * Adds `flip_values()` for flipping values around a center value. (Mutator)
