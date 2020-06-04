@@ -8,7 +8,8 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The values are expanded such that the distance to the specified origin is increased in all dimensions.
+#'  The the distance to the specified origin is increased/decreased in all dimensions.
+#'  A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
 #'  latter can be useful when supplying a grouped data frame and expanding around e.g. the centroid
