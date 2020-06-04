@@ -7,13 +7,13 @@
 #' Wrapper for running mutator methods
 #'
 #' @param data \code{data.frame} or \code{vector}.
-#' @param col Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.
-#' @param new_name Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.
+#' @param col Column to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.
+#' @param new_name Name of the new column with the mutated values. If \code{NULL}, the original \code{`col`} column is mutated directly.
 #' @param mutate_fn Mutator to apply.
-#' @param check_fn Function with checks post-preparation of \code{data} and \code{col}.
+#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`col`}.
 #'  Should not return anything.
-#' @param force_df Whether to return a \code{data.frame} when \code{data} is a \code{vector}.
-#' @param ... Named arguments for the \code{mutate_fn}.
+#' @param force_df Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.
+#' @param ... Named arguments for the \code{`mutate_fn`}.
 #' @keywords internal
 #' @return
 #'  The mutated \code{data frame} / \code{vector}.
@@ -81,8 +81,8 @@ mutator <- function(data,
 
 #' Wrapper for running multicolumn mutator methods
 #'
-#' @param cols Columns to mutate values of. Must be specified when \code{data} is a \code{data frame}.
-#' @param check_fn Function with checks post-preparation of \code{data} and \code{cols}.
+#' @param cols Columns to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.
+#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`cols`}.
 #'  Should not return anything.
 #' @param suffix Suffix to add to the names of the generated columns.
 #' @inheritParams mutator

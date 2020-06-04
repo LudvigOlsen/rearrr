@@ -9,9 +9,9 @@ flip_values(data, col = NULL, new_name = NULL, center_fn = median)
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.}
+\item{col}{Column to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.}
 
-\item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.}
+\item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{`col`} column is mutated directly.}
 
 \item{center_fn}{Function for finding the center value to flip the values around.}
 }
@@ -90,8 +90,7 @@ ggplot(df, aes(x=index, y=A)) +
 }
 \seealso{
 Other mutate functions: 
-\code{\link{expand2d}()},
-\code{\link{expand}()},
+\code{\link{expand_values}()},
 \code{\link{rotate2d}()}
 }
 \author{

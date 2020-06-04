@@ -48,16 +48,18 @@ points.
 
 ### Mutators
 
-| Function        | Description                                     |
-| :-------------- | :---------------------------------------------- |
-| `flip_values()` | Flip the values around a center value.          |
-| `rotate2d()`    | Rotate values around an origin in 2 dimensions. |
+| Function          | Description                                                        |
+| :---------------- | :----------------------------------------------------------------- |
+| `flip_values()`   | Flip the values around a center value.                             |
+| `rotate2d()`      | Rotate values around an origin in 2 dimensions.                    |
+| `expand_values()` | Expand values around around an origin in any number of dimensions. |
 
 ### Helper functions
 
-| Function     | Description                                  |
-| :----------- | :------------------------------------------- |
-| `centroid()` | Calculates the mean of each supplied vector. |
+| Function             | Description                                                          |
+| :------------------- | :------------------------------------------------------------------- |
+| `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
+| `centroid()`         | Calculates the mean of each supplied vector.                         |
 
 ## Table of Contents
 
@@ -77,6 +79,8 @@ points.
       - [Mutator examples](#mutator-examples)
           - [Flip values](#flip-values)
           - [Rotate values](#rotate-values)
+          - [Expand values in n
+            dimensions](#expand-values-in-n-dimensions)
 
 ## Installation
 
@@ -239,3 +243,31 @@ rotate2d(random_sample, degrees = 60, origin_fn = centroid)
 ```
 
 <img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
+
+### Expand values in n dimensions
+
+``` r
+# 1d expansion
+expand_values(
+  random_sample,
+  multipliers = 3,
+  origin_fn = centroid,
+  exponentiate = TRUE
+)
+#>     Value Value_expanded .exponents .origin
+#> 1  0.2655    -0.57536089          3 0.55152
+#> 2  0.3721    -0.08909041          3 0.55152
+#> 3  0.5729     0.61704109          3 0.55152
+#> 4  0.9082     2.04859892          3 0.55152
+#> 5  0.2017    -0.90787098          3 0.55152
+#> 6  0.8984     1.99487579          3 0.55152
+#> 7  0.9447     2.25561343          3 0.55152
+#> 8  0.6608     0.91649139          3 0.55152
+#> 9  0.6291     0.80278290          3 0.55152
+#> 10 0.0618    -1.75456447          3 0.55152
+```
+
+2d
+expansion:
+
+<img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />

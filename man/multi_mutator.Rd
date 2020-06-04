@@ -20,16 +20,16 @@ multi_mutator(
 
 \item{mutate_fn}{Mutator to apply.}
 
-\item{check_fn}{Function with checks post-preparation of \code{data} and \code{cols}.
+\item{check_fn}{Function with checks post-preparation of \code{`data`} and \code{`cols`}.
 Should not return anything.}
 
-\item{cols}{Columns to mutate values of. Must be specified when \code{data} is a \code{data frame}.}
+\item{cols}{Columns to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.}
 
 \item{suffix}{Suffix to add to the names of the generated columns.}
 
-\item{force_df}{Whether to return a \code{data.frame} when \code{data} is a \code{vector}.}
+\item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
 
-\item{...}{Named arguments for the \code{mutate_fn}.}
+\item{...}{Named arguments for the \code{`mutate_fn`}.}
 }
 \value{
 The mutated \code{data.frame}.

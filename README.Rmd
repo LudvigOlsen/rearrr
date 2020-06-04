@@ -66,11 +66,13 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |:----------------------|:----------------------------------------------------------------------|
 |`flip_values()`        |Flip the values around a center value.                                 |
 |`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |
+|`expand_values()`      |Expand values around around an origin in any number of dimensions.     |
 
 ### Helper functions
 
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
+|`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
 
 ## Table of Contents
@@ -296,7 +298,6 @@ rotate2d(random_sample, degrees = 60, origin_fn = centroid)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-
 rotate_df <- rotate2d(random_sample, degrees = c(0, 72, 144, 216, 288), origin_fn = centroid)
 
 # Plot rotated values
@@ -309,5 +310,50 @@ rotate_df %>%
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_colour_brewer(palette = "Dark2") + 
   labs(x = "Index", y="Value", color="Degrees")
+
+```
+
+### Expand values in n dimensions
+
+```{r}
+# 1d expansion
+expand_values(
+  random_sample,
+  multipliers = 3,
+  origin_fn = centroid,
+  exponentiate = TRUE
+)
+```
+
+2d expansion:
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+xpectr::set_test_seed(36)
+random_x <- runif(10)
+random_y <- runif(10)
+expand_df <- purrr::map_dfr(
+  .x = c(1, 2, 3, 4, 5),
+  .f = function(exponent) {
+    expand_values(
+      data.frame("x" = random_x,
+                 "y" = random_y),
+      cols = c("x", "y"),
+      multipliers = exponent,
+      origin_fn = centroid,
+      exponentiate = TRUE
+    )
+  }
+)
+
+# Plot rotated values
+expand_df %>% 
+  ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.exponents))) +
+  geom_hline(yintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_vline(xintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_line(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y="y", color="Exponent")
 
 ```

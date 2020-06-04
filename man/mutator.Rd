@@ -19,16 +19,16 @@ mutator(
 
 \item{mutate_fn}{Mutator to apply.}
 
-\item{check_fn}{Function with checks post-preparation of \code{data} and \code{col}.
+\item{check_fn}{Function with checks post-preparation of \code{`data`} and \code{`col`}.
 Should not return anything.}
 
-\item{col}{Column to mutate values of. Must be specified when \code{data} is a \code{data frame}.}
+\item{col}{Column to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.}
 
-\item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{col} column is mutated directly.}
+\item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{`col`} column is mutated directly.}
 
-\item{force_df}{Whether to return a \code{data.frame} when \code{data} is a \code{vector}.}
+\item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
 
-\item{...}{Named arguments for the \code{mutate_fn}.}
+\item{...}{Named arguments for the \code{`mutate_fn`}.}
 }
 \value{
 The mutated \code{data frame} / \code{vector}.

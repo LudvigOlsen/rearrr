@@ -17,16 +17,19 @@
 #'  The multipliers/exponents can can supplied as constant(s) or as a function that returns constant(s).
 #'  The latter can be useful when supplying a grouped data frame and the multiplier/exponent depends
 #'  on the data in the groups.
-#'  If supplying multiple constants, there must be one per dimension (length of \code{cols}).
+#'  If supplying multiple constants, there must be one per dimension (length of \code{`cols`}).
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param cols Names of columns in \code{data} to expand. Each column is considered a dimension to expand in.
+#' @param cols Names of columns in \code{`data`} to expand.
+#'  Each column is considered a dimension to expand in.
 #' @param origin Coordinates of the origin to expand around.
-#'  Must be either a single constant to use in all dimensions or a vector with one constant per dimension.
+#'  Must be either a single constant to use in all dimensions
+#'  or a vector with one constant per dimension.
 #'
-#'  \strong{N.B.} Ignored when \code{origin_fn} is not \code{NULL}.
+#'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_fn Function for finding the origin coordinates to expand the values around.
-#'  Each column will be passed as a vector in the order of \code{`cols`}. It should return either a single constant to be used in
+#'  Each column will be passed as a vector in the order of \code{`cols`}.
+#'  It should return either a single constant to be used in
 #'  all dimensions or a vector with one constant per dimension.
 #'
 #'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
@@ -50,21 +53,49 @@
 #'
 #'  \code{\}}
 #' @param multipliers Constant(s) to multiply/exponentiate the distance to the origin by.
-#' @param multiplier_fn Function
-#' @param exponentiate Whether to exponentiate instead of multiplying.
-#' @param add_one_exp Whether to add 1/-1 before exponentiating to ensure the values don't contract.
-#'  The added value is subtracted after the exponentiation.
+#'  Must be either a single constant to use in all dimensions or
+#'  a vector with one constant per dimension.
+#' @param multiplier_fn Function for finding the multipliers.
+#'  Each column will be passed as a vector in the order of \code{`cols`}.
+#'  It should return either a single constant to be used in
+#'  all dimensions or a vector with one constant per dimension.
 #'
-#'  Added with:
-#'  \code{x <- x + sign(x)} ; \code{y <- y + sign(y)}.
+#'  Just as for \code{`origin_fn`}, it can be created with
+#'  \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+#'  the same function to each dimension. See \code{`origin_fn`} above.
+#' @param exponentiate Whether to exponentiate instead of multiplying. (Logical)
+#' @param add_one_exp Whether to add the \code{sign} (either \code{1} or \code{-1})
+#'  before exponentiating to ensure the values don't contract.
+#'  The added value is subtracted after the exponentiation. (Logical)
 #'
-#'  Ignored when \code{exponentiate} is \code{FALSE}.
+#'  Exponentiation becomes:
+#'
+#'  \code{x <- x + sign(x)}
+#'
+#'  \code{x <- sign(x) * abs(x) ^ multiplier}
+#'
+#'  \code{x <- x - sign(x)}
+#'
+#'  \strong{N.B.} Ignored when \code{`exponentiate`} is \code{FALSE}.
 #' @param mult_col_name Name of new column with the multiplier.
 #' @param origin_col_name Name of new column with the origin coordinates.
 #' @export
-#' @return Data frame with three new columns containing the rotated x- and y-values and the degrees.
+#' @return \code{data.frame} with the expanded columns,
+#'  along with the applied multiplier/exponent and origin coordinates.
 #' @details
-#'  TODO
+#'  For each value of each dimension (column), either multiply or exponentiate by the multiplier:
+#'
+#'  \code{# Multiplication}
+#'
+#'  \code{x <- x * multiplier}
+#'
+#'  \code{# Exponentiation}
+#'
+#'  \code{x <- sign(x) * abs(x) ^ multiplier}
+#'
+#'  Note: By default (when \code{`add_one_exp`} is TRUE),
+#'  we add the sign (\code{1 / -1}) of the value before the exponentiation
+#'  and subtracts it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @inheritParams multi_mutator
 #' @examples
@@ -72,6 +103,7 @@
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
+#' library(purrr)
 #' library(ggplot2)
 #'
 #' # Set seed
@@ -87,25 +119,57 @@
 #'           4, 4, 4, 4, 4)
 #' )
 #'
+#' # Expand values in the two dimensions (x and y)
+#' # With the origin at x=0.5, y=0.5
+#' # We expand x by 2 and y by 4
+#' expand_values(
+#'   data = df,
+#'   cols = c("x", "y"),
+#'   multipliers = c(2, 4),
+#'   origin = c(0.5, 0.5)
+#' )
 #'
-#' # Expand values
-#' expand2d(df, multiplier = 1.2, x_col="x", y_col="y")
+#' # Expand values in the two dimensions (x and y)
+#' # With the origin at x=0.5, y=0.5
+#' # We expand both by 3
+#' expand_values(
+#'   data = df,
+#'   cols = c("x", "y"),
+#'   multipliers = 3,
+#'   origin = 0.5
+#' )
+#'
+#' # Expand values in one dimension (x)
+#' # With the origin at x=0.5
+#' # We expand by 3
+#' expand_values(
+#'   data = df,
+#'   cols = c("x"),
+#'   multipliers = 3,
+#'   origin = 0.5
+#' )
 #'
 #' # Expand x and y around the centroid
 #' # We use exponentiation for a more drastic effect
-#' # The add_one_exp makes sure it expands even
-#' # when x or y is in the range [>-1, <1]
-#' df_expanded <- df %>%
-#'   expand2d(x_col = "x",
-#'            y_col = "y",
-#'            multiplier = c(1, 2.0, 3.0, 4.0),
-#'            origin_fn = centroid,
-#'            exponentiate = TRUE,
-#'            add_one_exp = TRUE)
+#' # The add_one_exp makes sure it expands
+#' # even when x or y is in the range [>-1, <1]
+#' # To compare multiple exponents, we wrap the
+#' # call in purrr::map_dfr
+#' df_expanded <- purrr::map_dfr(
+#'   .x = c(1, 2.0, 3.0, 4.0),
+#'   .f = function(exponent){
+#'   expand_values(
+#'     data = df,
+#'     cols = c("x", "y"),
+#'     multipliers = exponent,
+#'     origin_fn = centroid,
+#'     exponentiate = TRUE,
+#'     add_one_exp = TRUE)
+#' })
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
-#' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
+#' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponents))) +
 #'   geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
 #'              size = 0.2, alpha = .4, linetype="dashed") +
 #'   geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
@@ -115,37 +179,68 @@
 #'   labs(x = "x", y="y", color="Exponent")
 #'
 #' # Expand x and y around the centroid using multiplication
-#' df_expanded <- df %>%
-#'   expand2d(x_col = "x",
-#'            y_col = "y",
-#'            multiplier = c(1, 1.5, 2.0, 2.5),
-#'            origin_fn = centroid,
-#'            exponentiate = FALSE)
+#' # To compare multiple multipliers, we wrap the
+#' # call in purrr::map_dfr
+#' df_expanded <- purrr::map_dfr(
+#'   .x = c(1, 2.0, 3.0, 4.0),
+#'   .f = function(multiplier){
+#'   expand_values(df,
+#'          cols = c("x", "y"),
+#'          multipliers = multiplier,
+#'          origin_fn = centroid,
+#'          exponentiate = FALSE)
+#' })
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
-#' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multiplier))) +
+#' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multipliers))) +
 #'   geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-#'              size = 0.2, alpha = .4, linetype="dashed") +
+#'              size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-#'              size = 0.2, alpha = .4, linetype="dashed") +
+#'              size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_point() +
 #'   theme_minimal() +
-#'   labs(x = "x", y="y", color="Multiplier")
+#'   labs(x = "x", y = "y", color = "Multiplier")
+#'
+#' # Expand x and y with different multipliers
+#' # around the centroid using multiplication
+#' df_expanded <- expand_values(
+#'   df,
+#'   cols = c("x", "y"),
+#'   multipliers = c(1.25, 10),
+#'   origin_fn = centroid,
+#'   exponentiate = FALSE
+#' )
+#' df_expanded
+#'
+#' # Plot the expansions of x and y around the overall centroid
+#' # Note how the y axis is expanded a lot more than the x-axis
+#' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded)) +
+#'   geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
+#'              size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
+#'              size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_line(aes(color = "Expanded")) +
+#'   geom_point(aes(color = "Expanded")) +
+#'   geom_line(aes(x = x, y = y, color = "Original")) +
+#'   geom_point(aes(x = x, y = y, color = "Original")) +
+#'   theme_minimal() +
+#'   labs(x = "x", y = "y", color = "Multiplier")
 #'
 #' }
-expand <- function(data,
-                   cols = NULL,
-                   multipliers = 1,
-                   multipliers_fn = NULL,
-                   origin = 0,
-                   origin_fn = NULL,
-                   exponentiate = FALSE,
-                   add_one_exp = TRUE,
-                   suffix = "_expanded",
-                   keep_original = TRUE,
-                   mult_col_name = ifelse(isTRUE(exponentiate), ".exponent", ".multipliers"),
-                   origin_col_name = ".origin") {
+expand_values <- function(data,
+                          cols = NULL,
+                          multipliers = 1,
+                          multipliers_fn = NULL,
+                          origin = 0,
+                          origin_fn = NULL,
+                          exponentiate = FALSE,
+                          add_one_exp = TRUE,
+                          suffix = "_expanded",
+                          keep_original = TRUE,
+                          mult_col_name = ifelse(isTRUE(exponentiate), ".exponents", ".multipliers"),
+                          origin_col_name = ".origin") {
+
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(mult_col_name, add = assert_collection)
