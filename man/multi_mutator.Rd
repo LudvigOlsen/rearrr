@@ -25,9 +25,15 @@ Should not return anything.}
 
 \item{cols}{Columns to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.}
 
-\item{suffix}{Suffix to add to the names of the generated columns.}
+\item{suffix}{Suffix to add to the names of the generated columns.
+
+Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
+
+\item{keep_original}{Whether to keep the original columns. (Logical)
+
+Some columns may have been overwritten, in which case only the newest version is returned.}
 
 \item{...}{Named arguments for the \code{`mutate_fn`}.}
 }

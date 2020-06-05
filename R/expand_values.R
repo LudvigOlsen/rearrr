@@ -1,14 +1,14 @@
 
 
 #   __________________ #< 98e58be6387b888b9531fcb3a3d4f0b7 ># __________________
-#   Expand                                                                  ####
+#   Expand values                                                           ####
 
 
 #' @title Expand the values around an origin
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The the distance to the specified origin is increased/decreased in all dimensions.
+#'  The distance to the specified origin is increased/decreased in all dimensions.
 #'  A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
@@ -19,6 +19,12 @@
 #'  The latter can be useful when supplying a grouped data frame and the multiplier/exponent depends
 #'  on the data in the groups.
 #'  If supplying multiple constants, there must be one per dimension (length of \code{`cols`}).
+#'
+#'  \strong{NOTE}: When exponentiating, the default is to first add \code{1} or \code{-1}
+#'  (depending on the sign of the distance) to the distances,
+#'  to ensure expansion even when the distance is between \code{-1} and \code{1}.
+#'  If you need the purely exponentiated distances,
+#'  disable \code{`add_one_exp`}.
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param cols Names of columns in \code{`data`} to expand.
@@ -56,6 +62,8 @@
 #' @param multipliers Constant(s) to multiply/exponentiate the distance to the origin by.
 #'  Must be either a single constant to use in all dimensions or
 #'  a vector with one constant per dimension.
+#'
+#'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
 #' @param multiplier_fn Function for finding the multipliers.
 #'  Each column will be passed as a vector in the order of \code{`cols`}.
 #'  It should return either a single constant to be used in
@@ -63,7 +71,7 @@
 #'
 #'  Just as for \code{`origin_fn`}, it can be created with
 #'  \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension. See \code{`origin_fn`} above.
+#'  the same function to each dimension. See \code{`origin_fn`}.
 #' @param exponentiate Whether to exponentiate instead of multiplying. (Logical)
 #' @param add_one_exp Whether to add the \code{sign} (either \code{1} or \code{-1})
 #'  before exponentiating to ensure the values don't contract.
@@ -78,8 +86,8 @@
 #'  \code{x <- x - sign(x)}
 #'
 #'  \strong{N.B.} Ignored when \code{`exponentiate`} is \code{FALSE}.
-#' @param mult_col_name Name of new column with the multiplier.
-#' @param origin_col_name Name of new column with the origin coordinates.
+#' @param mult_col_name Name of new column with the multiplier. If \code{NULL}, no column is added.
+#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} with the expanded columns,
 #'  along with the applied multiplier/exponent and origin coordinates.
@@ -228,6 +236,25 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "Multiplier")
 #'
+#' # Contraction
+#'
+#' # Group-wise contraction to create clusters
+#' df_contracted <- df %>%
+#'   dplyr::group_by(g) %>%
+#'   expand_values(
+#'     cols = c("x", "y"),
+#'     multipliers = 0.07,
+#'     suffix = "_contracted",
+#'     origin_fn = centroid
+#'   )
+#'
+#' # Plot the clustered data point on top of the original data points
+#' ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))) +
+#'   geom_point(aes(x=x, y=y, color = factor(g)), alpha = 0.3, shape=16) +
+#'   geom_point() +
+#'   theme_minimal() +
+#'   labs(x = "x", y="y", color="g")
+#'
 #' }
 expand_values <- function(data,
                           cols = NULL,
@@ -244,8 +271,8 @@ expand_values <- function(data,
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(mult_col_name, add = assert_collection)
-  checkmate::assert_string(origin_col_name, add = assert_collection)
+  checkmate::assert_string(mult_col_name, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
                             min.len = 1,
                             any.missing = FALSE,
@@ -406,20 +433,32 @@ expand_mutator_method <- function(data,
     })
 
   # Add expanded columns to data
+
+  # Convert to data frame
   names(dim_vectors) <- paste0(names(dim_vectors), suffix)
   expanded_data <- data.frame(dim_vectors, stringsAsFactors = FALSE)
+
+  # If overwriting columns, delete in 'data' first
+  col_intersection <-
+    intersect(colnames(expanded_data), colnames(data))
+  if (length(col_intersection) > 0) {
+    data <- data[, colnames(data) %ni% col_intersection, drop = FALSE]
+  }
 
   # Add to original dataframe
   data <- dplyr::bind_cols(data, expanded_data)
 
   # Add info columns
-  if (length(multipliers) > 1) {
-    data[[mult_col_name]] <- list(multipliers)
-  } else{
-    data[[mult_col_name]] <- multipliers
+  if (!is.null(mult_col_name)){
+    if (length(multipliers) > 1) {
+      data[[mult_col_name]] <- list(multipliers)
+    } else{
+      data[[mult_col_name]] <- multipliers
+    }
   }
-  data[[origin_col_name]] <- list(origin)
-
+  if (!is.null(origin_col_name)) {
+    data[[origin_col_name]] <- list(origin)
+  }
   data
 
 }

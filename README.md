@@ -48,18 +48,21 @@ points.
 
 ### Mutators
 
-| Function          | Description                                                        |
-| :---------------- | :----------------------------------------------------------------- |
-| `flip_values()`   | Flip the values around a center value.                             |
-| `rotate2d()`      | Rotate values around an origin in 2 dimensions.                    |
-| `expand_values()` | Expand values around around an origin in any number of dimensions. |
+| Function           | Description                                                        |
+| :----------------- | :----------------------------------------------------------------- |
+| `flip_values()`    | Flip the values around a center value.                             |
+| `rotate2d()`       | Rotate values around an origin in 2 dimensions.                    |
+| `expand_values()`  | Expand values around around an origin in any number of dimensions. |
+| `cluster_groups()` | Move data points into clusters around group centroids.             |
 
 ### Helper functions
 
-| Function             | Description                                                          |
-| :------------------- | :------------------------------------------------------------------- |
-| `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
-| `centroid()`         | Calculates the mean of each supplied vector.                         |
+| Function               | Description                                                          |
+| :--------------------- | :------------------------------------------------------------------- |
+| `create_origin_fn()`   | Creates function for finding origin coordinates (like `centroid()`). |
+| `centroid()`           | Calculates the mean of each supplied vector.                         |
+| `transfer_centroids()` | Transfer centroids from one `data.frame` to another.                 |
+| `min_max_scale()`      | Scale values to a range.                                             |
 
 ## Table of Contents
 
@@ -81,6 +84,7 @@ points.
           - [Rotate values](#rotate-values)
           - [Expand values in n
             dimensions](#expand-values-in-n-dimensions)
+          - [Cluster groups](#cluster-groups)
 
 ## Installation
 
@@ -118,9 +122,9 @@ xpectr::set_test_seed(1)
 
 <!-- Note: The `kable()` function simply **formats** the output and is not required. -->
 
-While we can use the functions with data frames, we showcase them with a
-vector for simplicity. The functions work with grouped data frames and
-in `magrittr` pipelines (`%>%`).
+While we can use the functions with data frames, we showcase many of
+them with a vector for simplicity. The functions work with grouped data
+frames and in `magrittr` pipelines (`%>%`).
 
 ## Rearranger examples
 
@@ -271,3 +275,35 @@ expand_values(
 expansion:
 
 <img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />
+
+### Cluster groups
+
+``` r
+# Set seed for reproducibility
+xpectr::set_test_seed(3)
+
+# Create data frame with random data and a grouping variable
+df <- data.frame(
+  "x" = runif(50),
+  "y" = runif(50),
+  "g" = rep(c(1, 2, 3, 4, 5), each = 10)
+) 
+
+cluster_groups(df, cols = c("x", "y"), group_col = "g")
+#> # A tibble: 50 x 5
+#>        x     y x_clustered y_clustered     g
+#>    <dbl> <dbl>       <dbl>       <dbl> <dbl>
+#>  1 0.168 0.229       0.335       0.420     1
+#>  2 0.808 0.213       0.449       0.417     1
+#>  3 0.385 0.877       0.374       0.540     1
+#>  4 0.328 0.993       0.364       0.562     1
+#>  5 0.602 0.844       0.413       0.534     1
+#>  6 0.604 0.910       0.413       0.547     1
+#>  7 0.125 0.471       0.328       0.465     1
+#>  8 0.295 0.224       0.358       0.419     1
+#>  9 0.578 0.128       0.408       0.401     1
+#> 10 0.631 0.280       0.418       0.429     1
+#> # … with 40 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />

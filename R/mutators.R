@@ -85,6 +85,11 @@ mutator <- function(data,
 #' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`cols`}.
 #'  Should not return anything.
 #' @param suffix Suffix to add to the names of the generated columns.
+#'
+#'  Use an empty string (i.e. \code{""}) to overwrite the original columns.
+#' @param keep_original Whether to keep the original columns. (Logical)
+#'
+#'  Some columns may have been overwritten, in which case only the newest version is returned.
 #' @inheritParams mutator
 #' @keywords internal
 #' @return
@@ -116,7 +121,7 @@ multi_mutator <- function(data,
                               null.ok = FALSE, add = assert_collection)
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_string(suffix, min.chars = 1, add = assert_collection)
+  checkmate::assert_string(suffix, add = assert_collection)
   checkmate::assert_flag(force_df, add = assert_collection)
   checkmate::assert_flag(keep_original, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -132,6 +137,11 @@ multi_mutator <- function(data,
     group_columns <- colnames(dplyr::group_keys(data))
     non_group_columns <- setdiff(colnames(data), group_columns)
     exclude_cols <- non_group_columns
+    if (suffix == ""){
+      # The cols will be overwritten
+      # so we shouldn't exclude them
+      exclude_cols <- setdiff(exclude_cols, cols)
+    }
   }
 
   # Apply mutator method

@@ -126,6 +126,7 @@ ggplot(df_grouped, aes(x=index_rotated, y=A_rotated, color = factor(.degrees))) 
 }
 \seealso{
 Other mutate functions: 
+\code{\link{cluster_groups}()},
 \code{\link{expand_values}()},
 \code{\link{flip_values}()}
 }

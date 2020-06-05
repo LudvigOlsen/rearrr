@@ -67,6 +67,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`flip_values()`        |Flip the values around a center value.                                 |
 |`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |
 |`expand_values()`      |Expand values around around an origin in any number of dimensions.     |
+|`cluster_groups()`     |Move data points into clusters around group centroids.                 |
 
 ### Helper functions
 
@@ -74,6 +75,9 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |:----------------------|:----------------------------------------------------------------------|
 |`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
+|`transfer_centroids()` |Transfer centroids from one `data.frame` to another.                   |
+|`min_max_scale()`      |Scale values to a range.                                               |
+
 
 ## Table of Contents
 
@@ -142,7 +146,7 @@ gg_base_line_size <- .3
 
 <!-- Note: The `kable()` function simply **formats** the output and is not required. -->
 
-While we can use the functions with data frames, we showcase them with a vector for simplicity.
+While we can use the functions with data frames, we showcase many of them with a vector for simplicity.
 The functions work with grouped data frames and in `magrittr` pipelines (`%>%`).
 
 ## Rearranger examples
@@ -357,3 +361,33 @@ expand_df %>%
   labs(x = "x", y="y", color="Exponent")
 
 ```
+
+### Cluster groups
+
+```{r}
+# Set seed for reproducibility
+xpectr::set_test_seed(3)
+
+# Create data frame with random data and a grouping variable
+df <- data.frame(
+  "x" = runif(50),
+  "y" = runif(50),
+  "g" = rep(c(1, 2, 3, 4, 5), each = 10)
+) 
+
+cluster_groups(df, cols = c("x", "y"), group_col = "g")
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+df_clustered <- cluster_groups(df, cols = c("x", "y"), group_col = "g")
+
+ggplot(df_clustered, aes(x = x_clustered, y = y_clustered, color = factor(g))) +
+  # Original data
+  geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
+  # Clustered data
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = "g")
+```
+

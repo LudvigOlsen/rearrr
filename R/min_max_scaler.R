@@ -1,0 +1,53 @@
+
+
+#   __________________ #< 3a8fede84c3a1758022e789cf95b5f21 ># __________________
+#   MinMax scaling                                                          ####
+
+
+#' @title Scale to a range
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Scales the values to a range with MinMax scaling.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @param x Numeric \code{vector} to scale.
+#' @param new_min Minimum value of target range.
+#' @param new_max Maximum value of target range.
+#' @param old_min Minimum value of original range.
+#'
+#'  If \code{NULL}, this is the minimum value in \code{`x`}.
+#' @param old_max Maximum value of original range.
+#'
+#'  If \code{NULL}, this is the maximum value in \code{`x`}.
+#' @export
+#' @return Scaled version of \code{`x`}.
+#' @examples
+#' \donttest{
+#' # Attach packages
+#' library(rearrr)
+#'
+#' # Set seed
+#' set.seed(1)
+#'
+#' # Create numeric vector
+#' x <- runif(10)
+#'
+#' # Scale
+#' min_max_scale(x, new_min = -1, new_max = 0)
+#' min_max_scale(x, new_min = -1, new_max = 0, old_max = 3)
+#'
+#' }
+min_max_scale <- function(x,
+                          new_min,
+                          new_max,
+                          old_min = NULL,
+                          old_max = NULL) {
+  if (is.null(old_min)) {
+    old_min <- min(x)
+  }
+  if (is.null(old_max)) {
+    old_max <- max(x)
+  }
+  x <- (x - old_min) / (old_max - old_min)
+  x * (new_max - new_min) + new_min
+}

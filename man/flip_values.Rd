@@ -90,6 +90,7 @@ ggplot(df, aes(x=index, y=A)) +
 }
 \seealso{
 Other mutate functions: 
+\code{\link{cluster_groups}()},
 \code{\link{expand_values}()},
 \code{\link{rotate2d}()}
 }
