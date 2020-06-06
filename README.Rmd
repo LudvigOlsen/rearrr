@@ -69,7 +69,13 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`expand_values()`      |Expand values around around an origin in any number of dimensions.     |
 |`cluster_groups()`     |Move data points into clusters around group centroids.                 |
 
-### Helper functions
+### Generators
+
+| Function              | Description                                                           |
+|:----------------------|:----------------------------------------------------------------------|
+|`generate_clusters()`  |Generate n-dimensional clusters.                                       |
+
+### Helpers
 
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
@@ -77,7 +83,6 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
 |`transfer_centroids()` |Transfer centroids from one `data.frame` to another.                   |
 |`min_max_scale()`      |Scale values to a range.                                               |
-|`generate_clusters()`  |Generate n-dimensional clusters.                                       |
 
 
 ## Table of Contents

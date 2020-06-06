@@ -247,6 +247,7 @@ cluster_groups <- function(data,
       )
   }
 
+  # Rename columns and select which columns to return
   if (suffix != ""){
     colnames(clustered) <-
       purrr::map_chr(.x = colnames(clustered), .f = ~ {
