@@ -55,7 +55,13 @@ points.
 | `expand_values()`  | Expand values around around an origin in any number of dimensions. |
 | `cluster_groups()` | Move data points into clusters around group centroids.             |
 
-### Helper functions
+### Generators
+
+| Function              | Description                      |
+| :-------------------- | :------------------------------- |
+| `generate_clusters()` | Generate n-dimensional clusters. |
+
+### Helpers
 
 | Function               | Description                                                          |
 | :--------------------- | :------------------------------------------------------------------- |
@@ -63,7 +69,6 @@ points.
 | `centroid()`           | Calculates the mean of each supplied vector.                         |
 | `transfer_centroids()` | Transfer centroids from one `data.frame` to another.                 |
 | `min_max_scale()`      | Scale values to a range.                                             |
-| `generate_clusters()`  | Generate n-dimensional clusters.                                     |
 
 ## Table of Contents
 
@@ -71,7 +76,8 @@ points.
       - [Overview](#overview)
           - [Rearrangers](#rearrangers)
           - [Mutators](#mutators)
-          - [Helper functions](#helper-functions)
+          - [Generators](#generators)
+          - [Helpers](#helpers)
       - [Installation](#installation)
       - [Attach packages](#attach-packages)
       - [Rearranger examples](#rearranger-examples)
