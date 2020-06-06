@@ -4,7 +4,14 @@
 \alias{min_max_scale}
 \title{Scale to a range}
 \usage{
-min_max_scale(x, new_min, new_max, old_min = NULL, old_max = NULL)
+min_max_scale(
+  x,
+  new_min,
+  new_max,
+  old_min = NULL,
+  old_max = NULL,
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{x}{Numeric \code{vector} to scale.}
@@ -20,6 +27,10 @@ If \code{NULL}, this is the minimum value in \code{`x`}.}
 \item{old_max}{Maximum value of original range.
 
 If \code{NULL}, this is the maximum value in \code{`x`}.}
+
+\item{na.rm}{Whether missing values should be removed when calculating \code{`old_min`} and/or \code{`old_max`}.
+
+\strong{N.B.} Ignored when both \code{`old_min`} and \code{`old_max`} are \code{NULL}.}
 }
 \value{
 Scaled version of \code{`x`}.

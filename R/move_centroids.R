@@ -17,7 +17,7 @@ move_centroid <- function(data,
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(change_col_name, add = assert_collection)
+  checkmate::assert_string(change_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(to,
                             min.len = 1,
                             any.missing = FALSE,
@@ -118,7 +118,10 @@ move_centroid_mutator_method <- function(data,
   data <- dplyr::bind_cols(data, expanded_data)
 
   # Add info columns
-  data[[change_col_name]] <- list(to_move)
+  if (!is.null(change_col_name)){
+    data[[change_col_name]] <- list(to_move)
+  }
+
 
   data
 

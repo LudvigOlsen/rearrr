@@ -170,10 +170,19 @@ is_between_ <- function(x, a, b) {
 
 
 greedy_windows <- function(data, window_size, factor_name = ".window") {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, min.cols = 1, min.rows = 1, add = assert_collection)
+  checkmate::assert_number(window_size, lower = 1, add = assert_collection)
+  checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   size <- nrow(data)
   num_windows <- ceiling(size / window_size)
   windows <- rep(seq_len(num_windows), each = window_size)
-  data[[factor_name]] <- head(windows, size)
+  data[[factor_name]] <- factor(head(windows, size))
   data
 }
 
@@ -182,6 +191,19 @@ greedy_windows <- function(data, window_size, factor_name = ".window") {
 ##  Windows n-distributed                                                   ####
 
 ndist_windows <- function(data, num_windows, factor_name  = ".window") {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_number(num_windows, lower = 1,  add = assert_collection)
+  checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (num_windows > nrow(data)){
+    assert_collection$push("'num_windows' was greater than the number of rows in 'data'.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   data[[factor_name]] <-
     n_dist_group_factor_(v_size = nrow(data), n_windows = num_windows)
 
