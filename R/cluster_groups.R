@@ -51,22 +51,36 @@
 #' df <- data.frame(
 #'   "x" = runif(50),
 #'   "y" = runif(50),
+#'   "z" = runif(50),
 #'   "g" = rep(c(1, 2, 3, 4, 5), each = 10)
 #' )
 #'
 #' # Move the data points into clusters
-#' cluster_groups(df, cols = c("x", "y"), group_col = "g")
-#' cluster_groups(df, cols = c("x", "y"), group_col = "g", multiplier = 0.1)
-#' cluster_groups(df, cols = c("x"), group_col = "g", multiplier = 0.1)
+#' cluster_groups(df, cols = c("x", "y"),
+#'                group_col = "g")
+#' cluster_groups(df, cols = c("x", "y"),
+#'                group_col = "g",
+#'                multiplier = 0.1)
+#' cluster_groups(df, cols = c("x"),
+#'                group_col = "g",
+#'                multiplier = 0.1)
 #'
+#' #
 #' # Plotting clusters
+#' #
 #'
 #' # Cluster x and y for each group in g
-#' df_clustered <- cluster_groups(df, cols = c("x", "y"), group_col = "g")
+#' df_clustered <- cluster_groups(
+#'   data = df,
+#'   cols = c("x", "y"),
+#'   group_col = "g")
 #'
 #' # Plot the clusters over the original data points
 #' # As we work with random data, the cluster might overlap
-#' ggplot(df_clustered, aes(x = x_clustered, y = y_clustered, color = factor(g))) +
+#' ggplot(
+#'   df_clustered,
+#'   aes(x = x_clustered, y = y_clustered, color = factor(g))
+#' ) +
 #'   # Original data
 #'   geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
 #'   # Clustered data
@@ -74,18 +88,49 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "g")
 #'
+#' #
 #' # Maintain original group centroids
-#' df_clustered <- cluster_groups(df, cols=c("x", "y"), group_col = "g", keep_centroids = TRUE)
+#' #
+#'
+#' df_clustered <- cluster_groups(
+#'   data = df,
+#'   cols=c("x", "y"),
+#'   group_col = "g",
+#'   keep_centroids = TRUE)
 #'
 #' # Plot the clusters over the original data points
 #' # As we work with random data, the cluster might overlap
-#' ggplot(df_clustered, aes(x = x_clustered, y = y_clustered, color = factor(g))) +
+#' ggplot(
+#'   df_clustered,
+#'   aes(x = x_clustered, y = y_clustered, color = factor(g))
+#' ) +
 #'   # Original data
 #'   geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
 #'   # Clustered data
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "g")
+#'
+#' #
+#' # Three dimensions
+#' #
+#'
+#' # Cluster in 3d
+#' df_clustered <- cluster_groups(
+#'   data = df,
+#'   cols=c("x", "y", "z"),
+#'   group_col = "g"
+#' )
+#'
+#' # Plot 3d with plotly
+#' plotly::plot_ly(
+#'   x=df_clustered$x_clustered,
+#'   y=df_clustered$y_clustered,
+#'   z=df_clustered$z_clustered,
+#'   type="scatter3d",
+#'   mode="markers",
+#'   color=df_clustered$g
+#' )
 #'
 #' }
 cluster_groups <- function(data,
@@ -178,7 +223,7 @@ cluster_groups <- function(data,
   # MinMax scaling to restore original scale
   scaled <- plyr::llply(cols, function(cl) {
     min_max_scale(
-      xs = expanded[[cl]],
+      x = expanded[[cl]],
       new_min = scale_min_fn(data[[cl]]),
       new_max = scale_max_fn(data[[cl]])
     )

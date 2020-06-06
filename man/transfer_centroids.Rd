@@ -84,7 +84,8 @@ df3 \%>\%
 }
 \seealso{
 Other clustering functions: 
-\code{\link{cluster_groups}()}
+\code{\link{cluster_groups}()},
+\code{\link{generate_clusters}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

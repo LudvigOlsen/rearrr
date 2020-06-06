@@ -63,6 +63,7 @@ points.
 | `centroid()`           | Calculates the mean of each supplied vector.                         |
 | `transfer_centroids()` | Transfer centroids from one `data.frame` to another.                 |
 | `min_max_scale()`      | Scale values to a range.                                             |
+| `generate_clusters()`  | Generate n-dimensional clusters.                                     |
 
 ## Table of Contents
 
@@ -85,6 +86,8 @@ points.
           - [Expand values in n
             dimensions](#expand-values-in-n-dimensions)
           - [Cluster groups](#cluster-groups)
+      - [Generators](#generators)
+          - [Generate clusters](#generate-clusters)
 
 ## Installation
 
@@ -307,3 +310,27 @@ cluster_groups(df, cols = c("x", "y"), group_col = "g")
 ```
 
 <img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
+
+## Generators
+
+### Generate clusters
+
+``` r
+generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1.6)
+#> # A tibble: 50 x 6
+#>       D1    D2    D3     D4    D5 .cluster
+#>    <dbl> <dbl> <dbl>  <dbl> <dbl> <fct>   
+#>  1 0.316 0.553 0.523 0.202  0.653 1       
+#>  2 0.279 0.753 0.447 0.0774 0.788 1       
+#>  3 0.301 0.516 0.530 0.0541 0.842 1       
+#>  4 0.350 0.594 0.540 0.0701 0.922 1       
+#>  5 0.239 0.497 0.677 0.102  0.621 1       
+#>  6 0.264 0.632 0.670 0.0742 0.845 1       
+#>  7 0.273 0.589 0.696 0.0681 0.885 1       
+#>  8 0.273 0.592 0.559 0.0944 0.987 1       
+#>  9 0.336 0.569 0.618 0.212  0.670 1       
+#> 10 0.302 0.605 0.545 0.0601 0.938 1       
+#> # … with 40 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-27-1.png" width="552" style="display: block; margin: auto;" />

@@ -236,7 +236,9 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "Multiplier")
 #'
+#' #
 #' # Contraction
+#' #
 #'
 #' # Group-wise contraction to create clusters
 #' df_contracted <- df %>%

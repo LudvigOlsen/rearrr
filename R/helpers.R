@@ -178,6 +178,72 @@ greedy_windows <- function(data, window_size, factor_name = ".window") {
 }
 
 
+##  .................. #< 160fb806ead6df367e8121d143d788b6 ># ..................
+##  Windows n-distributed                                                   ####
+
+ndist_windows <- function(data, num_windows, factor_name  = ".window") {
+  data[[factor_name]] <-
+    n_dist_group_factor_(v_size = nrow(data), n_windows = num_windows)
+
+  data
+}
+
+
+n_dist_group_factor_ <- function(v_size, n_windows) {
+  # Simplified version of groupdata2 version
+
+  #
+  # Takes a vector and a number of windows to create
+  # Distributes excess elements somewhat evenly across windows
+  # Returns grouping factor
+  #
+
+  # Create grouping factor with distributed excess elements
+  grouping_factor <- ceiling(seq_len(v_size) / (v_size / n_windows))
+
+  # Sometimes a value of e.g. 7.0000.. is rounded up to 8
+  # in the above ceiling(). This means that we get 8 groups
+  # instead of the specified 7. In this case we replace
+  # the extra "8" with 7.
+  # --> This should be tested! <--
+
+  # If there are too many groups
+  if (max(grouping_factor) > n_windows) {
+    # Get the largest number in grouping factor
+    max_value <- max(grouping_factor)
+
+    # Get the size of the last group
+    last_group_size <-
+      length(grouping_factor[grouping_factor == max_value])
+
+    # If there is only one group too much and it only contains one element
+    # put this element in the second last group instead
+    if (max_value - 1 == n_windows && last_group_size == 1) {
+      # Replace the level of the factor containing the max_value
+      # with the value of the second last group instead (max_value - 1)
+      grouping_factor[grouping_factor == max_value] <- max_value - 1
+
+      # Else, stop the script as something has gone wrong
+      # and I need to know about it!
+    } else {
+      stop(
+        paste(
+          "Grouping factor contains too many groups! ",
+          max_value,
+          " groups in total with ",
+          last_group_size,
+          " elements in last group.",
+          sep = ""
+        )
+      )
+    }
+  }
+
+  factor(grouping_factor)
+
+}
+
+
 #   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
 #   ImportFrom                                                              ####
 

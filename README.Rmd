@@ -77,6 +77,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
 |`transfer_centroids()` |Transfer centroids from one `data.frame` to another.                   |
 |`min_max_scale()`      |Scale values to a range.                                               |
+|`generate_clusters()`  |Generate n-dimensional clusters.                                       |
 
 
 ## Table of Contents
@@ -389,5 +390,34 @@ ggplot(df_clustered, aes(x = x_clustered, y = y_clustered, color = factor(g))) +
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_colour_brewer(palette = "Dark2") + 
   labs(x = "x", y = "y", color = "g")
+```
+
+## Generators
+
+### Generate clusters
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+xpectr::set_test_seed(10)
+```
+
+```{r}
+generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1.6)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+xpectr::set_test_seed(10)
+
+df_clusters <- generate_clusters(
+  num_rows = 50, num_cols = 5,
+  num_clusters = 5, compactness = 1.6
+  ) 
+df_clusters %>% 
+  ggplot(
+    aes(x = D1, y = D2, color = .cluster)) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "D1", y = "D2", color = "Cluster")
+
 ```
 

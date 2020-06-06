@@ -1,8 +1,6 @@
 
 # rearrr 0.0.0.9000
 
-* Please welcome `rearrr`! :-)
-
 ## New rearrangers
 
 * Adds `center_max()` for centering the highest value with values decreasing around it. (Rearranger)
@@ -38,3 +36,9 @@
 * Adds `min_max_scale()` for scaling values to a specified range. (Helper)
 
 * Adds `create_origin_fn()` for creating a function for finding origin coordinates (like `centroid()`). (Helper)
+
+* Adds `generate_clusters()` for generating n-dimensional clusters. (Helper)
+
+## Welcome message (important!)
+
+* Please welcome `rearrr`! :-)
