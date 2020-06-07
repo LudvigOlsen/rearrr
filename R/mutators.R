@@ -27,9 +27,9 @@ mutator <- function(data,
 
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, col = col, new_name = new_name)
+  prepped <- prepare_input_data(data = data, cols = col, new_name = new_name)
   data <- prepped[["data"]]
-  col <- prepped[["col"]]
+  col <- prepped[["cols"]]
   new_name = prepped[["new_name"]]
   was_vector <- prepped[["was_vector"]]
 
@@ -65,7 +65,7 @@ mutator <- function(data,
   data <-
     prepare_output_data(
       data = data,
-      col = col,
+      cols = col,
       use_index = FALSE,
       to_vector = was_vector && !force_df
     )
@@ -90,24 +90,29 @@ mutator <- function(data,
 #' @param keep_original Whether to keep the original columns. (Logical)
 #'
 #'  Some columns may have been overwritten, in which case only the newest version is returned.
+#' @param min_dims Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
+#'  setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.
 #' @inheritParams mutator
 #' @keywords internal
 #' @return
 #'  The mutated \code{data.frame}.
-multi_mutator <- function(data,
-                    mutate_fn,
-                    check_fn,
-                    cols = NULL,
-                    suffix = "_mutated",
-                    force_df = TRUE,
-                    keep_original = TRUE,
-                    ...) {
+multi_mutator <- function(
+  data,
+  mutate_fn,
+  check_fn,
+  cols = NULL,
+  suffix = "_mutated",
+  force_df = TRUE,
+  min_dims = 1,
+  keep_original = TRUE,
+  ...) {
+
 
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, col = cols)
+  prepped <- prepare_input_data(data = data, cols = cols, min_dims = min_dims)
   data <- prepped[["data"]]
-  cols <- prepped[["col"]]
+  cols <- prepped[["cols"]]
   was_vector <- prepped[["was_vector"]]
 
   if (isTRUE(prepped[["use_index"]])){
@@ -158,7 +163,7 @@ multi_mutator <- function(data,
   data <-
     prepare_output_data(
       data = data,
-      col = cols,
+      cols = cols,
       use_index = FALSE,
       to_vector = was_vector && !force_df,
       exclude_cols = exclude_cols

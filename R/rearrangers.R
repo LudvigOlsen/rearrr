@@ -33,9 +33,9 @@ rearranger <- function(data,
 
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, col = col)
+  prepped <- prepare_input_data(data = data, cols = col)
   data <- prepped[["data"]]
-  col <- prepped[["col"]]
+  col <- prepped[["cols"]]
   use_index <- prepped[["use_index"]]
   was_vector <- prepped[["was_vector"]]
 
@@ -66,7 +66,7 @@ rearranger <- function(data,
   data <-
     prepare_output_data(
       data = data,
-      col = col,
+      cols = col,
       use_index = use_index,
       to_vector = was_vector
     )

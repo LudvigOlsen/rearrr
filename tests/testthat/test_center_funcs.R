@@ -326,7 +326,7 @@ test_that("fuzz testing center_max()", {
   side_effects_17050 <- xpectr::capture_side_effects(center_max(data = c(1, 2, 3, 4), col = "A", shuffle_sides = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col' must be 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error_class']]),
@@ -888,7 +888,7 @@ test_that("fuzz testing center_min method for rearrange()", {
   side_effects_17050 <- xpectr::capture_side_effects(center_min(data = c(1, 2, 3, 4), col = "A", shuffle_sides = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col' must be 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error_class']]),

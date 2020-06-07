@@ -1,13 +1,15 @@
 
 
 #   __________________ #< 1da7e5c1e61869688d7c0889889264c0 ># __________________
-#   Prepare 'data' and 'col'                                                ####
+#   Prepare 'data' and 'cols'                                               ####
 
 
-prepare_input_data <- function(data, col, new_name=NULL){
+prepare_input_data <- function(data, cols, min_dims=1, new_name=NULL){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
+
+  checkmate::assert_number(min_dims, lower = 1, add = assert_collection)
 
   # Initial check of 'data'
   checkmate::assert(
@@ -28,49 +30,67 @@ prepare_input_data <- function(data, col, new_name=NULL){
 
   # Convert to data frame if vector
   if (!is.list(data)){
-    if (!is.null(col)){
+    if (!is.null(cols)){
       assert_collection$push(
-        "when 'data' is not a data frame, 'col' must be 'NULL'."
+        "when 'data' is not a data frame, 'col(s)' must be 'NULL'."
       )
       checkmate::reportAssertions(assert_collection)
     }
     data <- data.frame("Value" = data,
                        stringsAsFactors = FALSE)
-    col = "Value"
+    cols = "Value"
     was_vector <- TRUE
+    if (min_dims == 2){
+      data[["Index"]] <- seq_len(nrow(data))
+      cols = c("Index", "Value")
+      data <- data[, cols, drop = FALSE]
+    }
   } else {
     was_vector <- FALSE
   }
 
-  # If data frame and using row numbers as col
-  use_index <- is.null(col)
+  # If data frame and using row numbers as cols
+  use_index <- is.null(cols)
   if (isTRUE(use_index)){
-    col <- create_tmp_var(data, ".index_col_")
+    cols <- create_tmp_var(data, ".index_col_")
     data <- data %>%
-      dplyr::mutate(!!col := dplyr::row_number())
+      dplyr::mutate(!!cols := dplyr::row_number())
   }
 
-  # New Name can be string or NULL
+  # new_name can be string or NULL
   checkmate::assert_string(x = new_name, null.ok = TRUE)
   if (is.null(new_name)){
-    new_name <- col
+    if (isTRUE(was_vector) && min_dims == 2){
+      new_name <- "Value"
+    } else{
+      new_name <- cols
+    }
+  }
+
+  # Check min dimensions
+  if (length(cols) < min_dims) {
+    assert_collection$push(paste0(
+      "This mutator method requires at least ",
+      min_dims,
+      " dimensions / columns."
+    ))
   }
 
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
   list("data" = data,
-       "col" = col,
+       "cols" = cols,
        "new_name" = new_name,
        "use_index" = use_index,
        "was_vector" = was_vector)
 }
 
-prepare_output_data <- function(data, col, use_index, to_vector, exclude_cols=NULL){
+prepare_output_data <- function(data, cols, use_index, to_vector, exclude_cols=NULL){
 
-  # Remove tmp column if 'col' was 'NULL'
+  # Remove tmp column if 'cols' was 'NULL'
   if (isTRUE(use_index)){
-    data[[col]] <- NULL
+    data[[cols]] <- NULL
   }
 
   # Return as vector if that is what we were passed

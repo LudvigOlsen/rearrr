@@ -12,6 +12,7 @@ rotate2d(
   suffix = "_rotated",
   origin = c(0, 0),
   origin_fn = NULL,
+  keep_original = TRUE,
   degree_col_name = ".degrees"
 )
 }
@@ -21,24 +22,30 @@ rotate2d(
 \item{degrees}{Degrees to rotate values counterclockwise. In \code{[-360, 360]}.
 Can be a vector with multiple degrees.}
 
-\item{x_col}{Name of x column in \code{data}. If \code{NULL} or \code{data} is a vector,
-the index of \code{data} is used.}
+\item{x_col}{Name of x column in \code{`data`}. If \code{NULL} and \code{`data`} is a \code{vector},
+the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.}
 
-\item{y_col}{Name of y column in \code{data}. If \code{data} is a data frame, it must be specified.}
+\item{y_col}{Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.}
 
-\item{suffix}{Suffix to add to the names of the generated columns.}
+\item{suffix}{Suffix to add to the names of the generated columns.
+
+Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{origin}{Coordinates of the origin to rotate around. Must be a vector with 2 elements (orig_x, orig_y).
-Ignored when \code{origin_fn} is not \code{NULL}.}
+Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates to rotate the values around.
 Should have 2 input arguments (a vector with x-values, a vector with y-values) and
 return a vector with exactly 2 elements (orig_x, orig_y).}
 
-\item{degree_col_name}{Name of new column with the degrees.}
+\item{keep_original}{Whether to keep the original columns. (Logical)
+
+Some columns may have been overwritten, in which case only the newest version is returned.}
+
+\item{degree_col_name}{Name of new column with the degrees. If \code{NULL}, no column is added.}
 }
 \value{
-Data frame with three new columns containing the rotated x- and y-values and the degrees.
+\code{data.frame} with three new columns containing the rotated x- and y-values and the degrees.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -78,7 +85,7 @@ set.seed(1)
 
 # Create a data frame
 df <- data.frame(
-  "index" = 1:12,
+  "Index" = 1:12,
   "A" = c(
     1, 2, 3, 4, 9, 10,
     11, 12, 15, 16, 17, 18
@@ -88,20 +95,20 @@ df <- data.frame(
 )
 
 # Rotate values
-rotate2d(df, 45, x_col="index", y_col="A")
+rotate2d(df, 45, x_col="Index", y_col="A")
 
 # Rotate A around the centroid
 df_rotated <- df \%>\%
-  rotate2d(x_col = "index",
+  rotate2d(x_col = "Index",
            y_col = "A",
            degrees = c(0, 120, 240),
            origin_fn = centroid)
 df_rotated
 
 # Plot A and A rotated around overall centroid
-ggplot(df_rotated, aes(x = index_rotated, y = A_rotated, color = factor(.degrees))) +
+ggplot(df_rotated, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
   geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_vline(xintercept = mean(df$index), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype="dashed") +
   geom_line(alpha = .4) +
   geom_point() +
   theme_minimal() +
@@ -110,14 +117,14 @@ ggplot(df_rotated, aes(x = index_rotated, y = A_rotated, color = factor(.degrees
 # Rotate around group centroids
 df_grouped <- df \%>\%
   dplyr::group_by(G) \%>\%
-  rotate2d(x_col = "index",
+  rotate2d(x_col = "Index",
            y_col = "A",
            degrees = c(0, 120, 240),
            origin_fn = centroid)
 df_grouped
 
 # Plot A and A rotated around group centroids
-ggplot(df_grouped, aes(x=index_rotated, y=A_rotated, color = factor(.degrees))) +
+ggplot(df_grouped, aes(x=Index_rotated, y=A_rotated, color = factor(.degrees))) +
   geom_point() +
   theme_minimal() +
   labs(x = "Index", y="Value", color="Degrees")

@@ -11,6 +11,7 @@ multi_mutator(
   cols = NULL,
   suffix = "_mutated",
   force_df = TRUE,
+  min_dims = 1,
   keep_original = TRUE,
   ...
 )
@@ -30,6 +31,9 @@ Should not return anything.}
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
+
+\item{min_dims}{Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
+setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
