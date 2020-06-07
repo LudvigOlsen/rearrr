@@ -63,7 +63,7 @@
 #'  a vector with one constant per dimension.
 #'
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
-#' @param multiplier_fn Function for finding the multipliers.
+#' @param multipliers_fn Function for finding the multipliers.
 #'  Each column will be passed as a vector in the order of \code{`cols`}.
 #'  It should return a vector with one constant per dimension.
 #'

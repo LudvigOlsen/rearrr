@@ -319,5 +319,5 @@ add_dimensions <- function(data,
 #' @importFrom dplyr %>%
 #' @importFrom rlang .data :=
 #' @importFrom utils head tail
-#' @importFrom stats quantile runif median
+#' @importFrom stats quantile runif median setNames
 NULL

@@ -31,6 +31,14 @@ a vector with one constant per dimension.
 
 \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.}
 
+\item{multipliers_fn}{Function for finding the multipliers.
+Each column will be passed as a vector in the order of \code{`cols`}.
+It should return a vector with one constant per dimension.
+
+Just as for \code{`origin_fn`}, it can be created with
+\code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+the same function to each dimension. See \code{`origin_fn`}.}
+
 \item{origin}{Coordinates of the origin to expand around.
 Must be either a single constant to use in all dimensions
 or a vector with one constant per dimension.
@@ -89,14 +97,6 @@ Some columns may have been overwritten, in which case only the newest version is
 \item{mult_col_name}{Name of new column with the multiplier. If \code{NULL}, no column is added.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
-
-\item{multiplier_fn}{Function for finding the multipliers.
-Each column will be passed as a vector in the order of \code{`cols`}.
-It should return a vector with one constant per dimension.
-
-Just as for \code{`origin_fn`}, it can be created with
-\code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-the same function to each dimension. See \code{`origin_fn`}.}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the expanded columns,
