@@ -35,8 +35,8 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates to rotate the values around.
-Should have 2 input arguments (a vector with x-values, a vector with y-values) and
-return a vector with exactly 2 elements (orig_x, orig_y).}
+Should have \code{2} input arguments (a vector with x-values, a vector with y-values) and
+return a vector with exactly \code{2} elements (orig_x, orig_y).}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 

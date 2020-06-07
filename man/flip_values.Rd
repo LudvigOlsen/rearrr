@@ -27,8 +27,7 @@ or a vector with one constant per dimension.
 
 \item{center_fn}{Function for finding the center value to flip the values around.
 Each column will be passed as a vector in the order of \code{`cols`}.
-It should return either a single constant to be used in
-all dimensions or a vector with one constant per dimension.
+It should return a vector with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.

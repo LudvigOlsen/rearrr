@@ -23,8 +23,8 @@
 #' @param origin Coordinates of the origin to rotate around. Must be a vector with 2 elements (orig_x, orig_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_fn Function for finding the origin coordinates to rotate the values around.
-#'  Should have 2 input arguments (a vector with x-values, a vector with y-values) and
-#'  return a vector with exactly 2 elements (orig_x, orig_y).
+#'  Should have \code{2} input arguments (a vector with x-values, a vector with y-values) and
+#'  return a vector with exactly \code{2} elements (orig_x, orig_y).
 #' @param degree_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with three new columns containing the rotated x- and y-values and the degrees.

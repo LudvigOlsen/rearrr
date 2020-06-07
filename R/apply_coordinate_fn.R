@@ -39,6 +39,7 @@ apply_coordinate_fn <- function(dim_vectors,
       }
     )
     check_msg <- paste0("output of '", fn_name, "'")
+    allow_len_one <- FALSE
   } else {
     check_msg <- paste0("'", coordinate_name, "'")
   }

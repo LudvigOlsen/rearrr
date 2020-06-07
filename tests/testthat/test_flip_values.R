@@ -209,7 +209,7 @@ test_that("fuzz testing flipped_values()", {
   side_effects_17365 <- xpectr::capture_side_effects(flip_values(data = "hej", cols = NULL, center = 0, center_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, center_col_name = ".center"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has type\n * 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor},\n * but element 1 has type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error_class']]),
@@ -609,49 +609,16 @@ test_that("fuzz testing flipped_values()", {
   # Testing flip_values(data = df, cols = c("x", "y"), c...
   # Changed from baseline: center_fn = median
   xpectr::set_test_seed(42)
-  # Assigning output
-  output_19888 <- flip_values(data = df, cols = c("x", "y"), center = 0, center_fn = median, suffix = "", keep_original = FALSE, center_col_name = ".center")
-  # Testing class
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19888 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), center = 0, center_fn = median, suffix = "", keep_original = FALSE, center_col_name = ".center"), reset_seed = TRUE)
   expect_equal(
-    class(output_19888),
-    c("tbl_df", "tbl", "data.frame"),
+    xpectr::strip(side_effects_19888[['error']]),
+    xpectr::strip("output of 'center_fn' must have same length as 'cols' (2) but had length 1."),
     fixed = TRUE)
-  # Testing column values
   expect_equal(
-    output_19888[["x"]],
-    c(0.39918, 0.37691, 1.02785, 0.48354, 0.67224, 0.79489, 0.5774,
-      1.17932, 0.65699, 0.60892, 0.85624, 0.59487, 0.37931, 1.05856,
-      0.85169),
-    tolerance = 1e-4)
-  expect_equal(
-    output_19888[["y"]],
-    c(0.37397, 0.33576, 1.1965, 0.83899, 0.75365, 0.40995, 1.17527,
-      0.32509, 0.36732, 1.23155, 0.79977, 0.92378, 0.40825, 0.86701,
-      0.47798),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_19888),
-    c("x", "y", ".center"),
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_19888),
-    c("numeric", "numeric", "list"),
-    fixed = TRUE)
-  # Testing column types
-  expect_equal(
-    xpectr::element_types(output_19888),
-    c("double", "double", "list"),
-    fixed = TRUE)
-  # Testing dimensions
-  expect_equal(
-    dim(output_19888),
-    c(15L, 3L))
-  # Testing group keys
-  expect_equal(
-    colnames(dplyr::group_keys(output_19888)),
-    character(0),
+    xpectr::strip(side_effects_19888[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   # Testing flip_values(data = df, cols = c("x", "y"), c...

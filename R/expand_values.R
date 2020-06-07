@@ -15,7 +15,7 @@
 #'  latter can be useful when supplying a grouped data frame and expanding around e.g. the centroid
 #'  of each group.
 #'
-#'  The multipliers/exponents can can supplied as constant(s) or as a function that returns constant(s).
+#'  The multipliers/exponents can can supplied as constant(s) or as a function that returns constants.
 #'  The latter can be useful when supplying a grouped data frame and the multiplier/exponent depends
 #'  on the data in the groups.
 #'  If supplying multiple constants, there must be one per dimension (length of \code{`cols`}).
@@ -36,8 +36,7 @@
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_fn Function for finding the origin coordinates to expand the values around.
 #'  Each column will be passed as a vector in the order of \code{`cols`}.
-#'  It should return either a single constant to be used in
-#'  all dimensions or a vector with one constant per dimension.
+#'  It should return a vector with one constant per dimension.
 #'
 #'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 #'  the same function to each dimension.
@@ -66,8 +65,7 @@
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
 #' @param multiplier_fn Function for finding the multipliers.
 #'  Each column will be passed as a vector in the order of \code{`cols`}.
-#'  It should return either a single constant to be used in
-#'  all dimensions or a vector with one constant per dimension.
+#'  It should return a vector with one constant per dimension.
 #'
 #'  Just as for \code{`origin_fn`}, it can be created with
 #'  \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
