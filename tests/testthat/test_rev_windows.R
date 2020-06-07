@@ -44,7 +44,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -96,7 +96,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -137,7 +137,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
-    "G",
+    character(0),
     fixed = TRUE)
 
   # Testing rev_windows(data = 1:10, window_size = 3, ke...
@@ -244,7 +244,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing class
   expect_equal(
     class(output_17365),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -285,7 +285,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_17365)),
-    "G",
+    character(0),
     fixed = TRUE)
 
   # Testing rev_windows(data = df, window_size = 2, keep...
@@ -296,7 +296,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -363,7 +363,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing class
   expect_equal(
     class(output_17050),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -460,7 +460,7 @@ test_that("fuzz testing rev_windows()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(

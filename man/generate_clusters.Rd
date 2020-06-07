@@ -36,7 +36,7 @@ as that is the only argument we pass to it.}
 \item{cluster_col_name}{Name of cluster factor.}
 }
 \value{
-\code{data.frame} with the clustered columns and the cluster grouping factor.
+\code{data.frame} (\code{tibble}) with the clustered columns and the cluster grouping factor.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

@@ -27,7 +27,7 @@
 #'  return a vector with exactly 2 elements (orig_x, orig_y).
 #' @param degree_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #' @export
-#' @return \code{data.frame} with three new columns containing the rotated x- and y-values and the degrees.
+#' @return \code{data.frame} (\code{tibble}) with three new columns containing the rotated x- and y-values and the degrees.
 #' @details
 #'  Applies the following rotation matrix:
 #'

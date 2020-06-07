@@ -16,7 +16,7 @@
 #' @param ... Named arguments for the \code{`mutate_fn`}.
 #' @keywords internal
 #' @return
-#'  The mutated \code{data frame} / \code{vector}.
+#'  The mutated \code{data.frame} (\code{tibble}) / \code{vector}.
 mutator <- function(data,
                     mutate_fn,
                     check_fn,
@@ -95,7 +95,7 @@ mutator <- function(data,
 #' @inheritParams mutator
 #' @keywords internal
 #' @return
-#'  The mutated \code{data.frame}.
+#'  The mutated \code{data.frame} (\code{tibble}).
 multi_mutator <- function(
   data,
   mutate_fn,

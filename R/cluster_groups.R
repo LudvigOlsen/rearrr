@@ -27,7 +27,7 @@
 #'  makes the clusters more compact and vice versa.
 #' @inheritParams multi_mutator
 #' @export
-#' @return \code{data.frame} with the clustered columns.
+#' @return \code{data.frame} (\code{tibble}) with the clustered columns.
 #' @details
 #'  \itemize{
 #'   \item{Contracts the distance from each data point to the centroid of its group.}
@@ -265,5 +265,6 @@ cluster_groups <- function(data,
   }
 
   # Return clustered data
-  clustered
+  clustered %>%
+    dplyr::as_tibble()
 }

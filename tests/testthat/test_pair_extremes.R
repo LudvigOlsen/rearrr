@@ -246,7 +246,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -299,7 +299,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -543,7 +543,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_14577),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -586,7 +586,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_17191),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -639,7 +639,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -692,7 +692,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -745,7 +745,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_14622),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -798,7 +798,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19400),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -866,7 +866,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_11174),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -934,7 +934,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_15603),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -987,7 +987,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19040),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1055,7 +1055,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19888),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(

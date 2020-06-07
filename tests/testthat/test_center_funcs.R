@@ -44,7 +44,7 @@ test_that("fuzz testing center_max()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -97,7 +97,7 @@ test_that("fuzz testing center_max()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -341,7 +341,7 @@ test_that("fuzz testing center_max()", {
   # Testing class
   expect_equal(
     class(output_14577),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -394,7 +394,7 @@ test_that("fuzz testing center_max()", {
   # Testing class
   expect_equal(
     class(output_17191),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -447,7 +447,7 @@ test_that("fuzz testing center_max()", {
   # Testing class
   expect_equal(
     class(output_19346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -500,7 +500,7 @@ test_that("fuzz testing center_max()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -606,7 +606,7 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -659,7 +659,7 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -903,7 +903,7 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_14577),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -956,7 +956,7 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_17191),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1009,7 +1009,7 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_19346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1062,7 +1062,7 @@ test_that("fuzz testing center_min method for rearrange()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1232,7 +1232,7 @@ test_that("edge cases for center_max()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1265,7 +1265,7 @@ test_that("edge cases for center_max()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19148)),
-    "b",
+    character(0),
     fixed = TRUE)
   ## Finished testing 'center_max( data = dplyr::tibble( "a" = c(1,...'     ####
 

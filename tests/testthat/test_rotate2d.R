@@ -11,7 +11,8 @@ test_that("fuzz testing rotate2d()", {
     "y" = runif(15),
     "z" = runif(15),
     "g" = rep(c(1, 2, 3, 4, 5), each = 3)
-  )
+  ) %>%
+    dplyr::as_tibble()
 
 
   # Generate expectations for 'rotate2d'
@@ -52,7 +53,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -104,7 +105,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -149,7 +150,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
-    "g",
+    character(0),
     fixed = TRUE)
 
   # Testing rotate2d(data = c(1, 2, 3, 4, 5), degrees = ...
@@ -220,7 +221,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_17365),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -264,7 +265,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_17365)),
-    "g",
+    character(0),
     fixed = TRUE)
 
   # Testing rotate2d(data = c(1, 2, 3, 4, 5), degrees = ...
@@ -275,7 +276,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -353,7 +354,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_14577),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -436,7 +437,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -584,7 +585,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_19040),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -651,7 +652,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_19888),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -725,7 +726,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_19466),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -837,7 +838,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_14469),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -903,7 +904,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(output_17375),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -954,7 +955,7 @@ test_that("fuzz testing rotate2d()", {
   # Testing class
   expect_equal(
     class(df),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(

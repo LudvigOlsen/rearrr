@@ -42,7 +42,7 @@ Some columns may have been overwritten, in which case only the newest version is
 \item{...}{Named arguments for the \code{`mutate_fn`}.}
 }
 \value{
-The mutated \code{data.frame}.
+The mutated \code{data.frame} (\code{tibble}).
 }
 \description{
 Wrapper for running multicolumn mutator methods

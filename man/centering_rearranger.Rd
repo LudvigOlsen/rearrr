@@ -9,15 +9,15 @@ centering_rearranger(data, col = NULL, shuffle_sides = FALSE, what = "max")
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{shuffle_sides}{Whether to shuffle which elements are left and right of the center. (Logical)}
 
-\item{what}{What to position. "max" or "min". (Character)}
+\item{what}{What to position. \code{"max"} or \code{"min"}. (Character)}
 }
 \value{
-Sorted \code{data frame} / \code{vector}.
+Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 }
 \description{
 Wrapper for running centering rearrange methods

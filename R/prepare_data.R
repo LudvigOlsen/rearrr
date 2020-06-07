@@ -106,6 +106,9 @@ prepare_output_data <- function(data, cols, use_index, to_vector, exclude_cols=N
   # Reset index
   row.names(data) <- NULL
 
+  # Convert to tibble
+  data <- dplyr::as_tibble(data)
+
   data
 }
 

@@ -20,14 +20,14 @@ rev_windows_rearranger(
 
 \item{factor_name}{Name of the factor with window identifiers. (Logical)
 
-N.B. Only used when \code{keep_windows} is \code{TRUE}.}
+N.B. Only used when \code{`keep_windows`} is \code{TRUE}.}
 }
 \value{
-The sorted \code{data frame} / \code{vector}.
+The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 Optionally with the windows factor added.
 
-When \code{data} is a \code{vector} and \code{keep_windows} is \code{FALSE},
-the output will be a \code{vector}. Otherwise, a \code{data frame}.
+When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
+the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 }
 \description{
 Wrapper for running centering rearrange methods

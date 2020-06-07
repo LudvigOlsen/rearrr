@@ -15,22 +15,22 @@ closest_to(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{target}{Target value. (Logical)}
 
 \item{target_fn}{Function for extracting target value. (Logical)
 
-\strong{N.B.} Either \code{target} or \code{target_fn} should be specified.
+\strong{N.B.} Either \code{`target`} or \code{`target_fn`} should be specified.
 
-\strong{N.B.} When \code{data} is grouped,
-the \code{target_fn} function is applied group-wise.}
+\strong{N.B.} When \code{`data`} is grouped,
+the \code{`target_fn`} function is applied group-wise.}
 
 \item{shuffle_ties}{Whether to shuffle elements with the same distance to the target. (Logical)}
 }
 \value{
-The sorted \code{data frame} / \code{vector}.
+The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

@@ -11,20 +11,20 @@
 #' Wrapper for running rearranging methods
 #'
 #' @param data \code{data.frame} or \code{vector}.
-#' @param col Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
+#' @param col Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 #'  the row numbers are used.
 #' @param rearrange_fn Rearrange function to apply.
-#' @param check_fn Function with checks post-preparation of \code{data} and \code{col}.
+#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`col`}.
 #'  Should not return anything.
-#' @param ... Named arguments for the \code{rearrange_fn}.
+#' @param ... Named arguments for the \code{`rearrange_fn`}.
 #' @keywords internal
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with (a) sorting factor(s) added.
 #'
-#'  When \code{data} is a \code{vector} and
-#'  no extra factors are returned by \code{rearrange_fn},
-#'  the output will be a \code{vector}. Otherwise, a \code{data frame}.
+#'  When \code{`data`} is a \code{vector} and
+#'  no extra factors are returned by \code{`rearrange_fn`},
+#'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 rearranger <- function(data,
                        rearrange_fn,
                        check_fn,
@@ -84,9 +84,9 @@ rearranger <- function(data,
 #' @inheritParams rearranger
 #' @param position Index or quantile (in \code{0-1}) at which to position the element of interest.
 #' @param shuffle_sides Whether to shuffle which elements are left and right of the position. (Logical)
-#' @param what What to position. "max" or "min". (Character)
+#' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
-#' @return Sorted \code{data frame} / \code{vector}.
+#' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 positioning_rearranger <- function(data, col = NULL, position = NULL, shuffle_sides = FALSE, what = "max"){
 
   # Check arguments ####
@@ -125,9 +125,9 @@ positioning_rearranger <- function(data, col = NULL, position = NULL, shuffle_si
 #'
 #' @inheritParams rearranger
 #' @param shuffle_sides Whether to shuffle which elements are left and right of the center. (Logical)
-#' @param what What to position. "max" or "min". (Character)
+#' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
-#' @return Sorted \code{data frame} / \code{vector}.
+#' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what = "max"){
 
   # Check arguments ####
@@ -157,10 +157,10 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
 #' @inheritParams rearranger
 #' @param shuffle_members Whether to shuffle the pair members. (Logical)
 #' @param shuffle_pairs Whether to shuffle the pairs. (Logical)
-#' @param keep_factors Whether to keep the sorting factor(s) in the \code{data frame}. \code{Logical}.
+#' @param keep_factors Whether to keep the sorting factor(s) in the \code{data.frame}. \code{Logical}.
 #' @param factor_name Name of sorting factor.
 #'
-#'  N.B. Only used when \code{keep_factors} is \code{TRUE}.
+#'  N.B. Only used when \code{`keep_factors`} is \code{TRUE}.
 #' @param unequal_method Method for dealing with an unequal number of rows
 #'  in \code{data}.
 #'
@@ -223,11 +223,11 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
 #'  }
 #' @keywords internal
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the sorting factor added.
 #'
-#'  When \code{data} is a \code{vector} and \code{keep_factors} is \code{FALSE},
-#'  the output will be a \code{vector}. Otherwise, a \code{data frame}.
+#'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
+#'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 extreme_pairing_rearranger <- function(
   data,
   col = NULL,
@@ -278,14 +278,14 @@ extreme_pairing_rearranger <- function(
 #' @param keep_windows Whether to keep the factor with window identifiers. (Logical)
 #' @param factor_name Name of the factor with window identifiers. (Logical)
 #'
-#'  N.B. Only used when \code{keep_windows} is \code{TRUE}.
+#'  N.B. Only used when \code{`keep_windows`} is \code{TRUE}.
 #' @keywords internal
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the windows factor added.
 #'
-#'  When \code{data} is a \code{vector} and \code{keep_windows} is \code{FALSE},
-#'  the output will be a \code{vector}. Otherwise, a \code{data frame}.
+#'  When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
+#'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, factor_name = ".window"){
 
   # Check arguments ####
@@ -317,15 +317,15 @@ rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, fact
 #' @param target Target value. (Logical)
 #' @param target_fn Function for extracting target value. (Logical)
 #'
-#'  \strong{N.B.} Either \code{target} or \code{target_fn} should be specified.
+#'  \strong{N.B.} Either \code{`target`} or \code{`target_fn`} should be specified.
 #'
-#'  \strong{N.B.} When \code{data} is grouped,
-#'  the \code{target_fn} function is applied group-wise.
+#'  \strong{N.B.} When \code{`data`} is grouped,
+#'  the \code{`target_fn`} function is applied group-wise.
 #' @param shuffle_ties Whether to shuffle elements with the same distance to the target. (Logical)
-#' @param decreasing Whether to prder by decreasing distances to the target. (Logical)
+#' @param decreasing Whether to order by decreasing distances to the target. (Logical)
 #' @keywords internal
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 by_distance_rearranger <- function(data, col, target = NULL, target_fn = NULL,
                                    shuffle_ties = FALSE, decreasing = FALSE){
 

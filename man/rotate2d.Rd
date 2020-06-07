@@ -45,7 +45,7 @@ Some columns may have been overwritten, in which case only the newest version is
 \item{degree_col_name}{Name of new column with the degrees. If \code{NULL}, no column is added.}
 }
 \value{
-\code{data.frame} with three new columns containing the rotated x- and y-values and the degrees.
+\code{data.frame} (\code{tibble}) with three new columns containing the rotated x- and y-values and the degrees.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

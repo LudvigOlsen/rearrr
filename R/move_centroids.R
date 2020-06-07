@@ -102,24 +102,15 @@ move_centroid_mutator_method <- function(data,
       .x + .y
     })
 
-  # Convert to data frame
-  names(dim_vectors) <- paste0(names(dim_vectors), suffix)
-  expanded_data <-
-    data.frame(dim_vectors, stringsAsFactors = FALSE)
-
-  # If overwriting columns, delete in 'data' first
-  col_intersection <-
-    intersect(colnames(expanded_data), colnames(data))
-  if (length(col_intersection) > 0) {
-    data <- data[, colnames(data) %ni% col_intersection, drop = FALSE]
-  }
-
-  # Add to original dataframe
-  data <- dplyr::bind_cols(data, expanded_data)
+  # Add dim_vectors as columns with the suffix
+  data <-
+    add_dimensions(data = data,
+                   new_vectors = dim_vectors,
+                   suffix = suffix)
 
   # Add info columns
   if (!is.null(change_col_name)){
-    data[[change_col_name]] <- list(to_move)
+    data[[change_col_name]] <- list_coordinates(to_move, cols)
   }
 
 

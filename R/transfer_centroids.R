@@ -24,7 +24,7 @@
 #' @param group_cols Names of grouping columns.
 #' @export
 #' @family clustering functions
-#' @return The \code{`to_data`} \code{data.frame} with the
+#' @return The \code{`to_data`} \code{data.frame} (\code{tibble}) with the
 #'  centroids from the \code{`from_data`} \code{data.frame}.
 #' @examples
 #' \donttest{
@@ -140,8 +140,8 @@ transfer_centroids <- function(to_data,
 
   # Make sure the group columns are the same in
   # both summaries
-  if (!dplyr::all_equal(from_group_columns,
-                        to_group_columns,
+  if (!dplyr::all_equal(as.data.frame(from_group_columns),
+                        as.data.frame(to_group_columns),
                         ignore_row_order = FALSE)) {
     stop("The summarized group columns from the two datasets are not equal.")
   }
@@ -172,6 +172,8 @@ transfer_centroids <- function(to_data,
     }
   )
 
-  to_data
+  # Convert to tibble and return
+  to_data %>%
+    dplyr::as_tibble()
 
 }

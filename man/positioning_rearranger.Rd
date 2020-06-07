@@ -15,17 +15,17 @@ positioning_rearranger(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{position}{Index or quantile (in \code{0-1}) at which to position the element of interest.}
 
 \item{shuffle_sides}{Whether to shuffle which elements are left and right of the position. (Logical)}
 
-\item{what}{What to position. "max" or "min". (Character)}
+\item{what}{What to position. \code{"max"} or \code{"min"}. (Character)}
 }
 \value{
-Sorted \code{data frame} / \code{vector}.
+Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 }
 \description{
 Wrapper for running positioning rearrange methods

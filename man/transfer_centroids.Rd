@@ -21,7 +21,7 @@ Must exist in both \code{`to_data`} and \code{`from_data`}.}
 \item{group_cols}{Names of grouping columns.}
 }
 \value{
-The \code{`to_data`} \code{data.frame} with the
+The \code{`to_data`} \code{data.frame} (\code{tibble}) with the
 centroids from the \code{`from_data`} \code{data.frame}.
 }
 \description{

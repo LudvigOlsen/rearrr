@@ -34,11 +34,11 @@
 #' @family rearrange functions
 #' @inheritParams extreme_pairing_rearranger
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the sorting factor added.
 #'
-#'  When \code{data} is a \code{vector} and \code{keep_factors} is \code{FALSE},
-#'  the output will be a \code{vector}. Otherwise, a \code{data frame}.
+#'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
+#'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 #' @examples
 #' \donttest{
 #' # Attach packages

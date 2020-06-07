@@ -30,7 +30,7 @@
 #' @family rearrange functions
 #' @inheritParams by_distance_rearranger
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -120,7 +120,7 @@ closest_to <- function(data,
 #' @inheritParams by_distance_rearranger
 #' @aliases farthest_from
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages

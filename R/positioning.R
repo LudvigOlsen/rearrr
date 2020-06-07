@@ -30,7 +30,7 @@
 #' @family rearrange functions
 #' @inheritParams positioning_rearranger
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -113,7 +113,7 @@ position_max <- function(data,
 #' @family rearrange functions
 #' @inheritParams positioning_rearranger
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages

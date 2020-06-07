@@ -31,7 +31,7 @@ Should not return anything.}
 \item{...}{Named arguments for the \code{`mutate_fn`}.}
 }
 \value{
-The mutated \code{data frame} / \code{vector}.
+The mutated \code{data.frame} (\code{tibble}) / \code{vector}.
 }
 \description{
 Wrapper for running mutator methods

@@ -4,16 +4,30 @@
 \alias{flip_values}
 \title{Flip the values around a center value}
 \usage{
-flip_values(data, col = NULL, new_name = NULL, center_fn = median)
+flip_values(
+  data,
+  cols = NULL,
+  center = 0,
+  center_fn = create_origin_fn(median),
+  suffix = "_flipped",
+  keep_original = TRUE,
+  center_col_name = ".center"
+)
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.}
-
-\item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{`col`} column is mutated directly.}
+\item{cols}{Columns to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.}
 
 \item{center_fn}{Function for finding the center value to flip the values around.}
+
+\item{suffix}{Suffix to add to the names of the generated columns.
+
+Use an empty string (i.e. \code{""}) to overwrite the original columns.}
+
+\item{keep_original}{Whether to keep the original columns. (Logical)
+
+Some columns may have been overwritten, in which case only the newest version is returned.}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

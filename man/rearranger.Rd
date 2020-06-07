@@ -11,21 +11,21 @@ rearranger(data, rearrange_fn, check_fn, col = NULL, ...)
 
 \item{rearrange_fn}{Rearrange function to apply.}
 
-\item{check_fn}{Function with checks post-preparation of \code{data} and \code{col}.
+\item{check_fn}{Function with checks post-preparation of \code{`data`} and \code{`col`}.
 Should not return anything.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
-\item{...}{Named arguments for the \code{rearrange_fn}.}
+\item{...}{Named arguments for the \code{`rearrange_fn`}.}
 }
 \value{
-The sorted \code{data frame} / \code{vector}.
+The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 Optionally with (a) sorting factor(s) added.
 
-When \code{data} is a \code{vector} and
-no extra factors are returned by \code{rearrange_fn},
-the output will be a \code{vector}. Otherwise, a \code{data frame}.
+When \code{`data`} is a \code{vector} and
+no extra factors are returned by \code{`rearrange_fn`},
+the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 }
 \description{
 Wrapper for running rearranging methods

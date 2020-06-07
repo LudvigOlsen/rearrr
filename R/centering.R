@@ -29,7 +29,7 @@
 #' @family rearrange functions
 #' @inheritParams centering_rearranger
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -108,7 +108,7 @@ center_max <- function(data,
 #' @family rearrange functions
 #' @inheritParams centering_rearranger
 #' @return
-#'  The sorted \code{data frame} / \code{vector}.
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
 #' \donttest{
 #' # Attach packages

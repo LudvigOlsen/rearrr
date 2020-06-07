@@ -267,6 +267,48 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
 
 
 #   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
+
+##  .................. #< 4405b38854cdc7cc63ac70477e1c9953 ># ..................
+##  Output helpers                                                          ####
+
+list_coordinates <- function(coordinates, names){
+  list(setNames(coordinates, names))
+}
+
+add_dimensions <- function(data,
+                           new_vectors,
+                           suffix = "",
+                           overwrite = TRUE) {
+  # Add suffix
+  names(new_vectors) <- paste0(names(new_vectors), suffix)
+
+  # Convert to data frame
+  new_data <- data.frame(new_vectors, stringsAsFactors = FALSE)
+
+  if (!isTRUE(overwrite) &&
+      length(intersect(colnames(new_data), colnames(data))) > 0) {
+    stop(
+      paste0(
+        "Cannot add these dimensions without overwriting existing columns: ",
+        intersect(colnames(new_data), colnames(data)),
+        "."
+      )
+    )
+  }
+
+  # If overwriting columns, delete in 'data' first
+  col_intersection <-
+    intersect(colnames(new_data), colnames(data))
+  if (length(col_intersection) > 0) {
+    data <- data[, colnames(data) %ni% col_intersection, drop = FALSE]
+  }
+
+  # Add to original dataframe
+  data <- dplyr::bind_cols(data, new_data)
+
+  data
+}
+
 #   ImportFrom                                                              ####
 
 #' @importFrom dplyr %>%

@@ -528,7 +528,7 @@ test_that("fuzz testing cluster_groups()", {
   # Testing class
   expect_equal(
     class(output_14622),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -575,7 +575,7 @@ test_that("fuzz testing cluster_groups()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_14622)),
-    "g",
+    character(0),
     fixed = TRUE)
 
   # Testing cluster_groups(data = df, cols = c("x", "y",...

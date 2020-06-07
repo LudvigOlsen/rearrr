@@ -17,7 +17,7 @@ pair_extremes(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{data} is a \code{data frame},
+\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{unequal_method}{Method for dealing with an unequal number of rows
@@ -85,18 +85,18 @@ And are \strong{ordered as}:
 
 \item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
 
-\item{keep_factors}{Whether to keep the sorting factor(s) in the \code{data frame}. \code{Logical}.}
+\item{keep_factors}{Whether to keep the sorting factor(s) in the \code{data.frame}. \code{Logical}.}
 
 \item{factor_name}{Name of sorting factor.
 
-N.B. Only used when \code{keep_factors} is \code{TRUE}.}
+N.B. Only used when \code{`keep_factors`} is \code{TRUE}.}
 }
 \value{
-The sorted \code{data frame} / \code{vector}.
+The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 Optionally with the sorting factor added.
 
-When \code{data} is a \code{vector} and \code{keep_factors} is \code{FALSE},
-the output will be a \code{vector}. Otherwise, a \code{data frame}.
+When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
+the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

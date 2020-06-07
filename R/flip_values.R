@@ -27,7 +27,7 @@
 #' @param center_fn Function for finding the center value to flip the values around.
 #' @export
 #' @family mutate functions
-#' @inheritParams mutator
+#' @inheritParams multi_mutator
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -82,30 +82,102 @@
 #'   theme_minimal()
 #' }
 flip_values <- function(data,
-                        col = NULL,
-                        new_name = NULL,
-                        center_fn = median) {
-  mutator(
+                        cols = NULL,
+                        center = 0,
+                        center_fn = create_origin_fn(median),
+                        suffix = "_flipped",
+                        keep_original = TRUE,
+                        center_col_name = ".center") {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_numeric(center,
+                            min.len = 1,
+                            any.missing = FALSE,
+                            add = assert_collection)
+  checkmate::assert_function(center_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(center_col_name, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  multi_mutator(
     data = data,
     mutate_fn = flip_mutator_method,
     check_fn = NULL,
-    col = col,
-    new_name = new_name,
-    center_fn = center_fn
+    suffix = suffix,
+    keep_original = keep_original,
+    cols = cols,
+    center = center,
+    center_fn = center_fn,
+    center_col_name = center_col_name
   )
 }
 
 flip_mutator_method <- function(data,
-                                col,
-                                new_name,
-                                center_fn) {
-  flip_around <- function(vec, around = median(vec)) {
-    2 * around - vec
+                                cols,
+                                suffix,
+                                center,
+                                center_fn,
+                                center_col_name) {
+
+  # Number of dimensions
+  # Each column is a dimension
+  num_dims <- length(cols)
+
+  # Convert columns to list of vectors
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
+
+  # Find center if specified
+  if (!is.null(center_fn)) {
+    center <- tryCatch(
+      do.call(center_fn, dim_vectors),
+      error = function(e) {
+        stop(paste0("failed to apply 'center_fn': ", e))
+      }
+    )
+    center_check_msg <- "output of 'center_fn'"
+  } else {
+    center_check_msg <- "'center'"
   }
 
-  # Find center value
-  center <- center_fn(data[[col]])
-  data[[new_name]] <- flip_around(vec = data[[col]],
-                                  around = center)
+  if (length(center) %ni% c(1, num_dims)) {
+    stop(
+      paste0(
+        center_check_msg,
+        " must have either length 1 or same",
+        " length as 'cols' (",
+        num_dims,
+        ") but had length ",
+        length(center),
+        "."
+      )
+    )
+  }
+  if (!is.numeric(center)) {
+    stop(paste0(center_check_msg, " was not numeric."))
+  }
+
+  # Flip around the center
+  dim_vectors <-
+    purrr::map2(.x = dim_vectors, .y = center, .f = ~ {
+      flip_around_(vec=.x, around = .y)
+    })
+
+  # Add dim_vectors as columns with the suffix
+  data <-
+    add_dimensions(data = data,
+                   new_vectors = dim_vectors,
+                   suffix = suffix)
+
+  # Add info columns
+  if (!is.null(center_col_name)) {
+    data[[center_col_name]] <- list_coordinates(center, cols)
+  }
+
   data
+}
+
+# The flipper
+flip_around_ <- function(vec, around = median(vec)) {
+  2 * around - vec
 }

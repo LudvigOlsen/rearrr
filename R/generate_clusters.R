@@ -25,7 +25,7 @@
 #' @param name_prefix Prefix string for naming columns.
 #' @param cluster_col_name Name of cluster factor.
 #' @export
-#' @return \code{data.frame} with the clustered columns and the cluster grouping factor.
+#' @return \code{data.frame} (\code{tibble}) with the clustered columns and the cluster grouping factor.
 #' @details
 #'  \itemize{
 #'   \item{Generates data frame with random values using the \code{`generator`}.}

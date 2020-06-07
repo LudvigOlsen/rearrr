@@ -89,7 +89,7 @@
 #' @param mult_col_name Name of new column with the multiplier. If \code{NULL}, no column is added.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
-#' @return \code{data.frame} with the expanded columns,
+#' @return \code{data.frame} (\code{tibble}) with the expanded columns,
 #'  along with the applied multiplier/exponent and origin coordinates.
 #' @details
 #'  For each value of each dimension (column), either multiply or exponentiate by the multiplier:
@@ -436,30 +436,22 @@ expand_mutator_method <- function(data,
 
   # Add expanded columns to data
 
-  # Convert to data frame
-  names(dim_vectors) <- paste0(names(dim_vectors), suffix)
-  expanded_data <- data.frame(dim_vectors, stringsAsFactors = FALSE)
-
-  # If overwriting columns, delete in 'data' first
-  col_intersection <-
-    intersect(colnames(expanded_data), colnames(data))
-  if (length(col_intersection) > 0) {
-    data <- data[, colnames(data) %ni% col_intersection, drop = FALSE]
-  }
-
-  # Add to original dataframe
-  data <- dplyr::bind_cols(data, expanded_data)
+  # Add dim_vectors as columns with the suffix
+  data <-
+    add_dimensions(data = data,
+                   new_vectors = dim_vectors,
+                   suffix = suffix)
 
   # Add info columns
   if (!is.null(mult_col_name)){
     if (length(multipliers) > 1) {
-      data[[mult_col_name]] <- list(multipliers)
+      data[[mult_col_name]] <- list_coordinates(multipliers, cols)
     } else{
-      data[[mult_col_name]] <- multipliers
+      data[[mult_col_name]] <- setNames(multipliers, cols)
     }
   }
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list(origin)
+    data[[origin_col_name]] <- list_coordinates(origin, cols)
   }
   data
 

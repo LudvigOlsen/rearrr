@@ -44,7 +44,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -100,7 +100,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -145,7 +145,7 @@ test_that("fuzz testing position_max()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
-    "G",
+    character(0),
     fixed = TRUE)
 
   # Testing position_max(data = 1:10, col = NULL, positi...
@@ -252,7 +252,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_17365),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -308,7 +308,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -364,7 +364,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_16569),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -465,7 +465,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_19346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -521,7 +521,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -592,7 +592,7 @@ test_that("fuzz testing position_max()", {
   # Testing class
   expect_equal(
     class(output_19400),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -703,7 +703,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -759,7 +759,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -804,7 +804,7 @@ test_that("fuzz testing position_min()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
-    "G",
+    character(0),
     fixed = TRUE)
 
   # Testing position_min(data = 1:10, col = NULL, positi...
@@ -911,7 +911,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_17365),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -967,7 +967,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1023,7 +1023,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_16569),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1124,7 +1124,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_19346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1180,7 +1180,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1251,7 +1251,7 @@ test_that("fuzz testing position_min()", {
   # Testing class
   expect_equal(
     class(output_19400),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1341,7 +1341,8 @@ test_that("position_max always have legal outputs()", {
                seq_len(df_length))
     }) %>%
       dplyr::mutate(pos = pos)
-  }) %>% dplyr::distinct()
+  }) %>% dplyr::distinct() %>%
+    dplyr::as_tibble()
 
 
   ## Testing 'orders'                                                       ####
@@ -1350,7 +1351,7 @@ test_that("position_max always have legal outputs()", {
   # Testing class
   expect_equal(
     class(orders),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1435,7 +1436,8 @@ test_that("position_min always have legal outputs()", {
                seq_len(df_length))
     }) %>%
       dplyr::mutate(pos = pos)
-  }) %>% dplyr::distinct()
+  }) %>% dplyr::distinct() %>%
+    dplyr::as_tibble()
 
 
   ## Testing 'orders'                                                       ####
@@ -1444,7 +1446,7 @@ test_that("position_min always have legal outputs()", {
   # Testing class
   expect_equal(
     class(orders),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(

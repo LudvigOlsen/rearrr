@@ -47,7 +47,7 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 Some columns may have been overwritten, in which case only the newest version is returned.}
 }
 \value{
-\code{data.frame} with the clustered columns.
+\code{data.frame} (\code{tibble}) with the clustered columns.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

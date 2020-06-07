@@ -101,7 +101,7 @@ Just as for \code{`origin_fn`}, it can be created with
 the same function to each dimension. See \code{`origin_fn`}.}
 }
 \value{
-\code{data.frame} with the expanded columns,
+\code{data.frame} (\code{tibble}) with the expanded columns,
 along with the applied multiplier/exponent and origin coordinates.
 }
 \description{

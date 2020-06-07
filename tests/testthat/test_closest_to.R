@@ -50,7 +50,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -110,7 +110,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -159,7 +159,7 @@ test_that("fuzz testing closest_to()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
-    "G",
+    character(0),
     fixed = TRUE)
 
   # Testing closest_to(data = 1:10, col = NULL, target =...
@@ -266,7 +266,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_17365),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -326,7 +326,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -416,7 +416,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_14577),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -506,7 +506,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -566,7 +566,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_14622),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -641,7 +641,7 @@ test_that("fuzz testing closest_to()", {
   # Testing class
   expect_equal(
     class(output_19782),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -760,7 +760,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_19148),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -820,7 +820,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_19370),
-    c("grouped_df", "tbl_df", "tbl", "data.frame"),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -869,7 +869,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
-    "G",
+    character(),
     fixed = TRUE)
 
   # Testing furthest_from(data = 1:10, col = NULL, targe...
@@ -976,7 +976,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_17365),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1036,7 +1036,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_11346),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1126,7 +1126,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_14577),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1216,7 +1216,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_12554),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1276,7 +1276,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_14622),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
@@ -1351,7 +1351,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing class
   expect_equal(
     class(output_19782),
-    "data.frame",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
