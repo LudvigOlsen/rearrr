@@ -58,42 +58,28 @@ move_centroid_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find current centroid if specified
-  old_centroid <- tryCatch(
-    do.call(centroid, dim_vectors),
-    error = function(e) {
-      stop(paste0("failed to apply 'centroid': ", e))
-    }
+  old_centroid <- apply_coordinate_fn(
+    dim_vectors = dim_vectors,
+    coordinates = NULL,
+    fn = centroid,
+    num_dims = length(cols),
+    coordinate_name = "old centroids",
+    fn_name = "centroid",
+    dim_var_name = "cols",
+    allow_len_one = FALSE
   )
 
   # Find to if specified
-  if (!is.null(to_fn)) {
-    to <- tryCatch(
-      do.call(to_fn, dim_vectors),
-      error = function(e) {
-        stop(paste0("failed to apply 'to_fn': ", e))
-      }
-    )
-    to_check_msg <- "output of 'to_fn'"
-  } else {
-    to_check_msg <- "'to'"
-  }
-
-  if (length(to) %ni% c(1, num_dims)) {
-    stop(
-      paste0(
-        to_check_msg,
-        " must have either length 1 or same",
-        " length as 'cols' (",
-        num_dims,
-        ") but had length ",
-        length(to),
-        "."
-      )
-    )
-  }
-  if (!is.numeric(to)) {
-    stop(paste0(to_check_msg, " was not numeric."))
-  }
+  to <- apply_coordinate_fn(
+    dim_vectors = dim_vectors,
+    coordinates = to,
+    fn = to_fn,
+    num_dims = length(cols),
+    coordinate_name = "to",
+    fn_name = "to_fn",
+    dim_var_name = "cols",
+    allow_len_one = TRUE
+  )
 
   # Move centroid
   to_move <- to - old_centroid

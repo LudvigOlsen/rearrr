@@ -271,7 +271,11 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
 ##  .................. #< 4405b38854cdc7cc63ac70477e1c9953 ># ..................
 ##  Output helpers                                                          ####
 
+# When 1 coordinate but multiple names, it recycles the coordinate
 list_coordinates <- function(coordinates, names){
+  if (length(coordinates) == 1 && length(names) > 1){
+    coordinates <- rep(coordinates, length(names))
+  }
   list(setNames(coordinates, names))
 }
 
@@ -308,6 +312,7 @@ add_dimensions <- function(data,
 
   data
 }
+
 
 #   ImportFrom                                                              ####
 

@@ -210,20 +210,16 @@ rotate2d_mutator_method <- function(data,
   y <- data[[y_col]]
 
   # Find origin if specified
-  if (!is.null(origin_fn)) {
-    origin <- tryCatch(
-      origin_fn(x, y),
-      error = function(e) {
-        stop(paste0("failed to apply 'origin_fn': ", e))
-      }
-    )
-    if (length(origin) != 2) {
-      stop("output of 'origin_fn' did not have length 2.")
-    }
-    if (!is.numeric(origin)) {
-      stop("output of 'origin_fn' was not numeric.")
-    }
-  }
+  origin <- apply_coordinate_fn(
+    dim_vectors = list(x, y),
+    coordinates = origin,
+    fn = origin_fn,
+    num_dims = length(cols),
+    coordinate_name = "origin",
+    fn_name = "origin_fn",
+    dim_var_name = "cols",
+    allow_len_one = FALSE
+  )
 
   # Move origin
   x <- x - origin[[1]]

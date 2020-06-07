@@ -76,6 +76,18 @@ prepare_input_data <- function(data, cols, min_dims=1, new_name=NULL){
     ))
   }
 
+  checkmate::assert_character(cols, min.chars = 1, min.len = 1, any.missing = FALSE, add = assert_collection)
+
+  checkmate::reportAssertions(assert_collection)
+
+  if (length(setdiff(cols, colnames(data))) > 0){
+    assert_collection$push(paste0(
+      "These names in the 'col(s)' argument were not found in 'data': ",
+      setdiff(cols, colnames(data)),
+      "."
+    ))
+  }
+
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 

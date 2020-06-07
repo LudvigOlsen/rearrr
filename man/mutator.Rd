@@ -11,6 +11,7 @@ mutator(
   col = NULL,
   new_name = NULL,
   force_df = FALSE,
+  allowed_types = c("numeric", "factor"),
   ...
 )
 }
@@ -27,6 +28,9 @@ Should not return anything.}
 \item{new_name}{Name of the new column with the mutated values. If \code{NULL}, the original \code{`col`} column is mutated directly.}
 
 \item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
+
+\item{allowed_types}{Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
+columns not mentioned in the \code{`col(s)`} argument.}
 
 \item{...}{Named arguments for the \code{`mutate_fn`}.}
 }

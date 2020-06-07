@@ -333,64 +333,28 @@ expand_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  if (!is.null(origin_fn)) {
-    origin <- tryCatch(
-      do.call(origin_fn, dim_vectors),
-      error = function(e) {
-        stop(paste0("failed to apply 'origin_fn': ", e))
-      }
-    )
-    origin_check_msg <- "output of 'origin_fn'"
-  } else {
-    origin_check_msg <- "'origin'"
-  }
-
-  if (length(origin) %ni% c(1, num_dims)) {
-    stop(
-      paste0(
-        origin_check_msg,
-        " must have either length 1 or same",
-        " length as 'cols' (",
-        num_dims,
-        ") but had length ",
-        length(origin),
-        "."
-      )
-    )
-  }
-  if (!is.numeric(origin)) {
-    stop(paste0(origin_check_msg, " was not numeric."))
-  }
+  origin <- apply_coordinate_fn(
+    dim_vectors = dim_vectors,
+    coordinates = origin,
+    fn = origin_fn,
+    num_dims = length(cols),
+    coordinate_name = "origin",
+    fn_name = "origin_fn",
+    dim_var_name = "cols",
+    allow_len_one = TRUE
+  )
 
   # Find multiplier if specified
-  if (!is.null(multipliers_fn)) {
-    multipliers <- tryCatch(
-      do.call(multipliers_fn, dim_vectors),
-      error = function(e) {
-        stop(paste0("failed to apply 'multipliers_fn': ", e))
-      }
-    )
-    multipliers_check_msg <- "output of 'multipliers_fn'"
-  } else {
-    multipliers_check_msg <- "'multipliers'"
-  }
-
-  if (length(multipliers) %ni% c(1, num_dims)) {
-    stop(
-      paste0(
-        multipliers_check_msg,
-        " must have either length 1 or same",
-        " length as 'cols' (",
-        num_dims,
-        ") but had length ",
-        length(multipliers),
-        "."
-      )
-    )
-  }
-  if (!is.numeric(multipliers)) {
-    stop(paste0(multipliers_check_msg, " was not numeric."))
-  }
+  multipliers <- apply_coordinate_fn(
+    dim_vectors = dim_vectors,
+    coordinates = multipliers,
+    fn = multipliers_fn,
+    num_dims = length(cols),
+    coordinate_name = "multipliers",
+    fn_name = "origin_fn",
+    dim_var_name = "cols",
+    allow_len_one = TRUE
+  )
 
   # Move origin
   # x <- x - origin_coordinate

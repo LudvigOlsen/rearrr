@@ -165,35 +165,17 @@ flip_mutator_method <- function(data,
   # Convert columns to list of vectors
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
-  # Find center if specified
-  if (!is.null(center_fn)) {
-    center <- tryCatch(
-      do.call(center_fn, dim_vectors),
-      error = function(e) {
-        stop(paste0("failed to apply 'center_fn': ", e))
-      }
-    )
-    center_check_msg <- "output of 'center_fn'"
-  } else {
-    center_check_msg <- "'center'"
-  }
-
-  if (length(center) %ni% c(1, num_dims)) {
-    stop(
-      paste0(
-        center_check_msg,
-        " must have either length 1 or same",
-        " length as 'cols' (",
-        num_dims,
-        ") but had length ",
-        length(center),
-        "."
-      )
-    )
-  }
-  if (!is.numeric(center)) {
-    stop(paste0(center_check_msg, " was not numeric."))
-  }
+  # Find origin if specified
+  center <- apply_coordinate_fn(
+    dim_vectors = dim_vectors,
+    coordinates = center,
+    fn = center_fn,
+    num_dims = length(cols),
+    coordinate_name = "center",
+    fn_name = "center_fn",
+    dim_var_name = "cols",
+    allow_len_one = TRUE
+  )
 
   # Flip around the center
   dim_vectors <-

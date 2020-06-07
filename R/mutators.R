@@ -13,6 +13,8 @@
 #' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`col`}.
 #'  Should not return anything.
 #' @param force_df Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.
+#' @param allowed_types Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
+#'  columns not mentioned in the \code{`col(s)`} argument.
 #' @param ... Named arguments for the \code{`mutate_fn`}.
 #' @keywords internal
 #' @return
@@ -23,6 +25,7 @@ mutator <- function(data,
                     col = NULL,
                     new_name = NULL,
                     force_df = FALSE,
+                    allowed_types = c("numeric", "factor"),
                     ...) {
 
   # Prepare 'data' and 'col'
@@ -44,6 +47,10 @@ mutator <- function(data,
   checkmate::assert_string(new_name, min.chars = 1, null.ok = FALSE, add = assert_collection)
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  checkmate::assert_data_frame(data[[col]], types = allowed_types,
+                               .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col' column"),
+                               add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # This is for checks we want to perform after preparing 'data' and 'col'
@@ -103,6 +110,7 @@ multi_mutator <- function(
   cols = NULL,
   suffix = "_mutated",
   force_df = TRUE,
+  allowed_types = c("numeric", "factor"),
   min_dims = 1,
   keep_original = TRUE,
   ...) {
@@ -122,13 +130,17 @@ multi_mutator <- function(
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
-  checkmate::assert_character(cols, any.missing = FALSE, min.len = 1,
+  checkmate::assert_character(cols, any.missing = FALSE, min.len = 1, min.chars = 1,
                               null.ok = FALSE, add = assert_collection)
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
   checkmate::assert_flag(force_df, add = assert_collection)
   checkmate::assert_flag(keep_original, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  checkmate::assert_data_frame(data[,cols, drop=FALSE], types = allowed_types,
+                               .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'cols' columns"),
+                               add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # This is for checks we want to perform after preparing 'data' and 'col'
