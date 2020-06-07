@@ -162,7 +162,7 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
 #'
 #'  N.B. Only used when \code{`keep_factors`} is \code{TRUE}.
 #' @param unequal_method Method for dealing with an unequal number of rows
-#'  in \code{data}.
+#'  in \code{`data`}.
 #'
 #'  One of: \code{first}, \code{middle} or \code{last}
 #'

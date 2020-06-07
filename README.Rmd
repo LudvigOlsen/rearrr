@@ -62,12 +62,12 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 
 ### Mutators
 
-| Function              | Description                                                           |
-|:----------------------|:----------------------------------------------------------------------|
-|`flip_values()`        |Flip the values around a center value.                                 |
-|`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |
-|`expand_values()`      |Expand values around around an origin in any number of dimensions.     |
-|`cluster_groups()`     |Move data points into clusters around group centroids.                 |
+| Function              | Description                                                           | Dimensions |
+|:----------------------|:----------------------------------------------------------------------|:-----------|
+|`flip_values()`        |Flip the values around a center value.                                 |n           |
+|`expand_values()`      |Expand values around around an origin.                                 |n           |
+|`cluster_groups()`     |Move data points into clusters around group centroids.                 |n           |
+|`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |2           |
 
 ### Generators
 
@@ -137,7 +137,7 @@ orderings <- data.frame(
   "closest_to" = closest_to(vec, target_fn = median),
   "furthest_from" = furthest_from(vec, target = 5),
   "random_sample" = random_sample,
-  "flipped_median" = flip_values(random_sample, center_fn=median)
+  "flipped_median" = flip_values(random_sample, center_fn=create_origin_fn(median))$Value_flipped
 ) 
 
 # Convert to long format for plotting
@@ -286,7 +286,7 @@ random_sample
 median(random_sample)
 
 # Flip the random numbers around the median
-flip_values(data = random_sample, center_fn = median)
+flip_values(data = random_sample, center_fn = create_origin_fn(median))
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}

@@ -42,7 +42,7 @@
 #'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 #'  the same function to each dimension.
 #'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}}, which is created with:
+#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
 #'
 #'  \code{create_origin_fn(mean)}
 #'
@@ -447,7 +447,7 @@ expand_mutator_method <- function(data,
     if (length(multipliers) > 1) {
       data[[mult_col_name]] <- list_coordinates(multipliers, cols)
     } else{
-      data[[mult_col_name]] <- setNames(multipliers, cols)
+      data[[mult_col_name]] <- multipliers
     }
   }
   if (!is.null(origin_col_name)) {

@@ -9,8 +9,11 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  The values are flipped with the formula \code{x = 2 * c - x} where \code{x} is the value and \code{c} is
-#'  the center value to flip the values around. The center value is determined by the
-#'  supplied \code{center_fn} function.
+#'  the center value to flip the values around.
+#'
+#'  The center can be supplied as coordinates or as a function that returns coordinates. The
+#'  latter can be useful when supplying a grouped data frame and flipping around e.g. the centroid
+#'  of each group.
 #'
 #'  \strong{Example}:
 #'
@@ -18,13 +21,45 @@
 #'
 #'  \code{c(5, 2, 7, 4, 3, 1)}
 #'
-#'  and the \code{center_fn = median}
+#'  and the \code{center_fn = create_origin_fn(median)}
 #'
 #'  Changes the values to :
 #'
 #'  \code{c(2, 5, 0, 3, 4, 6)}
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @param cols Names of columns in \code{`data`} to flip values of.
+#' @param center Coordinates of the center to flip around.
+#'  Must be either a single constant to use in all dimensions (columns)
+#'  or a vector with one constant per dimension.
+#'
+#'  \strong{N.B.} Ignored when \code{`center_fn`} is not \code{NULL}.
 #' @param center_fn Function for finding the center value to flip the values around.
+#'  Each column will be passed as a vector in the order of \code{`cols`}.
+#'  It should return either a single constant to be used in
+#'  all dimensions or a vector with one constant per dimension.
+#'
+#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+#'  the same function to each dimension.
+#'
+#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+#'
+#'  \code{create_origin_fn(mean)}
+#'
+#'  Which returns the following function:
+#'
+#'  \code{function(...)\{}
+#'
+#'  \verb{  }\code{list(...) \%>\%}
+#'
+#'  \verb{    }\code{purrr::map(mean) \%>\%}
+#'
+#'  \verb{    }\code{unlist(recursive = TRUE,}
+#'
+#'  \verb{           }\code{use.names = FALSE)}
+#'
+#'  \code{\}}
+#'
+#' @param center_col_name Name of new column with the center coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @family mutate functions
 #' @inheritParams multi_mutator
@@ -40,7 +75,7 @@
 #'
 #' # Create a data frame
 #' df <- data.frame(
-#'   "index" = 1:10,
+#'   "Index" = 1:10,
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
 #'   "G" = c(1, 1, 1, 2, 2,
@@ -48,34 +83,37 @@
 #'   stringsAsFactors = FALSE
 #' )
 #'
-#' # Flip values of each column
-#' flip_values(df, col = "A", center_fn = median)$A
-#' flip_values(df, col = "B", center_fn = median)$B
+#' # Flip values of the columns
+#' flip_values(df$A)
+#' flip_values(df, cols = "A")
+#' flip_values(df, cols = "B", center = 0.3, keep_original = FALSE)
+#' flip_values(df, cols = c("A", "B"), center = c(3, 0.3),
+#'             suffix = "",  keep_original = FALSE)
+#' flip_values(df, cols = c("A", "B"), center_fn = create_origin_fn(max))
 #'
 #' # Grouped by G
 #' df %>%
-#'   dplyr::select(G, A) %>%  # For clarity
 #'   dplyr::group_by(G) %>%
-#'   flip_values(col = "A",
-#'               new_name="A_flipped",
-#'               center_fn = median)
+#'   flip_values(cols = c("A", "B"),
+#'               center_fn = create_origin_fn(median),
+#'               keep_original = FALSE)
 #'
 #' # Plot A and flipped A
 #'
-#' # First find flipped A around the median and around the value 3.
+#' # First flip A around the median and then around the value 3.
 #' df <- df %>%
-#'   flip_values(col = "A", new_name = "A_flip_median", center_fn = median) %>%
-#'   flip_values(col = "A", new_name = "A_flip_3", center_fn = function(x){3})
+#'   flip_values(cols = "A", suffix = "_flip_median", center_col_name = NULL) %>%
+#'   flip_values(cols = "A", suffix = "_flip_3", center = 3, center_col_name = NULL)
 #'
 #' # Plot A and A flipped around its median
-#' ggplot(df, aes(x=index, y=A)) +
+#' ggplot(df, aes(x=Index, y=A)) +
 #'   geom_line(aes(color="A")) +
 #'   geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
 #'   geom_hline(aes(color="Median A", yintercept = median(A))) +
 #'   theme_minimal()
 #'
 #' # Plot A and A flipped around the value 3
-#' ggplot(df, aes(x=index, y=A)) +
+#' ggplot(df, aes(x=Index, y=A)) +
 #'   geom_line(aes(color="A")) +
 #'   geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
 #'   geom_hline(aes(color="3", yintercept = 3)) +

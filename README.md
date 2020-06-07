@@ -48,12 +48,12 @@ points.
 
 ### Mutators
 
-| Function           | Description                                                        |
-| :----------------- | :----------------------------------------------------------------- |
-| `flip_values()`    | Flip the values around a center value.                             |
-| `rotate2d()`       | Rotate values around an origin in 2 dimensions.                    |
-| `expand_values()`  | Expand values around around an origin in any number of dimensions. |
-| `cluster_groups()` | Move data points into clusters around group centroids.             |
+| Function           | Description                                            | Dimensions |
+| :----------------- | :----------------------------------------------------- | :--------- |
+| `flip_values()`    | Flip the values around a center value.                 | n          |
+| `expand_values()`  | Expand values around around an origin.                 | n          |
+| `cluster_groups()` | Move data points into clusters around group centroids. | n          |
+| `rotate2d()`       | Rotate values around an origin in 2 dimensions.        | 2          |
 
 ### Generators
 
@@ -171,17 +171,19 @@ position_min(data = 1:10, position = 3)
 
 ``` r
 pair_extremes(data = 1:10, keep_factor = TRUE)
+#> # A tibble: 10 x 2
 #>    Value .pair
-#> 1      1     1
-#> 2     10     1
-#> 3      2     2
-#> 4      9     2
-#> 5      3     3
-#> 6      8     3
-#> 7      4     4
-#> 8      7     4
-#> 9      5     5
-#> 10     6     5
+#>    <int> <fct>
+#>  1     1 1    
+#>  2    10 1    
+#>  3     2 2    
+#>  4     9 2    
+#>  5     3 3    
+#>  6     8 3    
+#>  7     4 4    
+#>  8     7 4    
+#>  9     5 5    
+#> 10     6 5
 ```
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="552" style="display: block; margin: auto;" />
@@ -232,8 +234,20 @@ median(random_sample)
 #> [1] 0.601
 
 # Flip the random numbers around the median
-flip_values(data = random_sample, center_fn = median)
-#>  [1] 0.9365 0.8299 0.6291 0.2938 1.0003 0.3036 0.2573 0.5412 0.5729 1.1402
+flip_values(data = random_sample, center_fn = create_origin_fn(median))
+#> # A tibble: 10 x 3
+#>     Value Value_flipped .center  
+#>     <dbl>         <dbl> <list>   
+#>  1 0.266          0.936 <dbl [1]>
+#>  2 0.372          0.830 <dbl [1]>
+#>  3 0.573          0.629 <dbl [1]>
+#>  4 0.908          0.294 <dbl [1]>
+#>  5 0.202          1.00  <dbl [1]>
+#>  6 0.898          0.304 <dbl [1]>
+#>  7 0.945          0.257 <dbl [1]>
+#>  8 0.661          0.541 <dbl [1]>
+#>  9 0.629          0.573 <dbl [1]>
+#> 10 0.0618         1.14  <dbl [1]>
 ```
 
 <img src="man/figures/README-unnamed-chunk-18-1.png" width="552" style="display: block; margin: auto;" />
@@ -242,17 +256,19 @@ flip_values(data = random_sample, center_fn = median)
 
 ``` r
 rotate2d(random_sample, degrees = 60, origin_fn = centroid)
-#>     Value Index_rotated Value_rotated .degrees
-#> 1  0.2655      3.497701    -3.4886043       60
-#> 2  0.3721      3.905382    -2.5692789       60
-#> 3  0.5729      4.231484    -1.6028535       60
-#> 4  0.9082      4.441106    -0.5691781       60
-#> 5  0.2017      5.552953    -0.0564027       60
-#> 6  0.8984      5.449593     1.1579727       60
-#> 7  0.9447      5.909496     2.0471481       60
-#> 8  0.6608      6.655361     2.7712235       60
-#> 9  0.6291      7.182814     3.6213989       60
-#> 10 0.0618      8.174110     4.2037743       60
+#> # A tibble: 10 x 5
+#>    Index  Value Index_rotated Value_rotated .degrees
+#>    <int>  <dbl>         <dbl>         <dbl>    <dbl>
+#>  1     1 0.266           3.50       -3.49         60
+#>  2     2 0.372           3.91       -2.57         60
+#>  3     3 0.573           4.23       -1.60         60
+#>  4     4 0.908           4.44       -0.569        60
+#>  5     5 0.202           5.55       -0.0564       60
+#>  6     6 0.898           5.45        1.16         60
+#>  7     7 0.945           5.91        2.05         60
+#>  8     8 0.661           6.66        2.77         60
+#>  9     9 0.629           7.18        3.62         60
+#> 10    10 0.0618          8.17        4.20         60
 ```
 
 <img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
@@ -267,17 +283,19 @@ expand_values(
   origin_fn = centroid,
   exponentiate = TRUE
 )
-#>     Value Value_expanded .exponents .origin
-#> 1  0.2655    -0.57536089          3 0.55152
-#> 2  0.3721    -0.08909041          3 0.55152
-#> 3  0.5729     0.61704109          3 0.55152
-#> 4  0.9082     2.04859892          3 0.55152
-#> 5  0.2017    -0.90787098          3 0.55152
-#> 6  0.8984     1.99487579          3 0.55152
-#> 7  0.9447     2.25561343          3 0.55152
-#> 8  0.6608     0.91649139          3 0.55152
-#> 9  0.6291     0.80278290          3 0.55152
-#> 10 0.0618    -1.75456447          3 0.55152
+#> # A tibble: 10 x 4
+#>     Value Value_expanded .exponents .origin  
+#>     <dbl>          <dbl>      <dbl> <list>   
+#>  1 0.266         -0.575           3 <dbl [1]>
+#>  2 0.372         -0.0891          3 <dbl [1]>
+#>  3 0.573          0.617           3 <dbl [1]>
+#>  4 0.908          2.05            3 <dbl [1]>
+#>  5 0.202         -0.908           3 <dbl [1]>
+#>  6 0.898          1.99            3 <dbl [1]>
+#>  7 0.945          2.26            3 <dbl [1]>
+#>  8 0.661          0.916           3 <dbl [1]>
+#>  9 0.629          0.803           3 <dbl [1]>
+#> 10 0.0618        -1.75            3 <dbl [1]>
 ```
 
 2d

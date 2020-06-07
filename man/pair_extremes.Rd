@@ -21,7 +21,7 @@ pair_extremes(
 the row numbers are used.}
 
 \item{unequal_method}{Method for dealing with an unequal number of rows
-in \code{data}.
+in \code{`data`}.
 
 One of: \code{first}, \code{middle} or \code{last}
 
@@ -106,7 +106,7 @@ form the first group, the second highest and the second lowest values
 form the second group, and so on.
 The values are then sorted by these groups/pairs.
 
-When \code{data} has an uneven number of rows, the \code{unequal_method}
+When \code{`data`} has an uneven number of rows, the \code{`unequal_method`}
 determines which group should have only \code{1} element.
 
 \strong{Example}:

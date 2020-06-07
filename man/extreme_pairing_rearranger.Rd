@@ -22,7 +22,7 @@ extreme_pairing_rearranger(
 the row numbers are used.}
 
 \item{unequal_method}{Method for dealing with an unequal number of rows
-in \code{data}.
+in \code{`data`}.
 
 One of: \code{first}, \code{middle} or \code{last}
 

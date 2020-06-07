@@ -13,7 +13,7 @@
 #'  form the second group, and so on.
 #'  The values are then sorted by these groups/pairs.
 #'
-#'  When \code{data} has an uneven number of rows, the \code{unequal_method}
+#'  When \code{`data`} has an uneven number of rows, the \code{`unequal_method`}
 #'  determines which group should have only \code{1} element.
 #'
 #'  \strong{Example}:

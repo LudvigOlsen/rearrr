@@ -45,7 +45,7 @@ all dimensions or a vector with one constant per dimension.
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}}, which is created with:
+E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
 
 \code{create_origin_fn(mean)}
 
