@@ -48,12 +48,13 @@ points.
 
 ### Mutators
 
-| Function           | Description                                            | Dimensions |
-| :----------------- | :----------------------------------------------------- | :--------- |
-| `flip_values()`    | Flip the values around a center value.                 | n          |
-| `expand_values()`  | Expand values around around an origin.                 | n          |
-| `cluster_groups()` | Move data points into clusters around group centroids. | n          |
-| `rotate2d()`       | Rotate values around an origin in 2 dimensions.        | 2          |
+| Function           | Description                                                           | Dimensions   |
+| :----------------- | :-------------------------------------------------------------------- | :----------- |
+| `flip_values()`    | Flip the values around a center value.                                | n            |
+| `expand_values()`  | Expand values around around an origin.                                | n            |
+| `cluster_groups()` | Move data points into clusters around group centroids.                | n            |
+| `dim_values()`     | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
+| `rotate2d()`       | Rotate values around an origin in 2 dimensions.                       | 2            |
 
 ### Generators
 
@@ -92,6 +93,7 @@ points.
           - [Expand values in n
             dimensions](#expand-values-in-n-dimensions)
           - [Cluster groups](#cluster-groups)
+          - [Dim values](#dim-values)
       - [Generators](#generators)
           - [Generate clusters](#generate-clusters)
 
@@ -335,6 +337,35 @@ cluster_groups(df, cols = c("x", "y"), group_col = "g")
 
 <img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
 
+### Dim values
+
+``` r
+# Add a column with 1s
+df_clustered$o <- 1
+
+# Dim the "o" column (uses last column in `cols` by default)
+# based on the data point's distance to the cluster centroid
+df_clustered %>% 
+  dplyr::group_by(g) %>% 
+  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = centroid)
+#> # A tibble: 50 x 6
+#>    x_clustered y_clustered     g     o o_dimmed .origin  
+#>          <dbl>       <dbl> <dbl> <dbl>    <dbl> <list>   
+#>  1       0.335       0.420     1     1    0.868 <dbl [3]>
+#>  2       0.449       0.417     1     1    0.850 <dbl [3]>
+#>  3       0.374       0.540     1     1    0.877 <dbl [3]>
+#>  4       0.364       0.562     1     1    0.840 <dbl [3]>
+#>  5       0.413       0.534     1     1    0.879 <dbl [3]>
+#>  6       0.413       0.547     1     1    0.860 <dbl [3]>
+#>  7       0.328       0.465     1     1    0.892 <dbl [3]>
+#>  8       0.358       0.419     1     1    0.888 <dbl [3]>
+#>  9       0.408       0.401     1     1    0.864 <dbl [3]>
+#> 10       0.418       0.429     1     1    0.899 <dbl [3]>
+#> # … with 40 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
+
 ## Generators
 
 ### Generate clusters
@@ -357,4 +388,4 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-27-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-29-1.png" width="552" style="display: block; margin: auto;" />

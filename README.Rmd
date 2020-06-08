@@ -67,6 +67,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`flip_values()`        |Flip the values around a center value.                                 |n           |
 |`expand_values()`      |Expand values around around an origin.                                 |n           |
 |`cluster_groups()`     |Move data points into clusters around group centroids.                 |n           |
+|`dim_values()`         |Dim values of a dimension by the distance to an n-dimensional origin.  |n (alters 1)|
 |`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |2           |
 
 ### Generators
@@ -395,7 +396,36 @@ ggplot(df_clustered, aes(x = x_clustered, y = y_clustered, color = factor(g))) +
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_colour_brewer(palette = "Dark2") + 
   labs(x = "x", y = "y", color = "g")
+
+df_clustered <- df_clustered %>% 
+  dplyr::select(x_clustered, y_clustered, g)
 ```
+
+### Dim values
+
+```{r}
+# Add a column with 1s
+df_clustered$o <- 1
+
+# Dim the "o" column (uses last column in `cols` by default)
+# based on the data point's distance to the cluster centroid
+df_clustered %>% 
+  dplyr::group_by(g) %>% 
+  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = centroid)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+df_dimmed <- df_clustered %>% 
+  dplyr::group_by(g) %>% 
+  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = centroid)
+
+ggplot(df_dimmed, aes(x = x_clustered, y = y_clustered, alpha = o_dimmed, color = factor(g))) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = "g", alpha = "o_dimmed")
+```
+
 
 ## Generators
 

@@ -44,7 +44,7 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
-Some columns may have been overwritten, in which case only the newest version is returned.}
+Some columns may have been overwritten, in which case only the newest versions are returned.}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the clustered columns.
@@ -160,6 +160,7 @@ plotly::plot_ly(
 }
 \seealso{
 Other mutate functions: 
+\code{\link{dim_values}()},
 \code{\link{expand_values}()},
 \code{\link{flip_values}()},
 \code{\link{rotate2d}()}

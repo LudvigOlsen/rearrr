@@ -96,7 +96,7 @@ mutator <- function(data,
 #'  Use an empty string (i.e. \code{""}) to overwrite the original columns.
 #' @param keep_original Whether to keep the original columns. (Logical)
 #'
-#'  Some columns may have been overwritten, in which case only the newest version is returned.
+#'  Some columns may have been overwritten, in which case only the newest versions are returned.
 #' @param min_dims Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 #'  setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.
 #' @inheritParams mutator

@@ -40,7 +40,7 @@ return a vector with exactly \code{2} elements (orig_x, orig_y).}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
-Some columns may have been overwritten, in which case only the newest version is returned.}
+Some columns may have been overwritten, in which case only the newest versions are returned.}
 
 \item{degree_col_name}{Name of new column with the degrees. If \code{NULL}, no column is added.}
 }
@@ -134,6 +134,7 @@ ggplot(df_grouped, aes(x=Index_rotated, y=A_rotated, color = factor(.degrees))) 
 \seealso{
 Other mutate functions: 
 \code{\link{cluster_groups}()},
+\code{\link{dim_values}()},
 \code{\link{expand_values}()},
 \code{\link{flip_values}()}
 }

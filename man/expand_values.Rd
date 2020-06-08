@@ -92,7 +92,7 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
-Some columns may have been overwritten, in which case only the newest version is returned.}
+Some columns may have been overwritten, in which case only the newest versions are returned.}
 
 \item{mult_col_name}{Name of new column with the multiplier. If \code{NULL}, no column is added.}
 
@@ -293,6 +293,7 @@ ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))
 \seealso{
 Other mutate functions: 
 \code{\link{cluster_groups}()},
+\code{\link{dim_values}()},
 \code{\link{flip_values}()},
 \code{\link{rotate2d}()}
 }

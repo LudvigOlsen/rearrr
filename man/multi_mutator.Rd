@@ -41,7 +41,7 @@ setting \code{`min_dims`} to \code{2} will use both the index and the values as 
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
-Some columns may have been overwritten, in which case only the newest version is returned.}
+Some columns may have been overwritten, in which case only the newest versions are returned.}
 
 \item{...}{Named arguments for the \code{`mutate_fn`}.}
 }
