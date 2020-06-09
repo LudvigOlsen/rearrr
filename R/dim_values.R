@@ -32,12 +32,12 @@
 #'  Each column is considered a dimension.
 #' @param origin Coordinates of the origin to dim around.
 #'  Must be either a single constant to use in all dimensions
-#'  or a vector with one constant per dimension.
+#'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_fn Function for finding the origin coordinates to dim around.
-#'  Each column will be passed as a vector in the order of \code{`cols`}.
-#'  It should return a vector with one constant per dimension.
+#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'  It should return a \code{vector} with one constant per dimension.
 #'
 #'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 #'  the same function to each dimension.

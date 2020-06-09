@@ -314,6 +314,18 @@ add_dimensions <- function(data,
 }
 
 
+
+##  .................. #< cb9942d54f8fa35406de031d066531dc ># ..................
+##  Conversions                                                             ####
+
+degrees_to_radians <- function(degrees){
+  degrees * (pi / 180)
+}
+
+radians_to_degrees <- function(radians){
+  radians / (pi / 180)
+}
+
 #   ImportFrom                                                              ####
 
 #' @importFrom dplyr %>%

@@ -31,12 +31,12 @@
 #'  Each column is considered a dimension to expand in.
 #' @param origin Coordinates of the origin to expand around.
 #'  Must be either a single constant to use in all dimensions
-#'  or a vector with one constant per dimension.
+#'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_fn Function for finding the origin coordinates to expand the values around.
-#'  Each column will be passed as a vector in the order of \code{`cols`}.
-#'  It should return a vector with one constant per dimension.
+#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'  It should return a \code{vector} with one constant per dimension.
 #'
 #'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 #'  the same function to each dimension.
@@ -60,12 +60,12 @@
 #'  \code{\}}
 #' @param multipliers Constant(s) to multiply/exponentiate the distance to the origin by.
 #'  Must be either a single constant to use in all dimensions or
-#'  a vector with one constant per dimension.
+#'  a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
 #' @param multipliers_fn Function for finding the multipliers.
-#'  Each column will be passed as a vector in the order of \code{`cols`}.
-#'  It should return a vector with one constant per dimension.
+#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'  It should return a \code{vector} with one constant per dimension.
 #'
 #'  Just as for \code{`origin_fn`}, it can be created with
 #'  \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply

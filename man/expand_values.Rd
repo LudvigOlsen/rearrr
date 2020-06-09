@@ -27,13 +27,13 @@ Each column is considered a dimension to expand in.}
 
 \item{multipliers}{Constant(s) to multiply/exponentiate the distance to the origin by.
 Must be either a single constant to use in all dimensions or
-a vector with one constant per dimension.
+a \code{vector} with one constant per dimension.
 
 \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.}
 
 \item{multipliers_fn}{Function for finding the multipliers.
-Each column will be passed as a vector in the order of \code{`cols`}.
-It should return a vector with one constant per dimension.
+Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+It should return a \code{vector} with one constant per dimension.
 
 Just as for \code{`origin_fn`}, it can be created with
 \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
@@ -41,13 +41,13 @@ the same function to each dimension. See \code{`origin_fn`}.}
 
 \item{origin}{Coordinates of the origin to expand around.
 Must be either a single constant to use in all dimensions
-or a vector with one constant per dimension.
+or a \code{vector} with one constant per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates to expand the values around.
-Each column will be passed as a vector in the order of \code{`cols`}.
-It should return a vector with one constant per dimension.
+Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+It should return a \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
@@ -295,7 +295,8 @@ Other mutate functions:
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{flip_values}()},
-\code{\link{rotate2d}()}
+\code{\link{rotate2d}()},
+\code{\link{rotate3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

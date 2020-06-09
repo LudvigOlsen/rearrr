@@ -1,11 +1,10 @@
 
 
-
 #   __________________ #< cd1a61becee10db96fdb9c8566818046 ># __________________
 #   rotate2d                                                                ####
 
 
-#' @title Rotate the values around an origin
+#' @title Rotate the values around an origin in 2 dimensions
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
@@ -16,24 +15,46 @@
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param degrees Degrees to rotate values counterclockwise. In \code{[-360, 360]}.
-#'  Can be a vector with multiple degrees.
+#'  Can be a \code{vector} with multiple degrees.
 #' @param x_col Name of x column in \code{`data`}. If \code{NULL} and \code{`data`} is a \code{vector},
 #'  the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
-#' @param origin Coordinates of the origin to rotate around. Must be a vector with 2 elements (orig_x, orig_y).
+#' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_fn Function for finding the origin coordinates to rotate the values around.
-#'  Should have \code{2} input arguments (a vector with x-values, a vector with y-values) and
-#'  return a vector with exactly \code{2} elements (orig_x, orig_y).
+#'  Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values and
+#'  a \code{vector} with y-values).
+#'  It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y).
+#'
+#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+#'  the same function to each dimension.
+#'
+#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+#'
+#'  \code{create_origin_fn(mean)}
+#'
+#'  Which returns the following function:
+#'
+#'  \code{function(...)\{}
+#'
+#'  \verb{  }\code{list(...) \%>\%}
+#'
+#'  \verb{    }\code{purrr::map(mean) \%>\%}
+#'
+#'  \verb{    }\code{unlist(recursive = TRUE,}
+#'
+#'  \verb{           }\code{use.names = FALSE)}
+#'
+#'  \code{\}}
 #' @param degree_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with three new columns containing the rotated x- and y-values and the degrees.
 #' @details
 #'  Applies the following rotation matrix:
 #'
-#'  | [ \eqn{cos \theta} |, \eqn{ -sin \theta} ] |
-#'  | :--- | :--- |
-#'  | [ \eqn{sin \theta} |, \eqn{ cos \theta}  ] |
+#'  | [ \eqn{cos \theta} |, \eqn{ -sin \theta} | ] |
+#'  | :--- | :--- | :--- |
+#'  | [ \eqn{sin \theta} |, \eqn{ cos \theta}  | ] |
 #'
 #'  That is:
 #'
@@ -59,10 +80,8 @@
 #' # Create a data frame
 #' df <- data.frame(
 #'   "Index" = 1:12,
-#'   "A" = c(
-#'     1, 2, 3, 4, 9, 10,
-#'     11, 12, 15, 16, 17, 18
-#'   ),
+#'   "A" = c(1, 2, 3, 4, 9, 10, 11,
+#'           12, 15, 16, 17, 18),
 #'   "G" = c(1, 1, 1, 1, 2, 2,
 #'           2, 2, 3, 3, 3, 3)
 #' )
@@ -133,10 +152,10 @@ rotate2d <- function(data,
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if (is.data.frame(data) && is.null(y_col)) {
-    assert_collection$push("when 'data' is a data frame, 'y_col' must be specified.")
+    assert_collection$push("when 'data' is a data.frame, 'y_col' must be specified.")
   }
   if (is.data.frame(data) && is.null(x_col)) {
-    assert_collection$push("when 'data' is a data frame, 'x_col' must be specified.")
+    assert_collection$push("when 'data' is a data.frame, 'x_col' must be specified.")
   }
   if (length(c(x_col, y_col)) == 2 && x_col == y_col){
     assert_collection$push("'x_col' and 'y_col' cannot be the same column.")
@@ -171,7 +190,7 @@ rotate2d <- function(data,
 
 }
 
-# col is the y_col
+
 rotate2d_mutator_method <- function(data,
                                     cols,
                                     degrees,
@@ -184,21 +203,7 @@ rotate2d_mutator_method <- function(data,
   y_col <- cols[[2]]
 
   # Create rotation matrix based on the degrees
-  if (degrees %in% c(-360, 0, 360)) {
-    rotation_matrix <- matrix(c(1, 0, 0, 1), nrow = 2, ncol = 2)
-  } else if (degrees %in% c(90, -270)) {
-    rotation_matrix <- matrix(c(0, 1,-1, 0), nrow = 2, ncol = 2)
-  } else if (degrees %in% c(180, -180)) {
-    rotation_matrix <- matrix(c(-1, 0, 0,-1), nrow = 2, ncol = 2)
-  } else if (degrees %in% c(270, -90)) {
-    rotation_matrix <- matrix(c(0,-1, 1, 0), nrow = 2, ncol = 2)
-  } else {
-    # 360 degrees == 2pi
-    radian <- degrees * (pi / 180)
-    rotation_matrix <- matrix(c(cos(radian), sin(radian),-sin(radian), cos(radian)),
-                              nrow = 2,
-                              ncol = 2)
-  }
+  rotation_matrix <- create_rotation_matrix2d(deg=degrees)
 
   # Extract x and y values
   if (is.null(x_col)) {

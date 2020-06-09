@@ -69,6 +69,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`cluster_groups()`     |Move data points into clusters around group centroids.                 |n           |
 |`dim_values()`         |Dim values of a dimension by the distance to an n-dimensional origin.  |n (alters 1)|
 |`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |2           |
+|`rotate3d()`           |Rotate values around an origin in 3 dimensions.                        |3           |
 
 ### Generators
 
@@ -80,6 +81,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
+|`create_dimming_fn()`  |Creates function for controlling dimming values with `dim_values()`.   |
 |`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
 |`transfer_centroids()` |Transfer centroids from one `data.frame` to another.                   |
@@ -304,6 +306,8 @@ orderings %>%
 
 ### Rotate values
 
+2-dimensional rotation:
+
 ```{r}
 rotate2d(random_sample, degrees = 60, origin_fn = centroid)
 ```
@@ -323,6 +327,52 @@ rotate_df %>%
   labs(x = "Index", y="Value", color="Degrees")
 
 ```
+
+3-dimensional rotation:
+
+```{r}
+# Set seed
+set.seed(3)
+
+# Create a data frame
+df <- data.frame(
+  "x" = 1:12,
+  "y" = c(1, 2, 3, 4, 9, 10, 11,
+          12, 15, 16, 17, 18),
+  "z" = runif(12),
+  "g" = c(1, 1, 1, 1, 2, 2,
+          2, 2, 3, 3, 3, 3)
+)
+
+# Perform rotation
+rotate3d(df, x_col = "x", y_col = "y", z_col = "z", 
+         x_deg = 45, y_deg = 90, z_deg = 135, 
+         origin_fn = centroid)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+rotate_df <- df %>%
+  rotate3d(x_col = "x",
+           y_col = "y",
+           z_col = "z",
+           x_deg = c(0, 72, 144, 216, 288),
+           y_deg = c(0, 72, 144, 216, 288),
+           z_deg = c(0, 72, 144, 216, 288),
+           origin_fn = centroid)
+
+# Plot rotated values
+rotate_df %>% 
+  ggplot(aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
+  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_line(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
+```
+
+
 
 ### Expand values in n dimensions
 
@@ -381,6 +431,7 @@ df <- data.frame(
   "y" = runif(50),
   "g" = rep(c(1, 2, 3, 4, 5), each = 10)
 ) 
+
 
 cluster_groups(df, cols = c("x", "y"), group_col = "g")
 ```

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rotate2d.R
 \name{rotate2d}
 \alias{rotate2d}
-\title{Rotate the values around an origin}
+\title{Rotate the values around an origin in 2 dimensions}
 \usage{
 rotate2d(
   data,
@@ -20,7 +20,7 @@ rotate2d(
 \item{data}{\code{data.frame} or \code{vector}.}
 
 \item{degrees}{Degrees to rotate values counterclockwise. In \code{[-360, 360]}.
-Can be a vector with multiple degrees.}
+Can be a \code{vector} with multiple degrees.}
 
 \item{x_col}{Name of x column in \code{`data`}. If \code{NULL} and \code{`data`} is a \code{vector},
 the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.}
@@ -31,12 +31,34 @@ the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it 
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to rotate around. Must be a vector with 2 elements (orig_x, orig_y).
+\item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates to rotate the values around.
-Should have \code{2} input arguments (a vector with x-values, a vector with y-values) and
-return a vector with exactly \code{2} elements (orig_x, orig_y).}
+Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values and
+a \code{vector} with y-values).
+It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y).
+
+Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+the same function to each dimension.
+
+E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+
+\code{create_origin_fn(mean)}
+
+Which returns the following function:
+
+\code{function(...)\{}
+
+\verb{  }\code{list(...) \%>\%}
+
+\verb{    }\code{purrr::map(mean) \%>\%}
+
+\verb{    }\code{unlist(recursive = TRUE,}
+
+\verb{           }\code{use.names = FALSE)}
+
+\code{\}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
@@ -57,9 +79,9 @@ latter can be useful when supplying a grouped data frame and rotating around e.g
 of each group.
 }
 \details{
-Applies the following rotation matrix:\tabular{ll}{
-   [ \eqn{cos \theta} \tab , \eqn{ -sin \theta} ] \cr
-   [ \eqn{sin \theta} \tab , \eqn{ cos \theta}  ] \cr
+Applies the following rotation matrix:\tabular{lll}{
+   [ \eqn{cos \theta} \tab , \eqn{ -sin \theta} \tab ] \cr
+   [ \eqn{sin \theta} \tab , \eqn{ cos \theta} \tab ] \cr
 }
 
 
@@ -86,10 +108,8 @@ set.seed(1)
 # Create a data frame
 df <- data.frame(
   "Index" = 1:12,
-  "A" = c(
-    1, 2, 3, 4, 9, 10,
-    11, 12, 15, 16, 17, 18
-  ),
+  "A" = c(1, 2, 3, 4, 9, 10, 11,
+          12, 15, 16, 17, 18),
   "G" = c(1, 1, 1, 1, 2, 2,
           2, 2, 3, 3, 3, 3)
 )
@@ -136,7 +156,8 @@ Other mutate functions:
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_values}()},
-\code{\link{flip_values}()}
+\code{\link{flip_values}()},
+\code{\link{rotate3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

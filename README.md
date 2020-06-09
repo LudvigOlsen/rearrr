@@ -55,6 +55,7 @@ points.
 | `cluster_groups()` | Move data points into clusters around group centroids.                | n            |
 | `dim_values()`     | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
 | `rotate2d()`       | Rotate values around an origin in 2 dimensions.                       | 2            |
+| `rotate3d()`       | Rotate values around an origin in 3 dimensions.                       | 3            |
 
 ### Generators
 
@@ -66,6 +67,7 @@ points.
 
 | Function               | Description                                                          |
 | :--------------------- | :------------------------------------------------------------------- |
+| `create_dimming_fn()`  | Creates function for controlling dimming values with `dim_values()`. |
 | `create_origin_fn()`   | Creates function for finding origin coordinates (like `centroid()`). |
 | `centroid()`           | Calculates the mean of each supplied vector.                         |
 | `transfer_centroids()` | Transfer centroids from one `data.frame` to another.                 |
@@ -256,6 +258,8 @@ flip_values(data = random_sample, center_fn = create_origin_fn(median))
 
 ### Rotate values
 
+2-dimensional rotation:
+
 ``` r
 rotate2d(random_sample, degrees = 60, origin_fn = centroid)
 #> # A tibble: 10 x 5
@@ -274,6 +278,46 @@ rotate2d(random_sample, degrees = 60, origin_fn = centroid)
 ```
 
 <img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
+
+3-dimensional rotation:
+
+``` r
+# Set seed
+set.seed(3)
+
+# Create a data frame
+df <- data.frame(
+  "x" = 1:12,
+  "y" = c(1, 2, 3, 4, 9, 10, 11,
+          12, 15, 16, 17, 18),
+  "z" = runif(12),
+  "g" = c(1, 1, 1, 1, 2, 2,
+          2, 2, 3, 3, 3, 3)
+)
+
+# Perform rotation
+rotate3d(df, x_col = "x", y_col = "y", z_col = "z", 
+         x_deg = 45, y_deg = 90, z_deg = 135, 
+         origin_fn = centroid)
+#> # A tibble: 12 x 10
+#>        x     y     z     g x_rotated y_rotated z_rotated .origin .degrees
+#>    <int> <dbl> <dbl> <dbl>     <dbl>     <dbl>     <dbl> <list>  <list>  
+#>  1     1     1 0.168     1    15.3        9.54    5.96   <dbl [… <dbl [3…
+#>  2     2     2 0.808     1    14.3       10.2     4.96   <dbl [… <dbl [3…
+#>  3     3     3 0.385     1    13.3        9.76    3.96   <dbl [… <dbl [3…
+#>  4     4     4 0.328     1    12.3        9.70    2.96   <dbl [… <dbl [3…
+#>  5     5     9 0.602     2     7.33       9.97    1.96   <dbl [… <dbl [3…
+#>  6     6    10 0.604     2     6.33       9.98    0.962  <dbl [… <dbl [3…
+#>  7     7    11 0.125     2     5.33       9.50   -0.0384 <dbl [… <dbl [3…
+#>  8     8    12 0.295     2     4.33       9.67   -1.04   <dbl [… <dbl [3…
+#>  9     9    15 0.578     3     1.33       9.95   -2.04   <dbl [… <dbl [3…
+#> 10    10    16 0.631     3     0.333     10.0    -3.04   <dbl [… <dbl [3…
+#> 11    11    17 0.512     3    -0.667      9.88   -4.04   <dbl [… <dbl [3…
+#> 12    12    18 0.505     3    -1.67       9.88   -5.04   <dbl [… <dbl [3…
+#> # … with 1 more variable: .degrees_str <chr>
+```
+
+<img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Expand values in n dimensions
 
@@ -303,7 +347,7 @@ expand_values(
 2d
 expansion:
 
-<img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Cluster groups
 
@@ -317,6 +361,7 @@ df <- data.frame(
   "y" = runif(50),
   "g" = rep(c(1, 2, 3, 4, 5), each = 10)
 ) 
+
 
 cluster_groups(df, cols = c("x", "y"), group_col = "g")
 #> # A tibble: 50 x 5
@@ -335,7 +380,7 @@ cluster_groups(df, cols = c("x", "y"), group_col = "g")
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Dim values
 
@@ -364,7 +409,7 @@ df_clustered %>%
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-28-1.png" width="552" style="display: block; margin: auto;" />
 
 ## Generators
 
@@ -388,4 +433,4 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-29-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-31-1.png" width="552" style="display: block; margin: auto;" />

@@ -30,12 +30,12 @@
 #' @param cols Names of columns in \code{`data`} to flip values of.
 #' @param center Coordinates of the center to flip around.
 #'  Must be either a single constant to use in all dimensions (columns)
-#'  or a vector with one constant per dimension.
+#'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`center_fn`} is not \code{NULL}.
 #' @param center_fn Function for finding the center value to flip the values around.
-#'  Each column will be passed as a vector in the order of \code{`cols`}.
-#'  It should return a vector with one constant per dimension.
+#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'  It should return a \code{vector} with one constant per dimension.
 #'
 #'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 #'  the same function to each dimension.
