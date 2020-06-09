@@ -23,7 +23,7 @@ prepare_input_data <- function(data, cols, min_dims=1, new_name=NULL){
   # Cannot be non-data-frame list
   if (!is.data.frame(data) && is.list(data)){
     assert_collection$push(
-      "when 'data' is not a data frame, it cannot be a list."
+      "when 'data' is not a data.frame, it cannot be a list."
     )
     checkmate::reportAssertions(assert_collection)
   }
@@ -32,7 +32,7 @@ prepare_input_data <- function(data, cols, min_dims=1, new_name=NULL){
   if (!is.list(data)){
     if (!is.null(cols)){
       assert_collection$push(
-        "when 'data' is not a data frame, 'col(s)' must be 'NULL'."
+        "when 'data' is not a data.frame, 'col(s)' must be 'NULL'."
       )
       checkmate::reportAssertions(assert_collection)
     }

@@ -450,7 +450,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   side_effects_15190 <- xpectr::capture_side_effects(pair_extremes(data = list(1, 2, 3), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, it cannot be a list."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, it cannot be a list."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error_class']]),
@@ -528,7 +528,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   side_effects_17050 <- xpectr::capture_side_effects(pair_extremes(data = c(1, 2, 3, 4), col = "A", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col(s)' must be 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error_class']]),

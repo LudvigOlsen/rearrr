@@ -105,7 +105,7 @@ way to change the exponent or the \eqn{+1} is with
 \code{\link[rearrr:create_dimming_fn]{create_dimming_fn()}}.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
-latter can be useful when supplying a grouped data frame and dimming around e.g. the centroid
+latter can be useful when supplying a grouped \code{data.frame} and dimming around e.g. the centroid
 of each group.
 }
 \details{

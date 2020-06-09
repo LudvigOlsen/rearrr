@@ -109,11 +109,11 @@ The distance to the specified origin is increased/decreased in all dimensions.
 A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
-latter can be useful when supplying a grouped data frame and expanding around e.g. the centroid
+latter can be useful when supplying a grouped \code{data.frame} and expanding around e.g. the centroid
 of each group.
 
 The multipliers/exponents can can supplied as constant(s) or as a function that returns constants.
-The latter can be useful when supplying a grouped data frame and the multiplier/exponent depends
+The latter can be useful when supplying a grouped \code{data.frame} and the multiplier/exponent depends
 on the data in the groups.
 If supplying multiple constants, there must be one per dimension (length of \code{`cols`}).
 

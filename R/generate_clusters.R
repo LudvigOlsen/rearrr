@@ -8,7 +8,7 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Generate data frame with clustered groups.
+#'  Generates \code{data.frame} with clustered groups.
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param num_rows Number of rows.
@@ -28,7 +28,7 @@
 #' @return \code{data.frame} (\code{tibble}) with the clustered columns and the cluster grouping factor.
 #' @details
 #'  \itemize{
-#'   \item{Generates data frame with random values using the \code{`generator`}.}
+#'   \item{Generates \code{data.frame} with random values using the \code{`generator`}.}
 #'   \item{Divides the rows into groups (the clusters).}
 #'   \item{Contracts the distance from each data point to the centroid of its group.}
 #'   \item{Performs MinMax scaling such that the scale of the data points is similar to the generated data.}

@@ -64,7 +64,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 
 | Function              | Description                                                           | Dimensions |
 |:----------------------|:----------------------------------------------------------------------|:-----------|
-|`flip_values()`        |Flip the values around a center value.                                 |n           |
+|`flip_values()`        |Flip the values around an origin.                                      |n           |
 |`expand_values()`      |Expand values around around an origin.                                 |n           |
 |`cluster_groups()`     |Move data points into clusters around group centroids.                 |n           |
 |`dim_values()`         |Dim values of a dimension by the distance to an n-dimensional origin.  |n (alters 1)|
@@ -84,6 +84,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`create_dimming_fn()`  |Creates function for controlling dimming values with `dim_values()`.   |
 |`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
+|`most_centered()`      |Finds coordinates of data point closest to the centroid.               |
 |`transfer_centroids()` |Transfer centroids from one `data.frame` to another.                   |
 |`min_max_scale()`      |Scale values to a range.                                               |
 
@@ -140,7 +141,7 @@ orderings <- data.frame(
   "closest_to" = closest_to(vec, target_fn = median),
   "furthest_from" = furthest_from(vec, target = 5),
   "random_sample" = random_sample,
-  "flipped_median" = flip_values(random_sample, center_fn=create_origin_fn(median))$Value_flipped
+  "flipped_median" = flip_values(random_sample, origin_fn=create_origin_fn(median))$Value_flipped
 ) 
 
 # Convert to long format for plotting
@@ -289,7 +290,7 @@ random_sample
 median(random_sample)
 
 # Flip the random numbers around the median
-flip_values(data = random_sample, center_fn = create_origin_fn(median))
+flip_values(data = random_sample, origin_fn = create_origin_fn(median))
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -459,16 +460,16 @@ df_clustered <- df_clustered %>%
 df_clustered$o <- 1
 
 # Dim the "o" column (uses last column in `cols` by default)
-# based on the data point's distance to the cluster centroid
+# based on the data point's distance to the most central point in the cluster
 df_clustered %>% 
   dplyr::group_by(g) %>% 
-  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = centroid)
+  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = most_centered)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
 df_dimmed <- df_clustered %>% 
   dplyr::group_by(g) %>% 
-  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = centroid)
+  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = most_centered)
 
 ggplot(df_dimmed, aes(x = x_clustered, y = y_clustered, alpha = o_dimmed, color = factor(g))) +
   geom_point() +

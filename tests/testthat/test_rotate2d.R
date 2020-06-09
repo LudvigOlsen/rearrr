@@ -161,7 +161,7 @@ test_that("fuzz testing rotate2d()", {
   side_effects_12861 <- xpectr::capture_side_effects(rotate2d(data = c(1, 2, 3, 4, 5), degrees = 10, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, keep_original = FALSE, degree_col_name = ".degrees"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col(s)' must be 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error_class']]),
@@ -176,7 +176,7 @@ test_that("fuzz testing rotate2d()", {
   side_effects_18304 <- xpectr::capture_side_effects(rotate2d(data = "hej", degrees = 10, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, keep_original = FALSE, degree_col_name = ".degrees"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col(s)' must be 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -324,7 +324,7 @@ test_that("fuzz testing rotate2d()", {
   side_effects_16569 <- xpectr::capture_side_effects(rotate2d(data = c(1, 2, 3, 4, 5), degrees = 10, x_col = "x", y_col = NULL, suffix = "", origin = c(0, 0), origin_fn = centroid, keep_original = FALSE, degree_col_name = ".degrees"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is not a data frame, 'col(s)' must be 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error_class']]),
@@ -540,7 +540,7 @@ test_that("fuzz testing rotate2d()", {
   side_effects_11174 <- xpectr::capture_side_effects(rotate2d(data = df, degrees = 10, x_col = NULL, y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, keep_original = FALSE, degree_col_name = ".degrees"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is a data frame, 'x_col' must be specified."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is a data.frame, 'x_col' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['error_class']]),
@@ -570,7 +570,7 @@ test_that("fuzz testing rotate2d()", {
   side_effects_15603 <- xpectr::capture_side_effects(rotate2d(data = df, degrees = 10, x_col = "x", y_col = NULL, suffix = "", origin = c(0, 0), origin_fn = NULL, keep_original = FALSE, degree_col_name = ".degrees"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error']]),
-    xpectr::strip("1 assertions failed:\n * when 'data' is a data frame, 'y_col' must be specified."),
+    xpectr::strip("1 assertions failed:\n * when 'data' is a data.frame, 'y_col' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error_class']]),

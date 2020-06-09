@@ -23,11 +23,15 @@
 
 * Adds `expand_values()` for expanding values around an origin in any number of dimensions. (Mutator)
 
-* Adds `rotate2d()` for rotating values around an origin. (Mutator)
+* Adds `dim_values()` for dimming values in one dimension by their distance to around an n-dimensional origin. (Mutator)
+
+* Adds `rotate2d()` and `rotate3d()` for rotating values around an origin. (Mutator)
 
 * Adds `flip_values()` for flipping values around a center value. (Mutator)
 
 ## New helpers
+
+* Adds `most_centered()` for finding the coordinates of the data point closest to the centroid. (Helper)
 
 * Adds `centroid()` for finding the centroid from multiple vectors (dimensions). (Helper)
 

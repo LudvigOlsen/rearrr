@@ -23,7 +23,7 @@
 #'  \code{\link[rearrr:create_dimming_fn]{create_dimming_fn()}}.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
-#'  latter can be useful when supplying a grouped data frame and dimming around e.g. the centroid
+#'  latter can be useful when supplying a grouped \code{data.frame} and dimming around e.g. the centroid
 #'  of each group.
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
@@ -232,21 +232,9 @@ dim_values_mutator_method <- function(data, cols, dimming_fn, origin, origin_fn,
     allow_len_one = TRUE
   )
 
-  # Distance formula:
-  # d(P1, P2) = sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
-
-  # Calculate (x2-x1)^2, (y2-y1)^2, etc.
-  distance_terms <-
-    purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      (.x - .y)^2
-    })
-
-  # Calculate sqrt(sum(x,y,z))
-  # of the squared differences dim-wise
-  distances <- distance_terms %>%
-    purrr::transpose() %>%
-    purrr::simplify_all() %>%
-    purrr::map_dbl(~{sqrt(sum(.x))})
+  # Calculate distances
+  # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
+  distances <- calculate_distances(dim_vectors = dim_vectors, to = origin)
 
   # Apply dimmer
   dim_vectors[[dim_col]] <- dimming_fn(dim_vectors[[dim_col]], distances)

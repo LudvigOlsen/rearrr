@@ -2,16 +2,16 @@
 % Please edit documentation in R/flip_values.R
 \name{flip_values}
 \alias{flip_values}
-\title{Flip the values around a center value}
+\title{Flip the values around an origin}
 \usage{
 flip_values(
   data,
   cols = NULL,
-  center = 0,
-  center_fn = create_origin_fn(median),
+  origin = 0,
+  origin_fn = create_origin_fn(median),
   suffix = "_flipped",
   keep_original = TRUE,
-  center_col_name = ".center"
+  origin_col_name = ".origin"
 )
 }
 \arguments{
@@ -19,13 +19,13 @@ flip_values(
 
 \item{cols}{Names of columns in \code{`data`} to flip values of.}
 
-\item{center}{Coordinates of the center to flip around.
+\item{origin}{Coordinates of the origin to flip around.
 Must be either a single constant to use in all dimensions (columns)
 or a \code{vector} with one constant per dimension.
 
-\strong{N.B.} Ignored when \code{`center_fn`} is not \code{NULL}.}
+\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{center_fn}{Function for finding the center value to flip the values around.
+\item{origin_fn}{Function for finding the origin value to flip the values around.
 Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 It should return a \code{vector} with one constant per dimension.
 
@@ -58,16 +58,16 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
-\item{center_col_name}{Name of new column with the center coordinates. If \code{NULL}, no column is added.}
+\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 The values are flipped with the formula \code{x = 2 * c - x} where \code{x} is the value and \code{c} is
-the center value to flip the values around.
+the origin coordinate to flip the values around.
 
-The center can be supplied as coordinates or as a function that returns coordinates. The
-latter can be useful when supplying a grouped data frame and flipping around e.g. the centroid
+The origin can be supplied as coordinates or as a function that returns coordinates. The
+latter can be useful when supplying a grouped \code{data.frame} and flipping around e.g. the centroid
 of each group.
 
 \strong{Example}:
@@ -76,7 +76,7 @@ The column values:
 
 \code{c(5, 2, 7, 4, 3, 1)}
 
-and the \code{center_fn = create_origin_fn(median)}
+and the \code{origin_fn = create_origin_fn(median)}
 
 Changes the values to :
 
@@ -105,24 +105,24 @@ df <- data.frame(
 # Flip values of the columns
 flip_values(df$A)
 flip_values(df, cols = "A")
-flip_values(df, cols = "B", center = 0.3, keep_original = FALSE)
-flip_values(df, cols = c("A", "B"), center = c(3, 0.3),
+flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
+flip_values(df, cols = c("A", "B"), origin = c(3, 0.3),
             suffix = "",  keep_original = FALSE)
-flip_values(df, cols = c("A", "B"), center_fn = create_origin_fn(max))
+flip_values(df, cols = c("A", "B"), origin_fn = create_origin_fn(max))
 
 # Grouped by G
 df \%>\%
   dplyr::group_by(G) \%>\%
   flip_values(cols = c("A", "B"),
-              center_fn = create_origin_fn(median),
+              origin_fn = create_origin_fn(median),
               keep_original = FALSE)
 
 # Plot A and flipped A
 
 # First flip A around the median and then around the value 3.
 df <- df \%>\%
-  flip_values(cols = "A", suffix = "_flip_median", center_col_name = NULL) \%>\%
-  flip_values(cols = "A", suffix = "_flip_3", center = 3, center_col_name = NULL)
+  flip_values(cols = "A", suffix = "_flip_median", origin_col_name = NULL) \%>\%
+  flip_values(cols = "A", suffix = "_flip_3", origin = 3, origin_col_name = NULL)
 
 # Plot A and A flipped around its median
 ggplot(df, aes(x=Index, y=A)) +

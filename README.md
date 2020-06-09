@@ -50,7 +50,7 @@ points.
 
 | Function           | Description                                                           | Dimensions   |
 | :----------------- | :-------------------------------------------------------------------- | :----------- |
-| `flip_values()`    | Flip the values around a center value.                                | n            |
+| `flip_values()`    | Flip the values around an origin.                                     | n            |
 | `expand_values()`  | Expand values around around an origin.                                | n            |
 | `cluster_groups()` | Move data points into clusters around group centroids.                | n            |
 | `dim_values()`     | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
@@ -70,6 +70,7 @@ points.
 | `create_dimming_fn()`  | Creates function for controlling dimming values with `dim_values()`. |
 | `create_origin_fn()`   | Creates function for finding origin coordinates (like `centroid()`). |
 | `centroid()`           | Calculates the mean of each supplied vector.                         |
+| `most_centered()`      | Finds coordinates of data point closest to the centroid.             |
 | `transfer_centroids()` | Transfer centroids from one `data.frame` to another.                 |
 | `min_max_scale()`      | Scale values to a range.                                             |
 
@@ -238,9 +239,9 @@ median(random_sample)
 #> [1] 0.601
 
 # Flip the random numbers around the median
-flip_values(data = random_sample, center_fn = create_origin_fn(median))
+flip_values(data = random_sample, origin_fn = create_origin_fn(median))
 #> # A tibble: 10 x 3
-#>     Value Value_flipped .center  
+#>     Value Value_flipped .origin  
 #>     <dbl>         <dbl> <list>   
 #>  1 0.266          0.936 <dbl [1]>
 #>  2 0.372          0.830 <dbl [1]>
@@ -389,23 +390,23 @@ cluster_groups(df, cols = c("x", "y"), group_col = "g")
 df_clustered$o <- 1
 
 # Dim the "o" column (uses last column in `cols` by default)
-# based on the data point's distance to the cluster centroid
+# based on the data point's distance to the most central point in the cluster
 df_clustered %>% 
   dplyr::group_by(g) %>% 
-  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = centroid)
+  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = most_centered)
 #> # A tibble: 50 x 6
 #>    x_clustered y_clustered     g     o o_dimmed .origin  
 #>          <dbl>       <dbl> <dbl> <dbl>    <dbl> <list>   
-#>  1       0.335       0.420     1     1    0.868 <dbl [3]>
-#>  2       0.449       0.417     1     1    0.850 <dbl [3]>
-#>  3       0.374       0.540     1     1    0.877 <dbl [3]>
-#>  4       0.364       0.562     1     1    0.840 <dbl [3]>
-#>  5       0.413       0.534     1     1    0.879 <dbl [3]>
-#>  6       0.413       0.547     1     1    0.860 <dbl [3]>
-#>  7       0.328       0.465     1     1    0.892 <dbl [3]>
-#>  8       0.358       0.419     1     1    0.888 <dbl [3]>
-#>  9       0.408       0.401     1     1    0.864 <dbl [3]>
-#> 10       0.418       0.429     1     1    0.899 <dbl [3]>
+#>  1       0.335       0.420     1     1    0.853 <dbl [3]>
+#>  2       0.449       0.417     1     1    0.936 <dbl [3]>
+#>  3       0.374       0.540     1     1    0.798 <dbl [3]>
+#>  4       0.364       0.562     1     1    0.765 <dbl [3]>
+#>  5       0.413       0.534     1     1    0.819 <dbl [3]>
+#>  6       0.413       0.547     1     1    0.801 <dbl [3]>
+#>  7       0.328       0.465     1     1    0.831 <dbl [3]>
+#>  8       0.358       0.419     1     1    0.889 <dbl [3]>
+#>  9       0.408       0.401     1     1    0.943 <dbl [3]>
+#> 10       0.418       0.429     1     1    1     <dbl [3]>
 #> # … with 40 more rows
 ```
 
