@@ -143,10 +143,12 @@ ggplot(df, aes(x=Index, y=A)) +
 Other mutate functions: 
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
-\code{\link{expand_values}()},
-\code{\link{rotate2d}()},
-\code{\link{rotate3d}()},
-\code{\link{swirl2d}()}
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{rotate_2d}()},
+\code{\link{rotate_3d}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

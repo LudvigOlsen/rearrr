@@ -65,11 +65,14 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 | Function              | Description                                                           | Dimensions |
 |:----------------------|:----------------------------------------------------------------------|:-----------|
 |`flip_values()`        |Flip the values around an origin.                                      |n           |
-|`expand_values()`      |Expand values around around an origin.                                 |n           |
+|`expand_distances()`   |Expand distances to an origin.                                         |n           |
+|`expand_distances_each()`|Expand distances to an origin separately for each dimension.         |n           |
 |`cluster_groups()`     |Move data points into clusters around group centroids.                 |n           |
 |`dim_values()`         |Dim values of a dimension by the distance to an n-dimensional origin.  |n (alters 1)|
-|`rotate2d()`           |Rotate values around an origin in 2 dimensions.                        |2           |
-|`rotate3d()`           |Rotate values around an origin in 3 dimensions.                        |3           |
+|`rotate_2d()`           |Rotate values around an origin in 2 dimensions.                        |2           |
+|`rotate_3d()`           |Rotate values around an origin in 3 dimensions.                        |3           |
+|`swirl_2d()`            |Swirl values around an origin in 2 dimensions.                         |2           |
+|`swirl_3d()`            |Swirl values around an origin in 3 dimensions.                         |3           |
 
 ### Generators
 
@@ -123,6 +126,7 @@ library(knitr)        # kable()
 library(dplyr)        # %>% arrange()
 library(tidyr)        # gather()
 library(ggplot2)
+library(patchwork)
 
 xpectr::set_test_seed(1)
 ```
@@ -305,83 +309,14 @@ orderings %>%
   scale_colour_brewer(palette = "Dark2")
 ```
 
-### Rotate values
 
-2-dimensional rotation:
-
-```{r}
-rotate2d(random_sample, degrees = 60, origin_fn = centroid)
-```
-
-```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-rotate_df <- rotate2d(random_sample, degrees = c(0, 72, 144, 216, 288), origin_fn = centroid)
-
-# Plot rotated values
-rotate_df %>% 
-  ggplot(aes(x = Index_rotated, y = Value_rotated, color = factor(.degrees))) +
-  geom_hline(yintercept = mean(random_sample), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_vline(xintercept = mean(seq_len(length(random_sample))), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "Index", y="Value", color="Degrees")
-
-```
-
-3-dimensional rotation:
-
-```{r}
-# Set seed
-set.seed(3)
-
-# Create a data frame
-df <- data.frame(
-  "x" = 1:12,
-  "y" = c(1, 2, 3, 4, 9, 10, 11,
-          12, 15, 16, 17, 18),
-  "z" = runif(12),
-  "g" = c(1, 1, 1, 1, 2, 2,
-          2, 2, 3, 3, 3, 3)
-)
-
-# Perform rotation
-rotate3d(df, x_col = "x", y_col = "y", z_col = "z", 
-         x_deg = 45, y_deg = 90, z_deg = 135, 
-         origin_fn = centroid)
-```
-
-```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-rotate_df <- df %>%
-  rotate3d(x_col = "x",
-           y_col = "y",
-           z_col = "z",
-           x_deg = c(0, 72, 144, 216, 288),
-           y_deg = c(0, 72, 144, 216, 288),
-           z_deg = c(0, 72, 144, 216, 288),
-           origin_fn = centroid)
-
-# Plot rotated values
-rotate_df %>% 
-  ggplot(aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
-```
-
-
-
-### Expand values in n dimensions
+### Expand distances
 
 ```{r}
 # 1d expansion
-expand_values(
+expand_distances(
   random_sample,
-  multipliers = 3,
+  multiplier = 3,
   origin_fn = centroid,
   exponentiate = TRUE
 )
@@ -396,11 +331,11 @@ random_y <- runif(10)
 expand_df <- purrr::map_dfr(
   .x = c(1, 2, 3, 4, 5),
   .f = function(exponent) {
-    expand_values(
+    expand_distances(
       data.frame("x" = random_x,
                  "y" = random_y),
       cols = c("x", "y"),
-      multipliers = exponent,
+      multiplier = exponent,
       origin_fn = centroid,
       exponentiate = TRUE
     )
@@ -409,10 +344,10 @@ expand_df <- purrr::map_dfr(
 
 # Plot rotated values
 expand_df %>% 
-  ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.exponents))) +
+  ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
   geom_hline(yintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
   geom_vline(xintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_line(alpha = gg_line_alpha) + 
+  geom_path(alpha = gg_line_alpha) + 
   geom_point() + 
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_colour_brewer(palette = "Dark2") + 
@@ -476,6 +411,292 @@ ggplot(df_dimmed, aes(x = x_clustered, y = y_clustered, alpha = o_dimmed, color 
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_colour_brewer(palette = "Dark2") + 
   labs(x = "x", y = "y", color = "g", alpha = "o_dimmed")
+```
+
+
+
+### Rotate values
+
+2-dimensional rotation:
+
+```{r}
+rotate_2d(random_sample, degrees = 60, origin_fn = centroid)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+rotate_df <- rotate_2d(random_sample, degrees = c(0, 72, 144, 216, 288), origin_fn = centroid)
+
+# Plot rotated values
+rotate_df %>% 
+  ggplot(aes(x = Index_rotated, y = Value_rotated, color = factor(.degrees))) +
+  geom_hline(yintercept = mean(random_sample), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_vline(xintercept = mean(seq_len(length(random_sample))), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_path(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "Index", y="Value", color="Degrees")
+
+```
+
+3-dimensional rotation:
+
+```{r}
+# Set seed
+set.seed(3)
+
+# Create a data frame
+df <- data.frame(
+  "x" = 1:12,
+  "y" = c(1, 2, 3, 4, 9, 10, 11,
+          12, 15, 16, 17, 18),
+  "z" = runif(12),
+  "g" = rep(1:3, each=4)
+)
+
+# Perform rotation
+rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", 
+         x_deg = 45, y_deg = 90, z_deg = 135, 
+         origin_fn = centroid)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+rotate_df <- df %>%
+  rotate_3d(x_col = "x",
+           y_col = "y",
+           z_col = "z",
+           x_deg = c(0, 72, 144, 216, 288),
+           y_deg = c(0, 72, 144, 216, 288),
+           z_deg = c(0, 72, 144, 216, 288),
+           origin_fn = centroid)
+
+# Plot rotated values
+rotate_df %>% 
+  ggplot(aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
+  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_path(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
+```
+
+### Swirl values
+
+2-dimensional swirling:
+
+```{r}
+# Rotate values
+swirl_2d(rep(1, 50), radius = 95)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=9.5}
+# Swirl around the centroid
+df_swirled <- swirl_2d(
+  data = rep(1, 50),
+  radius = c(95, 96, 97, 98, 99, 100),
+  origin_fn = centroid,
+  suffix = "",
+  scale_fn = function(x) {
+    x ^ 1.6
+  }
+)
+
+orig <- df_swirled$.origin[[1]]
+
+# Plot swirls
+ggswirl1 <- df_swirled %>%
+  ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = ".radius")
+
+df_swirled <- df_swirled %>% 
+  rotate_2d(degrees = (1:36) * 10, 
+           x_col = "Index", 
+           y_col = "Value", 
+           suffix = "",
+           origin = orig)
+
+# Plot rotated swirls
+ggswirl2 <- df_swirled %>%
+  ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = ".radius")
+
+# Expand values ^2
+df_swirled <- df_swirled %>% 
+  expand_distances(
+    cols = c("Index", "Value"),
+    multiplier = 2, 
+    exponentiate = T,
+    origin = orig,
+    suffix = "")
+
+# Plot expanded swirls
+ggswirl3 <- df_swirled %>%
+  ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = ".radius")
+
+# Dim values
+df_swirled <- df_swirled %>% 
+  mutate(o = 1) %>% 
+  dim_values(cols = c("Index", "Value", "o"), origin = c(orig, 1), suffix = "")
+
+# Plot rotated swirls
+ggswirl4 <- df_swirled %>%
+  ggplot(aes(x = Index, y = Value, alpha = o, color = factor(.radius))) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = ".radius", alpha = "opacity (for D)")
+
+combined <- (ggswirl1 + ggswirl2) / (ggswirl3 + ggswirl4) & theme(legend.position = "bottom")
+combined <- combined + plot_layout(guides = "collect")
+combined + 
+  plot_annotation(title = "2d swirls with rotation, expansion and dimming",
+                  subtitle = "A: 2d swirls,  B: Rotated A, C: Expanded B, D: Dimmed C",
+                  caption = "Distances in A are scaled by d^1.6",
+                  tag_levels = 'A')
+
+```
+
+3-dimensional swirling:
+
+```{r}
+# Set seed
+set.seed(4)
+
+# Create a data frame
+df <- data.frame(
+  "x" = 1:50,
+  "y" = 1:50,
+  "z" = 1:50,
+  "r1" = runif(50),
+  "r2" = runif(50) * 35,
+  "o" = 1,
+  "g" = rep(1:5, each=10)
+)
+
+# They see me swiiirling
+swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original = FALSE)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=8.1}
+
+# 1st plot
+
+df_swirled <- swirl_3d(
+  data = df,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  x_radius = c(100, 0, 0),
+  y_radius = c(0, 100, 0),
+  z_radius = c(0, 0, 100),
+  origin_fn = centroid
+)
+
+ggswirl_3d_1 <- df_swirled %>% 
+  ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+  geom_path(alpha = gg_line_alpha) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+
+# 2nd plot
+
+df_swirled <- swirl_3d(
+  data = df,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  x_radius = c(50, 0, 0),
+  y_radius = c(0, 50, 0),
+  z_radius = c(0, 0, 50),
+  origin_fn = centroid
+)
+
+ggswirl_3d_2 <- df_swirled %>% 
+  ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+  geom_path(alpha = gg_line_alpha) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+
+# 3rd plot
+
+df_swirled <- swirl_3d(
+  data = df,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  x_radius = c(25, 50, 25, 25),
+  y_radius = c(50, 75, 100, 25),
+  z_radius = c(75, 25, 25, 25),
+  origin_fn = centroid,
+  scale_fn = function(x) {
+    x^0.81
+  }
+)
+
+ggswirl_3d_3 <- df_swirled %>% 
+  ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+  geom_path(alpha = gg_line_alpha) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+
+# 4th plot
+
+df_swirled <- swirl_3d(
+  data = df,
+  x_col = "r1",
+  y_col = "r2",
+  z_col = "o",
+  x_radius = c(0, 0, 0, 0),
+  y_radius = c(0, 30, 60, 90),
+  z_radius = c(10, 10, 10, 10),
+  origin_fn = centroid
+)
+
+# Not let's rotate it every 10 degrees
+df_rotated <- df_swirled %>%
+  rotate_3d(
+    x_col = "r1_swirled",
+    y_col = "r2_swirled",
+    z_col = "o_swirled",
+    x_deg = rep(0, 36),
+    y_deg = rep(0, 36),
+    z_deg = (1:36) * 10,
+    suffix = "",
+    origin = df_swirled$.origin[[1]])
+
+
+ggswirl_3d_4 <- df_rotated %>% 
+  ggplot(aes(x = r1_swirled, y = r2_swirled, color = .degrees_str,  alpha = o_swirled)) +
+  geom_point(show.legend = FALSE) +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  # scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "r1", y = "r2", color = "radius", alpha = "o (opacity)")
+
+combined <- (ggswirl_3d_1 + ggswirl_3d_2) / (ggswirl_3d_3 + ggswirl_3d_4) & theme(legend.position = "none")
+# combined <- combined + plot_layout(guides = "collect")
+combined + 
+  plot_annotation(title = "3d swirls",
+                  subtitle = "ABC: 3d swirls, D: rotated 3d swirls",
+                  caption = "Distances in C are scaled by d^0.81",
+                  tag_levels = 'A')
 ```
 
 

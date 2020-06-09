@@ -44,7 +44,18 @@ apply_coordinate_fn <- function(dim_vectors,
     check_msg <- paste0("'", coordinate_name, "'")
   }
 
-  if (isTRUE(allow_len_one)) {
+  if (is.null(dim_var_name) && num_dims == 1){
+    if (length(coordinates) != 1){
+      stop(
+        paste0(
+          check_msg,
+          " must have length 1 but had length ",
+          length(coordinates),
+          "."
+        )
+      )
+    }
+  } else if (isTRUE(allow_len_one)) {
     if (length(coordinates) %ni% c(1, num_dims)) {
       stop(
         paste0(

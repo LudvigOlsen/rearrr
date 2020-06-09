@@ -168,12 +168,7 @@ cluster_groups <- function(data,
   checkmate::assert_function(scale_min_fn, add = assert_collection)
   checkmate::assert_function(scale_max_fn, add = assert_collection)
   checkmate::assert_flag(keep_centroids, add = assert_collection)
-  checkmate::assert_numeric(
-    multiplier,
-    any.missing = FALSE,
-    min.len = 1,
-    add = assert_collection
-  )
+  checkmate::assert_number(multiplier, add = assert_collection)
   checkmate::assert_flag(keep_original, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -209,10 +204,11 @@ cluster_groups <- function(data,
   }
 
   # Contract data
-  expanded <- expand_values(
+  # TODO Consider replacing with expand_distances()
+  expanded <- expand_distances(
     data = data,
     cols = cols,
-    multipliers = multiplier,
+    multiplier = multiplier,
     origin_fn = centroid,
     suffix = "",
     keep_original = keep_original,

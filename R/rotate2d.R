@@ -1,7 +1,7 @@
 
 
 #   __________________ #< cd1a61becee10db96fdb9c8566818046 ># __________________
-#   rotate2d                                                                ####
+#   Rotate 2d                                                                ####
 
 
 #' @title Rotate the values around an origin in 2 dimensions
@@ -11,7 +11,7 @@
 #'  The values are rotated counterclockwise around a specified origin.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
-#'  latter can be useful when supplying a grouped data frame and rotating around e.g. the centroid
+#'  latter can be useful when supplying a grouped \code{data.frame} and rotating around e.g. the centroid
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param degrees Degrees to rotate values counterclockwise. In \code{[-360, 360]}.
@@ -46,9 +46,11 @@
 #'  \verb{           }\code{use.names = FALSE)}
 #'
 #'  \code{\}}
-#' @param degree_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
+#' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
+#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
-#' @return \code{data.frame} (\code{tibble}) with three new columns containing the rotated x- and y-values and the degrees.
+#' @return \code{data.frame} (\code{tibble}) with seven new columns containing
+#'  the rotated x-,y- and z-values and the degrees, radiuses and origin coordinates.
 #' @details
 #'  Applies the following rotation matrix:
 #'
@@ -66,6 +68,7 @@
 #'
 #'  As specified at [Wikipedia/Rotation_matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
 #' @family mutate functions
+#' @family rotation functions
 #' @inheritParams multi_mutator
 #' @examples
 #' \donttest{
@@ -87,11 +90,11 @@
 #' )
 #'
 #' # Rotate values
-#' rotate2d(df, 45, x_col="Index", y_col="A")
+#' rotate_2d(df, 45, x_col="Index", y_col="A")
 #'
 #' # Rotate A around the centroid
 #' df_rotated <- df %>%
-#'   rotate2d(x_col = "Index",
+#'   rotate_2d(x_col = "Index",
 #'            y_col = "A",
 #'            degrees = c(0, 120, 240),
 #'            origin_fn = centroid)
@@ -109,7 +112,7 @@
 #' # Rotate around group centroids
 #' df_grouped <- df %>%
 #'   dplyr::group_by(G) %>%
-#'   rotate2d(x_col = "Index",
+#'   rotate_2d(x_col = "Index",
 #'            y_col = "A",
 #'            degrees = c(0, 120, 240),
 #'            origin_fn = centroid)
@@ -122,7 +125,7 @@
 #'   labs(x = "Index", y="Value", color="Degrees")
 #'
 #' }
-rotate2d <- function(data,
+rotate_2d <- function(data,
                      degrees,
                      x_col = NULL,
                      y_col = NULL,
@@ -130,7 +133,8 @@ rotate2d <- function(data,
                      origin = c(0, 0),
                      origin_fn = NULL,
                      keep_original = TRUE,
-                     degree_col_name = ".degrees") {
+                     degrees_col_name = ".degrees",
+                     origin_col_name = ".origin") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_numeric(
@@ -144,7 +148,8 @@ rotate2d <- function(data,
   checkmate::assert_string(x_col, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(y_col, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
-  checkmate::assert_string(degree_col_name, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(degrees_col_name, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
                             len = 2,
                             any.missing = FALSE,
@@ -169,7 +174,7 @@ rotate2d <- function(data,
     .f = function(degree) {
       out <- multi_mutator(
         data = data,
-        mutate_fn = rotate2d_mutator_method,
+        mutate_fn = rotate_2d_mutator_method,
         check_fn = NULL,
         force_df = TRUE,
         min_dims = 2,
@@ -178,10 +183,11 @@ rotate2d <- function(data,
         degrees = degree,
         suffix = suffix,
         origin = origin,
-        origin_fn = origin_fn
+        origin_fn = origin_fn,
+        origin_col_name = origin_col_name
       )
-      if (!is.null(degree_col_name)) {
-        out[[degree_col_name]] <- degree
+      if (!is.null(degrees_col_name)) {
+        out[[degrees_col_name]] <- degree
       }
 
       out
@@ -191,13 +197,13 @@ rotate2d <- function(data,
 }
 
 
-rotate2d_mutator_method <- function(data,
+rotate_2d_mutator_method <- function(data,
                                     cols,
                                     degrees,
                                     suffix,
                                     origin,
                                     origin_fn,
-                                    new_name = NULL) {
+                                    origin_col_name) {
   # Extract columns
   x_col <- cols[[1]]
   y_col <- cols[[2]]
@@ -247,6 +253,11 @@ rotate2d_mutator_method <- function(data,
   # Add rotated columns to data
   data[[paste0(x_col, suffix)]] <- x
   data[[paste0(y_col, suffix)]] <- y
+
+  # Add info columns
+  if (!is.null(origin_col_name)) {
+    data[[origin_col_name]] <- list_coordinates(origin, names = cols)
+  }
 
   data
 

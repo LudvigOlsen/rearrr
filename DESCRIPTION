@@ -25,6 +25,7 @@ Suggests:
     ggplot2,
     graphics,
     knitr,
+    patchwork,
     plotly,
     testthat,
     tidyr,

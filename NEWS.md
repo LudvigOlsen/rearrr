@@ -21,11 +21,13 @@
 
 * Adds `cluster_groups()` for moving data points into clusters around their group centroid. (Mutator)
 
-* Adds `expand_values()` for expanding values around an origin in any number of dimensions. (Mutator)
+* Adds `expand_distances()` and `expand_distances_each()` for expanding values around an origin in any number of dimensions. (Mutator)
 
 * Adds `dim_values()` for dimming values in one dimension by their distance to around an n-dimensional origin. (Mutator)
 
-* Adds `rotate2d()` and `rotate3d()` for rotating values around an origin. (Mutator)
+* Adds `rotate_2d()` and `rotate_3d()` for rotating values around an origin. (Mutator)
+
+* Adds `swirl_2d()` and `swirl_3d()` for rotating values around an origin. (Mutator)
 
 * Adds `flip_values()` for flipping values around a center value. (Mutator)
 

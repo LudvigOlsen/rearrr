@@ -732,7 +732,7 @@ test_that("fuzz testing cluster_groups()", {
   }, keep_centroids = FALSE, multiplier = "hej", suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Must be of type 'numeric', not 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Must be of type 'number', not 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error_class']]),
@@ -751,7 +751,7 @@ test_that("fuzz testing cluster_groups()", {
   }, keep_centroids = FALSE, multiplier = NA, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Contains missing values (element 1)."),
+    xpectr::strip("1 assertions failed:\n * Variable 'multiplier': May not be NA."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error_class']]),
@@ -770,7 +770,7 @@ test_that("fuzz testing cluster_groups()", {
   }, keep_centroids = FALSE, multiplier = NULL, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Must be of type 'numeric', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error_class']]),

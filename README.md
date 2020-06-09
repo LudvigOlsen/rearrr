@@ -48,14 +48,17 @@ points.
 
 ### Mutators
 
-| Function           | Description                                                           | Dimensions   |
-| :----------------- | :-------------------------------------------------------------------- | :----------- |
-| `flip_values()`    | Flip the values around an origin.                                     | n            |
-| `expand_values()`  | Expand values around around an origin.                                | n            |
-| `cluster_groups()` | Move data points into clusters around group centroids.                | n            |
-| `dim_values()`     | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
-| `rotate2d()`       | Rotate values around an origin in 2 dimensions.                       | 2            |
-| `rotate3d()`       | Rotate values around an origin in 3 dimensions.                       | 3            |
+| Function                  | Description                                                           | Dimensions   |
+| :------------------------ | :-------------------------------------------------------------------- | :----------- |
+| `flip_values()`           | Flip the values around an origin.                                     | n            |
+| `expand_distances()`      | Expand distances to an origin.                                        | n            |
+| `expand_distances_each()` | Expand distances to an origin separately for each dimension.          | n            |
+| `cluster_groups()`        | Move data points into clusters around group centroids.                | n            |
+| `dim_values()`            | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
+| `rotate_2d()`             | Rotate values around an origin in 2 dimensions.                       | 2            |
+| `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
+| `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
+| `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
 
 ### Generators
 
@@ -92,11 +95,11 @@ points.
           - [Reverse windows](#reverse-windows)
       - [Mutator examples](#mutator-examples)
           - [Flip values](#flip-values)
-          - [Rotate values](#rotate-values)
-          - [Expand values in n
-            dimensions](#expand-values-in-n-dimensions)
+          - [Expand distances](#expand-distances)
           - [Cluster groups](#cluster-groups)
           - [Dim values](#dim-values)
+          - [Rotate values](#rotate-values)
+          - [Swirl values](#swirl-values)
       - [Generators](#generators)
           - [Generate clusters](#generate-clusters)
 
@@ -130,6 +133,7 @@ library(knitr)        # kable()
 library(dplyr)        # %>% arrange()
 library(tidyr)        # gather()
 library(ggplot2)
+library(patchwork)
 
 xpectr::set_test_seed(1)
 ```
@@ -257,98 +261,35 @@ flip_values(data = random_sample, origin_fn = create_origin_fn(median))
 
 <img src="man/figures/README-unnamed-chunk-18-1.png" width="552" style="display: block; margin: auto;" />
 
-### Rotate values
-
-2-dimensional rotation:
-
-``` r
-rotate2d(random_sample, degrees = 60, origin_fn = centroid)
-#> # A tibble: 10 x 5
-#>    Index  Value Index_rotated Value_rotated .degrees
-#>    <int>  <dbl>         <dbl>         <dbl>    <dbl>
-#>  1     1 0.266           3.50       -3.49         60
-#>  2     2 0.372           3.91       -2.57         60
-#>  3     3 0.573           4.23       -1.60         60
-#>  4     4 0.908           4.44       -0.569        60
-#>  5     5 0.202           5.55       -0.0564       60
-#>  6     6 0.898           5.45        1.16         60
-#>  7     7 0.945           5.91        2.05         60
-#>  8     8 0.661           6.66        2.77         60
-#>  9     9 0.629           7.18        3.62         60
-#> 10    10 0.0618          8.17        4.20         60
-```
-
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
-
-3-dimensional rotation:
-
-``` r
-# Set seed
-set.seed(3)
-
-# Create a data frame
-df <- data.frame(
-  "x" = 1:12,
-  "y" = c(1, 2, 3, 4, 9, 10, 11,
-          12, 15, 16, 17, 18),
-  "z" = runif(12),
-  "g" = c(1, 1, 1, 1, 2, 2,
-          2, 2, 3, 3, 3, 3)
-)
-
-# Perform rotation
-rotate3d(df, x_col = "x", y_col = "y", z_col = "z", 
-         x_deg = 45, y_deg = 90, z_deg = 135, 
-         origin_fn = centroid)
-#> # A tibble: 12 x 10
-#>        x     y     z     g x_rotated y_rotated z_rotated .origin .degrees
-#>    <int> <dbl> <dbl> <dbl>     <dbl>     <dbl>     <dbl> <list>  <list>  
-#>  1     1     1 0.168     1    15.3        9.54    5.96   <dbl [… <dbl [3…
-#>  2     2     2 0.808     1    14.3       10.2     4.96   <dbl [… <dbl [3…
-#>  3     3     3 0.385     1    13.3        9.76    3.96   <dbl [… <dbl [3…
-#>  4     4     4 0.328     1    12.3        9.70    2.96   <dbl [… <dbl [3…
-#>  5     5     9 0.602     2     7.33       9.97    1.96   <dbl [… <dbl [3…
-#>  6     6    10 0.604     2     6.33       9.98    0.962  <dbl [… <dbl [3…
-#>  7     7    11 0.125     2     5.33       9.50   -0.0384 <dbl [… <dbl [3…
-#>  8     8    12 0.295     2     4.33       9.67   -1.04   <dbl [… <dbl [3…
-#>  9     9    15 0.578     3     1.33       9.95   -2.04   <dbl [… <dbl [3…
-#> 10    10    16 0.631     3     0.333     10.0    -3.04   <dbl [… <dbl [3…
-#> 11    11    17 0.512     3    -0.667      9.88   -4.04   <dbl [… <dbl [3…
-#> 12    12    18 0.505     3    -1.67       9.88   -5.04   <dbl [… <dbl [3…
-#> # … with 1 more variable: .degrees_str <chr>
-```
-
-<img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />
-
-### Expand values in n dimensions
+### Expand distances
 
 ``` r
 # 1d expansion
-expand_values(
+expand_distances(
   random_sample,
-  multipliers = 3,
+  multiplier = 3,
   origin_fn = centroid,
   exponentiate = TRUE
 )
 #> # A tibble: 10 x 4
-#>     Value Value_expanded .exponents .origin  
-#>     <dbl>          <dbl>      <dbl> <list>   
-#>  1 0.266         -0.575           3 <dbl [1]>
-#>  2 0.372         -0.0891          3 <dbl [1]>
-#>  3 0.573          0.617           3 <dbl [1]>
-#>  4 0.908          2.05            3 <dbl [1]>
-#>  5 0.202         -0.908           3 <dbl [1]>
-#>  6 0.898          1.99            3 <dbl [1]>
-#>  7 0.945          2.26            3 <dbl [1]>
-#>  8 0.661          0.916           3 <dbl [1]>
-#>  9 0.629          0.803           3 <dbl [1]>
-#> 10 0.0618        -1.75            3 <dbl [1]>
+#>     Value Value_expanded .exponent .origin  
+#>     <dbl>          <dbl>     <dbl> <list>   
+#>  1 0.266         -0.575          3 <dbl [1]>
+#>  2 0.372         -0.0891         3 <dbl [1]>
+#>  3 0.573          0.617          3 <dbl [1]>
+#>  4 0.908          2.05           3 <dbl [1]>
+#>  5 0.202         -0.908          3 <dbl [1]>
+#>  6 0.898          1.99           3 <dbl [1]>
+#>  7 0.945          2.26           3 <dbl [1]>
+#>  8 0.661          0.916          3 <dbl [1]>
+#>  9 0.629          0.803          3 <dbl [1]>
+#> 10 0.0618        -1.75           3 <dbl [1]>
 ```
 
 2d
 expansion:
 
-<img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Cluster groups
 
@@ -381,7 +322,7 @@ cluster_groups(df, cols = c("x", "y"), group_col = "g")
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Dim values
 
@@ -410,7 +351,131 @@ df_clustered %>%
 #> # … with 40 more rows
 ```
 
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
+
+### Rotate values
+
+2-dimensional rotation:
+
+``` r
+rotate_2d(random_sample, degrees = 60, origin_fn = centroid)
+#> # A tibble: 10 x 6
+#>    Index  Value Index_rotated Value_rotated .origin   .degrees
+#>    <int>  <dbl>         <dbl>         <dbl> <list>       <dbl>
+#>  1     1 0.266           3.50       -3.49   <dbl [2]>       60
+#>  2     2 0.372           3.91       -2.57   <dbl [2]>       60
+#>  3     3 0.573           4.23       -1.60   <dbl [2]>       60
+#>  4     4 0.908           4.44       -0.569  <dbl [2]>       60
+#>  5     5 0.202           5.55       -0.0564 <dbl [2]>       60
+#>  6     6 0.898           5.45        1.16   <dbl [2]>       60
+#>  7     7 0.945           5.91        2.05   <dbl [2]>       60
+#>  8     8 0.661           6.66        2.77   <dbl [2]>       60
+#>  9     9 0.629           7.18        3.62   <dbl [2]>       60
+#> 10    10 0.0618          8.17        4.20   <dbl [2]>       60
+```
+
+<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
+
+3-dimensional rotation:
+
+``` r
+# Set seed
+set.seed(3)
+
+# Create a data frame
+df <- data.frame(
+  "x" = 1:12,
+  "y" = c(1, 2, 3, 4, 9, 10, 11,
+          12, 15, 16, 17, 18),
+  "z" = runif(12),
+  "g" = rep(1:3, each=4)
+)
+
+# Perform rotation
+rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", 
+         x_deg = 45, y_deg = 90, z_deg = 135, 
+         origin_fn = centroid)
+#> # A tibble: 12 x 10
+#>        x     y     z     g x_rotated y_rotated z_rotated .origin .degrees
+#>    <int> <dbl> <dbl> <int>     <dbl>     <dbl>     <dbl> <list>  <list>  
+#>  1     1     1 0.168     1    15.3        9.54    5.96   <dbl [… <dbl [3…
+#>  2     2     2 0.808     1    14.3       10.2     4.96   <dbl [… <dbl [3…
+#>  3     3     3 0.385     1    13.3        9.76    3.96   <dbl [… <dbl [3…
+#>  4     4     4 0.328     1    12.3        9.70    2.96   <dbl [… <dbl [3…
+#>  5     5     9 0.602     2     7.33       9.97    1.96   <dbl [… <dbl [3…
+#>  6     6    10 0.604     2     6.33       9.98    0.962  <dbl [… <dbl [3…
+#>  7     7    11 0.125     2     5.33       9.50   -0.0384 <dbl [… <dbl [3…
+#>  8     8    12 0.295     2     4.33       9.67   -1.04   <dbl [… <dbl [3…
+#>  9     9    15 0.578     3     1.33       9.95   -2.04   <dbl [… <dbl [3…
+#> 10    10    16 0.631     3     0.333     10.0    -3.04   <dbl [… <dbl [3…
+#> 11    11    17 0.512     3    -0.667      9.88   -4.04   <dbl [… <dbl [3…
+#> 12    12    18 0.505     3    -1.67       9.88   -5.04   <dbl [… <dbl [3…
+#> # … with 1 more variable: .degrees_str <chr>
+```
+
 <img src="man/figures/README-unnamed-chunk-28-1.png" width="552" style="display: block; margin: auto;" />
+
+### Swirl values
+
+2-dimensional swirling:
+
+``` r
+# Rotate values
+swirl_2d(rep(1, 50), radius = 95)
+#> # A tibble: 50 x 7
+#>    Index Value Index_swirled Value_swirled .degrees .origin   .radius
+#>    <int> <dbl>         <dbl>         <dbl>    <dbl> <list>      <dbl>
+#>  1     1     1         0.952          1.05     2.68 <dbl [2]>      95
+#>  2     2     1         1.92           1.15     4.24 <dbl [2]>      95
+#>  3     3     1         2.88           1.31     5.99 <dbl [2]>      95
+#>  4     4     1         3.83           1.53     7.81 <dbl [2]>      95
+#>  5     5     1         4.76           1.82     9.66 <dbl [2]>      95
+#>  6     6     1         5.68           2.18    11.5  <dbl [2]>      95
+#>  7     7     1         6.58           2.59    13.4  <dbl [2]>      95
+#>  8     8     1         7.45           3.07    15.3  <dbl [2]>      95
+#>  9     9     1         8.30           3.61    17.2  <dbl [2]>      95
+#> 10    10     1         9.13           4.21    19.0  <dbl [2]>      95
+#> # … with 40 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-30-1.png" width="699.2" style="display: block; margin: auto;" />
+
+3-dimensional swirling:
+
+``` r
+# Set seed
+set.seed(4)
+
+# Create a data frame
+df <- data.frame(
+  "x" = 1:50,
+  "y" = 1:50,
+  "z" = 1:50,
+  "r1" = runif(50),
+  "r2" = runif(50) * 35,
+  "o" = 1,
+  "g" = rep(1:5, each=10)
+)
+
+# They see me swiiirling
+swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original = FALSE)
+#> # A tibble: 50 x 7
+#>    x_swirled y_swirled z_swirled .origin   .degrees  .radius   .radius_str 
+#>        <dbl>     <dbl>     <dbl> <list>    <list>    <list>    <chr>       
+#>  1         1     0.872      1.11 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  2         2     1.46       2.42 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  3         3     1.74       3.87 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  4         4     1.68       5.40 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  5         5     1.27       6.96 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  6         6     0.508      8.47 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  7         7    -0.604      9.88 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  8         8    -2.05      11.1  <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#>  9         9    -3.80      12.1  <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#> 10        10    -5.82      12.9  <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
+#> # … with 40 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-32-1.png" width="699.2" style="display: block; margin: auto;" />
 
 ## Generators
 
@@ -434,4 +499,4 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-31-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-35-1.png" width="552" style="display: block; margin: auto;" />

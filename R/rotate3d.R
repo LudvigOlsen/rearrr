@@ -12,7 +12,7 @@
 #'  The values are rotated counterclockwise around a specified origin.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
-#'  latter can be useful when supplying a grouped data frame and rotating around e.g. the centroid
+#'  latter can be useful when supplying a grouped \code{data.frame} and rotating around e.g. the centroid
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param x_deg,y_deg,z_deg Degrees to rotate values around the x/y/z-axis counterclockwise. In \code{[-360, 360]}.
@@ -67,6 +67,7 @@
 #'
 #'  As specified at [Wikipedia/Rotation_matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
 #' @family mutate functions
+#' @family rotation functions
 #' @inheritParams multi_mutator
 #' @examples
 #' \donttest{
@@ -89,11 +90,11 @@
 #' )
 #'
 #' # Rotate values 45 degrees around x-axis
-#' rotate3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45)
+#' rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45)
 #'
 #' # Rotate all axes around the centroid
 #' df_rotated <- df %>%
-#'   rotate3d(x_col = "x",
+#'   rotate_3d(x_col = "x",
 #'            y_col = "y",
 #'            z_col = "z",
 #'            x_deg = c(0, 72, 144, 216, 288),
@@ -123,7 +124,7 @@
 #'
 #' # Rotate randomly around all axes
 #' df_rotated <- df %>%
-#'   rotate3d(x_col = "x",
+#'   rotate_3d(x_col = "x",
 #'            y_col = "y",
 #'            z_col = "z",
 #'            x_deg = round(runif(10, min = 0, max = 360)),
@@ -154,7 +155,7 @@
 #' # Rotate around group centroids
 #' df_grouped <- df %>%
 #'   dplyr::group_by(g) %>%
-#'   rotate3d(x_col = "x",
+#'   rotate_3d(x_col = "x",
 #'            y_col = "y",
 #'            z_col = "z",
 #'            x_deg = c(0, 72, 144, 216, 288),
@@ -179,7 +180,7 @@
 #' )
 #'
 #' }
-rotate3d <- function(data,
+rotate_3d <- function(data,
                      x_col,
                      y_col,
                      z_col,
@@ -242,7 +243,7 @@ rotate3d <- function(data,
   if (!all(length(x_deg) == c(length(y_deg), length(z_deg)))) {
     assert_collection$push(
       paste0(
-        "'x_deg', 'y_deg', and 'z_deg' must all have the same length but had: ",
+        "'x_deg', 'y_deg', and 'z_deg' must all have the same length but had lengths: ",
         paste0(c(
           length(x_deg), length(y_deg), length(z_deg)
         ), collapse = ", "),
@@ -261,10 +262,10 @@ rotate3d <- function(data,
     .f = function(degrees) {
       out <- multi_mutator(
         data = data,
-        mutate_fn = rotate3d_mutator_method,
+        mutate_fn = rotate_3d_mutator_method,
         check_fn = NULL,
         force_df = TRUE,
-        min_dims = 2,
+        min_dims = 3,
         keep_original = keep_original,
         cols = c(x_col, y_col, z_col),
         x_deg = degrees[[1]],
@@ -286,12 +287,7 @@ rotate3d <- function(data,
   )
 
   if (!is.null(degrees_col_name)) {
-    output[[paste0(degrees_col_name, "_str")]] <-
-      substr(paste0(output[[degrees_col_name]]),
-             start = 3,
-             stop = nchar(output[[degrees_col_name]]) - 1)
-    output[[paste0(degrees_col_name, "_str")]] <-
-      gsub("[[:blank:]]+", "", output[[paste0(degrees_col_name, "_str")]])
+    output <- paste_coordinates_column(output, degrees_col_name)
   }
 
   output
@@ -299,7 +295,7 @@ rotate3d <- function(data,
 }
 
 
-rotate3d_mutator_method <- function(data,
+rotate_3d_mutator_method <- function(data,
                                     cols,
                                     x_deg,
                                     y_deg,

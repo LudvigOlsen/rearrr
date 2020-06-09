@@ -279,6 +279,18 @@ list_coordinates <- function(coordinates, names){
   list(setNames(coordinates, names))
 }
 
+# Paste a list column where each element is c(x = 1, y = d)
+paste_coordinates_column <- function(data, col) {
+  str_name <- paste0(col, "_str")
+  data[[str_name]] <- paste0(data[[col]])
+  data[[str_name]] <-  substr(data[[str_name]],
+                              start = 3,
+                              stop = nchar(data[[str_name]]) - 1)
+  data[[str_name]] <- gsub("[[:blank:]]+", "", data[[str_name]])
+
+  data
+}
+
 add_dimensions <- function(data,
                            new_vectors,
                            suffix = "",
@@ -326,6 +338,32 @@ radians_to_degrees <- function(radians){
   radians / (pi / 180)
 }
 
+# Normalize vector to Unit length
+to_unit_vector <- function(x) {
+  x / sqrt(sum(x ^ 2))
+}
+
+calculate_swirl_degrees <- function(distances, radius){
+  if (radius == 0){
+    return(distances*0)
+  }
+  (distances / (2 * radius) * 360) %% 360
+}
+
+# Normalize dimensions
+# One vector per dimension
+normalize_dimensions_to_unit_lengths <- function(dim_vectors){
+  if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))){
+    stop("All dim_vectors must have the same length.")
+  }
+  purrr::transpose(dim_vectors) %>%
+    purrr::simplify_all() %>%
+    purrr::map(to_unit_vector) %>%
+    purrr::transpose() %>%
+    purrr::simplify_all()
+}
+
+
 #   ImportFrom                                                              ####
 
 #' @importFrom dplyr %>%
@@ -333,3 +371,6 @@ radians_to_degrees <- function(radians){
 #' @importFrom utils head tail
 #' @importFrom stats quantile runif median setNames
 NULL
+
+# R CMD check NOTE handling
+if (getRversion() >= "2.15.1") utils::globalVariables(c("."))
