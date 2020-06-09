@@ -189,7 +189,8 @@ Other mutate functions:
 \code{\link{expand_values}()},
 \code{\link{flip_values}()},
 \code{\link{rotate2d}()},
-\code{\link{rotate3d}()}
+\code{\link{rotate3d}()},
+\code{\link{swirl2d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
