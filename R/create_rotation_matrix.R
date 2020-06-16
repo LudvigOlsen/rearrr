@@ -5,6 +5,14 @@
 create_rotation_matrix3d <- function(x_deg = 0,
                                      y_deg = 0,
                                      z_deg = 0) {
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_number(x_deg, lower = -360, upper = 360, add = assert_collection)
+  checkmate::assert_number(y_deg, lower = -360, upper = 360, add = assert_collection)
+  checkmate::assert_number(z_deg, lower = -360, upper = 360, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   # Convert to radians
   x_radians <- degrees_to_radians(x_deg)
   y_radians <- degrees_to_radians(y_deg)
@@ -36,6 +44,13 @@ create_rotation_matrix3d <- function(x_deg = 0,
 }
 
 create_rotation_matrix2d <- function(deg = 0) {
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_number(deg, lower = -360, upper = 360, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   if (deg %in% c(-360, 0, 360)) {
     rotation_matrix <- matrix(c(1, 0, 0, 1), nrow = 2, ncol = 2)
   } else if (deg %in% c(90,-270)) {

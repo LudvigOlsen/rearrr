@@ -13,6 +13,19 @@ apply_coordinate_fn <- function(dim_vectors,
                                 dim_var_name,
                                 allow_len_one = FALSE) {
 
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_list(dim_vectors, types = "numeric", any.missing = FALSE, min.len = 1, add = assert_collection)
+  checkmate::assert_numeric(coordinates, any.missing = FALSE, min.len = 1, add = assert_collection)
+  checkmate::assert_function(fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_number(num_dims, lower = 1, add = assert_collection)
+  checkmate::assert_string(coordinate_name, add = assert_collection)
+  checkmate::assert_string(fn_name, add = assert_collection)
+  checkmate::assert_string(dim_var_name, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(allow_len_one, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   # Find coordinates if specified
   if (!is.null(fn)) {
     coordinates <- tryCatch(
