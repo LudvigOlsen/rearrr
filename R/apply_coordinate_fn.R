@@ -103,6 +103,10 @@ apply_coordinate_fn <- function(dim_vectors,
     stop(paste0(check_msg, " was not numeric."))
   }
 
+  if (any(is.na(coordinates))){
+    stop(paste0(check_msg, " contained missing values (NAs)."))
+  }
+
   coordinates
 }
 

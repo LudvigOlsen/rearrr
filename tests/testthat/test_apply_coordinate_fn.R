@@ -2,7 +2,7 @@ library(rearrr)
 context("apply_coordinate_fn()")
 
 
-test_that("testing apply_coordinate_fn()", {
+test_that("fuzz testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
 
   dim_vecs <- list(
@@ -16,6 +16,12 @@ test_that("testing apply_coordinate_fn()", {
 
   one_d_fn <- function(...){mean(centroid(...))}
 
+  na_fn <- function(...){
+    a <- centroid(...)
+    a[[1]] <- NA
+    a
+  }
+
   # Generate expectations for 'apply_coordinate_fn'
   # Tip: comment out the gxs_function() call
   # so it is easy to regenerate the tests
@@ -25,7 +31,7 @@ test_that("testing apply_coordinate_fn()", {
   #   args_values = list(
   #     "dim_vectors" = list(dim_vecs, dim_vecs2, as.data.frame(dim_vecs), c(1, 2, 3), NA),
   #     "coordinates" = list(c(0, 1, 2), c(5, 5, 5), c(0, 0, 0, 0), NA),
-  #     "fn" = list(centroid, most_centered, one_d_fn, mean, identity, 0, NA),
+  #     "fn" = list(centroid, most_centered, one_d_fn, na_fn, mean, identity, 0, NA),
   #     "num_dims" = list(3, 4, 2,-2, NA),
   #     "coordinate_name" = list("leCoordinate", "origin", 1, NA),
   #     "fn_name" = list("leFunction", 1, NA),
@@ -38,6 +44,7 @@ test_that("testing apply_coordinate_fn()", {
   #   ),
   #   indentation = 2
   # )
+
 
 
   ## Testing 'apply_coordinate_fn'                                            ####
@@ -248,17 +255,32 @@ test_that("testing apply_coordinate_fn()", {
     fixed = TRUE)
 
   # Testing apply_coordinate_fn(dim_vectors = dim_vecs, ...
+  # Changed from baseline: fn = na_fn
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_14577 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = na_fn, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip("output of 'leFunction' contained missing values (NAs)."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing apply_coordinate_fn(dim_vectors = dim_vecs, ...
   # Changed from baseline: fn = mean
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = mean, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = mean, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("failed to apply 'leFunction': Error in mean.default(a = c(1, 2, 3, 4), b = c(5, 6, 7, 8), c = c(9, 10, : argument \"x\" is missing, with no default\n"),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(side_effects_17191[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -267,13 +289,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = identity, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = identity, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error']]),
+    xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("failed to apply 'leFunction': Error in (function (x) : unused arguments (a = c(1, 2, 3, 4), b = c(5, 6, 7, 8), c = c(9, 10, 11, 12))\n"),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error_class']]),
+    xpectr::strip(side_effects_19346[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -282,13 +304,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = 0, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = 0, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19346[['error']]),
+    xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'fn': Must be a function (or 'NULL'), not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19346[['error_class']]),
+    xpectr::strip(side_effects_12554[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -297,13 +319,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = NA, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_14622 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = NA, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error']]),
+    xpectr::strip(side_effects_14622[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'fn': Must be a function (or 'NULL'), not 'logical'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error_class']]),
+    xpectr::strip(side_effects_14622[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -311,33 +333,33 @@ test_that("testing apply_coordinate_fn()", {
   # Changed from baseline: fn = most_centered
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14622 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = most_centered, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE)
+  output_19400 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = most_centered, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE)
   # Testing class
   expect_equal(
-    class(output_14622),
+    class(output_19400),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_14622,
+    output_19400,
     type = "double")
   # Testing values
   expect_equal(
-    output_14622,
+    output_19400,
     c(a = 2, b = 6, c = 10),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_14622),
+    names(output_19400),
     c("a", "b", "c"),
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_14622),
+    length(output_19400),
     3L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_14622)),
+    sum(xpectr::element_lengths(output_19400)),
     3L)
 
   # Testing apply_coordinate_fn(dim_vectors = dim_vecs, ...
@@ -345,13 +367,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = one_d_fn, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = one_d_fn, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19400[['error']]),
+    xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("output of 'leFunction' must have same length as 'dimVar' (3) but had length 1."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19400[['error_class']]),
+    xpectr::strip(side_effects_19782[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -359,33 +381,33 @@ test_that("testing apply_coordinate_fn()", {
   # Changed from baseline: fn = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = NULL, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE)
+  output_11174 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = NULL, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE)
   # Testing class
   expect_equal(
-    class(output_19782),
+    class(output_11174),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_19782,
+    output_11174,
     type = "double")
   # Testing values
   expect_equal(
-    output_19782,
+    output_11174,
     c(0, 1, 2),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_19782),
+    names(output_11174),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_19782),
+    length(output_11174),
     3L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_19782)),
+    sum(xpectr::element_lengths(output_11174)),
     3L)
 
   # Testing apply_coordinate_fn(dim_vectors = dim_vecs, ...
@@ -393,13 +415,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = one_d_fn, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = TRUE), reset_seed = TRUE)
+  side_effects_14749 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = one_d_fn, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error']]),
+    xpectr::strip(side_effects_14749[['error']]),
     xpectr::strip("output of 'leFunction' must have same length as 'dimVar' (3) but had length 1."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(side_effects_14749[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -408,13 +430,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = one_d_fn, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = NULL, allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = one_d_fn, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = NULL, allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error']]),
+    xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("output of 'leFunction' must have same length as '' (3) but had length 1."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error_class']]),
+    xpectr::strip(side_effects_15603[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -423,13 +445,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 4, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 4, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error']]),
+    xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("output of 'leFunction' must have same length as 'dimVar' (4) but had length 3."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error_class']]),
+    xpectr::strip(side_effects_19040[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -438,13 +460,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19040 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 2, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 2, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19040[['error']]),
+    xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("output of 'leFunction' must have same length as 'dimVar' (2) but had length 3."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19040[['error_class']]),
+    xpectr::strip(side_effects_11387[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -453,13 +475,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = -2, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_19888 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = -2, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error']]),
+    xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'num_dims': Element 1 is not >= 1."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error_class']]),
+    xpectr::strip(side_effects_19888[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -468,13 +490,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = NA, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_19466 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = NA, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error']]),
+    xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'num_dims': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error_class']]),
+    xpectr::strip(side_effects_19466[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -483,13 +505,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = NULL, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = NULL, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'num_dims': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(side_effects_10824[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -497,33 +519,33 @@ test_that("testing apply_coordinate_fn()", {
   # Changed from baseline: coordinate_name = "or...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10824 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "origin", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE)
+  output_15142 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "origin", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE)
   # Testing class
   expect_equal(
-    class(output_10824),
+    class(output_15142),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_10824,
+    output_15142,
     type = "double")
   # Testing values
   expect_equal(
-    output_10824,
+    output_15142,
     c(2.5, 6.5, 10.5),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_10824),
+    names(output_15142),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_10824),
+    length(output_15142),
     3L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_10824)),
+    sum(xpectr::element_lengths(output_15142)),
     3L)
 
   # Testing apply_coordinate_fn(dim_vectors = dim_vecs, ...
@@ -531,13 +553,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = 1, fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_13902 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = 1, fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error']]),
+    xpectr::strip(side_effects_13902[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'coordinate_name': Must be of type 'string', not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error_class']]),
+    xpectr::strip(side_effects_13902[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -546,13 +568,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = NA, fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_19057 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = NA, fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error']]),
+    xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'coordinate_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(side_effects_19057[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -561,13 +583,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = NULL, fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = NULL, fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'coordinate_name': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(side_effects_14469[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -576,13 +598,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14469 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = 1, dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_18360 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = 1, dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip(side_effects_18360[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'fn_name': Must be of type 'string', not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error_class']]),
+    xpectr::strip(side_effects_18360[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -591,13 +613,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = NA, dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = NA, dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'fn_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error_class']]),
+    xpectr::strip(side_effects_17375[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -606,13 +628,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17375 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = NULL, dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_18110 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = NULL, dim_var_name = "dimVar", allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17375[['error']]),
+    xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'fn_name': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17375[['error_class']]),
+    xpectr::strip(side_effects_18110[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -621,13 +643,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18110 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = 1, allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_13881 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = 1, allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18110[['error']]),
+    xpectr::strip(side_effects_13881[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'dim_var_name': Must be of type 'string' (or 'NULL'), not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18110[['error_class']]),
+    xpectr::strip(side_effects_13881[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -636,13 +658,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13881 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = NA, allow_len_one = FALSE), reset_seed = TRUE)
+  side_effects_16851 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = NA, allow_len_one = FALSE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13881[['error']]),
+    xpectr::strip(side_effects_16851[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'dim_var_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13881[['error_class']]),
+    xpectr::strip(side_effects_16851[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -650,33 +672,33 @@ test_that("testing apply_coordinate_fn()", {
   # Changed from baseline: dim_var_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16851 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = NULL, allow_len_one = FALSE)
+  output_10039 <- apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = NULL, allow_len_one = FALSE)
   # Testing class
   expect_equal(
-    class(output_16851),
+    class(output_10039),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_16851,
+    output_10039,
     type = "double")
   # Testing values
   expect_equal(
-    output_16851,
+    output_10039,
     c(2.5, 6.5, 10.5),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_16851),
+    names(output_10039),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_16851),
+    length(output_10039),
     3L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_16851)),
+    sum(xpectr::element_lengths(output_10039)),
     3L)
 
   # Testing apply_coordinate_fn(dim_vectors = dim_vecs, ...
@@ -684,13 +706,13 @@ test_that("testing apply_coordinate_fn()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10039 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = NULL), reset_seed = TRUE)
+  side_effects_18329 <- xpectr::capture_side_effects(apply_coordinate_fn(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", allow_len_one = NULL), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_10039[['error']]),
+    xpectr::strip(side_effects_18329[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'allow_len_one': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_10039[['error_class']]),
+    xpectr::strip(side_effects_18329[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
