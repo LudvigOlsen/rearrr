@@ -18,8 +18,11 @@
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param x_radius,y_radius,z_radius Radiuses of the
-#'  most-inner swirls for each axis (in the \emph{simplest} case).
+#'  most-inner swirls around each axis (in the \emph{simplest} case).
 #'  Can be \code{vector}s with multiple radiuses.
+#'
+#'  E.g. the \code{`x_radius`} specifies the radius when rotating \emph{around} the x-axis,
+#'  not the radius \emph{on} the x-axis.
 #'
 #'  Note: With a custom \code{`scaling_fn`}, these might not be the actual swirl radiuses anymore. Think of
 #'  them more as width settings where a larger number leads to fewer full rotations.
@@ -271,9 +274,9 @@ swirl_3d <- function(data,
     min.len = 1,
     add = assert_collection
   )
-  checkmate::assert_string(x_col, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_string(y_col, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_string(z_col, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(x_col, add = assert_collection)
+  checkmate::assert_string(y_col, add = assert_collection)
+  checkmate::assert_string(z_col, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
   checkmate::assert_string(degrees_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(radius_col_name, null.ok = TRUE, add = assert_collection)
@@ -351,16 +354,16 @@ swirl_3d <- function(data,
 }
 
 swirl_3d_mutator_method <- function(data,
-                                   cols,
-                                   x_radius,
-                                   y_radius,
-                                   z_radius,
-                                   scale_fn,
-                                   suffix,
-                                   origin,
-                                   origin_fn,
-                                   degrees_col_name,
-                                   origin_col_name){
+                                    cols,
+                                    x_radius,
+                                    y_radius,
+                                    z_radius,
+                                    scale_fn,
+                                    suffix,
+                                    origin,
+                                    origin_fn,
+                                    degrees_col_name,
+                                    origin_col_name) {
 
   # Extract columns
   x_col <- cols[[1]]
@@ -387,6 +390,10 @@ swirl_3d_mutator_method <- function(data,
 
   # Scale distances
   scaled_distances <- scale_fn(distances)
+
+  if (length(scaled_distances) != length(distances)){
+    stop("the output of 'scale_fn' must have the same length as the input.")
+  }
 
   # Convert distances to degrees
   x_degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = x_radius)

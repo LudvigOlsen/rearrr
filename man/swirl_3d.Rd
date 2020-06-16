@@ -28,8 +28,11 @@ swirl_3d(
 \item{x_col, y_col, z_col}{Name of x/y/z column in \code{`data`}. All must be specified.}
 
 \item{x_radius, y_radius, z_radius}{Radiuses of the
-most-inner swirls for each axis (in the \emph{simplest} case).
+most-inner swirls around each axis (in the \emph{simplest} case).
 Can be \code{vector}s with multiple radiuses.
+
+E.g. the \code{`x_radius`} specifies the radius when rotating \emph{around} the x-axis,
+not the radius \emph{on} the x-axis.
 
 Note: With a custom \code{`scaling_fn`}, these might not be the actual swirl radiuses anymore. Think of
 them more as width settings where a larger number leads to fewer full rotations.}

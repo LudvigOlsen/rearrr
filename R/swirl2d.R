@@ -135,17 +135,17 @@
 #'
 #' }
 swirl_2d <- function(data,
-                    radius,
-                    x_col = NULL,
-                    y_col = NULL,
-                    suffix = "_swirled",
-                    origin = c(0, 0),
-                    origin_fn = NULL,
-                    scale_fn = identity,
-                    keep_original = TRUE,
-                    degrees_col_name = ".degrees",
-                    radius_col_name = ".radius",
-                    origin_col_name = ".origin") {
+                     radius,
+                     x_col = NULL,
+                     y_col = NULL,
+                     suffix = "_swirled",
+                     origin = c(0, 0),
+                     origin_fn = NULL,
+                     scale_fn = identity,
+                     keep_original = TRUE,
+                     degrees_col_name = ".degrees",
+                     radius_col_name = ".radius",
+                     origin_col_name = ".origin") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -245,12 +245,19 @@ swirl_2d_mutator_method <- function(data,
   # Scale distances
   scaled_distances <- scale_fn(distances)
 
+  if (length(scaled_distances) != length(distances)){
+    stop("the output of 'scale_fn' must have the same length as the input.")
+  }
+
   # Convert distances to degrees
   degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = radius)
 
   # Add degrees column
   deg_tmp_var <- create_tmp_var(data = data, tmp_var = ".__degrees__", disallowed = degrees_col_name)
   data[[deg_tmp_var]] <- degrees
+
+  row_index_col <- create_tmp_var(data = data)
+  data[[row_index_col]] <- seq_len(nrow(data))
 
   # Call rotate_2d for each unique distance
   data <- purrr::map_dfr(.x = split(data, f = distances), .f = ~ {
@@ -261,9 +268,14 @@ swirl_2d_mutator_method <- function(data,
       degrees = .x[[deg_tmp_var]][[1]],
       origin = origin,
       suffix = suffix,
-      origin_col_name = NULL
+      origin_col_name = NULL,
+      degrees_col_name = NULL
     )
   })
+
+  # Get original row order
+  data <- data[order(data[[row_index_col]]), , drop = FALSE]
+  data[[row_index_col]] <- NULL
 
   # Add info columns
   if (!is.null(origin_col_name)) {
