@@ -423,18 +423,18 @@ rotate_3d(df, x_col = "x", y_col = "y", z_col = "z",
 # Rotate values
 swirl_2d(rep(1, 50), radius = 95)
 #> # A tibble: 50 x 7
-#>    Index Value Index_swirled Value_swirled .degrees .origin   .radius
-#>    <int> <dbl>         <dbl>         <dbl>    <dbl> <list>      <dbl>
-#>  1     1     1         0.952          1.05     2.68 <dbl [2]>      95
-#>  2     2     1         1.92           1.15     4.24 <dbl [2]>      95
-#>  3     3     1         2.88           1.31     5.99 <dbl [2]>      95
-#>  4     4     1         3.83           1.53     7.81 <dbl [2]>      95
-#>  5     5     1         4.76           1.82     9.66 <dbl [2]>      95
-#>  6     6     1         5.68           2.18    11.5  <dbl [2]>      95
-#>  7     7     1         6.58           2.59    13.4  <dbl [2]>      95
-#>  8     8     1         7.45           3.07    15.3  <dbl [2]>      95
-#>  9     9     1         8.30           3.61    17.2  <dbl [2]>      95
-#> 10    10     1         9.13           4.21    19.0  <dbl [2]>      95
+#>    Index Value Index_swirled Value_swirled .origin   .degrees .radius
+#>    <int> <dbl>         <dbl>         <dbl> <list>       <dbl>   <dbl>
+#>  1     1     1         0.952          1.05 <dbl [2]>     2.68      95
+#>  2     2     1         1.92           1.15 <dbl [2]>     4.24      95
+#>  3     3     1         2.88           1.31 <dbl [2]>     5.99      95
+#>  4     4     1         3.83           1.53 <dbl [2]>     7.81      95
+#>  5     5     1         4.76           1.82 <dbl [2]>     9.66      95
+#>  6     6     1         5.68           2.18 <dbl [2]>    11.5       95
+#>  7     7     1         6.58           2.59 <dbl [2]>    13.4       95
+#>  8     8     1         7.45           3.07 <dbl [2]>    15.3       95
+#>  9     9     1         8.30           3.61 <dbl [2]>    17.2       95
+#> 10    10     1         9.13           4.21 <dbl [2]>    19.0       95
 #> # … with 40 more rows
 ```
 
