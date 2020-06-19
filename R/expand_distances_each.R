@@ -102,9 +102,9 @@
 #'
 #'  \code{x <- sign(x) * abs(x) ^ multiplier}
 #'
-#'  Note: By default (when \code{`add_one_exp`} is TRUE),
+#'  Note: By default (when \code{`add_one_exp`} is \code{TRUE}),
 #'  we add the sign (\code{1 / -1}) of the value before the exponentiation
-#'  and subtracts it afterwards. See \code{`add_one_exp`}.
+#'  and subtract it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @family expander functions
 #' @inheritParams multi_mutator

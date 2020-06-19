@@ -69,13 +69,13 @@
 #'  before exponentiating to ensure they don't contract when between \code{0} and \code{1}.
 #'  The added value is subtracted after the exponentiation. (Logical)
 #'
-#'  Exponentiation becomes:
+#'  The distances to the origin (\code{`d`}) are exponentiated as such:
 #'
-#'  \code{x <- x + 1}
+#'  \code{d <- d + 1}
 #'
-#'  \code{x <- sign(x) * abs(x) ^ multiplier} TODO FIX THIS TO THIS FUNCTION!!!
+#'  \code{d <- d ^ multiplier}
 #'
-#'  \code{x <- x - 1}
+#'  \code{d <- d - 1}
 #'
 #'  \strong{N.B.} Ignored when \code{`exponentiate`} is \code{FALSE}.
 #' @param mult_col_name Name of new column with the multiplier. If \code{NULL}, no column is added.
@@ -84,20 +84,18 @@
 #' @return \code{data.frame} (\code{tibble}) with the expanded columns,
 #'  along with the applied multiplier/exponent and origin coordinates.
 #' @details
-#'  TODO!!
-#'  For each value of each dimension (column), either multiply or exponentiate by the multiplier:
+#'  Increases the distance to the origin in n-dimensional space by multiplying or exponentiating it by the multiplier.
 #'
-#'  \code{# Multiplication}
+#'  We first move the origin to the zero-coordinates (e.g. \code{c(0, 0, 0)})
+#'  and normalize each vector to unit length. We then multiply by this unit vector by the
+#'  multiplied/exponentiated distance and moves the origin back to its original coordinates.
 #'
-#'  \code{x <- x * multiplier}
+#'  The distance to the specified origin is calculated with:
+#'  \deqn{d(P1, P2) = sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 + ... )}
 #'
-#'  \code{# Exponentiation}
-#'
-#'  \code{x <- sign(x) * abs(x) ^ multiplier}
-#'
-#'  Note: By default (when \code{`add_one_exp`} is TRUE),
-#'  we add the sign (\code{1 / -1}) of the value before the exponentiation
-#'  and subtracts it afterwards. See \code{`add_one_exp`}.
+#'  Note: By default (when \code{`add_one_exp`} is \code{TRUE}),
+#'  we add \code{1} to the distance before the exponentiation
+#'  and subtract it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @family expander functions
 #' @inheritParams multi_mutator
