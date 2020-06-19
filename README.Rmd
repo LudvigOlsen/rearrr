@@ -69,10 +69,10 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`expand_distances_each()`|Expand distances to an origin separately for each dimension.         |n           |
 |`cluster_groups()`     |Move data points into clusters around group centroids.                 |n           |
 |`dim_values()`         |Dim values of a dimension by the distance to an n-dimensional origin.  |n (alters 1)|
-|`rotate_2d()`           |Rotate values around an origin in 2 dimensions.                        |2           |
-|`rotate_3d()`           |Rotate values around an origin in 3 dimensions.                        |3           |
-|`swirl_2d()`            |Swirl values around an origin in 2 dimensions.                         |2           |
-|`swirl_3d()`            |Swirl values around an origin in 3 dimensions.                         |3           |
+|`rotate_2d()`          |Rotate values around an origin in 2 dimensions.                        |2           |
+|`rotate_3d()`          |Rotate values around an origin in 3 dimensions.                        |3           |
+|`swirl_2d()`           |Swirl values around an origin in 2 dimensions.                         |2           |
+|`swirl_3d()`           |Swirl values around an origin in 3 dimensions.                         |3           |
 
 ### Generators
 
@@ -84,6 +84,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
+|`distance()`           |Calculates distance to a specified origin.                             |
 |`create_dimming_fn()`  |Creates function for controlling dimming values with `dim_values()`.   |
 |`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
 |`centroid()`           |Calculates the mean of each supplied vector.                           |

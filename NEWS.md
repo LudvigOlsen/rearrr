@@ -33,6 +33,8 @@
 
 ## New helpers
 
+* Adds `distance()` for calculating distances to a specified origin. (Helper)
+
 * Adds `most_centered()` for finding the coordinates of the data point closest to the centroid. (Helper)
 
 * Adds `centroid()` for finding the centroid from multiple vectors (dimensions). (Helper)

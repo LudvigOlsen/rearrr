@@ -70,6 +70,7 @@ points.
 
 | Function               | Description                                                          |
 | :--------------------- | :------------------------------------------------------------------- |
+| `distance()`           | Calculates distance to a specified origin.                           |
 | `create_dimming_fn()`  | Creates function for controlling dimming values with `dim_values()`. |
 | `create_origin_fn()`   | Creates function for finding origin coordinates (like `centroid()`). |
 | `centroid()`           | Calculates the mean of each supplied vector.                         |
