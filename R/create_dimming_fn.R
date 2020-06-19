@@ -55,6 +55,15 @@
 #'
 #' }
 create_dimming_fn <- function(numerator = 1, exponent = 2, add_to_distance = 1){
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_number(numerator, add = assert_collection)
+  checkmate::assert_number(exponent, add = assert_collection)
+  checkmate::assert_number(add_to_distance, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   function(x, d) {
     x * (numerator / ((add_to_distance + d) ^ exponent))
   }

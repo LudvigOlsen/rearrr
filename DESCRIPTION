@@ -29,7 +29,7 @@ Suggests:
     plotly,
     testthat,
     tidyr,
-    xpectr (>= 0.3.0)
+    xpectr (>= 0.4.0)
 RdMacros: 
     lifecycle
 Encoding: UTF-8

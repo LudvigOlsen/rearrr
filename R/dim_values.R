@@ -169,7 +169,6 @@ dim_values <- function(data,
                        keep_original = TRUE,
                        origin_col_name = ".origin") {
 
-
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
@@ -181,7 +180,7 @@ dim_values <- function(data,
   checkmate::assert_function(dimming_fn, nargs = 2, add = assert_collection)
   checkmate::assert_string(dim_col, min.chars = 1, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  if (!is.null(dim_col) && dim_col %ni% cols){
+  if (!is.null(dim_col) && !is.null(cols) && dim_col %ni% cols){
     assert_collection$push("'dim_col' must be in 'cols'.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -237,7 +236,13 @@ dim_values_mutator_method <- function(data, cols, dimming_fn, origin, origin_fn,
   distances <- calculate_distances(dim_vectors = dim_vectors, to = origin)
 
   # Apply dimmer
-  dim_vectors[[dim_col]] <- dimming_fn(dim_vectors[[dim_col]], distances)
+  dimmed_dimension <- dimming_fn(dim_vectors[[dim_col]], distances)
+
+  if (length(dimmed_dimension) != length(distances)){
+    stop("the output of 'dimming_fn' must have the same length as the input.")
+  }
+
+  dim_vectors[[dim_col]] <- dimmed_dimension
 
   # Add dim_vectors as columns with the suffix
   data <-
