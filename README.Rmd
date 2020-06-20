@@ -45,7 +45,9 @@ rvers <- substring(dep, 7, nchar(dep)-1)
 
 R package for rearranging data by a set of methods.
 
-We distinguish between **rearrangers** and **mutators**, where the first *reorders* the data points and the second *changes the values* of the data points.
+We distinguish between **rearrangers** and **mutators**, where the first *reorders* the data points and the second *changes the values* of the data points. 
+
+When performing an operation relative to a point in an n-dimensional vector space, we refer to the point as the **origin**. If we, for instance, wish to rotate our data points around the point at `x = 3` and `y = 7`, those are the coordinates of our origin.
 
 ### Rearrangers
 
@@ -56,8 +58,8 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 |`position_max()`       |Position the highest value with values decreasing around it.           |
 |`position_min()`       |Position the lowest value with values increasing around it.            |
 |`pair_extremes()`      |Arrange values as highest, lowest, second highest, second lowest, etc. |
-|`closest_to()`         |Order values by shortest distance to a target.                         |
-|`furthest_from()`      |Order values by longest distance to a target.                          |
+|`closest_to()`         |Order values by shortest distance to an origin.                        |
+|`furthest_from()`      |Order values by longest distance to an origin.                         |
 |`rev_windows()`        |Reverse order window-wise.                                             |
 
 ### Mutators
@@ -84,7 +86,7 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
-|`distance()`           |Calculates distance to a specified origin.                             |
+|`distance()`           |Calculates distance to an origin.                                      |
 |`create_dimming_fn()`  |Creates function for controlling dimming values with `dim_values()`.   |
 |`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
@@ -143,8 +145,8 @@ orderings <- data.frame(
   "position_min" = position_min(vec, position = 3),
   "pair_extremes" = pair_extremes(vec),
   "rev_windows" = rev_windows(vec, window_size = 3),
-  "closest_to" = closest_to(vec, target_fn = median),
-  "furthest_from" = furthest_from(vec, target = 5),
+  "closest_to" = closest_to(vec, origin_fn = create_origin_fn(median)),
+  "furthest_from" = furthest_from(vec, origin = 5),
   "random_sample" = random_sample,
   "flipped_median" = flip_values(random_sample, origin_fn=create_origin_fn(median))$Value_flipped
 ) 
@@ -235,14 +237,14 @@ orderings %>%
 
 ### Closest to / furthest from
 
-The target value/index can be passed as either a specific value or a function.
+The origin can be passed as either a specific coordinate (here, a value in `data`) or a function.
 
 ```{r}
-closest_to(data = 1:10, target_fn = median)
+closest_to(data = 1:10, origin_fn = create_origin_fn(median))
 ```
 
 ```{r}
-furthest_from(data = 1:10, target = 5)
+furthest_from(data = 1:10, origin = 5)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}

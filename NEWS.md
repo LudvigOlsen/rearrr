@@ -15,7 +15,7 @@
 
 * Adds `rev_windows()` for reversing order window-wise. (Rearranger)
 
-* Adds `closest_to()` and `furthest_from()` for arranging values by how far they are from a target value / index. (Rearranger)
+* Adds `closest_to()` and `furthest_from()` for arranging values by how far they are from an origin (e.g. a target value / index in 1d). (Rearranger)
 
 ## New mutators
 

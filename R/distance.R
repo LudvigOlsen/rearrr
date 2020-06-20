@@ -141,17 +141,10 @@ calculate_distances_mutator_method <- function(data,
     allow_len_one = TRUE
   )
 
-  # Move origin
-  # x <- x - origin_coordinate
-  dim_vectors <-
-    purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      .x - .y
-    })
-
   # Calculate distances
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
   distances <-
-    calculate_distances(dim_vectors = dim_vectors, to = rep(0, num_dims))
+    calculate_distances(dim_vectors = dim_vectors, to = origin)
 
   # Add info columns
   if (!is.null(origin_col_name)) {

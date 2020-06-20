@@ -8,9 +8,12 @@
 ##  Center by                                                               ####
 
 
-rearrange_center_by <- function(data, col,
+rearrange_center_by <- function(data, cols,
                                 shuffle_sides,
                                 what = "max") {
+
+  stopifnot(length(cols) == 1)
+  col <- cols
 
   size <- nrow(data)
 
@@ -113,10 +116,13 @@ order_by_group <- function(data, group_col, shuffle_members, shuffle_pairs){
 
 
 rearrange_position_at <- function(data,
-                                  col,
+                                  cols,
                                   position,
                                   shuffle_sides,
                                   what = "max") {
+
+  stopifnot(length(cols) == 1)
+  col <- cols
 
   size <- nrow(data)
   even_nrows <- size %% 2 == 0
@@ -203,7 +209,7 @@ rearrange_position_at <- function(data,
 ##  Reverse windows                                                         ####
 
 # 'col' is a required arg in the function but is ignored
-rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, col = NULL){
+rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, cols = NULL){
 
   size <- nrow(data)
   if (size < 2){
@@ -226,30 +232,47 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, 
 ##  By Distance - closest to / furthest from                                ####
 
 
-rearrange_by_distance <- function(data, col, target, target_fn, shuffle_ties, decreasing){
+rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, decreasing){
 
   if (nrow(data) < 2){
     return(data)
   }
 
-  if (is.null(target) && !is.null(target_fn)){
-    target <- target_fn(data[[col]])
-  }
+  # Number of dimensions
+  # Each column is a dimension
+  num_dims <- length(cols)
 
-  checkmate::assert_number(target, finite = TRUE, .var.name = "extracted target")
+  # Convert columns to list of vectors
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
+
+  # Find origin if specified
+  origin <- apply_coordinate_fn(
+    dim_vectors = dim_vectors,
+    coordinates = origin,
+    fn = origin_fn,
+    num_dims = length(cols),
+    coordinate_name = "origin",
+    fn_name = "origin_fn",
+    dim_var_name = "cols",
+    allow_len_one = TRUE
+  )
+
+  tmp_distances_col <- create_tmp_var(data, ".tmp_distances")
+  data[[tmp_distances_col]] <- calculate_distances(dim_vectors = dim_vectors, to = origin)
 
   if (isTRUE(shuffle_ties)){
     # Shuffle the data frame
     data <- data[sample(seq_len(nrow(data))), , drop = FALSE]
   } else {
     # pre-order
-    data <- data[order(data[[col]]), , drop = FALSE]
+    data <- data %>%
+      dplyr::arrange(!!!rlang::syms(cols))
   }
 
-  # TODO Handle character vectors as well
+  data <- data[order(data[[tmp_distances_col]], decreasing = decreasing), , drop = FALSE]
+  data[[tmp_distances_col]] <- NULL
 
-  data[order(abs(target - data[[col]]), decreasing = decreasing), , drop = FALSE]
-
+  data
 }
 
 
@@ -258,13 +281,16 @@ rearrange_by_distance <- function(data, col, target, target_fn, shuffle_ties, de
 
 
 # TODO Add aggregate_fn for recursive pairings
-rearrange_pair_extremes <- function(data, col,
+rearrange_pair_extremes <- function(data, cols,
                                     unequal_method,
                                     num_pairings,
                                     shuffle_members,
                                     shuffle_pairs,
                                     keep_factors,
                                     factor_name){
+
+  stopifnot(length(cols) == 1)
+  col <- cols
 
   if (nrow(data) < 2){
     return(data)

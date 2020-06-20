@@ -370,6 +370,7 @@ normalize_dimensions_to_unit_lengths <- function(dim_vectors){
 #' @importFrom rlang .data :=
 #' @importFrom utils head tail
 #' @importFrom stats quantile runif median setNames
+#' @importFrom lifecycle deprecated deprecate_stop
 NULL
 
 # R CMD check NOTE handling

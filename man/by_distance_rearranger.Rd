@@ -6,9 +6,9 @@
 \usage{
 by_distance_rearranger(
   data,
-  col,
-  target = NULL,
-  target_fn = NULL,
+  cols,
+  origin = NULL,
+  origin_fn = NULL,
   shuffle_ties = FALSE,
   decreasing = FALSE
 )
@@ -16,21 +16,43 @@ by_distance_rearranger(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{cols}{Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
-\item{target}{Target value. (Logical)}
+\item{origin}{Coordinates of the origin to calculate distances to.
+Must be either a single constant to use in all dimensions
+or a \code{vector} with one constant per dimension.
 
-\item{target_fn}{Function for extracting target value. (Logical)
+\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\strong{N.B.} Either \code{`target`} or \code{`target_fn`} should be specified.
+\item{origin_fn}{Function for finding the origin coordinates to calculate distances to.
+Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+It should return a \code{vector} with one constant per dimension.
 
-\strong{N.B.} When \code{`data`} is grouped,
-the \code{`target_fn`} function is applied group-wise.}
+Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+the same function to each dimension.
 
-\item{shuffle_ties}{Whether to shuffle elements with the same distance to the target. (Logical)}
+E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
 
-\item{decreasing}{Whether to order by decreasing distances to the target. (Logical)}
+\code{create_origin_fn(mean)}
+
+Which returns the following function:
+
+\code{function(...)\{}
+
+\verb{  }\code{list(...) \%>\%}
+
+\verb{    }\code{purrr::map(mean) \%>\%}
+
+\verb{    }\code{unlist(recursive = TRUE,}
+
+\verb{           }\code{use.names = FALSE)}
+
+\code{\}}}
+
+\item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
+
+\item{decreasing}{Whether to order by decreasing distances to the origin. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.

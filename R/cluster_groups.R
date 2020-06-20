@@ -204,7 +204,6 @@ cluster_groups <- function(data,
   }
 
   # Contract data
-  # TODO Consider replacing with expand_distances()
   expanded <- expand_distances(
     data = data,
     cols = cols,
