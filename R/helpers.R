@@ -340,6 +340,9 @@ radians_to_degrees <- function(radians){
 
 # Normalize vector to Unit length
 to_unit_vector <- function(x) {
+  if (sum(x ^ 2) == 0){
+    return(x)
+  }
   x / sqrt(sum(x ^ 2))
 }
 
