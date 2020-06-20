@@ -1,5 +1,6 @@
 
 
+
 #   __________________ #< 45425d2ee7b52e512217af9ce04ee05b ># __________________
 #   Transfer centroids                                                      ####
 
@@ -101,8 +102,22 @@ transfer_centroids <- function(to_data,
     add = assert_collection
   )
   checkmate::reportAssertions(assert_collection)
-  if (length(intersect(colnames(to_data), colnames(from_data))) != length(colnames(from_data))) {
+  cols_intersection <-
+    intersect(colnames(to_data), colnames(from_data))
+  if (length(cols_intersection) != ncol(to_data) ||
+      length(cols_intersection) != ncol(from_data)) {
     assert_collection$push("'to_data' and 'from_data' must have the exact same columns.")
+  }
+  if (length(intersect(cols, group_cols)) > 0) {
+    assert_collection$push("some names in 'cols' were also in 'group_cols'.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  if (length(setdiff(cols, colnames(to_data))) > 0) {
+    assert_collection$push("some names in 'cols' were not columns in 'to_data'.")
+  }
+  if (!is.null(group_cols) &&
+      length(setdiff(group_cols, colnames(to_data))) > 0) {
+    assert_collection$push("some names in 'group_cols' were not columns in 'to_data'.")
   }
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -113,9 +128,9 @@ transfer_centroids <- function(to_data,
 
   # Group data frames if specified
   if (!is.null(group_cols)) {
-    to_data <- dplyr::group_by(to_data,!!!rlang::syms(group_cols))
+    to_data <- dplyr::group_by(to_data, !!!rlang::syms(group_cols))
     from_data <-
-      dplyr::group_by(from_data,!!!rlang::syms(group_cols))
+      dplyr::group_by(from_data, !!!rlang::syms(group_cols))
   }
 
   # Find from centroids
@@ -140,9 +155,11 @@ transfer_centroids <- function(to_data,
 
   # Make sure the group columns are the same in
   # both summaries
-  if (!dplyr::all_equal(as.data.frame(from_group_columns),
-                        as.data.frame(to_group_columns),
-                        ignore_row_order = FALSE)) {
+  if (!dplyr::all_equal(
+    as.data.frame(from_group_columns),
+    as.data.frame(to_group_columns),
+    ignore_row_order = FALSE
+  )) {
     stop("The summarized group columns from the two datasets are not equal.")
   }
 
