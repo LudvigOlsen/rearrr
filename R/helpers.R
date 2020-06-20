@@ -295,6 +295,15 @@ add_dimensions <- function(data,
                            new_vectors,
                            suffix = "",
                            overwrite = TRUE) {
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_list(new_vectors, add = assert_collection)
+  checkmate::assert_string(suffix, add = assert_collection)
+  checkmate::assert_flag(overwrite, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
   # Add suffix
   names(new_vectors) <- paste0(names(new_vectors), suffix)
 
@@ -331,10 +340,12 @@ add_dimensions <- function(data,
 ##  Conversions                                                             ####
 
 degrees_to_radians <- function(degrees){
+  checkmate::assert_numeric(degrees, any.missing = FALSE)
   degrees * (pi / 180)
 }
 
 radians_to_degrees <- function(radians){
+  checkmate::assert_numeric(radians, any.missing = FALSE)
   radians / (pi / 180)
 }
 
@@ -348,6 +359,8 @@ to_unit_vector <- function(x) {
 }
 
 calculate_swirl_degrees <- function(distances, radius){
+  checkmate::assert_numeric(distances, any.missing = FALSE)
+  checkmate::assert_number(radius)
   if (radius == 0){
     return(distances*0)
   }
@@ -357,6 +370,7 @@ calculate_swirl_degrees <- function(distances, radius){
 # Normalize dimensions
 # One vector per dimension
 normalize_dimensions_to_unit_lengths <- function(dim_vectors){
+  checkmate::assert_list(dim_vectors, any.missing = FALSE, types = "numeric")
   if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))){
     stop("All dim_vectors must have the same length.")
   }
