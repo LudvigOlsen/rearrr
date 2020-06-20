@@ -30,8 +30,13 @@ R package for rearranging data by a set of methods.
 
 We distinguish between **rearrangers** and **mutators**, where the first
 *reorders* the data points and the second *changes the values* of the
-data
-points.
+data points.
+
+When performing an operation relative to a point in an n-dimensional
+vector space, we refer to the point as the **origin**. If we, for
+instance, wish to rotate our data points around the point at `x = 3` and
+`y = 7`, those are the coordinates of our
+origin.
 
 ### Rearrangers
 
@@ -42,8 +47,8 @@ points.
 | `position_max()`  | Position the highest value with values decreasing around it.           |
 | `position_min()`  | Position the lowest value with values increasing around it.            |
 | `pair_extremes()` | Arrange values as highest, lowest, second highest, second lowest, etc. |
-| `closest_to()`    | Order values by shortest distance to a target.                         |
-| `furthest_from()` | Order values by longest distance to a target.                          |
+| `closest_to()`    | Order values by shortest distance to an origin.                        |
+| `furthest_from()` | Order values by longest distance to an origin.                         |
 | `rev_windows()`   | Reverse order window-wise.                                             |
 
 ### Mutators
@@ -70,7 +75,7 @@ points.
 
 | Function               | Description                                                          |
 | :--------------------- | :------------------------------------------------------------------- |
-| `distance()`           | Calculates distance to a specified origin.                           |
+| `distance()`           | Calculates distance to an origin.                                    |
 | `create_dimming_fn()`  | Creates function for controlling dimming values with `dim_values()`. |
 | `create_origin_fn()`   | Creates function for finding origin coordinates (like `centroid()`). |
 | `centroid()`           | Calculates the mean of each supplied vector.                         |
@@ -200,16 +205,16 @@ pair_extremes(data = 1:10, keep_factor = TRUE)
 
 ### Closest to / furthest from
 
-The target value/index can be passed as either a specific value or a
-function.
+The origin can be passed as either a specific coordinate (here, a value
+in `data`) or a function.
 
 ``` r
-closest_to(data = 1:10, target_fn = median)
+closest_to(data = 1:10, origin_fn = create_origin_fn(median))
 #>  [1]  5  6  4  7  3  8  2  9  1 10
 ```
 
 ``` r
-furthest_from(data = 1:10, target = 5)
+furthest_from(data = 1:10, origin = 5)
 #>  [1] 10  1  9  2  8  3  7  4  6  5
 ```
 
