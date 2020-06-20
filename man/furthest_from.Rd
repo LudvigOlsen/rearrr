@@ -3,32 +3,54 @@
 \name{furthest_from}
 \alias{furthest_from}
 \alias{farthest_from}
-\title{Orders values by longest distance to the target}
+\title{Orders values by longest distance to an origin}
 \usage{
 furthest_from(
   data,
-  col = NULL,
-  target = NULL,
-  target_fn = NULL,
+  cols = NULL,
+  origin = NULL,
+  origin_fn = NULL,
   shuffle_ties = FALSE
 )
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{cols}{Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
-\item{target}{Target value. (Logical)}
+\item{origin}{Coordinates of the origin to calculate distances to.
+Must be either a single constant to use in all dimensions
+or a \code{vector} with one constant per dimension.
 
-\item{target_fn}{Function for extracting target value. (Logical)
+\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\strong{N.B.} Either \code{`target`} or \code{`target_fn`} should be specified.
+\item{origin_fn}{Function for finding the origin coordinates to calculate distances to.
+Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+It should return a \code{vector} with one constant per dimension.
 
-\strong{N.B.} When \code{`data`} is grouped,
-the \code{`target_fn`} function is applied group-wise.}
+Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+the same function to each dimension.
 
-\item{shuffle_ties}{Whether to shuffle elements with the same distance to the target. (Logical)}
+E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+
+\code{create_origin_fn(mean)}
+
+Which returns the following function:
+
+\code{function(...)\{}
+
+\verb{  }\code{list(...) \%>\%}
+
+\verb{    }\code{purrr::map(mean) \%>\%}
+
+\verb{    }\code{unlist(recursive = TRUE,}
+
+\verb{           }\code{use.names = FALSE)}
+
+\code{\}}}
+
+\item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -36,15 +58,23 @@ The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Values are ordered by how far they are from the target value.
+Values are ordered by how far they are from the origin.
+
+In 1d (when
+\code{`cols`} has length \code{1}), the origin can be thought of as a target value.
+In \emph{n} dimensions, the origin can be thought of as coordinates.
+
+The origin can be supplied as coordinates or as a function that returns coordinates. The
+latter can be useful when supplying a grouped \code{data.frame} and ordering the rows by
+their distance to the centroid of each group.
 
 \strong{Example}:
 
 The column values:
 
-\code{c(1, 2, 3, 4, 5}
+\code{c(1, 2, 3, 4, 5)}
 
-and \code{target = 2}
+and \code{origin = 2}
 
 are \strong{ordered as}:
 
@@ -70,32 +100,47 @@ df <- data.frame(
 )
 
 # Furthest from the third row
-furthest_from(df, target = 3)$index
+furthest_from(df, origin = 3)$index
 
 # By each of the columns
-furthest_from(df, col = "A", target = 3)$A
-furthest_from(df, col = "A", target_fn = median)$A
-furthest_from(df, col = "B", target = 0.5)$B
-furthest_from(df, col = "B", target_fn = median)$B
+furthest_from(df, cols = "A", origin = 3)$A
+furthest_from(df, cols = "A", origin_fn = most_centered)$A
+furthest_from(df, cols = "B", origin = 0.5)$B
+furthest_from(df, cols = "B", origin_fn = centroid)$B
 
-# Shuffle the elements with the same distance to the target
-furthest_from(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
+# Shuffle the elements with the same distance to the origin
+furthest_from(df, cols = "A",
+              origin_fn = create_origin_fn(median),
+              shuffle_ties = TRUE)$A
 
 # Grouped by G
 df \%>\%
   dplyr::select(G, A) \%>\%  # For clarity
   dplyr::group_by(G) \%>\%
-  furthest_from(col = "A", target_fn = median)
+  furthest_from(cols = "A",
+                origin_fn = create_origin_fn(median))
 
 # Plot the centered values
 plot(
   x = 1:10,
-  y = furthest_from(df, col = "B", target_fn = median)$B
+  y = furthest_from(df, cols = "B",
+                    origin_fn = create_origin_fn(median))$B,
+  xlab = "Position", ylab = "B"
 )
 plot(
   x = 1:10,
-  y = furthest_from(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
+  y = furthest_from(df, cols = "A",
+                    origin_fn = create_origin_fn(median),
+                    shuffle_ties = TRUE)$A,
+  xlab = "Position", ylab = "A"
 )
+
+# In multiple dimensions
+# Start by calculating distances
+# so we can check the ordering (not necessary)
+df \%>\%
+  distance(cols = c("A", "B"), origin_fn = most_centered) \%>\%
+  furthest_from(cols = c("A", "B"), origin_fn = most_centered)
 }
 }
 \seealso{

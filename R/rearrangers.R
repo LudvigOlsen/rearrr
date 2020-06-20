@@ -11,10 +11,12 @@
 #' Wrapper for running rearranging methods
 #'
 #' @param data \code{data.frame} or \code{vector}.
+#' @param cols Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+#'  the row numbers are used.
 #' @param col Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 #'  the row numbers are used.
 #' @param rearrange_fn Rearrange function to apply.
-#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`col`}.
+#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`cols`}.
 #'  Should not return anything.
 #' @param ... Named arguments for the \code{`rearrange_fn`}.
 #' @keywords internal
@@ -28,29 +30,41 @@
 rearranger <- function(data,
                        rearrange_fn,
                        check_fn,
-                       col = NULL,
+                       cols = NULL,
+                       allowed_types = c("numeric", "factor", "character"),
+                       col = deprecated(), # Keep it so we can have the docs
                        ...) {
+
+  # Internal check, shouldn't reach user
+  # We need to keep col as argument to inherit docs for it in wrappers
+  if (!rlang::is_missing(col)) {
+    deprecate_stop("0.0.0", "rearrr:::rearranger(col = )")
+  }
 
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, cols = col)
+  prepped <- prepare_input_data(data = data, cols = cols)
   data <- prepped[["data"]]
-  col <- prepped[["cols"]]
+  cols <- prepped[["cols"]]
   use_index <- prepped[["use_index"]]
   was_vector <- prepped[["was_vector"]]
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
-  checkmate::assert_string(col, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_character(cols, min.chars = 1, any.missing = FALSE,
+                              null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(rearrange_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_data_frame(data[,cols, drop = FALSE], types = allowed_types,
+                               .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col(s)' columns"),
+                               add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # TODO We might wanna allow returning altered args
   # This is for checks we want to perform after preparing 'data' and 'col'
   if (!is.null(check_fn))
-    check_fn(data = data, col = col, ...)
+    check_fn(data = data, cols = cols, ...)
   # End of argument checks ####
 
   # Apply rearrange method
@@ -58,7 +72,7 @@ rearranger <- function(data,
     run_by_group(
       data = data,
       fn = rearrange_fn,
-      col = col,
+      cols = cols,
       ...
     )
 
@@ -66,7 +80,7 @@ rearranger <- function(data,
   data <-
     prepare_output_data(
       data = data,
-      cols = col,
+      cols = cols,
       use_index = use_index,
       to_vector = was_vector
     )
@@ -111,7 +125,7 @@ positioning_rearranger <- function(data, col = NULL, position = NULL, shuffle_si
   rearranger(data = data,
              rearrange_fn = rearrange_position_at,
              check_fn = NULL,
-             col = col,
+             cols = col,
              position = position,
              shuffle_sides = shuffle_sides,
              what = what)
@@ -143,7 +157,7 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
   rearranger(data = data,
              rearrange_fn = rearrange_center_by,
              check_fn = NULL,
-             col = col,
+             cols = col,
              shuffle_sides = shuffle_sides,
              what = what)
 }
@@ -257,7 +271,7 @@ extreme_pairing_rearranger <- function(
   rearranger(data = data,
              rearrange_fn = rearrange_pair_extremes,
              check_fn = NULL,
-             col = col,
+             cols = col,
              unequal_method = unequal_method,
              num_pairings = num_pairings,
              shuffle_members = shuffle_members,
@@ -314,19 +328,41 @@ rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, fact
 #' Wrapper for running closest to / furthest from rearrange methods
 #'
 #' @inheritParams rearranger
-#' @param target Target value. (Logical)
-#' @param target_fn Function for extracting target value. (Logical)
+#' @param origin Coordinates of the origin to calculate distances to.
+#'  Must be either a single constant to use in all dimensions
+#'  or a \code{vector} with one constant per dimension.
 #'
-#'  \strong{N.B.} Either \code{`target`} or \code{`target_fn`} should be specified.
+#'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
+#' @param origin_fn Function for finding the origin coordinates to calculate distances to.
+#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'  It should return a \code{vector} with one constant per dimension.
 #'
-#'  \strong{N.B.} When \code{`data`} is grouped,
-#'  the \code{`target_fn`} function is applied group-wise.
-#' @param shuffle_ties Whether to shuffle elements with the same distance to the target. (Logical)
-#' @param decreasing Whether to order by decreasing distances to the target. (Logical)
+#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
+#'  the same function to each dimension.
+#'
+#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+#'
+#'  \code{create_origin_fn(mean)}
+#'
+#'  Which returns the following function:
+#'
+#'  \code{function(...)\{}
+#'
+#'  \verb{  }\code{list(...) \%>\%}
+#'
+#'  \verb{    }\code{purrr::map(mean) \%>\%}
+#'
+#'  \verb{    }\code{unlist(recursive = TRUE,}
+#'
+#'  \verb{           }\code{use.names = FALSE)}
+#'
+#'  \code{\}}
+#' @param shuffle_ties Whether to shuffle elements with the same distance to the origin. (Logical)
+#' @param decreasing Whether to order by decreasing distances to the origin. (Logical)
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-by_distance_rearranger <- function(data, col, target = NULL, target_fn = NULL,
+by_distance_rearranger <- function(data, cols, origin = NULL, origin_fn = NULL,
                                    shuffle_ties = FALSE, decreasing = FALSE){
 
   # TODO Allow target to be on length num_groups and find a way to pass
@@ -334,45 +370,29 @@ by_distance_rearranger <- function(data, col, target = NULL, target_fn = NULL,
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_function(target_fn, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_number(target, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_number(origin, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(shuffle_ties, add = assert_collection)
   checkmate::assert_flag(decreasing, add = assert_collection)
+  checkmate::assert_character(cols, any.missing = FALSE, min.len = 1, min.chars = 1,
+                              null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  if (sum(is.null(target), is.null(target_fn)) != 1){
+  if (sum(is.null(origin), is.null(origin_fn)) != 1){
     assert_collection$push(
-      "exactly one of {target,target_fn} should specified."
+      "exactly one of {origin,origin_fn} should specified."
     )
   }
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  # Specify checks for after calling prepare_input_data()
-  check_fn <- function(data, col, ...){
-    # Check arguments ####
-    assert_collection <- checkmate::makeAssertCollection()
-    if (!is.null(target) && typeof(target) != typeof(data[[col]]) &&
-        !(is.numeric(target) && is.numeric(data[[col]]))){
-      assert_collection$push(
-        "'target' was not of same type as 'data[[col]]'."
-      )
-    }
-    if (!is.numeric(data[[col]])){
-      assert_collection$push(
-        "'data[[col]]' must be numeric."
-      )
-    }
-    checkmate::reportAssertions(assert_collection)
-    # End of argument checks ####
-  }
-
   # Rearrange 'data'
   rearranger(data = data,
-             col = col,
+             cols = cols,
              rearrange_fn = rearrange_by_distance,
-             check_fn = check_fn,
-             target = target,
-             target_fn = target_fn,
+             allowed_types = c("numeric", "factor"),
+             check_fn = NULL,
+             origin = origin,
+             origin_fn = origin_fn,
              shuffle_ties = shuffle_ties,
              decreasing = decreasing
   )

@@ -8,19 +8,27 @@
 ##  .................. #< d8417478f17fb09ccd87a81c78c0006b ># ..................
 ##  Closest to                                                              ####
 
-#' @title Orders values by shortest distance to the target
+#' @title Orders values by shortest distance to an origin
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Values are ordered by how close they are from the target value.
+#'  Values are ordered by how close they are to the origin.
+#'
+#'  In 1d (when
+#'  \code{`cols`} has length \code{1}), the origin can be thought of as a target value.
+#'  In \emph{n} dimensions, the origin can be thought of as coordinates.
+#'
+#'  The origin can be supplied as coordinates or as a function that returns coordinates. The
+#'  latter can be useful when supplying a grouped \code{data.frame} and ordering the rows by
+#'  their distance to the centroid of each group.
 #'
 #'  \strong{Example}:
 #'
 #'  The column values:
 #'
-#'  \code{c(1, 2, 3, 4, 5}
+#'  \code{c(1, 2, 3, 4, 5)}
 #'
-#'  and \code{target = 2}
+#'  and \code{origin = 2}
 #'
 #'  are \strong{ordered as}:
 #'
@@ -51,43 +59,58 @@
 #' )
 #'
 #' # Furthest from the third row
-#' closest_to(df, target = 3)$index
+#' closest_to(df, origin = 3)$index
 #'
 #' # By each of the columns
-#' closest_to(df, col = "A", target = 3)$A
-#' closest_to(df, col = "A", target_fn = median)$A
-#' closest_to(df, col = "B", target = 0.5)$B
-#' closest_to(df, col = "B", target_fn = median)$B
+#' closest_to(df, cols = "A", origin = 3)$A
+#' closest_to(df, cols = "A", origin_fn = most_centered)$A
+#' closest_to(df, cols = "B", origin = 0.5)$B
+#' closest_to(df, cols = "B", origin_fn = centroid)$B
 #'
-#' # Shuffle the elements with the same distance to the target
-#' closest_to(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
+#' # Shuffle the elements with the same distance to the origin
+#' closest_to(df, cols = "A",
+#'            origin_fn = create_origin_fn(median),
+#'            shuffle_ties = TRUE)$A
 #'
 #' # Grouped by G
 #' df %>%
 #'   dplyr::select(G, A) %>%  # For clarity
 #'   dplyr::group_by(G) %>%
-#'   closest_to(col = "A", target_fn = median)
+#'   closest_to(cols = "A",
+#'              origin_fn = create_origin_fn(median))
 #'
 #' # Plot the centered values
 #' plot(
 #'   x = 1:10,
-#'   y = closest_to(df, col = "B", target_fn = median)$B
+#'   y = closest_to(df, cols = "B",
+#'                  origin_fn = create_origin_fn(median))$B,
+#'   xlab = "Position", ylab = "B"
 #' )
 #' plot(
 #'   x = 1:10,
-#'   y = closest_to(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
+#'   y = closest_to(df, cols = "A",
+#'                  origin_fn = create_origin_fn(median),
+#'                  shuffle_ties = TRUE)$A,
+#'   xlab = "Position", ylab = "A"
 #' )
+#'
+#' # In multiple dimensions
+#' # Start by calculating distances
+#' # so we can check the ordering (not necessary)
+#' df %>%
+#'   distance(cols = c("A", "B"), origin_fn = most_centered) %>%
+#'   closest_to(cols = c("A", "B"), origin_fn = most_centered)
 #' }
 closest_to <- function(data,
-                       col = NULL,
-                       target = NULL,
-                       target_fn = NULL,
+                       cols = NULL,
+                       origin = NULL,
+                       origin_fn = NULL,
                        shuffle_ties = FALSE) {
   by_distance_rearranger(
     data = data,
-    col = col,
-    target = target,
-    target_fn = target_fn,
+    cols = cols,
+    origin = origin,
+    origin_fn = origin_fn,
     shuffle_ties = shuffle_ties,
     decreasing = FALSE
   )
@@ -97,19 +120,27 @@ closest_to <- function(data,
 ##  .................. #< 367167a5b5eaf6fa777a992c4f250900 ># ..................
 ##  Farthest from                                                           ####
 
-#' @title Orders values by longest distance to the target
+#' @title Orders values by longest distance to an origin
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Values are ordered by how far they are from the target value.
+#'  Values are ordered by how far they are from the origin.
+#'
+#'  In 1d (when
+#'  \code{`cols`} has length \code{1}), the origin can be thought of as a target value.
+#'  In \emph{n} dimensions, the origin can be thought of as coordinates.
+#'
+#'  The origin can be supplied as coordinates or as a function that returns coordinates. The
+#'  latter can be useful when supplying a grouped \code{data.frame} and ordering the rows by
+#'  their distance to the centroid of each group.
 #'
 #'  \strong{Example}:
 #'
 #'  The column values:
 #'
-#'  \code{c(1, 2, 3, 4, 5}
+#'  \code{c(1, 2, 3, 4, 5)}
 #'
-#'  and \code{target = 2}
+#'  and \code{origin = 2}
 #'
 #'  are \strong{ordered as}:
 #'
@@ -141,43 +172,58 @@ closest_to <- function(data,
 #' )
 #'
 #' # Furthest from the third row
-#' furthest_from(df, target = 3)$index
+#' furthest_from(df, origin = 3)$index
 #'
 #' # By each of the columns
-#' furthest_from(df, col = "A", target = 3)$A
-#' furthest_from(df, col = "A", target_fn = median)$A
-#' furthest_from(df, col = "B", target = 0.5)$B
-#' furthest_from(df, col = "B", target_fn = median)$B
+#' furthest_from(df, cols = "A", origin = 3)$A
+#' furthest_from(df, cols = "A", origin_fn = most_centered)$A
+#' furthest_from(df, cols = "B", origin = 0.5)$B
+#' furthest_from(df, cols = "B", origin_fn = centroid)$B
 #'
-#' # Shuffle the elements with the same distance to the target
-#' furthest_from(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
+#' # Shuffle the elements with the same distance to the origin
+#' furthest_from(df, cols = "A",
+#'               origin_fn = create_origin_fn(median),
+#'               shuffle_ties = TRUE)$A
 #'
 #' # Grouped by G
 #' df %>%
 #'   dplyr::select(G, A) %>%  # For clarity
 #'   dplyr::group_by(G) %>%
-#'   furthest_from(col = "A", target_fn = median)
+#'   furthest_from(cols = "A",
+#'                 origin_fn = create_origin_fn(median))
 #'
 #' # Plot the centered values
 #' plot(
 #'   x = 1:10,
-#'   y = furthest_from(df, col = "B", target_fn = median)$B
+#'   y = furthest_from(df, cols = "B",
+#'                     origin_fn = create_origin_fn(median))$B,
+#'   xlab = "Position", ylab = "B"
 #' )
 #' plot(
 #'   x = 1:10,
-#'   y = furthest_from(df, col = "A", target_fn = median, shuffle_ties = TRUE)$A
+#'   y = furthest_from(df, cols = "A",
+#'                     origin_fn = create_origin_fn(median),
+#'                     shuffle_ties = TRUE)$A,
+#'   xlab = "Position", ylab = "A"
 #' )
+#'
+#' # In multiple dimensions
+#' # Start by calculating distances
+#' # so we can check the ordering (not necessary)
+#' df %>%
+#'   distance(cols = c("A", "B"), origin_fn = most_centered) %>%
+#'   furthest_from(cols = c("A", "B"), origin_fn = most_centered)
 #' }
 furthest_from <- function(data,
-                          col = NULL,
-                          target = NULL,
-                          target_fn = NULL,
+                          cols = NULL,
+                          origin = NULL,
+                          origin_fn = NULL,
                           shuffle_ties = FALSE){
   by_distance_rearranger(
     data = data,
-    col = col,
-    target = target,
-    target_fn = target_fn,
+    cols = cols,
+    origin = origin,
+    origin_fn = origin_fn,
     shuffle_ties = shuffle_ties,
     decreasing = TRUE
   )
