@@ -67,7 +67,7 @@ df <- data.frame(
 )
 
 # Square 'y'
-df_sq <- square(df, y_col = "y", offset_x = 3)
+df_sq <- square(df, y_col = "y")
 df_sq
 
 # Plot square
@@ -87,7 +87,7 @@ df_sq <- df \%>\%
   cluster_groups(cols = "y", group_cols = "g",
                  suffix = "") \%>\%
   dplyr::group_by(g) \%>\%
-  square(y_col = "y", offset_x = 3)
+  square(y_col = "y")
 
 # Plot squares
 df_sq \%>\%
@@ -114,7 +114,7 @@ df_sq \%>\%
 #
 
 # Start by squaring 'y'
-df_sq <- square(df, y_col = "y", offset_x = 3)
+df_sq <- square(df, y_col = "y")
 
 # Contract '.square_x' and 'y' towards the centroid
 # To contract with multiple multipliers at once,
@@ -141,7 +141,8 @@ df_expanded \%>\%
 \seealso{
 Other forming functions: 
 \code{\link{circularize}()},
-\code{\link{hexagonalize}()}
+\code{\link{hexagonalize}()},
+\code{\link{triangularize}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

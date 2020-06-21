@@ -38,7 +38,7 @@
 #' )
 #'
 #' # Square 'y'
-#' df_sq <- square(df, y_col = "y", offset_x = 3)
+#' df_sq <- square(df, y_col = "y")
 #' df_sq
 #'
 #' # Plot square
@@ -58,7 +58,7 @@
 #'   cluster_groups(cols = "y", group_cols = "g",
 #'                  suffix = "") %>%
 #'   dplyr::group_by(g) %>%
-#'   square(y_col = "y", offset_x = 3)
+#'   square(y_col = "y")
 #'
 #' # Plot squares
 #' df_sq %>%
@@ -85,7 +85,7 @@
 #' #
 #'
 #' # Start by squaring 'y'
-#' df_sq <- square(df, y_col = "y", offset_x = 3)
+#' df_sq <- square(df, y_col = "y")
 #'
 #' # Contract '.square_x' and 'y' towards the centroid
 #' # To contract with multiple multipliers at once,
@@ -171,9 +171,6 @@ square_mutator_method <- function(data,
   data[[tmp_side_col]] <-
     head(rep(c(1, 2), ceiling(nrow(data) / 2)), nrow(data))
 
-  # Initialize x coordinate column
-  data[[x_col_name]] <- 0
-
   # Find minimum value
   if (is.null(.min)){
     .min <- min(data[[col]])
@@ -186,8 +183,6 @@ square_mutator_method <- function(data,
 
   # Properties of square
   height <- .max - .min
-  # Pythagoras comes in handy!
-  side_length <- sqrt(2 * (height / 2) ^ 2)
   width <- height
 
   # Section cutoffs

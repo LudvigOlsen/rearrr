@@ -83,6 +83,7 @@ When performing an operation relative to a point in an n-dimensional vector spac
 |`hexagonalize()`   |Create x-coordinates for y-coordinates so they form a hexagon.         |
 |`square()`         |Create x-coordinates for y-coordinates so they form a square.          |
 |`circularize()`    |Create x-coordinates for y-coordinates so they form a circle.          |
+|`triangularize()`  |Create x-coordinates for y-coordinates so they form a triangle.        |
 
 ### Generators
 
@@ -757,7 +758,7 @@ combined +
 
 ## Forming examples
 
-### Hexagonalize values
+### Hexagonalize points
 
 ```{r}
 hexagonalize(runif(200))
@@ -806,7 +807,7 @@ combined +
 
 ```
 
-### Square values
+### Square points
 
 ```{r}
 square(runif(200))
@@ -857,7 +858,7 @@ combined +
 
 ```
 
-### Circularize values
+### Circularize points
 
 ```{r}
 circularize(runif(200))
@@ -901,7 +902,66 @@ ggcirc_2 <- df_circ_expanded %>%
 combined <- (ggcirc_1 + ggcirc_2) & theme(legend.position = "none")
 combined + 
   plot_annotation(title = "Circles",
-                  subtitle = "A: circularize y-values, B: contracted circles",
+                  subtitle = "A: circularized y-values, B: contracted circles",
+                  tag_levels = 'A')
+
+```
+
+### Triangularize points
+
+```{r}
+triangularize(runif(200))
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=4.25}
+xpectr::set_test_seed(10)
+
+# Create a data frame
+df <- data.frame(
+  "y" = runif(200)
+)
+
+df_tri <- triangularize(df, y_col = "y")
+
+ggtri_1 <- df_tri %>%
+  ggplot(aes(x = .triangle_x, y = y, color = .edge)) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") +
+  labs(x = ".triangle_x", y = "y")
+
+origin <- centroid(df_tri$.triangle_x, df_tri$y)
+df_tri_expanded <- purrr::map_dfr(
+  .x = 1:10/10,
+  .f = function(mult){
+    expand_distances(
+      data = df_tri,
+      cols = c(".triangle_x", "y"),
+      multiplier = mult,
+      exponentiate = TRUE, 
+      add_one_exp = FALSE,
+      origin = origin)
+  }) %>% 
+  rotate_2d(
+    degrees = 90,
+    x_col = ".triangle_x_expanded",
+    y_col = "y_expanded",
+    suffix = "",
+    origin = origin
+  )
+
+ggtri_2 <- df_tri_expanded %>%
+  ggplot(aes(x = .triangle_x_expanded, y = y_expanded, 
+             color = .edge, alpha = 0.8*.exponent^2)) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = ".triangle_x", y = "y")
+
+combined <- (ggtri_1 + ggtri_2) & theme(legend.position = "none")
+combined + 
+  plot_annotation(title = "Triangles",
+                  subtitle = "A: triangularized y-values, B: expanded and rotated triangles",
                   tag_levels = 'A')
 
 ```

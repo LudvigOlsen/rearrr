@@ -67,7 +67,7 @@ df <- data.frame(
 )
 
 # Hexagonalize 'y'
-df_hex <- hexagonalize(df, y_col = "y", offset_x = 3)
+df_hex <- hexagonalize(df, y_col = "y")
 df_hex
 
 # Plot hexagon
@@ -87,7 +87,7 @@ df_hex <- df \%>\%
   cluster_groups(cols = "y", group_cols = "g",
                  suffix = "") \%>\%
   dplyr::group_by(g) \%>\%
-  hexagonalize(y_col = "y", offset_x = 3)
+  hexagonalize(y_col = "y")
 
 # Plot hexagons
 df_hex \%>\%
@@ -114,7 +114,7 @@ df_hex \%>\%
 #
 
 # Start by hexagonalizing 'y'
-df_hex <- hexagonalize(df, y_col = "y", offset_x = 3)
+df_hex <- hexagonalize(df, y_col = "y")
 
 # Contract '.hexagon_x' and 'y' towards the centroid
 # To contract with multiple multipliers at once,
@@ -141,7 +141,8 @@ df_expanded \%>\%
 \seealso{
 Other forming functions: 
 \code{\link{circularize}()},
-\code{\link{square}()}
+\code{\link{square}()},
+\code{\link{triangularize}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

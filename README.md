@@ -67,11 +67,12 @@ origin.
 
 ### Formers
 
-| Function         | Description                                                    |
-| :--------------- | :------------------------------------------------------------- |
-| `hexagonalize()` | Create x-coordinates for y-coordinates so they form a hexagon. |
-| `square()`       | Create x-coordinates for y-coordinates so they form a square.  |
-| `circularize()`  | Create x-coordinates for y-coordinates so they form a circle.  |
+| Function          | Description                                                     |
+| :---------------- | :-------------------------------------------------------------- |
+| `hexagonalize()`  | Create x-coordinates for y-coordinates so they form a hexagon.  |
+| `square()`        | Create x-coordinates for y-coordinates so they form a square.   |
+| `circularize()`   | Create x-coordinates for y-coordinates so they form a circle.   |
+| `triangularize()` | Create x-coordinates for y-coordinates so they form a triangle. |
 
 ### Generators
 
@@ -116,9 +117,10 @@ origin.
           - [Rotate values](#rotate-values)
           - [Swirl values](#swirl-values)
       - [Forming examples](#forming-examples)
-          - [Hexagonalize values](#hexagonalize-values)
-          - [Square values](#square-values)
-          - [Circularize values](#circularize-values)
+          - [Hexagonalize points](#hexagonalize-points)
+          - [Square points](#square-points)
+          - [Circularize points](#circularize-points)
+          - [Triangularize points](#triangularize-points)
       - [Generators](#generators)
           - [Generate clusters](#generate-clusters)
 
@@ -526,7 +528,7 @@ swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original 
 
 ## Forming examples
 
-### Hexagonalize values
+### Hexagonalize points
 
 ``` r
 hexagonalize(runif(200))
@@ -548,7 +550,7 @@ hexagonalize(runif(200))
 
 <img src="man/figures/README-unnamed-chunk-36-1.png" width="699.2" style="display: block; margin: auto;" />
 
-### Square values
+### Square points
 
 ``` r
 square(runif(200))
@@ -570,7 +572,7 @@ square(runif(200))
 
 <img src="man/figures/README-unnamed-chunk-38-1.png" width="699.2" style="display: block; margin: auto;" />
 
-### Circularize values
+### Circularize points
 
 ``` r
 circularize(runif(200))
@@ -591,6 +593,28 @@ circularize(runif(200))
 ```
 
 <img src="man/figures/README-unnamed-chunk-40-1.png" width="699.2" style="display: block; margin: auto;" />
+
+### Triangularize points
+
+``` r
+triangularize(runif(200))
+#> # A tibble: 200 x 3
+#>    Value .triangle_x .edge
+#>    <dbl>       <dbl> <fct>
+#>  1 0.223       0.215 2    
+#>  2 0.536       0.463 1    
+#>  3 0.663       0.336 1    
+#>  4 0.848       0     3    
+#>  5 0.149       0.141 2    
+#>  6 0.670       0.329 1    
+#>  7 0.762       0.237 1    
+#>  8 0.999       0     1    
+#>  9 0.263       0.255 2    
+#> 10 0.885       0     3    
+#> # … with 190 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-42-1.png" width="699.2" style="display: block; margin: auto;" />
 
 ## Generators
 
@@ -614,4 +638,4 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-43-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-45-1.png" width="552" style="display: block; margin: auto;" />
