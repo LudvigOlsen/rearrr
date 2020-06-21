@@ -408,6 +408,7 @@ expand_each_mutator_method <- function(data,
   if (!is.null(mult_col_name)){
     if (length(multipliers) > 1) {
       data[[mult_col_name]] <- list_coordinates(multipliers, cols)
+      data <- paste_coordinates_column(data = data, col = mult_col_name)
     } else{
       data[[mult_col_name]] <- multipliers
     }

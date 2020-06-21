@@ -64,7 +64,14 @@ origin.
 | `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
 | `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
 | `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
-| `hexagonalize()`          | Create x-coordinates for y-coordinates so they form a hexagon.        | 1            |
+
+### Formers
+
+| Function         | Description                                                    |
+| :--------------- | :------------------------------------------------------------- |
+| `hexagonalize()` | Create x-coordinates for y-coordinates so they form a hexagon. |
+| `square()`       | Create x-coordinates for y-coordinates so they form a square.  |
+| `circularize()`  | Create x-coordinates for y-coordinates so they form a circle.  |
 
 ### Generators
 
@@ -90,6 +97,7 @@ origin.
       - [Overview](#overview)
           - [Rearrangers](#rearrangers)
           - [Mutators](#mutators)
+          - [Formers](#formers)
           - [Generators](#generators)
           - [Helpers](#helpers)
       - [Installation](#installation)
@@ -107,7 +115,10 @@ origin.
           - [Dim values](#dim-values)
           - [Rotate values](#rotate-values)
           - [Swirl values](#swirl-values)
+      - [Forming examples](#forming-examples)
           - [Hexagonalize values](#hexagonalize-values)
+          - [Square values](#square-values)
+          - [Circularize values](#circularize-values)
       - [Generators](#generators)
           - [Generate clusters](#generate-clusters)
 
@@ -299,6 +310,34 @@ expansion:
 
 <img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
 
+Expand differently in each axis:
+
+``` r
+# Expand x-axis and contract y-axis
+expand_distances_each(
+  data.frame("x" = runif(10),
+             "y" = runif(10)),
+  cols = c("x", "y"),
+  multipliers = c(7, 0.5),
+  origin_fn = centroid
+)
+#> # A tibble: 10 x 7
+#>         x      y x_expanded y_expanded .multipliers .multipliers_str .origin  
+#>     <dbl>  <dbl>      <dbl>      <dbl> <list>       <chr>            <list>   
+#>  1 0.622  0.284      1.37        0.309 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  2 0.675  0.610      1.74        0.472 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  3 0.802  0.524      2.63        0.428 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  4 0.260  0.0517    -1.17        0.192 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  5 0.760  0.0757     2.33        0.204 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  6 0.0199 0.414     -2.85        0.373 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  7 0.955  0.578      3.70        0.455 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  8 0.437  0.110      0.0675      0.222 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#>  9 0.0892 0.511     -2.36        0.422 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+#> 10 0.361  0.169     -0.466       0.251 <dbl [2]>    x=7,y=0.5        <dbl [2]>
+```
+
+<img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />
+
 ### Cluster groups
 
 ``` r
@@ -330,7 +369,7 @@ cluster_groups(df, cols = c("x", "y"), group_col = "g")
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-22-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Dim values
 
@@ -359,7 +398,7 @@ df_clustered %>%
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-24-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Rotate values
 
@@ -382,7 +421,7 @@ rotate_2d(random_sample, degrees = 60, origin_fn = centroid)
 #> 10    10 0.0618          8.17        4.20   <dbl [2]>       60
 ```
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-28-1.png" width="552" style="display: block; margin: auto;" />
 
 3-dimensional rotation:
 
@@ -421,7 +460,7 @@ rotate_3d(df, x_col = "x", y_col = "y", z_col = "z",
 #> # … with 1 more variable: .degrees_str <chr>
 ```
 
-<img src="man/figures/README-unnamed-chunk-28-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-30-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Swirl values
 
@@ -446,7 +485,7 @@ swirl_2d(rep(1, 50), radius = 95)
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-30-1.png" width="699.2" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-32-1.png" width="699.2" style="display: block; margin: auto;" />
 
 3-dimensional swirling:
 
@@ -483,7 +522,9 @@ swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original 
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-32-1.png" width="699.2" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-34-1.png" width="699.2" style="display: block; margin: auto;" />
+
+## Forming examples
 
 ### Hexagonalize values
 
@@ -492,20 +533,64 @@ hexagonalize(runif(200))
 #> # A tibble: 200 x 3
 #>    Value .hexagon_x .edge
 #>    <dbl>      <dbl> <fct>
-#>  1 0.253     0.863  2    
-#>  2 0.630     0      5    
-#>  3 0.266     0      5    
-#>  4 0.532     0      5    
-#>  5 0.468     0.863  2    
-#>  6 0.574     0.863  2    
-#>  7 0.668     0      5    
-#>  8 0.212     0.0690 4    
-#>  9 0.976     0.472  1    
-#> 10 0.809     0.103  6    
+#>  1 0.253     0.431  2    
+#>  2 0.630    -0.431  5    
+#>  3 0.266    -0.431  5    
+#>  4 0.532    -0.431  5    
+#>  5 0.468     0.431  2    
+#>  6 0.574     0.431  2    
+#>  7 0.668    -0.431  5    
+#>  8 0.212    -0.362  4    
+#>  9 0.976     0.0403 1    
+#> 10 0.809    -0.328  6    
 #> # … with 190 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-34-1.png" width="699.2" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-36-1.png" width="699.2" style="display: block; margin: auto;" />
+
+### Square values
+
+``` r
+square(runif(200))
+#> # A tibble: 200 x 3
+#>    Value .square_x .edge
+#>    <dbl>     <dbl> <fct>
+#>  1 0.223     0.215 2    
+#>  2 0.536     0.463 1    
+#>  3 0.663    -0.336 4    
+#>  4 0.848     0.151 1    
+#>  5 0.149    -0.141 3    
+#>  6 0.670    -0.329 4    
+#>  7 0.762    -0.237 4    
+#>  8 0.999     0     1    
+#>  9 0.263     0.255 2    
+#> 10 0.885    -0.113 4    
+#> # … with 190 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-38-1.png" width="699.2" style="display: block; margin: auto;" />
+
+### Circularize values
+
+``` r
+circularize(runif(200))
+#> # A tibble: 200 x 3
+#>    Value .circle_x .degrees
+#>    <dbl>     <dbl>    <dbl>
+#>  1 0.888     0.315    141. 
+#>  2 0.686    -0.463    292. 
+#>  3 0.630    -0.482    285. 
+#>  4 0.751     0.432    120. 
+#>  5 0.918     0.274    147. 
+#>  6 0.360    -0.479    254. 
+#>  7 0.808    -0.393    308. 
+#>  8 0.213     0.407     54.8
+#>  9 0.140     0.344     43.6
+#> 10 0.299     0.456     66.0
+#> # … with 190 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-40-1.png" width="699.2" style="display: block; margin: auto;" />
 
 ## Generators
 
@@ -529,4 +614,4 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-37-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-43-1.png" width="552" style="display: block; margin: auto;" />

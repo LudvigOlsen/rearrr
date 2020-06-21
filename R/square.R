@@ -1,33 +1,25 @@
 
 
-#   __________________ #< e5a2cbb7fe60438112c2447bf1135059 ># __________________
-#   Hexagonalize                                                            ####
+#   __________________ #< 16dfb8d7e0b0483ba9b962677c43324b ># __________________
+#   Square                                                                  ####
 
 
-#' @title Create x-coordinates so the points form a hexagon
+#' @title Create x-coordinates so the points form a square
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  Create the x-coordinates for a \code{vector} of y-coordinates such that
-#'  they form a hexagon.
+#'  they form a rotated square.
 #'
-#'  This will likely look most like a hexagon when the y-coordinates are somewhat equally distributed,
+#'  This will likely look most like a square when the y-coordinates are somewhat equally distributed,
 #'  e.g. a uniform distribution.
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param y_col Name of column in \code{`data`} with y-coordinates to create x-coordinates for.
-#' @param .min Minimum y-coordinate. If \code{NULL}, it is inferred by the given y-coordinates.
-#' @param .max Maximum y-coordinate. If \code{NULL}, it is inferred by the given y-coordinates.
-#' @param offset_x Value to offset the x-coordinates by.
-#' @param x_col_name Name of new column with the x-coordinates.
-#' @param edge_col_name Name of new column with the edge identifiers. If \code{NULL}, no column is added.
-#'
-#'  Numbering is clockwise and starts at the upper-right edge.
+#' @inheritParams hexagonalize
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the added x-coordinates and an identifier
 #'  for the edge the data point is a part of.
 #' @family forming functions
-#' @inheritParams multi_mutator
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -45,32 +37,32 @@
 #'   "g" = factor(rep(1:5, each = 40))
 #' )
 #'
-#' # Hexagonalize 'y'
-#' df_hex <- hexagonalize(df, y_col = "y", offset_x = 3)
-#' df_hex
+#' # Square 'y'
+#' df_sq <- square(df, y_col = "y", offset_x = 3)
+#' df_sq
 #'
-#' # Plot hexagon
-#' df_hex %>%
-#'   ggplot(aes(x = .hexagon_x, y = y, color = .edge)) +
+#' # Plot square
+#' df_sq %>%
+#'   ggplot(aes(x = .square_x, y = y, color = .edge)) +
 #'   geom_point() +
 #'   theme_minimal()
 #'
 #' #
-#' # Grouped hexagonalization
+#' # Grouped squaring
 #' #
 #'
-#' # Hexagonalize 'y' for each group
+#' # Square 'y' for each group
 #' # First cluster the groups a bit to move the
-#' # hexagons away from each other
-#' df_hex <- df %>%
+#' # squares away from each other
+#' df_sq <- df %>%
 #'   cluster_groups(cols = "y", group_cols = "g",
 #'                  suffix = "") %>%
 #'   dplyr::group_by(g) %>%
-#'   hexagonalize(y_col = "y", offset_x = 3)
+#'   square(y_col = "y", offset_x = 3)
 #'
-#' # Plot hexagons
-#' df_hex %>%
-#'   ggplot(aes(x = .hexagon_x, y = y, color = g)) +
+#' # Plot squares
+#' df_sq %>%
+#'   ggplot(aes(x = .square_x, y = y, color = g)) +
 #'   geom_point() +
 #'   theme_minimal()
 #'
@@ -79,51 +71,52 @@
 #' #
 #'
 #' # Specify minimum value manually
-#' df_hex <- hexagonalize(df, y_col = "y", .min = -2)
-#' df_hex
+#' df_sq <- square(df, y_col = "y", .min = -2)
+#' df_sq
 #'
-#' # Plot hexagon
-#' df_hex %>%
-#'   ggplot(aes(x = .hexagon_x, y = y, color = .edge)) +
+#' # Plot square
+#' df_sq %>%
+#'   ggplot(aes(x = .square_x, y = y, color = .edge)) +
 #'   geom_point() +
 #'   theme_minimal()
 #'
 #' #
-#' # Multiple hexagons by contraction
+#' # Multiple squares by contraction
 #' #
 #'
-#' # Start by hexagonalizing 'y'
-#' df_hex <- hexagonalize(df, y_col = "y", offset_x = 3)
+#' # Start by squaring 'y'
+#' df_sq <- square(df, y_col = "y", offset_x = 3)
 #'
-#' # Contract '.hexagon_x' and 'y' towards the centroid
+#' # Contract '.square_x' and 'y' towards the centroid
 #' # To contract with multiple multipliers at once,
 #' # we wrap the call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
 #'   .x = c(1, 0.75, 0.5, 0.25, 0.125),
 #'   .f = function(mult){
 #'     expand_distances(
-#'       data = df_hex,
-#'       cols = c(".hexagon_x", "y"),
+#'       data = df_sq,
+#'       cols = c(".square_x", "y"),
 #'       multiplier = mult,
 #'       origin_fn = centroid)
 #'   })
 #' df_expanded
 #'
 #' df_expanded %>%
-#'   ggplot(aes(x = .hexagon_x_expanded, y = y_expanded,
+#'   ggplot(aes(x = .square_x_expanded, y = y_expanded,
 #'              color = .edge, alpha = .multiplier)) +
 #'   geom_point() +
 #'   theme_minimal()
 #'
 #' }
-hexagonalize <- function(data,
-                         y_col = NULL,
-                         .min = NULL,
-                         .max = NULL,
-                         offset_x = 0,
-                         keep_original = TRUE,
-                         x_col_name = ".hexagon_x",
-                         edge_col_name = ".edge") {
+square <- function(data,
+                   y_col = NULL,
+                   .min = NULL,
+                   .max = NULL,
+                   offset_x = 0,
+                   keep_original = TRUE,
+                   x_col_name = ".square_x",
+                   edge_col_name = ".edge") {
+
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x_col_name, add = assert_collection)
@@ -137,7 +130,7 @@ hexagonalize <- function(data,
   # Mutate with each multiplier
   multi_mutator(
     data = data,
-    mutate_fn = hexagonalize_mutator_method,
+    mutate_fn = square_mutator_method,
     check_fn = NULL,
     cols = y_col,
     force_df = TRUE,
@@ -151,9 +144,16 @@ hexagonalize <- function(data,
 
 }
 
-
-hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
-                                        x_col_name, edge_col_name, suffix = NULL){
+# Note: It's a rotated square (so diamond'ish)
+# so height and width are the diagonals of the square
+square_mutator_method <- function(data,
+                                  cols,
+                                  .min,
+                                  .max,
+                                  offset_x,
+                                  x_col_name,
+                                  edge_col_name,
+                                  suffix = NULL) {
 
   col <- cols
 
@@ -184,25 +184,21 @@ hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
     .max <- max(data[[col]])
   }
 
-  # Properties of hexagon
+  # Properties of square
   height <- .max - .min
-  side_length <- height/2
   # Pythagoras comes in handy!
-  width <- sqrt(side_length ^ 2 - (side_length / 2) ^ 2) * 2
+  side_length <- sqrt(2 * (height / 2) ^ 2)
+  width <- height
 
   # Section cutoffs
-  middle_upper <- (.max - (side_length / 2))
-  middle_lower <- (.min + (side_length / 2))
+  midline <- (.max - (height / 2))
 
-  # Get data points per section (top, middle, bottom)
+  # Get data points per section (top, bottom)
   top <-
-    data[data[[col]] >= middle_upper, ,
+    data[data[[col]] >= midline, ,
          drop = FALSE]
   bottom <-
-    data[data[[col]] <= middle_lower, ,
-         drop = FALSE]
-  middle <-
-    data[is_between_(x = data[[col]], a = middle_lower, b = middle_upper), ,
+    data[data[[col]] < midline, ,
          drop = FALSE]
 
   ## Create x-coordinate
@@ -213,12 +209,9 @@ hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
       top[[col]],
       new_min = width / 2,
       new_max = 0,
-      old_min = middle_upper,
+      old_min = midline,
       old_max = .max
     )
-
-  # Middle section
-  middle[[x_col_name]] <- width/2
 
   # Bottom section
   bottom[[x_col_name]] <-
@@ -227,18 +220,16 @@ hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
       new_min = 0,
       new_max = width / 2,
       old_min = .min,
-      old_max = middle_lower
+      old_max = midline
     )
 
-
   # Edge numbers
-  top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 6, 1)
-  middle[[edge_col_name]] <- ifelse(middle[[tmp_side_col]] == 1, 5, 2)
-  bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 4, 3)
+  top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 4, 1)
+  bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 3, 2)
 
   # Combine datasets
   new_data <- dplyr::bind_rows(
-    top, middle, bottom
+    top, bottom
   )
 
   # Push to sides

@@ -218,7 +218,6 @@ Other mutate functions:
 \code{\link{expand_distances_each}()},
 \code{\link{expand_distances}()},
 \code{\link{flip_values}()},
-\code{\link{hexagonalize}()},
 \code{\link{rotate_2d}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}

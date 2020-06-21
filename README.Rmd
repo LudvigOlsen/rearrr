@@ -75,7 +75,14 @@ When performing an operation relative to a point in an n-dimensional vector spac
 |`rotate_3d()`          |Rotate values around an origin in 3 dimensions.                        |3           |
 |`swirl_2d()`           |Swirl values around an origin in 2 dimensions.                         |2           |
 |`swirl_3d()`           |Swirl values around an origin in 3 dimensions.                         |3           |
-|`hexagonalize()`       |Create x-coordinates for y-coordinates so they form a hexagon.         |1           |
+
+### Formers
+
+| Function          | Description                                                           |
+|:------------------|:----------------------------------------------------------------------|
+|`hexagonalize()`   |Create x-coordinates for y-coordinates so they form a hexagon.         |
+|`square()`         |Create x-coordinates for y-coordinates so they form a square.          |
+|`circularize()`    |Create x-coordinates for y-coordinates so they form a circle.          |
 
 ### Generators
 
@@ -349,15 +356,59 @@ expand_df <- purrr::map_dfr(
 # Plot rotated values
 expand_df %>% 
   ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
-  geom_hline(yintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_vline(xintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_hline(yintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+  geom_vline(xintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
   geom_path(alpha = gg_line_alpha) + 
   geom_point() + 
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_colour_brewer(palette = "Dark2") + 
   labs(x = "x", y="y", color="Exponent")
 
+xpectr::set_test_seed(36) # for next section
 ```
+
+Expand differently in each axis:
+
+```{r}
+# Expand x-axis and contract y-axis
+expand_distances_each(
+  data.frame("x" = runif(10),
+             "y" = runif(10)),
+  cols = c("x", "y"),
+  multipliers = c(7, 0.5),
+  origin_fn = centroid
+)
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
+rand_df <- data.frame("x" = random_x,
+                      "y" = random_y)
+expand_df <- purrr::map2_dfr(
+  .x = c(7, 1),
+  .y = c(0.5, 1),
+  .f = function(m1, m2) {
+    expand_distances_each(
+      rand_df,
+      cols = c("x", "y"),
+      multipliers = c(m1, m2),
+      origin_fn = centroid
+    )
+  }
+)
+
+# Plot rotated values
+expand_df %>% 
+  ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.multipliers_str))) +
+  geom_hline(yintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype = "dashed") +
+  geom_vline(xintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype = "dashed") +
+  geom_path(alpha = gg_line_alpha) + 
+  geom_point() + 
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = "x", y = "y", color = "Multiplier")
+
+```
+
 
 ### Cluster groups
 
@@ -392,6 +443,7 @@ df_clustered <- df_clustered %>%
   dplyr::select(x_clustered, y_clustered, g)
 ```
 
+
 ### Dim values
 
 ```{r}
@@ -416,7 +468,6 @@ ggplot(df_dimmed, aes(x = x_clustered, y = y_clustered, alpha = o_dimmed, color 
   scale_colour_brewer(palette = "Dark2") + 
   labs(x = "x", y = "y", color = "g", alpha = "o_dimmed")
 ```
-
 
 
 ### Rotate values
@@ -485,6 +536,7 @@ rotate_df %>%
   scale_colour_brewer(palette = "Dark2") + 
   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 ```
+
 
 ### Swirl values
 
@@ -703,13 +755,15 @@ combined +
                   tag_levels = 'A')
 ```
 
+## Forming examples
+
 ### Hexagonalize values
 
 ```{r}
 hexagonalize(runif(200))
 ```
 
-```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=4.05}
+```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=4.25}
 xpectr::set_test_seed(10)
 
 # Create a data frame
@@ -717,7 +771,7 @@ df <- data.frame(
   "y" = runif(200)
 )
 
-df_hex <- hexagonalize(df, y_col = "y", offset_x = 3)
+df_hex <- hexagonalize(df, y_col = "y")
 
 gghex_1 <- df_hex %>%
   ggplot(aes(x = .hexagon_x, y = y, color = .edge)) +
@@ -737,7 +791,8 @@ df_hex_expanded <- purrr::map_dfr(
   })
 
 gghex_2 <- df_hex_expanded %>%
-  ggplot(aes(x = .hexagon_x_expanded, y = y_expanded, color = .edge, alpha = 0.8*.multiplier^2)) +
+  ggplot(aes(x = .hexagon_x_expanded, y = y_expanded, 
+             color = .edge, alpha = 0.8*.multiplier^2)) +
   geom_point(aes(size = 0.8*.multiplier^2)) +
   theme_minimal(base_line_size = gg_base_line_size) + 
   scale_colour_brewer(palette = "Dark2") + 
@@ -751,6 +806,105 @@ combined +
 
 ```
 
+### Square values
+
+```{r}
+square(runif(200))
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=4.25}
+
+df_sq <- square(df, y_col = "y")
+
+ggsq_1 <- df_sq %>%
+  ggplot(aes(x = .square_x, y = y, color = .edge)) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = ".square_x", y = "y")
+
+df_sq_expanded <- purrr::map_dfr(
+  .x = c(1, 0.75, 0.5, 0.25, 0.125),
+  .f = function(mult){
+    expand_distances(
+      data = df_sq,
+      cols = c(".square_x", "y"),
+      multiplier = mult,
+      origin_fn = centroid)
+  }) %>% 
+  swirl_2d(
+    radius = 0.3,
+    x_col = ".square_x_expanded",
+    y_col = "y_expanded",
+    origin_fn = centroid,
+    suffix = "",
+    origin_col_name = NULL
+  )
+
+ggsq_2 <- df_sq_expanded %>%
+  ggplot(aes(x = .square_x_expanded, y = y_expanded, 
+             color = .edge, alpha = 0.8*.multiplier^2)) +
+  geom_point(aes(size = 0.8*.multiplier^2)) +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = ".square_x", y = "y")
+
+combined <- (ggsq_1 + ggsq_2) & theme(legend.position = "none")
+combined + 
+  plot_annotation(title = "Squares",
+                  subtitle = "A: squared y-values, B: contracted and swirled squares",
+                  tag_levels = 'A')
+
+```
+
+### Circularize values
+
+```{r}
+circularize(runif(200))
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=4.25}
+xpectr::set_test_seed(10)
+
+# Create a data frame
+df <- data.frame(
+  "y" = runif(200)
+)
+
+df_circ <- circularize(df, y_col = "y")
+
+ggcirc_1 <- df_circ %>%
+  ggplot(aes(x = .circle_x, y = y, color = .degrees)) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_distiller(palette = "Dark2") +
+  labs(x = ".circle_x", y = "y")
+
+df_circ_expanded <- purrr::map_dfr(
+  .x = 1:10/10,
+  .f = function(mult){
+    expand_distances(
+      data = df_circ,
+      cols = c(".circle_x", "y"),
+      multiplier = mult,
+      origin_fn = centroid)
+  })
+
+ggcirc_2 <- df_circ_expanded %>%
+  ggplot(aes(x = .circle_x_expanded, y = y_expanded, 
+             color = .degrees, alpha = 0.8*.multiplier^2)) +
+  geom_point(aes(size = 0.8*.multiplier^2)) +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_distiller(palette = "Dark2") + 
+  labs(x = ".circle_x", y = "y")
+
+combined <- (ggcirc_1 + ggcirc_2) & theme(legend.position = "none")
+combined + 
+  plot_annotation(title = "Circles",
+                  subtitle = "A: circularize y-values, B: contracted circles",
+                  tag_levels = 'A')
+
+```
 
 
 ## Generators
