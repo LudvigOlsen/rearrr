@@ -75,6 +75,7 @@ When performing an operation relative to a point in an n-dimensional vector spac
 |`rotate_3d()`          |Rotate values around an origin in 3 dimensions.                        |3           |
 |`swirl_2d()`           |Swirl values around an origin in 2 dimensions.                         |2           |
 |`swirl_3d()`           |Swirl values around an origin in 3 dimensions.                         |3           |
+|`hexagonalize()`       |Create x-coordinates for y-coordinates so they form a hexagon.         |1           |
 
 ### Generators
 
@@ -701,6 +702,55 @@ combined +
                   caption = "Distances in C are scaled by d^0.81",
                   tag_levels = 'A')
 ```
+
+### Hexagonalize values
+
+```{r}
+hexagonalize(runif(200))
+```
+
+```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=4.05}
+xpectr::set_test_seed(10)
+
+# Create a data frame
+df <- data.frame(
+  "y" = runif(200)
+)
+
+df_hex <- hexagonalize(df, y_col = "y", offset_x = 3)
+
+gghex_1 <- df_hex %>%
+  ggplot(aes(x = .hexagon_x, y = y, color = .edge)) +
+  geom_point() +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = ".hexagon_x", y = "y")
+
+df_hex_expanded <- purrr::map_dfr(
+  .x = c(1, 0.75, 0.5, 0.25, 0.125),
+  .f = function(mult){
+    expand_distances(
+      data = df_hex,
+      cols = c(".hexagon_x", "y"),
+      multiplier = mult,
+      origin_fn = centroid)
+  })
+
+gghex_2 <- df_hex_expanded %>%
+  ggplot(aes(x = .hexagon_x_expanded, y = y_expanded, color = .edge, alpha = 0.8*.multiplier^2)) +
+  geom_point(aes(size = 0.8*.multiplier^2)) +
+  theme_minimal(base_line_size = gg_base_line_size) + 
+  scale_colour_brewer(palette = "Dark2") + 
+  labs(x = ".hexagon_x", y = "y")
+
+combined <- (gghex_1 + gghex_2) & theme(legend.position = "none")
+combined + 
+  plot_annotation(title = "Hexagons",
+                  subtitle = "A: hexagonalized y-values, B: contracted hexagons",
+                  tag_levels = 'A')
+
+```
+
 
 
 ## Generators

@@ -86,7 +86,7 @@ mutator <- function(data,
 ##  Multicolumn mutator                                                     ####
 
 
-#' Wrapper for running multicolumn mutator methods
+#' Wrapper for running multi-column mutator methods
 #'
 #' @param cols Columns to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.
 #' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`cols`}.

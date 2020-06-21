@@ -64,6 +64,7 @@ origin.
 | `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
 | `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
 | `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
+| `hexagonalize()`          | Create x-coordinates for y-coordinates so they form a hexagon.        | 1            |
 
 ### Generators
 
@@ -106,6 +107,7 @@ origin.
           - [Dim values](#dim-values)
           - [Rotate values](#rotate-values)
           - [Swirl values](#swirl-values)
+          - [Hexagonalize values](#hexagonalize-values)
       - [Generators](#generators)
           - [Generate clusters](#generate-clusters)
 
@@ -483,6 +485,28 @@ swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original 
 
 <img src="man/figures/README-unnamed-chunk-32-1.png" width="699.2" style="display: block; margin: auto;" />
 
+### Hexagonalize values
+
+``` r
+hexagonalize(runif(200))
+#> # A tibble: 200 x 3
+#>    Value .hexagon_x .edge
+#>    <dbl>      <dbl> <fct>
+#>  1 0.253     0.863  2    
+#>  2 0.630     0      5    
+#>  3 0.266     0      5    
+#>  4 0.532     0      5    
+#>  5 0.468     0.863  2    
+#>  6 0.574     0.863  2    
+#>  7 0.668     0      5    
+#>  8 0.212     0.0690 4    
+#>  9 0.976     0.472  1    
+#> 10 0.809     0.103  6    
+#> # … with 190 more rows
+```
+
+<img src="man/figures/README-unnamed-chunk-34-1.png" width="699.2" style="display: block; margin: auto;" />
+
 ## Generators
 
 ### Generate clusters
@@ -505,4 +529,4 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-35-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-37-1.png" width="552" style="display: block; margin: auto;" />

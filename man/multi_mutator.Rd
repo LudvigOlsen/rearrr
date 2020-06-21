@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutators.R
 \name{multi_mutator}
 \alias{multi_mutator}
-\title{Wrapper for running multicolumn mutator methods}
+\title{Wrapper for running multi-column mutator methods}
 \usage{
 multi_mutator(
   data,
@@ -49,6 +49,6 @@ Some columns may have been overwritten, in which case only the newest versions a
 The mutated \code{data.frame} (\code{tibble}).
 }
 \description{
-Wrapper for running multicolumn mutator methods
+Wrapper for running multi-column mutator methods
 }
 \keyword{internal}
