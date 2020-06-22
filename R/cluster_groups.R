@@ -36,7 +36,6 @@
 #'  }
 #' @family mutate functions
 #' @family clustering functions
-#' @inheritParams multi_mutator
 #' @examples
 #' \donttest{
 #' # Attach packages
