@@ -85,6 +85,7 @@ origin.
 | Function               | Description                                                          |
 | :--------------------- | :------------------------------------------------------------------- |
 | `distance()`           | Calculates distance to an origin.                                    |
+| `angle()`              | Calculates angle between points and an origin.                       |
 | `create_dimming_fn()`  | Creates function for controlling dimming values with `dim_values()`. |
 | `create_origin_fn()`   | Creates function for finding origin coordinates (like `centroid()`). |
 | `centroid()`           | Calculates the mean of each supplied vector.                         |
@@ -576,19 +577,19 @@ square(runif(200))
 
 ``` r
 circularize(runif(200))
-#> # A tibble: 200 x 3
-#>    Value .circle_x .degrees
-#>    <dbl>     <dbl>    <dbl>
-#>  1 0.888     0.315    141. 
-#>  2 0.686    -0.463    292. 
-#>  3 0.630    -0.482    285. 
-#>  4 0.751     0.432    120. 
-#>  5 0.918     0.274    147. 
-#>  6 0.360    -0.479    254. 
-#>  7 0.808    -0.393    308. 
-#>  8 0.213     0.407     54.8
-#>  9 0.140     0.344     43.6
-#> 10 0.299     0.456     66.0
+#> # A tibble: 200 x 4
+#>    Value .circle_x .degrees .origin  
+#>    <dbl>     <dbl>    <dbl> <list>   
+#>  1 0.888     0.315     50.9 <dbl [2]>
+#>  2 0.686    -0.463    158.  <dbl [2]>
+#>  3 0.630    -0.482    165.  <dbl [2]>
+#>  4 0.751     0.432     30.0 <dbl [2]>
+#>  5 0.918     0.274     56.7 <dbl [2]>
+#>  6 0.360    -0.479    196.  <dbl [2]>
+#>  7 0.808    -0.393    142.  <dbl [2]>
+#>  8 0.213     0.407    325.  <dbl [2]>
+#>  9 0.140     0.344    314.  <dbl [2]>
+#> 10 0.299     0.456    336.  <dbl [2]>
 #> # … with 190 more rows
 ```
 

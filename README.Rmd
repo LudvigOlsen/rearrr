@@ -96,6 +96,7 @@ When performing an operation relative to a point in an n-dimensional vector spac
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
 |`distance()`           |Calculates distance to an origin.                                      |
+|`angle()`              |Calculates angle between points and an origin.                         |
 |`create_dimming_fn()`  |Creates function for controlling dimming values with `dim_values()`.   |
 |`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
 |`centroid()`           |Calculates the mean of each supplied vector.                           |
