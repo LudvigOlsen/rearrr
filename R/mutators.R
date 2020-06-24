@@ -148,10 +148,13 @@ multi_mutator <- function(
     check_fn(data = data, cols = cols, ...)
   # End of argument checks ####
 
+  # Store grp_keys
+  grp_keys <- dplyr::group_keys(data)
+
   # Find columns to remove post-run if keep_original is FALSE
   exclude_cols <- NULL
   if (!isTRUE(keep_original)){
-    group_columns <- colnames(dplyr::group_keys(data))
+    group_columns <- colnames(grp_keys)
     non_group_columns <- setdiff(colnames(data), group_columns)
     exclude_cols <- non_group_columns
     if (suffix == ""){
@@ -178,7 +181,8 @@ multi_mutator <- function(
       cols = cols,
       use_index = FALSE,
       to_vector = was_vector && !force_df,
-      exclude_cols = exclude_cols
+      exclude_cols = exclude_cols,
+      group_keys = grp_keys
     )
 
   data

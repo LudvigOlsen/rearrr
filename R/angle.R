@@ -56,6 +56,7 @@
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the additional columns (degrees and origin coordinates).
 #' @inheritParams multi_mutator
+#' @family measuring functions
 #' @examples
 #' \donttest{
 #' # Attach packages

@@ -100,6 +100,12 @@ distance(
 
 }
 }
+\seealso{
+Other measuring functions: 
+\code{\link{angle}()},
+\code{\link{vector_length}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{measuring functions}

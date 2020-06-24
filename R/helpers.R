@@ -339,25 +339,6 @@ add_dimensions <- function(data,
 ##  .................. #< cb9942d54f8fa35406de031d066531dc ># ..................
 ##  Conversions                                                             ####
 
-degrees_to_radians <- function(degrees){
-  checkmate::assert_numeric(degrees, any.missing = FALSE)
-  degrees * (pi / 180)
-}
-
-radians_to_degrees <- function(radians){
-  checkmate::assert_numeric(radians, any.missing = FALSE)
-  radians / (pi / 180)
-}
-
-# Normalize vector to Unit length
-to_unit_vector <- function(x) {
-  checkmate::assert_numeric(x, any.missing = FALSE)
-  if (sum(x ^ 2) == 0){
-    return(x)
-  }
-  x / sqrt(sum(x ^ 2))
-}
-
 calculate_swirl_degrees <- function(distances, radius){
   checkmate::assert_numeric(distances, any.missing = FALSE)
   checkmate::assert_number(radius)
@@ -365,20 +346,6 @@ calculate_swirl_degrees <- function(distances, radius){
     return(distances*0)
   }
   (distances / (2 * radius) * 360) %% 360
-}
-
-# Normalize dimensions
-# One vector per dimension
-normalize_dimensions_to_unit_lengths <- function(dim_vectors){
-  checkmate::assert_list(dim_vectors, any.missing = FALSE, types = "numeric")
-  if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))){
-    stop("All dim_vectors must have the same length.")
-  }
-  purrr::transpose(dim_vectors) %>%
-    purrr::simplify_all() %>%
-    purrr::map(to_unit_vector) %>%
-    purrr::transpose() %>%
-    purrr::simplify_all()
 }
 
 

@@ -332,7 +332,7 @@ expand_mutator_method <- function(data,
 
   # Unit length points
   norm_dim_vectors <-
-    normalize_dimensions_to_unit_lengths(dim_vectors)
+    to_unit_lengths_rowwise(dim_vectors)
 
   # Apply expansion
   if (isTRUE(exponentiate)) {

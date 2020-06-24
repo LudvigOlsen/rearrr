@@ -35,8 +35,11 @@ data points.
 When performing an operation relative to a point in an n-dimensional
 vector space, we refer to the point as the **origin**. If we, for
 instance, wish to rotate our data points around the point at `x = 3` and
-`y = 7`, those are the coordinates of our
-origin.
+`y = 7`, those are the coordinates of our origin.
+
+Note: `rearrr` is still quite new and not all functions are properly
+tested
+yet.
 
 ### Rearrangers
 
@@ -64,6 +67,7 @@ origin.
 | `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
 | `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
 | `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
+| `transfer_centroids()`    | Transfer centroids from one `data.frame` to another.                  | n            |
 
 ### Formers
 
@@ -80,18 +84,35 @@ origin.
 | :-------------------- | :------------------------------- |
 | `generate_clusters()` | Generate n-dimensional clusters. |
 
-### Helpers
+### Origin functions
 
-| Function               | Description                                                          |
-| :--------------------- | :------------------------------------------------------------------- |
-| `distance()`           | Calculates distance to an origin.                                    |
-| `angle()`              | Calculates angle between points and an origin.                       |
-| `create_dimming_fn()`  | Creates function for controlling dimming values with `dim_values()`. |
-| `create_origin_fn()`   | Creates function for finding origin coordinates (like `centroid()`). |
-| `centroid()`           | Calculates the mean of each supplied vector.                         |
-| `most_centered()`      | Finds coordinates of data point closest to the centroid.             |
-| `transfer_centroids()` | Transfer centroids from one `data.frame` to another.                 |
-| `min_max_scale()`      | Scale values to a range.                                             |
+| Function             | Description                                                          |
+| :------------------- | :------------------------------------------------------------------- |
+| `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
+| `centroid()`         | Calculates the mean of each supplied vector.                         |
+| `most_centered()`    | Finds coordinates of data point closest to the centroid.             |
+
+### Converters
+
+| Function               | Description                  |
+| :--------------------- | :--------------------------- |
+| `radians_to_degrees()` | Converts radians to degrees. |
+| `degrees_to_radians()` | Converts degrees to radians. |
+
+### Scalers
+
+| Function           | Description                                               |
+| :----------------- | :-------------------------------------------------------- |
+| `min_max_scale()`  | Scale values to a range.                                  |
+| `to_unit_length()` | Scale vectors to unit length *row-wise* or *column-wise*. |
+
+### Measuring functions
+
+| Function          | Description                                                     |
+| :---------------- | :-------------------------------------------------------------- |
+| `distance()`      | Calculates distance to an origin.                               |
+| `angle()`         | Calculates angle between points and an origin.                  |
+| `vector_length()` | Calculates vector length/magnitude *row-wise* or *column-wise*. |
 
 ## Table of Contents
 
@@ -101,7 +122,10 @@ origin.
           - [Mutators](#mutators)
           - [Formers](#formers)
           - [Generators](#generators)
-          - [Helpers](#helpers)
+          - [Origin functions](#origin-functions)
+          - [Converters](#converters)
+          - [Scalers](#scalers)
+          - [Measuring functions](#measuring-functions)
       - [Installation](#installation)
       - [Attach packages](#attach-packages)
       - [Rearranger examples](#rearranger-examples)

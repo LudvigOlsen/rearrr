@@ -57,6 +57,11 @@ min_max_scale(x, new_min = -1, new_max = 0, old_max = 3)
 
 }
 }
+\seealso{
+Other scaling functions: 
+\code{\link{to_unit_length}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{scaling functions}

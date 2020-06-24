@@ -98,7 +98,7 @@ prepare_input_data <- function(data, cols, min_dims=1, new_name=NULL){
        "was_vector" = was_vector)
 }
 
-prepare_output_data <- function(data, cols, use_index, to_vector, exclude_cols=NULL){
+prepare_output_data <- function(data, cols, use_index, to_vector, exclude_cols=NULL, group_keys = NULL){
 
   # Remove tmp column if 'cols' was 'NULL'
   if (isTRUE(use_index)){
@@ -113,6 +113,13 @@ prepare_output_data <- function(data, cols, use_index, to_vector, exclude_cols=N
 
   if (!is.null(exclude_cols) && length(exclude_cols) > 0){
     data <- data[, names(data) %ni% exclude_cols, drop = FALSE]
+  }
+
+  # When 'data' contains group summaries, we add the group keys
+  if (!is.null(group_keys) &&
+      length(intersect(colnames(group_keys), colnames(data))) == 0 &&
+      nrow(data) == nrow(group_keys)){
+    data <- dplyr::bind_cols(group_keys, data)
   }
 
   # Reset index

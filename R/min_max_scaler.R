@@ -24,6 +24,7 @@
 #'  \strong{N.B.} Ignored when both \code{`old_min`} and \code{`old_max`} are \code{NULL}.
 #' @export
 #' @return Scaled version of \code{`x`}.
+#' @family scaling functions
 #' @examples
 #' \donttest{
 #' # Attach packages
