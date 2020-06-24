@@ -17,7 +17,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param degrees_col_name Name of new column with the angles in degrees. If \code{NULL}, no column is added.
 #'
-#'  Angling is clockwise around \code{(0, 0)} and starts at \code{(0, .max)}.
+#'  Angling is counterclockwise around \code{(0, 0)} and starts at \code{(0, .max)}.
 #' @inheritParams hexagonalize
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the added x-coordinates and the angle in degrees.
@@ -196,9 +196,11 @@ circularize_mutator_method <- function(data, cols, .min, .max, offset_x,
                                data[[x_col_name]])
 
   if (!is.null(degrees_col_name)){
-    data[[degrees_col_name]] <- radians_to_degrees(angle) + 90
-    data[[degrees_col_name]] <- ifelse(data[[tmp_side_col]] == 1,
-                                       data[[degrees_col_name]]+180,
+    data[[degrees_col_name]] <- radians_to_degrees(angle) - 90
+    # Make it counterclockwise
+    data[[degrees_col_name]] <- -1 * data[[degrees_col_name]]
+    data[[degrees_col_name]] <- ifelse(data[[tmp_side_col]] == 2,
+                                       360 - data[[degrees_col_name]],
                                        data[[degrees_col_name]])
   }
 
