@@ -17,7 +17,8 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param degrees_col_name Name of new column with the angles in degrees. If \code{NULL}, no column is added.
 #'
-#'  Angling is counterclockwise around \code{(0, 0)} and starts at \code{(0, .max)}.
+#'  Angling is counterclockwise around \code{(0, 0)} and starts at \code{(max(x), 0)}.
+#' @param origin_col_name Name of new column with the origin coordinates (center of circle). If \code{NULL}, no column is added.
 #' @inheritParams hexagonalize
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the added x-coordinates and the angle in degrees.
@@ -118,12 +119,14 @@ circularize <- function(data,
                         offset_x = 0,
                         keep_original = TRUE,
                         x_col_name = ".circle_x",
-                        degrees_col_name = ".degrees") {
+                        degrees_col_name = ".degrees",
+                        origin_col_name = ".origin") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x_col_name, add = assert_collection)
   checkmate::assert_string(degrees_col_name, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.min, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
@@ -142,14 +145,15 @@ circularize <- function(data,
     .max = .max,
     offset_x = offset_x,
     x_col_name = x_col_name,
-    degrees_col_name = degrees_col_name
+    degrees_col_name = degrees_col_name,
+    origin_col_name = origin_col_name
   )
 
 }
 
 
 circularize_mutator_method <- function(data, cols, .min, .max, offset_x,
-                                       x_col_name, degrees_col_name, suffix = NULL){
+                                       x_col_name, degrees_col_name, origin_col_name, suffix = NULL){
 
   col <- cols
 
@@ -199,11 +203,17 @@ circularize_mutator_method <- function(data, cols, .min, .max, offset_x,
     data[[degrees_col_name]] <- radians_to_degrees(angle) - 90
     # Make it counterclockwise
     data[[degrees_col_name]] <- -1 * data[[degrees_col_name]]
+    # Separate sides
     data[[degrees_col_name]] <- ifelse(data[[tmp_side_col]] == 2,
                                        360 - data[[degrees_col_name]],
                                        data[[degrees_col_name]])
+    # Shift values such that (max(x), 0) is 0/360 degrees
+    data[[degrees_col_name]] <- roll_values(data[[degrees_col_name]], change = 90, .min = 0, .max = 360)
   }
 
+  if (!is.null(origin_col_name)){
+    data[[origin_col_name]] <- list_coordinates(c(0, origin), c(x_col_name, col))
+  }
 
   # Clean up
   data <- data[order(data[[tmp_index_col]]), , drop = FALSE]

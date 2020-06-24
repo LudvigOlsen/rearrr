@@ -12,7 +12,8 @@ circularize(
   offset_x = 0,
   keep_original = TRUE,
   x_col_name = ".circle_x",
-  degrees_col_name = ".degrees"
+  degrees_col_name = ".degrees",
+  origin_col_name = ".origin"
 )
 }
 \arguments{
@@ -34,7 +35,9 @@ Some columns may have been overwritten, in which case only the newest versions a
 
 \item{degrees_col_name}{Name of new column with the angles in degrees. If \code{NULL}, no column is added.
 
-Angling is counterclockwise around \code{(0, 0)} and starts at \code{(0, .max)}.}
+Angling is counterclockwise around \code{(0, 0)} and starts at \code{(max(x), 0)}.}
+
+\item{origin_col_name}{Name of new column with the origin coordinates (center of circle). If \code{NULL}, no column is added.}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the added x-coordinates and the angle in degrees.

@@ -382,6 +382,36 @@ normalize_dimensions_to_unit_lengths <- function(dim_vectors){
 }
 
 
+##  .................. #< 265824d0a45053eed068e60234b1fb6f ># ..................
+##  Roll vector                                                             ####
+
+roll_elements <- function(x, n) {
+  if (n == 0) {
+    x
+  } else {
+    c(tail(x, -n), head(x, n))
+  }
+}
+
+# roll_values(c(0:360/10), change = 9)
+roll_values <- function(x, change, .min = NULL, .max = NULL) {
+
+  if (is.null(.min)){
+    .min <- min(x)
+  }
+  if (is.null(.max)){
+    .max <- max(x)
+  }
+
+  x <- x + change
+
+  dplyr::case_when(
+    x > .max ~ .min + (x - .max),
+    x < .min ~ .max - (.min - x),
+    TRUE ~ x
+  )
+}
+
 ##  .................. #< 60cfc78f594e5611a6eaaf34a2b212ae ># ..................
 ##  Package imports                                                         ####
 
