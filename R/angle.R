@@ -12,7 +12,7 @@
 #'  Calculates the angle between each data point and the origin with:
 #'  \deqn{atan2(y2 - y1, x2 - x1)}
 #'
-#'  And converts to degrees (\code{0-360}), measured counterclockwise from \code{(0, max(x))}.
+#'  And converts to degrees (\code{0-360}), measured counterclockwise from the \code{(x > 0, y = 0)} line.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
 #'  latter can be useful when supplying a grouped \code{data.frame} and finding the angle to e.g. the centroid
