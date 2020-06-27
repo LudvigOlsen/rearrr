@@ -4,13 +4,13 @@
 \alias{roll_elements}
 \title{Roll elements}
 \usage{
-roll_elements(data, col = NULL, n = NULL, n_fn = NULL, ...)
+roll_elements(data, cols = NULL, n = NULL, n_fn = NULL, ...)
 }
 \arguments{
 \item{data}{\code{vector} or \code{data.frame} to roll elements of. When a \code{data.frame} is
 grouped, the rolling is applied group-wise.}
 
-\item{col}{Name of column to roll in \code{`data`}. If \code{NULL}, the rows are rolled.
+\item{cols}{Names of columns to roll in \code{`data`}. If \code{NULL}, all columns are rolled.
 
 \strong{N.B.} only used when \code{`data`} is a \code{data.frame}.}
 
@@ -35,7 +35,7 @@ Rolls positions of elements.
 
 Example:
 
-Rolling \code{c(1, 2, 3, 4, 5)} with \code{`n` = 2} becomes:
+Rolling \code{c(1, 2, 3, 4, 5)} with \code{`n = 2`} becomes:
 
 \code{c(3, 4, 5, 1, 2)}
 
@@ -84,7 +84,7 @@ roll_elements(df, n = 2)
 roll_elements(df, n = -2)
 
 # Roll 'x' column right/down
-roll_elements(df, col = "x", n = -2)
+roll_elements(df, cols = "x", n = -2)
 
 # Roll rows by median in each group
 roll_elements(

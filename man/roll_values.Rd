@@ -3,20 +3,43 @@
 \name{roll_values}
 \alias{roll_values}
 \alias{wrap_to_range}
-\title{Shift values of vector and wrap to range}
+\title{Shift values and wrap to range}
 \usage{
-roll_values(x, add = 0, .min = NULL, .max = NULL, between = 0, na.rm = FALSE)
+roll_values(
+  data,
+  cols = NULL,
+  add = 0,
+  .min = NULL,
+  .max = NULL,
+  between = 0,
+  na.rm = FALSE
+)
 
-wrap_to_range(x, .min = NULL, .max = NULL, between = 0, na.rm = FALSE)
+wrap_to_range(
+  data,
+  cols = NULL,
+  .min = NULL,
+  .max = NULL,
+  between = 0,
+  na.rm = FALSE
+)
 }
 \arguments{
-\item{x}{\code{Numeric vector} to roll values of.}
+\item{data}{\code{vector} or \code{data.frame} to roll/wrap values of. When a \code{data.frame} is
+grouped, the rolling/wrapping is applied group-wise.}
 
-\item{add}{Amount to add to each element. (\code{numeric scalar})}
+\item{cols}{Names of columns to roll/wrap in \code{`data`}. Must be specified
+when \code{`data`} is a \code{data.frame}.}
 
-\item{.min}{Minimum value allowed. If \code{NULL}, the minimum value in \code{`x`} is used.}
+\item{add}{Amount to add to each element. (\code{numeric scalar})
 
-\item{.max}{Maximum value allowed. If \code{NULL}, the maximum value in \code{`x`} is used.}
+When \code{0}, the wrapping is applied without any rolling.}
+
+\item{.min}{Minimum value allowed. If \code{NULL}, the
+minimum value in the \code{vector}/\code{column} is used.}
+
+\item{.max}{Maximum value allowed. If \code{NULL}, the
+maximum value in the \code{vector}/\code{column} is used.}
 
 \item{between}{The wrapping distance between \code{`.max`} and \code{`.min`}.
 
@@ -30,7 +53,7 @@ When \code{1}, \code{`x`} can be greater than \code{`.max`} by up to \code{1}, w
 when finding the \code{`.min`} and \code{`.max`} values.}
 }
 \value{
-\code{vector} with values in the specified min-max range.
+\code{`data`} with values in the specified min-max range(s).
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -46,9 +69,9 @@ while a value smaller than \code{0} would become e.g. \eqn{-5 -> 355}.
 Here, \code{0} and \code{360} are considered the same angle.
 If we were instead adding days to the weekdays \code{1-7},
 where \code{1} and \code{7} are separate days,
-we can set \code{`between` = 1} to have one day in-between them.
+we can set \code{`between = 1`} to have one day in-between them.
 
-\code{wrap_to_range()} is a wrapper with \code{add = 0}.
+\code{wrap_to_range()} is a wrapper with \code{`add = 0`}.
 
 Should not be confused with \code{\link[rearrr:roll_elements]{roll_elements()}},
 which changes the position of the elements.
@@ -74,6 +97,58 @@ wrap_to_range(x, .min = 1, .max = 7)
 
 # With 1 in-between .min and .max
 wrap_to_range(x, .min = 1, .max = 7, between = 1)
+
+#
+# Roll data.frame
+#
+
+# Set seed
+
+# Create a data frame
+df <- data.frame(
+  "w" = 1:7,
+  "d" = c(0, 45, 90, 135, 180, 270, 360)
+)
+
+# Roll weekdays by 1 day
+roll_values(
+  df,
+  cols = "w",
+  add = 1,
+  .min = 1,
+  .max = 7,
+  between = 1
+)
+
+# Roll degrees by -90 degrees
+roll_values(
+  df,
+  cols = "d",
+  add = -90,
+  .min = 0,
+  .max = 360,
+  between = 0
+)
+
+# Roll both weekdays and degrees by 1
+# We don't specify .min and .max, so they
+# are based on the values in the columns
+# Note: This is not that meaningful but shows
+# the option
+roll_values(
+  df,
+  cols = c("w", "d"),
+  add = 1
+)
+
+# Wrap weekdays to 2-5 range
+wrap_to_range(
+  df,
+  cols = "w",
+  .min = 2,
+  .max = 5,
+  between = 1
+)
 
 }
 }

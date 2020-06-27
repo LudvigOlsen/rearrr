@@ -13,7 +13,7 @@
 #'
 #'  Example:
 #'
-#'  Rolling \code{c(1, 2, 3, 4, 5)} with \code{`n` = 2} becomes:
+#'  Rolling \code{c(1, 2, 3, 4, 5)} with \code{`n = 2`} becomes:
 #'
 #'  \code{c(3, 4, 5, 1, 2)}
 #'
@@ -22,7 +22,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param data \code{vector} or \code{data.frame} to roll elements of. When a \code{data.frame} is
 #'  grouped, the rolling is applied group-wise.
-#' @param col Name of column to roll in \code{`data`}. If \code{NULL}, the rows are rolled.
+#' @param cols Names of columns to roll in \code{`data`}. If \code{NULL}, all columns are rolled.
 #'
 #'  \strong{N.B.} only used when \code{`data`} is a \code{data.frame}.
 #' @param n Number of positions to roll. A positive number rolls \code{`x`} \emph{left}.
@@ -79,7 +79,7 @@
 #' roll_elements(df, n = -2)
 #'
 #' # Roll 'x' column right/down
-#' roll_elements(df, col = "x", n = -2)
+#' roll_elements(df, cols = "x", n = -2)
 #'
 #' # Roll rows by median in each group
 #' roll_elements(
@@ -89,54 +89,71 @@
 #' )
 #'
 #' }
-roll_elements <-
-  function(data,
-           col = NULL,
-           n = NULL,
-           n_fn = NULL,
-           ...) {
-    # Check arguments ####
-    assert_collection <- checkmate::makeAssertCollection()
-    checkmate::assert_vector(data, strict = FALSE, add = assert_collection)
-    checkmate::assert_string(col, null.ok = TRUE, add = assert_collection)
-    checkmate::assert_number(n,
-                             finite = TRUE,
-                             null.ok = TRUE,
-                             add = assert_collection)
-    checkmate::assert_function(n_fn, null.ok = TRUE, add = assert_collection)
-    checkmate::reportAssertions(assert_collection)
-    if ((is.null(n) && is.null(n_fn)) ||
-        (!is.null(n) && !is.null(n_fn))) {
-      assert_collection$push("exactly one of {'n', 'n_fn'} must be specified.")
-    }
-    if (!is.data.frame(data) && !is.null(col)) {
-      assert_collection$push("when 'data' is not a data.frame, 'col' should be NULL.")
-    }
-    checkmate::reportAssertions(assert_collection)
-    # End of argument checks ####
+roll_elements <- function(data,
+                          cols = NULL,
+                          n = NULL,
+                          n_fn = NULL,
+                          ...) {
 
-    # If no rolling, just return data
-    if (!is.null(n) && n == 0) {
-      return(data)
-    }
 
-    if (is.data.frame(data)) {
-      roll_elements_df(
-        data = data,
-        col = col,
-        n = n,
-        n_fn = n_fn,
-        ...
-      )
-    } else if (is.vector(data) || is.factor(data)) {
-      roll_elements_vector(data = data,
-                           n = n,
-                           n_fn = n_fn,
-                           ...)
-    } else {
-      stop("'data' has unsupported type.")
-    }
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_vector(data, strict = FALSE, add = assert_collection)
+  checkmate::assert_character(
+    cols,
+    null.ok = TRUE,
+    min.chars = 1,
+    unique = TRUE,
+    any.missing = FALSE,
+    min.len = 1,
+    add = assert_collection
+  )
+  checkmate::assert_number(n,
+                           finite = TRUE,
+                           null.ok = TRUE,
+                           add = assert_collection)
+  checkmate::assert_function(n_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if ((is.null(n) && is.null(n_fn)) ||
+      (!is.null(n) && !is.null(n_fn))) {
+    assert_collection$push("exactly one of {'n', 'n_fn'} must be specified.")
   }
+  if (!is.data.frame(data) && !is.null(cols)) {
+    assert_collection$push("when 'data' is not a data.frame, 'cols' should be NULL.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  if (!is.null(cols) && length(setdiff(cols, colnames(data))) > 0) {
+    # TODO Make helper for this where n cols are shown and with ... when more were there
+    assert_collection$push(paste0(
+      "these names in 'cols' where not columns in 'data': ",
+      head(setdiff(cols, colnames(data)), 3)
+    ))
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # If no rolling, just return data
+  if (!is.null(n) && n == 0) {
+    return(data)
+  }
+
+  if (is.data.frame(data)) {
+    roll_elements_df(
+      data = data,
+      cols = cols,
+      n = n,
+      n_fn = n_fn,
+      ...
+    )
+  } else if (is.vector(data) || is.factor(data)) {
+    roll_elements_vector(data = data,
+                         n = n,
+                         n_fn = n_fn,
+                         ...)
+  } else {
+    stop("'data' has unsupported type.")
+  }
+}
 
 roll_elements_vector <- function(data, n, n_fn, ...) {
   n <- apply_n_fn(data = data,
@@ -149,7 +166,7 @@ roll_elements_vector <- function(data, n, n_fn, ...) {
   c(tail(x = data, n = -n), head(x = data, n = n))
 }
 
-roll_elements_df <- function(data, col, n, n_fn, ...) {
+roll_elements_df <- function(data, cols, n, n_fn, ...) {
   if (!is.null(n) && n == 0) {
     return(data)
   }
@@ -172,8 +189,8 @@ roll_elements_df <- function(data, col, n, n_fn, ...) {
       inds <- roll_elements_vector(seq_len(nrow(data)), n = n, n_fn = NULL)
 
       # Get rolled values/rows
-      if (!is.null(col)) {
-        data[[col]] <- data[[col]][inds]
+      if (!is.null(cols)) {
+        data[, cols] <- data[inds, cols, drop = FALSE]
         data
       } else {
         data[inds, , drop = FALSE]
