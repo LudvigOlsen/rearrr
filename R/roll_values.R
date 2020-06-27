@@ -1,8 +1,5 @@
 
 
-
-
-
 #   __________________ #< 648de01392b7852d4ee920e90bce83e6 ># __________________
 #   Roll values                                                             ####
 
@@ -25,6 +22,8 @@
 #'  we can set \code{`between = 1`} to have one day in-between them.
 #'
 #'  \code{wrap_to_range()} is a wrapper with \code{`add = 0`}.
+#'
+#'  The \code{*_vec()} versions take and return a vector.
 #'
 #'  Should not be confused with \code{\link[rearrr:roll_elements]{roll_elements()}},
 #'  which changes the position of the elements.
@@ -56,6 +55,8 @@
 #' @export
 #' @return \code{`data`} with new columns with values in the specified min-max range(s)
 #'  and columns with the applied ranges.
+#'
+#'  The \code{*_vec()} versions return a \code{vector}.
 #' @family roll functions
 #' @examples
 #' \donttest{
@@ -68,11 +69,7 @@
 #' roll_values(c(0:360), add = 90)
 #'
 #' # Get as vector
-#' roll_values(
-#'   c(0:360), add = 90,
-#'   suffix = "",
-#'   range_col_name = NULL
-#' )
+#' roll_values_vec(c(0:360), add = 90)
 #'
 #' # Change limits to 0-180
 #' # so e.g. 270 becomes 90
@@ -85,6 +82,9 @@
 #'
 #' # With 1 in-between .min and .max
 #' wrap_to_range(x, .min = 1, .max = 7, between = 1)
+#'
+#' # Get as vector
+#' wrap_to_range_vec(x, .min = 1, .max = 7, between = 1)
 #'
 #' #
 #' # Roll data.frame
@@ -202,6 +202,7 @@ wrap_to_range <- function(data,
                           between = 0,
                           na.rm = FALSE,
                           suffix = "_wrapped",
+                          keep_original = TRUE,
                           range_col_name = ".range") {
   roll_values(
     data = data,
@@ -212,7 +213,49 @@ wrap_to_range <- function(data,
     between = between,
     na.rm = na.rm,
     suffix = suffix,
+    keep_original = keep_original,
     range_col_name = range_col_name
+  )
+}
+
+#' @rdname roll_values
+roll_values_vec <- function(data,
+                            add = 0,
+                            .min = NULL,
+                            .max = NULL,
+                            between = 0,
+                            na.rm = FALSE) {
+  checkmate::assert_numeric(data)
+  roll_values(
+    data = data,
+    cols = NULL,
+    add = add,
+    .min = .min,
+    .max = .max,
+    between = between,
+    na.rm = na.rm,
+    suffix = "",
+    range_col_name = NULL
+  )
+}
+
+#' @rdname roll_values
+wrap_to_range_vec <- function(data,
+                              .min = NULL,
+                              .max = NULL,
+                              between = 0,
+                              na.rm = FALSE) {
+  checkmate::assert_numeric(data)
+  roll_values(
+    data = data,
+    cols = NULL,
+    add = 0,
+    .min = .min,
+    .max = .max,
+    between = between,
+    na.rm = na.rm,
+    suffix = "",
+    range_col_name = NULL
   )
 }
 

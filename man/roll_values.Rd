@@ -3,6 +3,8 @@
 \name{roll_values}
 \alias{roll_values}
 \alias{wrap_to_range}
+\alias{roll_values_vec}
+\alias{wrap_to_range_vec}
 \title{Shift values and wrap to range}
 \usage{
 roll_values(
@@ -26,8 +28,20 @@ wrap_to_range(
   between = 0,
   na.rm = FALSE,
   suffix = "_wrapped",
+  keep_original = TRUE,
   range_col_name = ".range"
 )
+
+roll_values_vec(
+  data,
+  add = 0,
+  .min = NULL,
+  .max = NULL,
+  between = 0,
+  na.rm = FALSE
+)
+
+wrap_to_range_vec(data, .min = NULL, .max = NULL, between = 0, na.rm = FALSE)
 }
 \arguments{
 \item{data}{\code{vector} or \code{data.frame} to roll/wrap values of. When a \code{data.frame} is
@@ -72,6 +86,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \value{
 \code{`data`} with new columns with values in the specified min-max range(s)
 and columns with the applied ranges.
+
+The \code{*_vec()} versions return a \code{vector}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -91,6 +107,8 @@ we can set \code{`between = 1`} to have one day in-between them.
 
 \code{wrap_to_range()} is a wrapper with \code{`add = 0`}.
 
+The \code{*_vec()} versions take and return a vector.
+
 Should not be confused with \code{\link[rearrr:roll_elements]{roll_elements()}},
 which changes the position of the elements.
 }
@@ -105,11 +123,7 @@ library(rearrr)
 roll_values(c(0:360), add = 90)
 
 # Get as vector
-roll_values(
-  c(0:360), add = 90,
-  suffix = "",
-  range_col_name = NULL
-)
+roll_values_vec(c(0:360), add = 90)
 
 # Change limits to 0-180
 # so e.g. 270 becomes 90
@@ -122,6 +136,9 @@ wrap_to_range(x, .min = 1, .max = 7)
 
 # With 1 in-between .min and .max
 wrap_to_range(x, .min = 1, .max = 7, between = 1)
+
+# Get as vector
+wrap_to_range_vec(x, .min = 1, .max = 7, between = 1)
 
 #
 # Roll data.frame
