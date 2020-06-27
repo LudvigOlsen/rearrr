@@ -4,10 +4,12 @@
 \alias{most_centered}
 \title{Find the coordinates for data point closest to the centroid}
 \usage{
-most_centered(...)
+most_centered(..., na.rm = FALSE)
 }
 \arguments{
 \item{...}{Numeric vectors.}
+
+\item{na.rm}{Whether to ignore missing values when calculating centroid coordinates. (Logical)}
 }
 \value{
 \code{vector} with the coordinates for the data point closest to the centroid.

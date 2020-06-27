@@ -4,10 +4,12 @@
 \alias{centroid}
 \title{Find the coordinates for the centroid}
 \usage{
-centroid(...)
+centroid(..., na.rm = FALSE)
 }
 \arguments{
 \item{...}{Numeric vectors.}
+
+\item{na.rm}{Whether to ignore missing values when calculating means. (Logical)}
 }
 \value{
 \code{vector} with the means of each supplied vector.

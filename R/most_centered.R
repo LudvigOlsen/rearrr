@@ -11,6 +11,7 @@
 #'  data point with the shortest distance to the centroid.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param ... Numeric vectors.
+#' @param na.rm Whether to ignore missing values when calculating centroid coordinates. (Logical)
 #' @export
 #' @return \code{vector} with the coordinates for the data point closest to the centroid.
 #' @examples
@@ -33,7 +34,7 @@
 #' # Compare to centroid coordinates
 #' centroid(x, y, z)
 #' }
-most_centered <- function(...) {
+most_centered <- function(..., na.rm = FALSE) {
   # Convert inputs to list
   dim_vectors <- list(...)
 
@@ -46,6 +47,7 @@ most_centered <- function(...) {
     .var.name = "list(...)",
     add = assert_collection
   )
+  checkmate::assert_flag(na.rm, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if (length(unique(lengths(dim_vectors))) != 1) {
     assert_collection$push("all vectors in '...' must have the same length.")
@@ -55,7 +57,7 @@ most_centered <- function(...) {
 
   # Calculate distances to the centroid
   distances <- calculate_distances(dim_vectors = dim_vectors,
-                                   to = centroid(...))
+                                   to = centroid(..., na.rm = na.rm))
 
   # Return coordinates of the data point with the shortest distance
   purrr::transpose(dim_vectors) %>%
