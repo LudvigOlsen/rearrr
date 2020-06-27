@@ -12,7 +12,10 @@ roll_values(
   .min = NULL,
   .max = NULL,
   between = 0,
-  na.rm = FALSE
+  na.rm = FALSE,
+  suffix = "_rolled",
+  keep_original = TRUE,
+  range_col_name = ".range"
 )
 
 wrap_to_range(
@@ -21,7 +24,9 @@ wrap_to_range(
   .min = NULL,
   .max = NULL,
   between = 0,
-  na.rm = FALSE
+  na.rm = FALSE,
+  suffix = "_wrapped",
+  range_col_name = ".range"
 )
 }
 \arguments{
@@ -51,9 +56,22 @@ When \code{1}, \code{`x`} can be greater than \code{`.max`} by up to \code{1}, w
 
 \item{na.rm}{Whether to remove missing values (\code{NA}s)
 when finding the \code{`.min`} and \code{`.max`} values.}
+
+\item{suffix}{Suffix to add to the names of the generated columns.
+
+Use an empty string (i.e. \code{""}) to overwrite the original columns.}
+
+\item{keep_original}{Whether to keep the original columns. (Logical)
+
+Some columns may have been overwritten, in which case only the newest versions are returned.}
+
+\item{range_col_name}{Name of new column with the min-max range. If \code{NULL}, no column is added.
+
+\strong{N.B.} Ignored when \code{`data`} is a \code{vector}.}
 }
 \value{
-\code{`data`} with values in the specified min-max range(s).
+\code{`data`} with new columns with values in the specified min-max range(s)
+and columns with the applied ranges.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -85,6 +103,13 @@ library(rearrr)
 # Note that 0 and 360 is considered the same angle
 # why there is no distance between the two
 roll_values(c(0:360), add = 90)
+
+# Get as vector
+roll_values(
+  c(0:360), add = 90,
+  suffix = "",
+  range_col_name = NULL
+)
 
 # Change limits to 0-180
 # so e.g. 270 becomes 90

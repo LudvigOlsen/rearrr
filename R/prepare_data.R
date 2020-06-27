@@ -83,7 +83,7 @@ prepare_input_data <- function(data, cols, min_dims=1, new_name=NULL){
   if (length(setdiff(cols, colnames(data))) > 0){
     assert_collection$push(paste0(
       "These names in the 'col(s)' argument were not found in 'data': ",
-      setdiff(cols, colnames(data)),
+      paste0(setdiff(cols, colnames(data)), collapse = ", "),
       "."
     ))
   }

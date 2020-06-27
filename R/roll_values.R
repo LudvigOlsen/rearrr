@@ -1,5 +1,8 @@
 
 
+
+
+
 #   __________________ #< 648de01392b7852d4ee920e90bce83e6 ># __________________
 #   Roll values                                                             ####
 
@@ -46,8 +49,13 @@
 #'  \code{`.max` + 1 == `.min`}.
 #' @param na.rm Whether to remove missing values (\code{NA}s)
 #'  when finding the \code{`.min`} and \code{`.max`} values.
+#' @param range_col_name Name of new column with the min-max range. If \code{NULL}, no column is added.
+#'
+#'  \strong{N.B.} Ignored when \code{`data`} is a \code{vector}.
+#' @inheritParams multi_mutator
 #' @export
-#' @return \code{`data`} with values in the specified min-max range(s).
+#' @return \code{`data`} with new columns with values in the specified min-max range(s)
+#'  and columns with the applied ranges.
 #' @family roll functions
 #' @examples
 #' \donttest{
@@ -58,6 +66,13 @@
 #' # Note that 0 and 360 is considered the same angle
 #' # why there is no distance between the two
 #' roll_values(c(0:360), add = 90)
+#'
+#' # Get as vector
+#' roll_values(
+#'   c(0:360), add = 90,
+#'   suffix = "",
+#'   range_col_name = NULL
+#' )
 #'
 #' # Change limits to 0-180
 #' # so e.g. 270 becomes 90
@@ -131,22 +146,12 @@ roll_values <- function(data,
                         .min = NULL,
                         .max = NULL,
                         between = 0,
-                        na.rm = FALSE) {
+                        na.rm = FALSE,
+                        suffix = "_rolled",
+                        keep_original = TRUE,
+                        range_col_name = ".range") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert(
-    checkmate::check_data_frame(data, min.rows = 1, min.cols = 1),
-    checkmate::check_numeric(data, any.missing = na.rm)
-  )
-  checkmate::assert_character(
-    cols,
-    null.ok = TRUE,
-    min.chars = 1,
-    unique = TRUE,
-    any.missing = FALSE,
-    min.len = 1,
-    add = assert_collection
-  )
   checkmate::assert_number(add, finite = TRUE, add = assert_collection)
   checkmate::assert_number(.min,
                            finite = TRUE,
@@ -156,7 +161,8 @@ roll_values <- function(data,
                            finite = TRUE,
                            null.ok = TRUE,
                            add = assert_collection)
-  checkmate::assert_number(between, finite = TRUE, add = assert_collection)
+  checkmate::assert_number(between, finite = TRUE, lower = 0, add = assert_collection)
+  checkmate::assert_string(range_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(na.rm, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if (!is.data.frame(data) && !is.null(cols)) {
@@ -166,37 +172,25 @@ roll_values <- function(data,
     assert_collection$push("when 'data' is a data.frame, 'cols' must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
-  if (!is.null(cols) && length(setdiff(cols, colnames(data))) > 0) {
-    assert_collection$push(paste0(
-      "these names in 'cols' where not columns in 'data': ",
-      head(setdiff(cols, colnames(data)), 3)
-    ))
-  }
-  checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  if (is.data.frame(data)) {
-    roll_values_df(
-      data = data,
-      cols = cols,
-      add = add,
-      .min = .min,
-      .max = .max,
-      between = between,
-      na.rm = na.rm
-    )
-  } else if (is.vector(data) || is.factor(data)) {
-    roll_values_vector(
-      data = data,
-      add = add,
-      .min = .min,
-      .max = .max,
-      between = between,
-      na.rm = na.rm
-    )
-  } else {
-    stop("'data' has unsupported type.")
-  }
+  multi_mutator(
+    data = data,
+    mutate_fn = roll_values_mutator_method,
+    check_fn = NULL,
+    cols = cols,
+    suffix = suffix,
+    force_df = FALSE,
+    allowed_types = c("numeric"),
+    min_dims = 1,
+    keep_original = keep_original,
+    add = add,
+    .min = .min,
+    .max = .max,
+    between = between,
+    na.rm = na.rm,
+    range_col_name = range_col_name
+  )
 
 }
 
@@ -206,7 +200,9 @@ wrap_to_range <- function(data,
                           .min = NULL,
                           .max = NULL,
                           between = 0,
-                          na.rm = FALSE) {
+                          na.rm = FALSE,
+                          suffix = "_wrapped",
+                          range_col_name = ".range") {
   roll_values(
     data = data,
     cols = cols,
@@ -214,28 +210,103 @@ wrap_to_range <- function(data,
     .min = .min,
     .max = .max,
     between = between,
-    na.rm = na.rm
+    na.rm = na.rm,
+    suffix = suffix,
+    range_col_name = range_col_name
   )
 }
 
 
-roll_values_vector <- function(data,
-                               add,
-                               .min,
-                               .max,
-                               between,
-                               na.rm) {
+roll_values_mutator_method <- function(data,
+                                       cols,
+                                       add,
+                                       .min,
+                                       .max,
+                                       between,
+                                       na.rm,
+                                       suffix,
+                                       range_col_name) {
+  # Number of dimensions
+  # Each column is a dimension
+  num_dims <- length(cols)
 
-  checkmate::assert_numeric(data, .var.name = "vector in 'data'")
+  # Convert columns to list of vectors
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
 
-  # Find range if not specified
+  # Find minimums
   if (is.null(.min)) {
-    .min <- min(data, na.rm = na.rm)
-  }
-  if (is.null(.max)) {
-    .max <- max(data, na.rm = na.rm)
+    .min <- apply_coordinate_fn(
+      dim_vectors = dim_vectors,
+      coordinates = .min,
+      fn = create_origin_fn(min, na.rm = na.rm),
+      num_dims = num_dims,
+      coordinate_name = ".min",
+      fn_name = "min()",
+      dim_var_name = "cols",
+      allow_len_one = TRUE
+    )
   }
 
+  # Find maximums
+  if (is.null(.max)) {
+    .max <- apply_coordinate_fn(
+      dim_vectors = dim_vectors,
+      coordinates = .max,
+      fn = create_origin_fn(max, na.rm = na.rm),
+      num_dims = num_dims,
+      coordinate_name = ".max",
+      fn_name = "max()",
+      dim_var_name = "cols",
+      allow_len_one = TRUE
+    )
+  }
+
+  # Combine to list of ranges (one or one per column)
+  .range <- list(.min, .max) %>%
+    purrr::transpose() %>%
+    purrr::simplify_all() %>%
+    purrr::map(setNames, nm = c(".min", ".max"))
+
+  # Roll each dimension
+  dim_vectors <-
+    purrr::map2(.x = dim_vectors, .y = .range, .f = ~ {
+      roll_values_inner(
+        data = .x,
+        add = add,
+        .min = .y[[1]],
+        .max = .y[[2]],
+        between = between,
+        na.rm = na.rm
+      )
+    })
+
+  # Add dim_vectors as columns with the suffix
+  data <- add_dimensions(
+    data = data,
+    new_vectors = setNames(dim_vectors, cols),
+    suffix = suffix
+  )
+
+  # Add info columns
+  if (!is.null(range_col_name)) {
+    data[[range_col_name]] <- list_coordinates(.range, cols)
+    data <- paste_ranges_column(data = data,
+                                col = range_col_name,
+                                include_min = TRUE,
+                                include_max = between > 0)
+  }
+
+  data
+
+}
+
+
+roll_values_inner <- function(data,
+                              add,
+                              .min,
+                              .max,
+                              between,
+                              na.rm) {
   if (.min > .max) {
     stop("'.min' was greater than '.max'.")
   }
@@ -247,28 +318,4 @@ roll_values_vector <- function(data,
   # Wrap to range
   (data - .min) %% (.max - .min + between) + .min
 
-}
-
-
-roll_values_df <- function(data,
-                           cols,
-                           add,
-                           .min,
-                           .max,
-                           between,
-                           na.rm) {
-
-  checkmate::assert_data_frame(data[, cols, drop = FALSE],
-                               types = "numeric")
-
-  data %>%
-    dplyr::mutate_at(
-      .vars = cols,
-      .funs = roll_values_vector,
-      add = add,
-      .min = .min,
-      .max = .max,
-      between = between,
-      na.rm = na.rm
-    )
 }
