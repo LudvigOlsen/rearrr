@@ -2,9 +2,12 @@
 % Please edit documentation in R/roll_elements.R
 \name{roll_elements}
 \alias{roll_elements}
+\alias{roll_elements_vec}
 \title{Roll elements}
 \usage{
-roll_elements(data, cols = NULL, n = NULL, n_fn = NULL, ...)
+roll_elements(data, cols = NULL, n = NULL, n_fn = NULL, n_col_name = ".n", ...)
+
+roll_elements_vec(data, n = NULL, n_fn = NULL, ...)
 }
 \arguments{
 \item{data}{\code{vector} or \code{data.frame} to roll elements of. When a \code{data.frame} is
@@ -26,7 +29,7 @@ E.g. \code{function(x){round(median(x$v))}} would get the median of the \code{v}
 \item{...}{Extra arguments for \code{`n_fn`}.}
 }
 \value{
-Rolled \code{`x`}.
+Rolled \code{`data`}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -38,6 +41,8 @@ Example:
 Rolling \code{c(1, 2, 3, 4, 5)} with \code{`n = 2`} becomes:
 
 \code{c(3, 4, 5, 1, 2)}
+
+\code{roll_elements_vec()} takes and returns a \code{vector}.
 
 Should not be confused with \code{\link[rearrr:roll_values]{roll_values()}},
 which changes the \code{value} of the elements and wraps to a given range.
@@ -98,8 +103,19 @@ roll_elements(
 \seealso{
 Other roll functions: 
 \code{\link{roll_values}()}
+
+Other rearrange functions: 
+\code{\link{center_max}()},
+\code{\link{center_min}()},
+\code{\link{closest_to}()},
+\code{\link{furthest_from}()},
+\code{\link{pair_extremes}()},
+\code{\link{position_max}()},
+\code{\link{position_min}()},
+\code{\link{rev_windows}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{rearrange functions}
 \concept{roll functions}

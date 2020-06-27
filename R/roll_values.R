@@ -58,6 +58,7 @@
 #'
 #'  The \code{*_vec()} versions return a \code{vector}.
 #' @family roll functions
+#' @family mutate functions
 #' @examples
 #' \donttest{
 #' # Attach packages

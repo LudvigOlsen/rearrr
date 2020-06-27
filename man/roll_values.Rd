@@ -197,8 +197,20 @@ wrap_to_range(
 \seealso{
 Other roll functions: 
 \code{\link{roll_elements}()}
+
+Other mutate functions: 
+\code{\link{cluster_groups}()},
+\code{\link{dim_values}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{flip_values}()},
+\code{\link{rotate_2d}()},
+\code{\link{rotate_3d}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{mutate functions}
 \concept{roll functions}

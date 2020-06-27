@@ -11,7 +11,8 @@ apply_coordinate_fn <- function(dim_vectors,
                                 coordinate_name,
                                 fn_name,
                                 dim_var_name,
-                                allow_len_one = FALSE) {
+                                allow_len_one = FALSE,
+                                extra_args = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -29,7 +30,7 @@ apply_coordinate_fn <- function(dim_vectors,
   # Find coordinates if specified
   if (!is.null(fn)) {
     coordinates <- tryCatch(
-      do.call(fn, dim_vectors),
+      rlang::exec(fn, !!!dim_vectors, !!!extra_args),
       error = function(e) {
         stop(paste0("failed to apply '", fn_name, "': ", e))
       },

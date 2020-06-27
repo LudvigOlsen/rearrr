@@ -265,6 +265,7 @@ Other mutate functions:
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
 \code{\link{flip_values}()},
+\code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
 \code{\link{swirl_2d}()},

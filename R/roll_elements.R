@@ -1,6 +1,8 @@
 
 
 
+
+
 #   __________________ #< f7c7492857e04f8c2ccd8ed8f5fd56dd ># __________________
 #   Roll elements                                                           ####
 
@@ -16,6 +18,8 @@
 #'  Rolling \code{c(1, 2, 3, 4, 5)} with \code{`n = 2`} becomes:
 #'
 #'  \code{c(3, 4, 5, 1, 2)}
+#'
+#'  \code{roll_elements_vec()} takes and returns a \code{vector}.
 #'
 #'  Should not be confused with \code{\link[rearrr:roll_values]{roll_values()}},
 #'  which changes the \code{value} of the elements and wraps to a given range.
@@ -34,8 +38,9 @@
 #'  E.g. \code{function(x){round(median(x$v))}} would get the median of the \code{v} variable in the subset.
 #' @param ... Extra arguments for \code{`n_fn`}.
 #' @export
-#' @return Rolled \code{`x`}.
+#' @return Rolled \code{`data`}.
 #' @family roll functions
+#' @family rearrange functions
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -93,41 +98,20 @@ roll_elements <- function(data,
                           cols = NULL,
                           n = NULL,
                           n_fn = NULL,
+                          n_col_name = ".n",
                           ...) {
-
-
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_vector(data, strict = FALSE, add = assert_collection)
-  checkmate::assert_character(
-    cols,
-    null.ok = TRUE,
-    min.chars = 1,
-    unique = TRUE,
-    any.missing = FALSE,
-    min.len = 1,
-    add = assert_collection
-  )
   checkmate::assert_number(n,
                            finite = TRUE,
                            null.ok = TRUE,
                            add = assert_collection)
   checkmate::assert_function(n_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(n_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if ((is.null(n) && is.null(n_fn)) ||
       (!is.null(n) && !is.null(n_fn))) {
     assert_collection$push("exactly one of {'n', 'n_fn'} must be specified.")
-  }
-  if (!is.data.frame(data) && !is.null(cols)) {
-    assert_collection$push("when 'data' is not a data.frame, 'cols' should be NULL.")
-  }
-  checkmate::reportAssertions(assert_collection)
-  if (!is.null(cols) && length(setdiff(cols, colnames(data))) > 0) {
-    # TODO Make helper for this where n cols are shown and with ... when more were there
-    assert_collection$push(paste0(
-      "these names in 'cols' where not columns in 'data': ",
-      head(setdiff(cols, colnames(data)), 3)
-    ))
   }
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -137,77 +121,122 @@ roll_elements <- function(data,
     return(data)
   }
 
-  if (is.data.frame(data)) {
-    roll_elements_df(
-      data = data,
-      cols = cols,
-      n = n,
-      n_fn = n_fn,
-      ...
-    )
-  } else if (is.vector(data) || is.factor(data)) {
-    roll_elements_vector(data = data,
-                         n = n,
-                         n_fn = n_fn,
-                         ...)
-  } else {
-    stop("'data' has unsupported type.")
+  inverse_direction <- FALSE
+  uses_tmp_index <- FALSE
+  if (is.data.frame(data) && is.null(cols)) {
+    # Roll rows
+    tmp_index_col <- create_tmp_var(data)
+    data[[tmp_index_col]] <- seq_len(nrow(data))
+    cols <- tmp_index_col
+    uses_tmp_index <- TRUE
+
+    # For this to work, we have to inverse
+    # the rolling direction
+    inverse_direction <- TRUE
   }
+
+  out <- rearranger(
+    data = data,
+    rearrange_fn = roll_elements_rearranger_method,
+    check_fn = NULL,
+    cols = cols,
+    n = n,
+    n_fn = n_fn,
+    n_fn_args = rlang::exprs(...),
+    n_col_name = n_col_name,
+    inverse_direction = inverse_direction
+  )
+
+  if (isTRUE(uses_tmp_index)) {
+    if (!is.null(n_col_name)) {
+      out[[n_col_name]] <- purrr::map(out[[n_col_name]],
+                                      .f = setNames,
+                                      nm = ".index")
+    }
+    out <- out[order(out[[tmp_index_col]]), , drop = FALSE]
+    out[[tmp_index_col]] <- NULL
+  }
+
+  out
 }
 
-roll_elements_vector <- function(data, n, n_fn, ...) {
-  n <- apply_n_fn(data = data,
-                  n = n,
-                  n_fn = n_fn,
-                  ...)
-  if (n == 0) {
-    return(data)
-  }
-  c(tail(x = data, n = -n), head(x = data, n = n))
+#' @rdname roll_elements
+roll_elements_vec <- function(data,
+                              n = NULL,
+                              n_fn = NULL,
+                              ...) {
+  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
+                    checkmate::check_factor(data))
+  roll_elements(
+    data = data,
+    n = n,
+    n_fn = n_fn,
+    n_col_name = NULL,
+    ...
+  )
 }
 
-roll_elements_df <- function(data, cols, n, n_fn, ...) {
+roll_elements_rearranger_method <- function(data,
+                                            cols,
+                                            n,
+                                            n_fn,
+                                            n_fn_args,
+                                            n_col_name,
+                                            inverse_direction) {
+  # Initial check of n
   if (!is.null(n) && n == 0) {
     return(data)
   }
 
-  # Roll each subset of data
-  run_by_group(
-    data = data,
-    fn = function(data) {
-      # Apply n_fn
-      n <- apply_n_fn(data = data,
-                      n = n,
-                      n_fn = n_fn,
-                      ...)
+  # Number of dimensions
+  # Each column is a dimension
+  num_dims <- length(cols)
 
-      if (n == 0) {
-        return(data)
-      }
+  # Convert columns to list of vectors
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
 
-      # Roll indices
-      inds <- roll_elements_vector(seq_len(nrow(data)), n = n, n_fn = NULL)
-
-      # Get rolled values/rows
-      if (!is.null(cols)) {
-        data[, cols] <- data[inds, cols, drop = FALSE]
-        data
-      } else {
-        data[inds, , drop = FALSE]
-      }
-    }
+  # Find n
+  n <- apply_coordinate_fn(
+    dim_vectors = dim_vectors,
+    coordinates = n,
+    fn = n_fn,
+    num_dims = num_dims,
+    coordinate_name = "n",
+    fn_name = "n_fn",
+    dim_var_name = "cols",
+    allow_len_one = TRUE,
+    extra_args = n_fn_args
   )
-}
 
-apply_n_fn <- function(data, n, n_fn, ...) {
-  if (!is.null(n_fn)) {
-    n <- n_fn(data, ...)
-    if (!checkmate::test_integerish(n, len = 1)) {
-      stop(paste0(
-        "output of 'n_fn' must be an integer-like scalar but was: ",
-        paste0(deparse(n), collapse = "")
-      ))
-    }
+  # Check n again
+  if (n == 0) {
+    return(data)
   }
-  n
+
+  if (isTRUE(inverse_direction)) {
+    n <- -1 * n
+  }
+
+  # Roll dimensions
+  dim_vectors <-
+    purrr::map2(.x = dim_vectors, .y = n, .f = ~ {
+      c(tail(x = .x, n = -.y), head(x = .x, n = .y))
+    })
+
+  # Add dim_vectors as columns with the suffix
+  data <- add_dimensions(
+    data = data,
+    new_vectors = setNames(dim_vectors, cols),
+    suffix = ""
+  )
+
+  if (!is.null(n_col_name)) {
+    if (isTRUE(inverse_direction)) {
+      n <- -1 * n
+    }
+    data[[n_col_name]] <- list_coordinates(n, cols)
+  }
+
+  data
+
 }
