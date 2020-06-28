@@ -112,6 +112,8 @@ angle <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(degrees_col_name, add = assert_collection)
+  checkmate::assert_string(x_col, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(y_col, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
                             min.len = 1,
@@ -126,6 +128,7 @@ angle <- function(data,
     data = data,
     mutate_fn = angle_mutator_method,
     check_fn = NULL,
+    min_dims = 2,
     cols = c(x_col, y_col),
     force_df = TRUE,
     keep_original = TRUE,
@@ -139,12 +142,13 @@ angle <- function(data,
 
 
 angle_mutator_method <- function(data,
-                                   cols,
-                                   origin,
-                                   origin_fn,
-                                   degrees_col_name,
-                                   origin_col_name,
-                                   ...) {
+                                 cols,
+                                 origin,
+                                 origin_fn,
+                                 degrees_col_name,
+                                 origin_col_name,
+                                 ...) {
+
   # Convert columns to list of vectors
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
