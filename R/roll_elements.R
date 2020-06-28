@@ -26,16 +26,23 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param data \code{vector} or \code{data.frame} to roll elements of. When a \code{data.frame} is
 #'  grouped, the rolling is applied group-wise.
-#' @param cols Names of columns to roll in \code{`data`}. If \code{NULL}, all columns are rolled.
+#' @param cols Names of columns in \code{`data`} to roll.
+#'  If \code{NULL}, the \emph{index} is rolled and used to reorder \code{`data`}.
 #'
 #'  \strong{N.B.} only used when \code{`data`} is a \code{data.frame}.
-#' @param n Number of positions to roll. A positive number rolls \code{`x`} \emph{left}.
-#'  A negative number rolls \code{`x`} \emph{right}.
-#' @param n_fn Function to find \code{`n`}. Useful when \code{`x`} is a grouped \code{data.frame}, where
-#'  we want \code{`n`} to depend on the rows in the group. The entire subset is passed to the function,
-#'  and it must return an integer-like scalar.
+#' @param n Number of positions to roll. A positive number rolls \emph{left/up}.
+#'  A negative number rolls \emph{right/down}.
+#' @param n_fn Function to find \code{`n`}. Useful when \code{`data`} is a
+#'  grouped \code{data.frame} and \code{`n`} should depend on the rows in the group.
 #'
-#'  E.g. \code{function(x){round(median(x$v))}} would get the median of the \code{v} variable in the subset.
+#'  \strong{Input}: Each \code{vector}/\code{column} in \code{`data`} is passed to the function as a separate argument.
+#'
+#'  \strong{Output}: It should return either a \code{vector} with one integer-like scalar \emph{per column}
+#'  or a single integer-like scalar to use for all columns.
+#'
+#'  Can be created with \code{\link[rearrr:create_n_fn]{create_n_fn()}}.
+#'  See also \code{\link[rearrr:median_index]{median_index()}} and
+#'  \code{\link[rearrr:median_index]{quantile_index()}}.
 #' @param ... Extra arguments for \code{`n_fn`}.
 #' @export
 #' @return Rolled \code{`data`}.
@@ -50,17 +57,20 @@
 #' # Roll vector left
 #' roll_elements(1:10, n = 2)
 #'
-#' # Roll vector right
-#' roll_elements(1:10, n = -2)
+#' # Roll vector right and return the vector
+#' roll_elements_vec(1:10, n = -2)
 #'
-#' # Roll vector left by median (rounded to 6)
-#' roll_elements(1:10, n_fn = function(x){round(median(x))})
+#' # Roll vector left by median index (rounded to 6)
+#' roll_elements(3:12, n_fn = median_index)
 #'
-#' # Pass extra arguments to 'n_fn' via '...'
+#' # Roll vector right by median value (rounded to 8)
+#' roll_elements(3:12, n_fn = create_n_fn(median, negate = TRUE))
+#'
+#' # Pass extra arguments (here 'prob') to 'n_fn' via '...'
 #' roll_elements(
 #'   1:10,
-#'   n_fn = function(x, y){round(median(x)) + y},
-#'   y = 2
+#'   n_fn = quantile_index,
+#'   prob = 0.2
 #' )
 #'
 #' #
@@ -68,7 +78,7 @@
 #' #
 #'
 #' # Set seed
-#  set.seed(1)
+#' set.seed(1)
 #'
 #' # Create a data frame
 #' df <- data.frame(
@@ -86,11 +96,13 @@
 #' # Roll 'x' column right/down
 #' roll_elements(df, cols = "x", n = -2)
 #'
-#' # Roll rows by median in each group
+#' # Roll rows right by median index in each group
+#' # Specify 'negate' and 'na.rm' for 'median_index' function
 #' roll_elements(
 #'   df %>% dplyr::group_by(g),
-#'   n_fn = function(x, y){round(median(x$y)) - 2},
-#'   y = 2
+#'   n_fn = median_index,
+#'   negate = TRUE,
+#'   na.rm = TRUE
 #' )
 #'
 #' }
