@@ -53,21 +53,23 @@ yet.
 | `closest_to()`    | Order values by shortest distance to an origin.                        |
 | `furthest_from()` | Order values by longest distance to an origin.                         |
 | `rev_windows()`   | Reverse order window-wise.                                             |
+| `roll_elements()` | Rolls/shifts positions of elements.                                    |
 
 ### Mutators
 
-| Function                  | Description                                                           | Dimensions   |
-| :------------------------ | :-------------------------------------------------------------------- | :----------- |
-| `flip_values()`           | Flip the values around an origin.                                     | n            |
-| `expand_distances()`      | Expand distances to an origin.                                        | n            |
-| `expand_distances_each()` | Expand distances to an origin separately for each dimension.          | n            |
-| `cluster_groups()`        | Move data points into clusters around group centroids.                | n            |
-| `dim_values()`            | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
-| `rotate_2d()`             | Rotate values around an origin in 2 dimensions.                       | 2            |
-| `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
-| `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
-| `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
-| `transfer_centroids()`    | Transfer centroids from one `data.frame` to another.                  | n            |
+| Function                              | Description                                                           | Dimensions   |
+| :------------------------------------ | :-------------------------------------------------------------------- | :----------- |
+| `flip_values()`                       | Flip the values around an origin.                                     | n            |
+| `expand_distances()`                  | Expand distances to an origin.                                        | n            |
+| `expand_distances_each()`             | Expand distances to an origin separately for each dimension.          | n            |
+| `cluster_groups()`                    | Move data points into clusters around group centroids.                | n            |
+| `dim_values()`                        | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
+| `rotate_2d()`                         | Rotate values around an origin in 2 dimensions.                       | 2            |
+| `rotate_3d()`                         | Rotate values around an origin in 3 dimensions.                       | 3            |
+| `swirl_2d()`                          | Swirl values around an origin in 2 dimensions.                        | 2            |
+| `swirl_3d()`                          | Swirl values around an origin in 3 dimensions.                        | 3            |
+| `transfer_centroids()`                | Transfer centroids from one `data.frame` to another.                  | n            |
+| `roll_values()`</br>`wrap_to_range()` | Shifts values and wraps to range.                                     | n            |
 
 ### Formers
 
@@ -84,35 +86,8 @@ yet.
 | :-------------------- | :------------------------------- |
 | `generate_clusters()` | Generate n-dimensional clusters. |
 
-### Origin functions
-
-| Function             | Description                                                          |
-| :------------------- | :------------------------------------------------------------------- |
-| `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
-| `centroid()`         | Calculates the mean of each supplied vector.                         |
-| `most_centered()`    | Finds coordinates of data point closest to the centroid.             |
-
-### Converters
-
-| Function               | Description                  |
-| :--------------------- | :--------------------------- |
-| `radians_to_degrees()` | Converts radians to degrees. |
-| `degrees_to_radians()` | Converts degrees to radians. |
-
-### Scalers
-
-| Function           | Description                                               |
-| :----------------- | :-------------------------------------------------------- |
-| `min_max_scale()`  | Scale values to a range.                                  |
-| `to_unit_length()` | Scale vectors to unit length *row-wise* or *column-wise*. |
-
-### Measuring functions
-
-| Function          | Description                                                     |
-| :---------------- | :-------------------------------------------------------------- |
-| `distance()`      | Calculates distance to an origin.                               |
-| `angle()`         | Calculates angle between points and an origin.                  |
-| `vector_length()` | Calculates vector length/magnitude *row-wise* or *column-wise*. |
+**Note**: The available utility functions (like scalers, converters and
+measuring functions) are listed at the bottom of the readme.
 
 ## Table of Contents
 
@@ -122,10 +97,6 @@ yet.
           - [Mutators](#mutators)
           - [Formers](#formers)
           - [Generators](#generators)
-          - [Origin functions](#origin-functions)
-          - [Converters](#converters)
-          - [Scalers](#scalers)
-          - [Measuring functions](#measuring-functions)
       - [Installation](#installation)
       - [Attach packages](#attach-packages)
       - [Rearranger examples](#rearranger-examples)
@@ -148,6 +119,11 @@ yet.
           - [Triangularize points](#triangularize-points)
       - [Generators](#generators)
           - [Generate clusters](#generate-clusters)
+      - [Utilities](#utilities)
+          - [Converters](#converters)
+          - [Scalers](#scalers)
+          - [Measuring functions](#measuring-functions)
+          - [Helpers functions](#helpers-functions)
 
 ## Installation
 
@@ -664,3 +640,38 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 ```
 
 <img src="man/figures/README-unnamed-chunk-45-1.png" width="552" style="display: block; margin: auto;" />
+
+## Utilities
+
+### Converters
+
+| Function               | Description                  |
+| :--------------------- | :--------------------------- |
+| `radians_to_degrees()` | Converts radians to degrees. |
+| `degrees_to_radians()` | Converts degrees to radians. |
+
+### Scalers
+
+| Function           | Description                                               |
+| :----------------- | :-------------------------------------------------------- |
+| `min_max_scale()`  | Scale values to a range.                                  |
+| `to_unit_length()` | Scale vectors to unit length *row-wise* or *column-wise*. |
+
+### Measuring functions
+
+| Function          | Description                                                     |
+| :---------------- | :-------------------------------------------------------------- |
+| `distance()`      | Calculates distance to an origin.                               |
+| `angle()`         | Calculates angle between points and an origin.                  |
+| `vector_length()` | Calculates vector length/magnitude *row-wise* or *column-wise*. |
+
+### Helpers functions
+
+| Function             | Description                                                          |
+| :------------------- | :------------------------------------------------------------------- |
+| `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
+| `centroid()`         | Calculates the mean of each supplied vector.                         |
+| `most_centered()`    | Finds coordinates of data point closest to the centroid.             |
+| `create_n_fn()`      | Creates function for finding the number of positions to move.        |
+| `median_index()`     | Calculates median index of each supplied vector.                     |
+| `quantile_index()`   | Calculates quantile of indices for each supplied vector.             |
