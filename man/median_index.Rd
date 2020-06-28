@@ -5,25 +5,16 @@
 \alias{quantile_index}
 \title{Find index of interest for each vector}
 \usage{
-median_index(..., negate = FALSE, na.rm = FALSE, round_fn = round)
+median_index(..., negate = FALSE, round_fn = round)
 
-quantile_index(
-  ...,
-  prob,
-  type = 7,
-  negate = FALSE,
-  na.rm = FALSE,
-  round_fn = round
-)
+quantile_index(..., prob, type = 7, negate = FALSE, round_fn = round)
 }
 \arguments{
 \item{...}{Numeric \code{vector}s.}
 
 \item{negate}{Whether to negate the result. I.e. to multiply it with \code{-1}. (Logical)}
 
-\item{na.rm}{Whether to ignore missing values when applying function to vector. (Logical)}
-
-\item{round_fn}{Function for rounding output.}
+\item{round_fn}{Function for rounding output. Rounding is done \emph{prior} to negation.}
 
 \item{prob}{Probability in \code{[0,1]} for \code{\link[stats:quantile]{quantile()}}.}
 

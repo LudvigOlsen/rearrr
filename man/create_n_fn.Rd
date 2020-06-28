@@ -17,6 +17,8 @@ The indices are created with \code{seq_along(x)}.}
 
 \item{round_fn}{Function for rounding results of \code{`fn`}.
 
+Rounding is done \emph{prior} to negation.
+
 To avoid rounding, supply \code{\link[base:identity]{identity}}.}
 
 \item{...}{Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.}

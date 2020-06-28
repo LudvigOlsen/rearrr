@@ -19,6 +19,8 @@
 #' @param negate Whether to negate the result. I.e. to multiply it with \code{-1}. (Logical)
 #' @param round_fn Function for rounding results of \code{`fn`}.
 #'
+#'  Rounding is done \emph{prior} to negation.
+#'
 #'  To avoid rounding, supply \code{\link[base:identity]{identity}}.
 #' @param ... Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.
 #' @export
@@ -125,8 +127,7 @@ create_n_fn <- function(fn,
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param ... Numeric \code{vector}s.
 #' @param negate Whether to negate the result. I.e. to multiply it with \code{-1}. (Logical)
-#' @param na.rm Whether to ignore missing values when applying function to vector. (Logical)
-#' @param round_fn Function for rounding output.
+#' @param round_fn Function for rounding output. Rounding is done \emph{prior} to negation.
 #' @export
 #' @return \code{numeric vector} with one element per supplied vector.
 #' @examples
@@ -151,13 +152,11 @@ create_n_fn <- function(fn,
 #' }
 median_index <- function(...,
                          negate = FALSE,
-                         na.rm = FALSE,
                          round_fn = round) {
   create_n_fn(median,
               use_index = TRUE,
               negate = negate,
-              round_fn = round_fn,
-              na.rm = na.rm)(...)
+              round_fn = round_fn)(...)
 }
 
 #' @rdname median_index
@@ -167,7 +166,6 @@ quantile_index <- function(...,
                            prob,
                            type = 7,
                            negate = FALSE,
-                           na.rm = FALSE,
                            round_fn = round) {
   create_n_fn(
     quantile,
@@ -175,7 +173,6 @@ quantile_index <- function(...,
     negate = negate,
     round_fn = round_fn,
     prob = prob,
-    type = type,
-    na.rm = na.rm
+    type = type
   )(...)
 }
