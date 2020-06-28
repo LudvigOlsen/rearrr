@@ -43,6 +43,7 @@
 #'  Can be created with \code{\link[rearrr:create_n_fn]{create_n_fn()}}.
 #'  See also \code{\link[rearrr:median_index]{median_index()}} and
 #'  \code{\link[rearrr:median_index]{quantile_index()}}.
+#' @param n_col_name Name of new column with the applied \code{`n`} values. If \code{NULL}, no column is added.
 #' @param ... Extra arguments for \code{`n_fn`}.
 #' @export
 #' @return Rolled \code{`data`}.
@@ -97,12 +98,11 @@
 #' roll_elements(df, cols = "x", n = -2)
 #'
 #' # Roll rows right by median index in each group
-#' # Specify 'negate' and 'na.rm' for 'median_index' function
+#' # Specify 'negate' for the 'median_index' function
 #' roll_elements(
 #'   df %>% dplyr::group_by(g),
 #'   n_fn = median_index,
-#'   negate = TRUE,
-#'   na.rm = TRUE
+#'   negate = TRUE
 #' )
 #'
 #' }
@@ -114,10 +114,11 @@ roll_elements <- function(data,
                           ...) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_number(n,
-                           finite = TRUE,
-                           null.ok = TRUE,
-                           add = assert_collection)
+  checkmate::assert_numeric(n,
+                            any.missing = FALSE,
+                            finite = TRUE,
+                            null.ok = TRUE,
+                            add = assert_collection)
   checkmate::assert_function(n_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(n_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -129,7 +130,7 @@ roll_elements <- function(data,
   # End of argument checks ####
 
   # If no rolling, just return data
-  if (!is.null(n) && n == 0) {
+  if (!is.null(n) && all(n == 0)) {
     return(data)
   }
 
@@ -196,7 +197,7 @@ roll_elements_rearranger_method <- function(data,
                                             n_col_name,
                                             inverse_direction) {
   # Initial check of n
-  if (!is.null(n) && n == 0) {
+  if (!is.null(n) && all(n == 0)) {
     return(data)
   }
 
@@ -221,7 +222,7 @@ roll_elements_rearranger_method <- function(data,
   )
 
   # Check n again
-  if (n == 0) {
+  if (all(n == 0)) {
     return(data)
   }
 

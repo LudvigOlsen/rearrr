@@ -33,6 +33,8 @@ Can be created with \code{\link[rearrr:create_n_fn]{create_n_fn()}}.
 See also \code{\link[rearrr:median_index]{median_index()}} and
 \code{\link[rearrr:median_index]{quantile_index()}}.}
 
+\item{n_col_name}{Name of new column with the applied \code{`n`} values. If \code{NULL}, no column is added.}
+
 \item{...}{Extra arguments for \code{`n_fn`}.}
 }
 \value{
@@ -103,12 +105,11 @@ roll_elements(df, n = -2)
 roll_elements(df, cols = "x", n = -2)
 
 # Roll rows right by median index in each group
-# Specify 'negate' and 'na.rm' for 'median_index' function
+# Specify 'negate' for the 'median_index' function
 roll_elements(
   df \%>\% dplyr::group_by(g),
   n_fn = median_index,
-  negate = TRUE,
-  na.rm = TRUE
+  negate = TRUE
 )
 
 }
