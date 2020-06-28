@@ -16,6 +16,8 @@ radians_to_degrees(radians)
 }
 \value{
 \code{vector} with converted degrees/radians.
+
+Missing values (\code{NA}s) are returned as they are.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
