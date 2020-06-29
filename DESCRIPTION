@@ -22,6 +22,7 @@ Imports:
     stats,
     utils
 Suggests: 
+    covr,
     ggplot2,
     graphics,
     knitr,

@@ -45,6 +45,7 @@ Are \strong{ordered as}:
 \donttest{
 # Attach packages
 library(rearrr)
+library(dplyr)
 
 # Set seed
 set.seed(1)
