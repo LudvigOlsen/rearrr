@@ -11,6 +11,7 @@
 #'  Calculates the mean for each of the passed vectors.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param ... Numeric vectors.
+#' @param na.rm Whether to ignore missing values when calculating means. (Logical)
 #' @export
 #' @return \code{vector} with the means of each supplied vector.
 #' @examples
@@ -30,6 +31,6 @@
 #' # Aka. the means of each vector
 #' centroid(x, y, z)
 #' }
-centroid <- function(...) {
-  create_origin_fn(mean)(...)
+centroid <- function(..., na.rm = FALSE) {
+  create_origin_fn(mean, na.rm = na.rm)(...)
 }

@@ -4,26 +4,16 @@
 \alias{create_origin_fn}
 \title{Create origin_fn function}
 \usage{
-create_origin_fn(fn)
+create_origin_fn(fn, ...)
 }
 \arguments{
 \item{fn}{Function to apply to each dimension. Should return a numeric scalar.}
+
+\item{...}{Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.}
 }
 \value{
 Function with the dots (\code{...}) argument that applies the \code{`fn`} function to
-each element in \code{...} (usually one vector per dimension). More specifically:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(fn) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}
+each element in \code{...} (usually one vector per dimension).
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -51,6 +41,22 @@ median_origin_fn(x, y, z)
 
 # Should be the same as
 c(median(x), median(y), median(z))
+
+# Use mean and ignore missing values
+mean_origin_fn <- create_origin_fn(mean, na.rm = TRUE)
+
+# Add missing values
+x[[2]] <- NA
+y[[5]] <- NA
+
+# Use mean_origin_fn
+mean_origin_fn(x, y, z)
+
+# Should be the same as
+c(mean(x, na.rm = TRUE),
+  mean(y, na.rm = TRUE),
+  mean(z, na.rm = TRUE)
+)
 
 }
 }

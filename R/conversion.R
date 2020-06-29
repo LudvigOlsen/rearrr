@@ -10,6 +10,8 @@
 #' @param radians \code{vector} of radians to convert to degrees with \deqn{`radians` / (\pi / 180)}
 #' @export
 #' @return \code{vector} with converted degrees/radians.
+#'
+#'  Missing values (\code{NA}s) are returned as they are.
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -26,12 +28,12 @@
 #' radians_to_degrees(degrees_to_radians(c(90, 180, 270)))
 #' }
 degrees_to_radians <- function(degrees){
-  checkmate::assert_numeric(degrees, any.missing = FALSE)
+  checkmate::assert_numeric(degrees)
   degrees * (pi / 180)
 }
 
 #' @rdname degrees_to_radians
 radians_to_degrees <- function(radians){
-  checkmate::assert_numeric(radians, any.missing = FALSE)
+  checkmate::assert_numeric(radians)
   radians / (pi / 180)
 }

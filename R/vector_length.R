@@ -8,7 +8,7 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Calculates vector lengths/magnitudes \emph{row-wise} or \emph{column-wise} with
+#'  Calculates vector lengths/magnitudes \emph{row-} or \emph{column-wise} with
 #'  \deqn{sqrt(sum(x^2))}
 #'  Where \eqn{x} is the \code{vector} to get the length/magnitude of.
 #'
@@ -83,6 +83,7 @@ vector_length <- function(data,
     mutate_fn = vector_length_mutator_method,
     check_fn = NULL,
     cols = cols,
+    allowed_types = "numeric",
     suffix = "",
     force_df = FALSE,
     keep_original = TRUE,

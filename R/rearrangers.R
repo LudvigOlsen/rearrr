@@ -56,7 +56,7 @@ rearranger <- function(data,
                               null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(rearrange_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_data_frame(data[,cols, drop = FALSE], types = allowed_types,
+  checkmate::assert_data_frame(data[, cols, drop = FALSE], types = allowed_types,
                                .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col(s)' columns"),
                                add = assert_collection)
   checkmate::reportAssertions(assert_collection)

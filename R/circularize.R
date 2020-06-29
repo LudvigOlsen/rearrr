@@ -208,7 +208,15 @@ circularize_mutator_method <- function(data, cols, .min, .max, offset_x,
                                        360 - data[[degrees_col_name]],
                                        data[[degrees_col_name]])
     # Shift values such that (max(x), 0) is 0/360 degrees
-    data[[degrees_col_name]] <- roll_values(data[[degrees_col_name]], change = 90, .min = 0, .max = 360)
+    data <- roll_values(
+      data = data,
+      cols = degrees_col_name,
+      add = 90,
+      .min = 0,
+      .max = 360,
+      suffix = "",
+      range_col_name = NULL
+    )
   }
 
   if (!is.null(origin_col_name)){

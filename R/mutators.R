@@ -1,5 +1,6 @@
 
 
+
 #   __________________ #< beae0116fffd26a3055dd7425c5928ad ># __________________
 #   Mutators                                                                ####
 
@@ -27,30 +28,41 @@ mutator <- function(data,
                     force_df = FALSE,
                     allowed_types = c("numeric", "factor"),
                     ...) {
-
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, cols = col, new_name = new_name)
+  prepped <-
+    prepare_input_data(data = data,
+                       cols = col,
+                       new_name = new_name)
   data <- prepped[["data"]]
   col <- prepped[["cols"]]
   new_name = prepped[["new_name"]]
   was_vector <- prepped[["was_vector"]]
 
-  if (isTRUE(prepped[["use_index"]])){
+  if (isTRUE(prepped[["use_index"]])) {
     stop("When 'data' is a data frame, 'col' must be specified.")
   }
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
-  checkmate::assert_string(col, min.chars = 1, null.ok = FALSE, add = assert_collection)
-  checkmate::assert_string(new_name, min.chars = 1, null.ok = FALSE, add = assert_collection)
+  checkmate::assert_string(col,
+                           min.chars = 1,
+                           null.ok = FALSE,
+                           add = assert_collection)
+  checkmate::assert_string(new_name,
+                           min.chars = 1,
+                           null.ok = FALSE,
+                           add = assert_collection)
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  checkmate::assert_data_frame(data[[col]], types = allowed_types,
-                               .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col' column"),
-                               add = assert_collection)
+  checkmate::assert_data_frame(
+    data[[col]],
+    types = allowed_types,
+    .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col' column"),
+    add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # This is for checks we want to perform after preparing 'data' and 'col'
@@ -99,48 +111,60 @@ mutator <- function(data,
 #'  Some columns may have been overwritten, in which case only the newest versions are returned.
 #' @param min_dims Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 #'  setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.
+#' @param allow_missing Whether to allow missing values (\code{NA}s). (Logical)
 #' @inheritParams mutator
 #' @keywords internal
 #' @return
 #'  The mutated \code{data.frame} (\code{tibble}).
-multi_mutator <- function(
-  data,
-  mutate_fn,
-  check_fn,
-  cols = NULL,
-  suffix = "_mutated",
-  force_df = TRUE,
-  allowed_types = c("numeric", "factor"),
-  min_dims = 1,
-  keep_original = TRUE,
-  ...) {
-
-
+multi_mutator <- function(data,
+                          mutate_fn,
+                          check_fn,
+                          cols = NULL,
+                          suffix = "_mutated",
+                          force_df = TRUE,
+                          allowed_types = c("numeric", "factor"),
+                          allow_missing = FALSE,
+                          min_dims = 1,
+                          keep_original = TRUE,
+                          ...) {
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, cols = cols, min_dims = min_dims)
+  prepped <- prepare_input_data(data = data,
+                                cols = cols,
+                                min_dims = min_dims,
+                                allow_missing = allow_missing)
   data <- prepped[["data"]]
   cols <- prepped[["cols"]]
   was_vector <- prepped[["was_vector"]]
 
-  if (isTRUE(prepped[["use_index"]])){
+  if (isTRUE(prepped[["use_index"]])) {
     stop("When 'data' is a data frame, 'cols' must be specified.")
   }
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
-  checkmate::assert_character(cols, any.missing = FALSE, min.len = 1, min.chars = 1,
-                              null.ok = FALSE, add = assert_collection)
+  checkmate::assert_character(
+    cols,
+    any.missing = FALSE,
+    min.len = 1,
+    min.chars = 1,
+    unique = TRUE,
+    null.ok = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
   checkmate::assert_flag(force_df, add = assert_collection)
   checkmate::assert_flag(keep_original, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  checkmate::assert_data_frame(data[,cols, drop=FALSE], types = allowed_types,
-                               .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'cols' columns"),
-                               add = assert_collection)
+  checkmate::assert_data_frame(
+    data[, cols, drop = FALSE],
+    types = allowed_types,
+    .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'cols' columns"),
+    add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # This is for checks we want to perform after preparing 'data' and 'col'
@@ -153,11 +177,11 @@ multi_mutator <- function(
 
   # Find columns to remove post-run if keep_original is FALSE
   exclude_cols <- NULL
-  if (!isTRUE(keep_original)){
+  if (!isTRUE(keep_original)) {
     group_columns <- colnames(grp_keys)
     non_group_columns <- setdiff(colnames(data), group_columns)
     exclude_cols <- non_group_columns
-    if (suffix == ""){
+    if (suffix == "") {
       # The cols will be overwritten
       # so we shouldn't exclude them
       exclude_cols <- setdiff(exclude_cols, cols)
@@ -188,6 +212,3 @@ multi_mutator <- function(
   data
 
 }
-
-
-

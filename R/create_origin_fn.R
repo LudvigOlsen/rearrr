@@ -10,21 +10,10 @@
 #'  Creates a function that applies a supplied function to all input vectors.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param fn Function to apply to each dimension. Should return a numeric scalar.
+#' @param ... Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.
 #' @export
 #' @return Function with the dots (\code{...}) argument that applies the \code{`fn`} function to
-#'  each element in \code{...} (usually one vector per dimension). More specifically:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(fn) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
+#'  each element in \code{...} (usually one vector per dimension).
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -47,11 +36,28 @@
 #' # Should be the same as
 #' c(median(x), median(y), median(z))
 #'
+#' # Use mean and ignore missing values
+#' mean_origin_fn <- create_origin_fn(mean, na.rm = TRUE)
+#'
+#' # Add missing values
+#' x[[2]] <- NA
+#' y[[5]] <- NA
+#'
+#' # Use mean_origin_fn
+#' mean_origin_fn(x, y, z)
+#'
+#' # Should be the same as
+#' c(mean(x, na.rm = TRUE),
+#'   mean(y, na.rm = TRUE),
+#'   mean(z, na.rm = TRUE)
+#' )
+#'
 #' }
-create_origin_fn <- function(fn) {
+create_origin_fn <- function(fn, ...) {
+  args <- list(...)
   function(...){
     list(...) %>%
-      purrr::map(fn) %>%
+      purrr::map(.f = function(x){rlang::exec(.fn = fn, x, !!!args)}) %>%
       unlist(recursive = TRUE, use.names = FALSE)
   }
 }

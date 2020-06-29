@@ -37,7 +37,7 @@ A \code{data.frame} with the summarized column vector lengths.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Calculates vector lengths/magnitudes \emph{row-wise} or \emph{column-wise} with
+Calculates vector lengths/magnitudes \emph{row-} or \emph{column-wise} with
 \deqn{sqrt(sum(x^2))}
 Where \eqn{x} is the \code{vector} to get the length/magnitude of.
 

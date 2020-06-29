@@ -86,7 +86,8 @@ Other rearrange functions:
 \code{\link{furthest_from}()},
 \code{\link{pair_extremes}()},
 \code{\link{position_max}()},
-\code{\link{position_min}()}
+\code{\link{position_min}()},
+\code{\link{roll_elements}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
