@@ -145,6 +145,7 @@ wrap_to_range_vec(x, .min = 1, .max = 7, between = 1)
 #
 
 # Set seed
+set.seed(1)
 
 # Create a data frame
 df <- data.frame(

@@ -92,7 +92,7 @@
 #' #
 #'
 #' # Set seed
-#  set.seed(1)
+#' set.seed(1)
 #'
 #' # Create a data frame
 #' df <- data.frame(
@@ -167,7 +167,7 @@ roll_values <- function(data,
   checkmate::assert_flag(na.rm, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if (!is.data.frame(data) && !is.null(cols)) {
-    assert_collection$push("when 'data' is not a numeric vector, 'cols' should be NULL.")
+    assert_collection$push("when 'data' is not a data.frame, 'cols' should be NULL.")
   }
   if (is.data.frame(data) && is.null(cols)) {
     assert_collection$push("when 'data' is a data.frame, 'cols' must be specified.")
@@ -183,6 +183,7 @@ roll_values <- function(data,
     suffix = suffix,
     force_df = FALSE,
     allowed_types = c("numeric"),
+    allow_missing = na.rm,
     min_dims = 1,
     keep_original = keep_original,
     add = add,
@@ -303,6 +304,16 @@ roll_values_mutator_method <- function(data,
       dim_var_name = "cols",
       allow_len_one = TRUE
     )
+  }
+
+  # In case one of .min/.max was provided and the
+  # other is measured and different length
+  if (length(.min) != length(.max)){
+    if (length(.min) == 1){
+      .min <- rep(.min, length(.max))
+    } else if (length(.max) == 1){
+      .max <- rep(.max, length(.min))
+    }
   }
 
   # Combine to list of ranges (one or one per column)

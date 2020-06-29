@@ -111,6 +111,7 @@ mutator <- function(data,
 #'  Some columns may have been overwritten, in which case only the newest versions are returned.
 #' @param min_dims Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 #'  setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.
+#' @param allow_missing Whether to allow missing values (\code{NA}s). (Logical)
 #' @inheritParams mutator
 #' @keywords internal
 #' @return
@@ -122,6 +123,7 @@ multi_mutator <- function(data,
                           suffix = "_mutated",
                           force_df = TRUE,
                           allowed_types = c("numeric", "factor"),
+                          allow_missing = FALSE,
                           min_dims = 1,
                           keep_original = TRUE,
                           ...) {
@@ -129,7 +131,8 @@ multi_mutator <- function(data,
   # Includes a set of checks
   prepped <- prepare_input_data(data = data,
                                 cols = cols,
-                                min_dims = min_dims)
+                                min_dims = min_dims,
+                                allow_missing = allow_missing)
   data <- prepped[["data"]]
   cols <- prepped[["cols"]]
   was_vector <- prepped[["was_vector"]]

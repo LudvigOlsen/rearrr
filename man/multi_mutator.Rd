@@ -12,6 +12,7 @@ multi_mutator(
   suffix = "_mutated",
   force_df = TRUE,
   allowed_types = c("numeric", "factor"),
+  allow_missing = FALSE,
   min_dims = 1,
   keep_original = TRUE,
   ...
@@ -35,6 +36,8 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{allowed_types}{Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
 columns not mentioned in the \code{`col(s)`} argument.}
+
+\item{allow_missing}{Whether to allow missing values (\code{NA}s). (Logical)}
 
 \item{min_dims}{Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.}
