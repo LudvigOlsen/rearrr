@@ -174,6 +174,7 @@ roll_elements <- function(data,
 }
 
 #' @rdname roll_elements
+#' @export
 roll_elements_vec <- function(data,
                               n = NULL,
                               n_fn = NULL,

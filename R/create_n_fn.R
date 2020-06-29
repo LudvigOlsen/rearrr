@@ -160,6 +160,7 @@ median_index <- function(...,
 }
 
 #' @rdname median_index
+#' @export
 #' @param prob Probability in \code{[0,1]} for \code{\link[stats:quantile]{quantile()}}.
 #' @param type Quantile algorithm to use. See \code{\link[stats:quantile]{quantile()}}.
 quantile_index <- function(...,

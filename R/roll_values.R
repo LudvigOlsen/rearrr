@@ -197,6 +197,7 @@ roll_values <- function(data,
 }
 
 #' @rdname roll_values
+#' @export
 wrap_to_range <- function(data,
                           cols = NULL,
                           .min = NULL,
@@ -221,6 +222,7 @@ wrap_to_range <- function(data,
 }
 
 #' @rdname roll_values
+#' @export
 roll_values_vec <- function(data,
                             add = 0,
                             .min = NULL,
@@ -242,6 +244,7 @@ roll_values_vec <- function(data,
 }
 
 #' @rdname roll_values
+#' @export
 wrap_to_range_vec <- function(data,
                               .min = NULL,
                               .max = NULL,

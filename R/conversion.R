@@ -33,6 +33,7 @@ degrees_to_radians <- function(degrees){
 }
 
 #' @rdname degrees_to_radians
+#' @export
 radians_to_degrees <- function(radians){
   checkmate::assert_numeric(radians)
   radians / (pi / 180)
