@@ -1861,7 +1861,6 @@ test_that("fuzz testing roll_values()", {
   #
 })
 
-
 test_that("testing wrap_to_range()", {
   xpectr::set_test_seed(42)
 

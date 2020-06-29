@@ -79,7 +79,8 @@ Note: `rearrr` is still quite new and not all functions are properly tested yet.
 |`swirl_2d()`           |Swirl values around an origin in 2 dimensions.                         |2           |
 |`swirl_3d()`           |Swirl values around an origin in 3 dimensions.                         |3           |
 |`transfer_centroids()` |Transfer centroids from one `data.frame` to another.                   |n           |
-|`roll_values()`</br>`wrap_to_range()` |Shifts values and wraps to range.                       |n           |
+|`roll_values()`        |Shifts values and wraps to a range.                                    |n           |
+|`wrap_to_range()`      |Wraps values to a range.                                               |n           |
 
 ### Formers
 

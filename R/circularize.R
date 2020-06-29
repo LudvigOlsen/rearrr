@@ -215,7 +215,7 @@ circularize_mutator_method <- function(data, cols, .min, .max, offset_x,
       .min = 0,
       .max = 360,
       suffix = "",
-      range_col_name = FALSE
+      range_col_name = NULL
     )
   }
 

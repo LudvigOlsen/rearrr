@@ -57,19 +57,20 @@ yet.
 
 ### Mutators
 
-| Function                              | Description                                                           | Dimensions   |
-| :------------------------------------ | :-------------------------------------------------------------------- | :----------- |
-| `flip_values()`                       | Flip the values around an origin.                                     | n            |
-| `expand_distances()`                  | Expand distances to an origin.                                        | n            |
-| `expand_distances_each()`             | Expand distances to an origin separately for each dimension.          | n            |
-| `cluster_groups()`                    | Move data points into clusters around group centroids.                | n            |
-| `dim_values()`                        | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
-| `rotate_2d()`                         | Rotate values around an origin in 2 dimensions.                       | 2            |
-| `rotate_3d()`                         | Rotate values around an origin in 3 dimensions.                       | 3            |
-| `swirl_2d()`                          | Swirl values around an origin in 2 dimensions.                        | 2            |
-| `swirl_3d()`                          | Swirl values around an origin in 3 dimensions.                        | 3            |
-| `transfer_centroids()`                | Transfer centroids from one `data.frame` to another.                  | n            |
-| `roll_values()`</br>`wrap_to_range()` | Shifts values and wraps to range.                                     | n            |
+| Function                  | Description                                                           | Dimensions   |
+| :------------------------ | :-------------------------------------------------------------------- | :----------- |
+| `flip_values()`           | Flip the values around an origin.                                     | n            |
+| `expand_distances()`      | Expand distances to an origin.                                        | n            |
+| `expand_distances_each()` | Expand distances to an origin separately for each dimension.          | n            |
+| `cluster_groups()`        | Move data points into clusters around group centroids.                | n            |
+| `dim_values()`            | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
+| `rotate_2d()`             | Rotate values around an origin in 2 dimensions.                       | 2            |
+| `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
+| `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
+| `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
+| `transfer_centroids()`    | Transfer centroids from one `data.frame` to another.                  | n            |
+| `roll_values()`           | Shifts values and wraps to a range.                                   | n            |
+| `wrap_to_range()`         | Wraps values to a range.                                              | n            |
 
 ### Formers
 
