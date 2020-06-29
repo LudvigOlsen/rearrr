@@ -9,7 +9,8 @@ test_that("distance()", {
     "x" = runif(20),
     "y" = runif(20),
     "z" = runif(20),
-    "g" = rep(1:4, each=5)
+    "g" = rep(1:4, each = 5),
+    stringsAsFactors = FALSE
   )
 
   # Generate expectations for 'distance'

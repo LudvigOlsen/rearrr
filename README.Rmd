@@ -155,7 +155,8 @@ orderings <- data.frame(
   "closest_to" = closest_to(vec, origin_fn = create_origin_fn(median)),
   "furthest_from" = furthest_from(vec, origin = 5),
   "random_sample" = random_sample,
-  "flipped_median" = flip_values(random_sample, origin_fn=create_origin_fn(median))$Value_flipped
+  "flipped_median" = flip_values(random_sample, origin_fn=create_origin_fn(median))$Value_flipped,
+  stringsAsFactors = FALSE
 ) 
 
 # Convert to long format for plotting

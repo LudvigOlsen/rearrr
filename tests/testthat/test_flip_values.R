@@ -11,7 +11,8 @@ test_that("fuzz testing flipped_values()", {
     "y" = runif(15),
     "z" = runif(15),
     "i" = 1:15,
-    "g" = rep(c(1, 2, 3, 4, 5), each = 3)
+    "g" = rep(c(1, 2, 3, 4, 5), each = 3),
+    stringsAsFactors = FALSE
   )
 
   # Generate expectations for 'flip_values'

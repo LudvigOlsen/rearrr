@@ -544,7 +544,8 @@ test_that("fuzz testing roll_values()", {
     "w" = 1:7,
     "d" = c(0, 45, 90, 135, 180, 270, 360),
     "ch" = LETTERS[1:7],
-    "g" = c(1,1,2,2,3,3,3)
+    "g" = c(1,1,2,2,3,3,3),
+    stringsAsFactors = FALSE
   )
 
   # Generate expectations for 'roll_values'
@@ -959,7 +960,7 @@ test_that("fuzz testing roll_values()", {
   side_effects_19346 <- xpectr::capture_side_effects(roll_values(data = df, cols = "ch", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''cols' columns': May only contain the following types: {numeric}, but element 1 has type\n * 'factor'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''cols' columns': May only contain the following types: {numeric}, but element 1 has type\n * 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error_class']]),
@@ -1644,7 +1645,7 @@ test_that("fuzz testing roll_values()", {
   # Testing column values
   expect_equal(
     output_14357[["ch"]],
-    structure(1:7, .Label = c("A", "B", "C", "D", "E", "F", "G"), class = "factor"))
+    c("A", "B", "C", "D", "E", "F", "G"))
   expect_equal(
     output_14357[["g"]],
     c(1, 1, 2, 2, 3, 3, 3),
@@ -1671,12 +1672,12 @@ test_that("fuzz testing roll_values()", {
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_14357),
-    c("factor", "numeric", "numeric", "numeric", "list", "character"),
+    c("character", "numeric", "numeric", "numeric", "list", "character"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_14357),
-    c("integer", "double", "double", "double", "list", "character"),
+    c("character", "double", "double", "double", "list", "character"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
@@ -1868,7 +1869,8 @@ test_that("testing wrap_to_range()", {
     "w" = 1:7,
     "d" = c(0, 45, 90, 135, 180, 270, NA),
     "ch" = LETTERS[1:7],
-    "g" = c(1,1,2,2,3,3,3)
+    "g" = c(1,1,2,2,3,3,3),
+    stringsAsFactors = FALSE
   )
 
   # Simply checks that changing the arguments is picked up by roll_values
@@ -1894,7 +1896,7 @@ test_that("testing wrap_to_range()", {
     tolerance = 1e-4)
   expect_equal(
     output_19148[["ch"]],
-    structure(1:7, .Label = c("A", "B", "C", "D", "E", "F", "G"), class = "factor"))
+    c("A", "B", "C", "D", "E", "F", "G"))
   expect_equal(
     output_19148[["g"]],
     c(1, 1, 2, 2, 3, 3, 3),
@@ -1920,13 +1922,13 @@ test_that("testing wrap_to_range()", {
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19148),
-    c("integer", "numeric", "factor", "numeric", "numeric", "numeric",
+    c("integer", "numeric", "character", "numeric", "numeric", "numeric",
       "list", "character"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19148),
-    c("integer", "double", "integer", "double", "double", "double",
+    c("integer", "double", "character", "double", "double", "double",
       "list", "character"),
     fixed = TRUE)
   # Testing dimensions

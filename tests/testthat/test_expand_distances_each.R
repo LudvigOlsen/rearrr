@@ -9,7 +9,8 @@ test_that("expand_distances_each()", {
     "x" = runif(20),
     "y" = runif(20),
     "z" = runif(20),
-    "g" = rep(1:4, each=5)
+    "g" = rep(1:4, each = 5),
+    stringsAsFactors = FALSE
   )
 
   # Generate expectations for 'expand_distances'

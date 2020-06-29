@@ -8,7 +8,8 @@ test_that("rearrange() with method pair_extremes works", {
   xpectr::set_test_seed(1)
   df <- data.frame(
     "participant" = factor(c(1, 3, 5, 6, 7, 8, 9)),
-    "score" = c(79, 85, 140, 69, 87, 92, 87)
+    "score" = c(79, 85, 140, 69, 87, 92, 87),
+    stringsAsFactors = FALSE
   )
   df <- df %>% dplyr::arrange(score)
 

@@ -93,7 +93,8 @@ generate_clusters <- function(num_rows,
   # Generate data frame
   data <- matrix(data = generator(num_rows * num_cols),
                  nrow = num_rows,
-                 ncol = num_cols) %>% as.data.frame()
+                 ncol = num_cols) %>%
+    as.data.frame(stringsAsFactors = FALSE)
 
   # Name columns
   cols <- paste0(name_prefix, seq_len(num_cols))
