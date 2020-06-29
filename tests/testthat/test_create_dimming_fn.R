@@ -3,6 +3,9 @@ context("create_dimming_fn()")
 
 test_that("create_dimming_fn()", {
 
+  # We can't check function definitions when running covr::*
+  testthat::skip_if(covr::in_covr())
+
   # Generate expectations for 'create_dimming_fn'
   # Tip: comment out the gxs_function() call
   # so it is easy to regenerate the tests
@@ -37,9 +40,9 @@ test_that("create_dimming_fn()", {
     fixed = TRUE)
   # Testing function definition
   expect_equal(
-    deparse(output_19148),
-    c("function (x, d) ", "{", "    x * (numerator/((add_to_distance + d)^exponent))",
-      "}"),
+    paste0(deparse(output_19148), collapse = ""),
+    paste0(c("function (x, d) ", "{", "    x * (numerator/((add_to_distance + d)^exponent))",
+      "}"), collapse = ""),
     fixed = TRUE)
 
   # Testing create_dimming_fn(numerator = 0, exponent = ...

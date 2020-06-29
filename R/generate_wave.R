@@ -26,7 +26,7 @@
 #' @keywords internal
 #' @return y-values for the wave signal.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
