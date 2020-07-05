@@ -252,8 +252,10 @@ triangularize_mutator_method_ <- function(data,
     )
 
   # Edge numbers
-  top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 3, 1)
-  bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 3, 2)
+  if (!is.null(edge_col_name)){
+    top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 3, 1)
+    bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 3, 2)
+  }
 
   # Combine datasets
   new_data <- dplyr::bind_rows(
@@ -270,7 +272,10 @@ triangularize_mutator_method_ <- function(data,
   new_data <- new_data[order(new_data[[tmp_index_col]]), , drop = FALSE]
   new_data[[tmp_index_col]] <- NULL
   new_data[[tmp_side_col]] <- NULL
-  new_data[[edge_col_name]] <- factor(new_data[[edge_col_name]])
+
+  if (!is.null(edge_col_name)){
+    new_data[[edge_col_name]] <- factor(new_data[[edge_col_name]])
+  }
 
   # Offset x
   new_data[[x_col_name]] <- new_data[[x_col_name]] + offset_x
