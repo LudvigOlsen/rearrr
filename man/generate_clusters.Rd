@@ -72,12 +72,13 @@ generate_clusters(num_rows = 20, num_cols = 5, num_clusters = 6, compactness = 2
 generate_clusters(
   num_rows = 50, num_cols = 2,
   num_clusters = 5, compactness = 1.6
-  ) \%>\%
+) \%>\%
   ggplot(
-    aes(x = D1, y = D2, color = .cluster)) +
-    geom_point() +
-    theme_minimal() +
-    labs(x = "D1", y = "D2", color = "Cluster")
+    aes(x = D1, y = D2, color = .cluster)
+  ) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "D1", y = "D2", color = "Cluster")
 
 #
 # Plot clusters in 3d view
@@ -91,14 +92,13 @@ clusters <- generate_clusters(
 
 # Plot 3d with plotly
 plotly::plot_ly(
-  x=clusters$D1,
-  y=clusters$D2,
-  z=clusters$D3,
-  type="scatter3d",
-  mode="markers",
-  color=clusters$.cluster
+  x = clusters$D1,
+  y = clusters$D2,
+  z = clusters$D3,
+  type = "scatter3d",
+  mode = "markers",
+  color = clusters$.cluster
 )
-
 }
 }
 \seealso{

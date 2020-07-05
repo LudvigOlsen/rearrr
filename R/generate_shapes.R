@@ -75,7 +75,7 @@ generate_shapes <- function(num_objects,
     }
     checkmate::reportAssertions(assert_collection)
     if (all(is_between_(shape_nums, a = 0, b = 1)) &&
-        round(sum(shape_nums), digits = 4) != 1) {
+      round(sum(shape_nums), digits = 4) != 1) {
       assert_collection$push("when numbers in 'shape' are between 0 and 1, they must sum to 1.")
     }
     if (all(shape_nums >= 1)) {
@@ -157,12 +157,13 @@ generate_shapes <- function(num_objects,
 
   dplyr::bind_rows(object_dfs) %>%
     dplyr::mutate(.object_x = .data$.object_x + .data$centroid_x) %>%
-    dplyr::select(.data$.object,
-                  .data$.shape,
-                  .data$.object_x,
-                  .data$.object_y,
-                  dplyr::one_of(unique(info_cols)))
-
+    dplyr::select(
+      .data$.object,
+      .data$.shape,
+      .data$.object_x,
+      .data$.object_y,
+      dplyr::one_of(unique(info_cols))
+    )
 }
 
 distribute_shapes_ <- function(shape,
@@ -176,7 +177,7 @@ distribute_shapes_ <- function(shape,
 
   # Specific counts
   if (!is.null(shape_nums) &&
-      all(shape_nums >= 1)) {
+    all(shape_nums >= 1)) {
     return(sample(rep(shape, shape_nums)))
   }
 
@@ -188,7 +189,7 @@ distribute_shapes_ <- function(shape,
   sampling_num_objects <- num_objects
 
   if (isTRUE(ensure_one) &&
-      length(shape) <= num_objects) {
+    length(shape) <= num_objects) {
     sampled_shapes <- append(sampled_shapes, shape)
     sampling_num_objects <- sampling_num_objects - length(shape)
   }
@@ -205,17 +206,20 @@ distribute_shapes_ <- function(shape,
   }
 
   return(sample(sampled_shapes))
-
 }
 
 gen_square_ <- function(data) {
   data %>%
-    square(y_col = ".object_y",
-           x_col_name = ".object_x") %>%
-    dplyr::arrange(.data$.object,
-                   .data$.edge,
-                   .data$.object_x,
-                   .data$.object_y) %>%
+    square(
+      y_col = ".object_y",
+      x_col_name = ".object_x"
+    ) %>%
+    dplyr::arrange(
+      .data$.object,
+      .data$.edge,
+      .data$.object_x,
+      .data$.object_y
+    ) %>%
     dplyr::group_by(.data$.object) %>%
     rotate_2d(
       degrees = 45,
@@ -231,30 +235,36 @@ gen_square_ <- function(data) {
 gen_circle_ <- function(data) {
   data %>%
     circularize(y_col = ".object_y", x_col_name = ".object_x") %>%
-    dplyr::arrange(.data$.object,
-                   .data$.degrees,
-                   .data$.object_x,
-                   .data$.object_y) %>%
+    dplyr::arrange(
+      .data$.object,
+      .data$.degrees,
+      .data$.object_x,
+      .data$.object_y
+    ) %>%
     list()
 }
 
 gen_triangle_ <- function(data) {
   data %>%
     triangularize(y_col = ".object_y", x_col_name = ".object_x") %>%
-    dplyr::arrange(.data$.object,
-                   .data$.edge,
-                   .data$.object_x,
-                   .data$.object_y) %>%
+    dplyr::arrange(
+      .data$.object,
+      .data$.edge,
+      .data$.object_x,
+      .data$.object_y
+    ) %>%
     list()
 }
 
 gen_hexagon_ <- function(data) {
   data %>%
     hexagonalize(y_col = ".object_y", x_col_name = ".object_x") %>%
-    dplyr::arrange(.data$.object,
-                   .data$.edge,
-                   .data$.object_x,
-                   .data$.object_y) %>%
+    dplyr::arrange(
+      .data$.object,
+      .data$.edge,
+      .data$.object_x,
+      .data$.object_y
+    ) %>%
     list()
 }
 
@@ -287,7 +297,8 @@ gen_initial_clusters_ <- function(num_points,
       ),
       centroid_x = centroid(.data$D2, .data$D1)[[1]]
     ) %>%
-    dplyr::rename(.object_y = .data$D1,
-                  .object = .data$.cluster)
-
+    dplyr::rename(
+      .object_y = .data$D1,
+      .object = .data$.cluster
+    )
 }

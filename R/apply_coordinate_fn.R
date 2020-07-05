@@ -5,14 +5,14 @@
 
 
 apply_coordinate_fn_ <- function(dim_vectors,
-                                coordinates,
-                                fn,
-                                num_dims,
-                                coordinate_name,
-                                fn_name,
-                                dim_var_name,
-                                allow_len_one = FALSE,
-                                extra_args = NULL) {
+                                 coordinates,
+                                 fn,
+                                 num_dims,
+                                 coordinate_name,
+                                 fn_name,
+                                 dim_var_name,
+                                 allow_len_one = FALSE,
+                                 extra_args = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -58,8 +58,8 @@ apply_coordinate_fn_ <- function(dim_vectors,
     check_msg <- paste0("'", coordinate_name, "'")
   }
 
-  if (is.null(dim_var_name) && num_dims == 1){
-    if (length(coordinates) != 1){
+  if (is.null(dim_var_name) && num_dims == 1) {
+    if (length(coordinates) != 1) {
       stop(
         paste0(
           check_msg,
@@ -104,10 +104,9 @@ apply_coordinate_fn_ <- function(dim_vectors,
     stop(paste0(check_msg, " was not numeric."))
   }
 
-  if (any(is.na(coordinates))){
+  if (any(is.na(coordinates))) {
     stop(paste0(check_msg, " contained missing values (NAs)."))
   }
 
   coordinates
 }
-

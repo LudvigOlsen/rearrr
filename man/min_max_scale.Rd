@@ -54,7 +54,6 @@ x <- runif(10)
 # Scale
 min_max_scale(x, new_min = -1, new_max = 0)
 min_max_scale(x, new_min = -1, new_max = 0, old_max = 3)
-
 }
 }
 \seealso{

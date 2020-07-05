@@ -80,8 +80,9 @@ base_select_ <- function(data, cols) {
 
 # Cols should be col names
 base_deselect_ <- function(data, cols) {
-  if (!is.character(cols))
+  if (!is.character(cols)) {
     stop("cols must be names")
+  }
   base_select_(data = data, cols = setdiff(names(data), cols))
 }
 
@@ -92,8 +93,9 @@ base_deselect_ <- function(data, cols) {
 
 # Col should be col name
 position_first_ <- function(data, col) {
-  if (is.numeric(col))
+  if (is.numeric(col)) {
     stop("'col' must be a name.")
+  }
   # if(is.data.table(data)){
   #   return(data[, c(col, setdiff(names(data), col)), with = FALSE])
   # }
@@ -110,8 +112,9 @@ position_first_ <- function(data, col) {
 # Note: May not work with rownames!
 insert_row_ <- function(data, new_row, after) {
   data <- rbind(data, new_row)
-  data <- data[order(c(seq_len(nrow(data) - 1), after + 0.5)),
-               , drop = FALSE] # extra comma on purpose
+  data <- data[order(c(seq_len(nrow(data) - 1), after + 0.5)), ,
+    drop = FALSE
+  ] # extra comma on purpose
   row.names(data) <- NULL
   data
 }
@@ -185,9 +188,10 @@ greedy_windows_ <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data,
-                               min.cols = 1,
-                               min.rows = 1,
-                               add = assert_collection)
+    min.cols = 1,
+    min.rows = 1,
+    add = assert_collection
+  )
   checkmate::assert_number(window_size, lower = 1, add = assert_collection)
   checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -205,12 +209,12 @@ greedy_windows_ <- function(data,
 ##  Windows n-distributed                                                   ####
 
 ndist_windows_ <- function(data,
-                          num_windows,
-                          factor_name  = ".window") {
+                           num_windows,
+                           factor_name = ".window") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, add = assert_collection)
-  checkmate::assert_number(num_windows, lower = 1,  add = assert_collection)
+  checkmate::assert_number(num_windows, lower = 1, add = assert_collection)
   checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if (num_windows > nrow(data)) {
@@ -277,7 +281,6 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
   }
 
   factor(grouping_factor)
-
 }
 
 
@@ -299,18 +302,19 @@ paste_coordinates_column_ <- function(data, col) {
   str_name <- paste0(col, "_str")
   # data[[col]] <- purrr::map(.x = data[[col]], .f = ~{purrr::map(.f = round(.x, digits = digits))})
   data[[str_name]] <- paste0(data[[col]])
-  data[[str_name]] <-  substr(data[[str_name]],
-                              start = 3,
-                              stop = nchar(data[[str_name]]) - 1)
+  data[[str_name]] <- substr(data[[str_name]],
+    start = 3,
+    stop = nchar(data[[str_name]]) - 1
+  )
   data[[str_name]] <- gsub("[[:blank:]]+", "", data[[str_name]])
 
   data
 }
 
 paste_ranges_column_ <- function(data,
-                                col,
-                                include_min = TRUE,
-                                include_max = TRUE) {
+                                 col,
+                                 include_min = TRUE,
+                                 include_max = TRUE) {
   str_name <- paste0(col, "_str")
   outer_is_list <- is.list(data[[col]][[1]])
   data[[str_name]] <- data[[col]] %>%
@@ -318,23 +322,26 @@ paste_ranges_column_ <- function(data,
       purrr::map(.x, .f = unname)
     })
   data[[str_name]] <- paste0(data[[str_name]])
-  data[[str_name]] <-  substr(data[[str_name]],
-                              start = ifelse(outer_is_list, 6, 3),
-                              stop = nchar(data[[str_name]]) - 1)
+  data[[str_name]] <- substr(data[[str_name]],
+    start = ifelse(outer_is_list, 6, 3),
+    stop = nchar(data[[str_name]]) - 1
+  )
   data[[str_name]] <- gsub("[[:blank:]]+", "", data[[str_name]])
   data[[str_name]] <- gsub("c", "", data[[str_name]])
-  if (isTRUE(include_min))
+  if (isTRUE(include_min)) {
     data[[str_name]] <- gsub("\\(", "[", data[[str_name]])
-  if (isTRUE(include_max))
+  }
+  if (isTRUE(include_max)) {
     data[[str_name]] <- gsub("\\)", "]", data[[str_name]])
+  }
 
   data
 }
 
 add_dimensions_ <- function(data,
-                           new_vectors,
-                           suffix = "",
-                           overwrite = TRUE) {
+                            new_vectors,
+                            suffix = "",
+                            overwrite = TRUE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, add = assert_collection)
@@ -351,7 +358,7 @@ add_dimensions_ <- function(data,
   new_data <- data.frame(new_vectors, stringsAsFactors = FALSE)
 
   if (!isTRUE(overwrite) &&
-      length(intersect(colnames(new_data), colnames(data))) > 0) {
+    length(intersect(colnames(new_data), colnames(data))) > 0) {
     stop(
       paste0(
         "Cannot add these dimensions without overwriting existing columns: ",
@@ -401,5 +408,6 @@ calculate_swirl_degrees_ <- function(distances, radius) {
 NULL
 
 # R CMD check NOTE handling
-if (getRversion() >= "2.15.1")
+if (getRversion() >= "2.15.1") {
   utils::globalVariables(c("."))
+}

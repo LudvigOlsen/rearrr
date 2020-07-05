@@ -52,7 +52,6 @@
 #' df %>%
 #'   dplyr::group_by(g) %>%
 #'   centroid(cols = c("x", "y", "z"))
-#'
 #' }
 centroid <- function(..., cols = NULL, na.rm = FALSE) {
   # Apply centroid function

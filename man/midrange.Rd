@@ -61,7 +61,6 @@ midrange(df, cols = c("x", "y", "z"))
 df \%>\%
   dplyr::group_by(g) \%>\%
   midrange(cols = c("x", "y", "z"))
-
 }
 }
 \seealso{

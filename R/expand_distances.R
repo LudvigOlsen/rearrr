@@ -114,7 +114,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Expand distances in the two dimensions (x and y)
@@ -157,23 +157,29 @@
 #' # call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
 #'   .x = c(1, 3, 5),
-#'   .f = function(exponent){
-#'   expand_distances(
-#'     data = df,
-#'     cols = c("x", "y"),
-#'     multiplier = exponent,
-#'     origin_fn = centroid,
-#'     exponentiate = TRUE,
-#'     add_one_exp = TRUE)
-#' })
+#'   .f = function(exponent) {
+#'     expand_distances(
+#'       data = df,
+#'       cols = c("x", "y"),
+#'       multiplier = exponent,
+#'       origin_fn = centroid,
+#'       exponentiate = TRUE,
+#'       add_one_exp = TRUE
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
 #' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
-#'   geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_vline(
+#'     xintercept = df_expanded[[".origin"]][[1]][[1]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
+#'   geom_hline(
+#'     yintercept = df_expanded[[".origin"]][[1]][[2]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
 #'   geom_path(size = 0.2) +
 #'   geom_point() +
 #'   theme_minimal() +
@@ -184,21 +190,27 @@
 #' # call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
 #'   .x = c(1, 3, 5),
-#'   .f = function(multiplier){
-#'   expand_distances(df,
-#'          cols = c("x", "y"),
-#'          multiplier = multiplier,
-#'          origin_fn = centroid,
-#'          exponentiate = FALSE)
-#' })
+#'   .f = function(multiplier) {
+#'     expand_distances(df,
+#'       cols = c("x", "y"),
+#'       multiplier = multiplier,
+#'       origin_fn = centroid,
+#'       exponentiate = FALSE
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
 #' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multiplier))) +
-#'   geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_vline(
+#'     xintercept = df_expanded[[".origin"]][[1]][[1]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
+#'   geom_hline(
+#'     yintercept = df_expanded[[".origin"]][[1]][[2]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
 #'   geom_path(size = 0.2, alpha = .8) +
 #'   geom_point() +
 #'   theme_minimal() +
@@ -224,7 +236,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "g")
-#'
 #' }
 expand_distances <- function(data,
                              cols = NULL,
@@ -243,9 +254,10 @@ expand_distances <- function(data,
   checkmate::assert_string(mult_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_number(multiplier, add = assert_collection)
   checkmate::assert_flag(exponentiate, add = assert_collection)
   checkmate::assert_flag(add_one_exp, add = assert_collection)
@@ -272,21 +284,20 @@ expand_distances <- function(data,
     mult_col_name = mult_col_name,
     origin_col_name = origin_col_name
   )
-
 }
 
 
 expand_mutator_method_ <- function(data,
-                                  cols,
-                                  suffix,
-                                  multiplier,
-                                  multiplier_fn,
-                                  origin,
-                                  origin_fn,
-                                  exponentiate,
-                                  add_one_exp,
-                                  mult_col_name,
-                                  origin_col_name) {
+                                   cols,
+                                   suffix,
+                                   multiplier,
+                                   multiplier_fn,
+                                   origin,
+                                   origin_fn,
+                                   exponentiate,
+                                   add_one_exp,
+                                   mult_col_name,
+                                   origin_col_name) {
   # Number of dimensions
   # Each column is a dimension
   num_dims <- length(cols)
@@ -340,7 +351,7 @@ expand_mutator_method_ <- function(data,
     # Add 1 to distances to avoid contraction when below 1
     distances <- distances + sum(isTRUE(add_one_exp))
     # Exponentiate distances
-    expo_distances <- distances ^ multiplier
+    expo_distances <- distances^multiplier
     # Substract the added 1
     expo_distances <- expo_distances - sum(isTRUE(add_one_exp))
 
@@ -349,7 +360,6 @@ expand_mutator_method_ <- function(data,
       purrr::map(.x = norm_dim_vectors, .f = ~ {
         .x * expo_distances
       })
-
   } else {
     # Add the multiplied distance
     expanded_dim_vectors <-
@@ -367,9 +377,11 @@ expand_mutator_method_ <- function(data,
   # Add expanded columns to data
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions_(data = data,
-                         new_vectors = setNames(expanded_dim_vectors, cols),
-                         suffix = suffix)
+  data <- add_dimensions_(
+    data = data,
+    new_vectors = setNames(expanded_dim_vectors, cols),
+    suffix = suffix
+  )
 
   # Add info columns
   if (!is.null(mult_col_name)) {
@@ -380,5 +392,4 @@ expand_mutator_method_ <- function(data,
   }
 
   data
-
 }

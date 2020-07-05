@@ -19,9 +19,10 @@ move_centroid <- function(data,
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(change_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(to,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(to_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -35,21 +36,19 @@ move_centroid <- function(data,
     suffix = suffix,
     force_df = TRUE,
     keep_original = keep_original,
-    to= to,
+    to = to,
     to_fn = to_fn,
     change_col_name = change_col_name
   )
-
 }
 
 
 move_centroid_mutator_method_ <- function(data,
-                                         cols,
-                                         to = 0,
-                                         to_fn = NULL,
-                                         suffix = "",
-                                         change_col_name = ".moved") {
-
+                                          cols,
+                                          to = 0,
+                                          to_fn = NULL,
+                                          suffix = "",
+                                          change_col_name = ".moved") {
   if (length(to) %ni% c(1, length(cols))) {
     stop("the 'to' must have length 1 or same length as 'cols'.")
   }
@@ -90,16 +89,17 @@ move_centroid_mutator_method_ <- function(data,
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions_(data = data,
-                   new_vectors = dim_vectors,
-                   suffix = suffix)
+    add_dimensions_(
+      data = data,
+      new_vectors = dim_vectors,
+      suffix = suffix
+    )
 
   # Add info columns
-  if (!is.null(change_col_name)){
+  if (!is.null(change_col_name)) {
     data[[change_col_name]] <- list_coordinates_(to_move, cols)
   }
 
 
   data
-
 }

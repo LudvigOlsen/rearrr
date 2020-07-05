@@ -28,12 +28,12 @@
 #'  no extra factors are returned by \code{`rearrange_fn`},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 rearranger_ <- function(data,
-                       rearrange_fn,
-                       check_fn,
-                       cols = NULL,
-                       allowed_types = c("numeric", "factor", "character"),
-                       col = deprecated(), # Keep it so we can have the docs
-                       ...) {
+                        rearrange_fn,
+                        check_fn,
+                        cols = NULL,
+                        allowed_types = c("numeric", "factor", "character"),
+                        col = deprecated(), # Keep it so we can have the docs
+                        ...) {
 
   # Internal check, shouldn't reach user
   # We need to keep col as argument to inherit docs for it in wrappers
@@ -52,19 +52,24 @@ rearranger_ <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
-  checkmate::assert_character(cols, min.chars = 1, any.missing = FALSE,
-                              null.ok = TRUE, add = assert_collection)
+  checkmate::assert_character(cols,
+    min.chars = 1, any.missing = FALSE,
+    null.ok = TRUE, add = assert_collection
+  )
   checkmate::assert_function(rearrange_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_data_frame(data[, cols, drop = FALSE], types = allowed_types,
-                               .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col(s)' columns"),
-                               add = assert_collection)
+  checkmate::assert_data_frame(data[, cols, drop = FALSE],
+    types = allowed_types,
+    .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col(s)' columns"),
+    add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # TODO We might wanna allow returning altered args
   # This is for checks we want to perform after preparing 'data' and 'col'
-  if (!is.null(check_fn))
+  if (!is.null(check_fn)) {
     check_fn(data = data, cols = cols, ...)
+  }
   # End of argument checks ####
 
   # Apply rearrange method
@@ -86,7 +91,6 @@ rearranger_ <- function(data,
     )
 
   data
-
 }
 
 
@@ -101,7 +105,7 @@ rearranger_ <- function(data,
 #' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
 #' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-positioning_rearranger_ <- function(data, col = NULL, position = NULL, shuffle_sides = FALSE, what = "max"){
+positioning_rearranger_ <- function(data, col = NULL, position = NULL, shuffle_sides = FALSE, what = "max") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -122,13 +126,15 @@ positioning_rearranger_ <- function(data, col = NULL, position = NULL, shuffle_s
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger_(data = data,
-             rearrange_fn = rearrange_position_at,
-             check_fn = NULL,
-             cols = col,
-             position = position,
-             shuffle_sides = shuffle_sides,
-             what = what)
+  rearranger_(
+    data = data,
+    rearrange_fn = rearrange_position_at,
+    check_fn = NULL,
+    cols = col,
+    position = position,
+    shuffle_sides = shuffle_sides,
+    what = what
+  )
 }
 
 
@@ -142,7 +148,7 @@ positioning_rearranger_ <- function(data, col = NULL, position = NULL, shuffle_s
 #' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
 #' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-centering_rearranger_ <- function(data, col = NULL, shuffle_sides = FALSE, what = "max"){
+centering_rearranger_ <- function(data, col = NULL, shuffle_sides = FALSE, what = "max") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -154,12 +160,14 @@ centering_rearranger_ <- function(data, col = NULL, shuffle_sides = FALSE, what 
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger_(data = data,
-             rearrange_fn = rearrange_center_by,
-             check_fn = NULL,
-             cols = col,
-             shuffle_sides = shuffle_sides,
-             what = what)
+  rearranger_(
+    data = data,
+    rearrange_fn = rearrange_center_by,
+    check_fn = NULL,
+    cols = col,
+    shuffle_sides = shuffle_sides,
+    what = what
+  )
 }
 
 
@@ -243,14 +251,14 @@ centering_rearranger_ <- function(data, col = NULL, shuffle_sides = FALSE, what 
 #'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 extreme_pairing_rearranger_ <- function(
-  data,
-  col = NULL,
-  unequal_method = "middle",
-  shuffle_members = FALSE,
-  shuffle_pairs = FALSE,
-  num_pairings = 1,
-  keep_factors = FALSE,
-  factor_name = ".pair") {
+                                        data,
+                                        col = NULL,
+                                        unequal_method = "middle",
+                                        shuffle_members = FALSE,
+                                        shuffle_pairs = FALSE,
+                                        num_pairings = 1,
+                                        keep_factors = FALSE,
+                                        factor_name = ".pair") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -262,23 +270,25 @@ extreme_pairing_rearranger_ <- function(
   checkmate::assert_flag(shuffle_pairs, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   checkmate::assert_names(unequal_method,
-                          subset.of = c("first", "middle", "last"),
-                          add = assert_collection)
+    subset.of = c("first", "middle", "last"),
+    add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger_(data = data,
-             rearrange_fn = rearrange_pair_extremes,
-             check_fn = NULL,
-             cols = col,
-             unequal_method = unequal_method,
-             num_pairings = num_pairings,
-             shuffle_members = shuffle_members,
-             shuffle_pairs = shuffle_pairs,
-             keep_factors = keep_factors,
-             factor_name = factor_name
-             )
+  rearranger_(
+    data = data,
+    rearrange_fn = rearrange_pair_extremes,
+    check_fn = NULL,
+    cols = col,
+    unequal_method = unequal_method,
+    num_pairings = num_pairings,
+    shuffle_members = shuffle_members,
+    shuffle_pairs = shuffle_pairs,
+    keep_factors = keep_factors,
+    factor_name = factor_name
+  )
 }
 
 
@@ -300,7 +310,7 @@ extreme_pairing_rearranger_ <- function(
 #'
 #'  When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
-rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, factor_name = ".window"){
+rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, factor_name = ".window") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -311,13 +321,14 @@ rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, fac
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger_(data = data,
-             rearrange_fn = rearrange_rev_windows,
-             check_fn = NULL,
-             window_size = window_size,
-             keep_windows = keep_windows,
-             factor_name = factor_name
-             )
+  rearranger_(
+    data = data,
+    rearrange_fn = rearrange_rev_windows,
+    check_fn = NULL,
+    window_size = window_size,
+    keep_windows = keep_windows,
+    factor_name = factor_name
+  )
 }
 
 
@@ -363,7 +374,7 @@ rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, fac
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 by_distance_rearranger_ <- function(data, cols, origin = NULL, origin_fn = NULL,
-                                   shuffle_ties = FALSE, decreasing = FALSE){
+                                    shuffle_ties = FALSE, decreasing = FALSE) {
 
   # TODO Allow target to be on length num_groups and find a way to pass
   # the groups to the split.
@@ -374,10 +385,12 @@ by_distance_rearranger_ <- function(data, cols, origin = NULL, origin_fn = NULL,
   checkmate::assert_number(origin, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(shuffle_ties, add = assert_collection)
   checkmate::assert_flag(decreasing, add = assert_collection)
-  checkmate::assert_character(cols, any.missing = FALSE, min.len = 1, min.chars = 1,
-                              null.ok = TRUE, add = assert_collection)
+  checkmate::assert_character(cols,
+    any.missing = FALSE, min.len = 1, min.chars = 1,
+    null.ok = TRUE, add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
-  if (sum(is.null(origin), is.null(origin_fn)) != 1){
+  if (sum(is.null(origin), is.null(origin_fn)) != 1) {
     assert_collection$push(
       "exactly one of {origin,origin_fn} should specified."
     )
@@ -386,15 +399,15 @@ by_distance_rearranger_ <- function(data, cols, origin = NULL, origin_fn = NULL,
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger_(data = data,
-             cols = cols,
-             rearrange_fn = rearrange_by_distance,
-             allowed_types = c("numeric", "factor"),
-             check_fn = NULL,
-             origin = origin,
-             origin_fn = origin_fn,
-             shuffle_ties = shuffle_ties,
-             decreasing = decreasing
+  rearranger_(
+    data = data,
+    cols = cols,
+    rearrange_fn = rearrange_by_distance,
+    allowed_types = c("numeric", "factor"),
+    check_fn = NULL,
+    origin = origin,
+    origin_fn = origin_fn,
+    shuffle_ties = shuffle_ties,
+    decreasing = decreasing
   )
 }
-

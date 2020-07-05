@@ -55,7 +55,6 @@
 #' df %>%
 #'   dplyr::group_by(g) %>%
 #'   midrange(cols = c("x", "y", "z"))
-#'
 #' }
 midrange <- function(..., cols = NULL, na.rm = FALSE) {
   # Midrange coordinate function

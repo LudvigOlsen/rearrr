@@ -80,7 +80,7 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = rep(1:4, each=5)
+  "g" = rep(1:4, each = 5)
 )
 
 # Calculate distances in the two dimensions (x and y)
@@ -97,7 +97,6 @@ distance(
   cols = c("x", "y"),
   origin_fn = centroid
 )
-
 }
 }
 \seealso{

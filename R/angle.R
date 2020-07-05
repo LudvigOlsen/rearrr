@@ -71,7 +71,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Calculate angles in the two dimensions (x and y)
@@ -100,15 +100,14 @@
 #'   y_col = "y",
 #'   origin_fn = centroid
 #' )
-#'
 #' }
 angle <- function(data,
-                    x_col = NULL,
-                    y_col = NULL,
-                    origin = c(0, 0),
-                    origin_fn = NULL,
-                    degrees_col_name = ".degrees",
-                    origin_col_name = ".origin") {
+                  x_col = NULL,
+                  y_col = NULL,
+                  origin = c(0, 0),
+                  origin_fn = NULL,
+                  degrees_col_name = ".degrees",
+                  origin_col_name = ".origin") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(degrees_col_name, add = assert_collection)
@@ -116,9 +115,10 @@ angle <- function(data,
   checkmate::assert_string(y_col, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -137,17 +137,16 @@ angle <- function(data,
     degrees_col_name = degrees_col_name,
     origin_col_name = origin_col_name
   )
-
 }
 
 
 angle_mutator_method_ <- function(data,
-                                 cols,
-                                 origin,
-                                 origin_fn,
-                                 degrees_col_name,
-                                 origin_col_name,
-                                 ...) {
+                                  cols,
+                                  origin,
+                                  origin_fn,
+                                  degrees_col_name,
+                                  origin_col_name,
+                                  ...) {
 
   # Convert columns to list of vectors
   dim_vectors <- as.list(data[, cols, drop = FALSE])
@@ -164,14 +163,17 @@ angle_mutator_method_ <- function(data,
     allow_len_one = TRUE
   )
 
-  data[[degrees_col_name]] <- atan2(data[[cols[[2]]]] - origin[[2]],
-                                    data[[cols[[1]]]] - origin[[1]])
+  data[[degrees_col_name]] <- atan2(
+    data[[cols[[2]]]] - origin[[2]],
+    data[[cols[[1]]]] - origin[[1]]
+  )
   data[[degrees_col_name]] <-
     radians_to_degrees(data[[degrees_col_name]])
   data[[degrees_col_name]] <-
     ifelse(sign(data[[degrees_col_name]]) < 0,
-           360 + data[[degrees_col_name]],
-           data[[degrees_col_name]])
+      360 + data[[degrees_col_name]],
+      data[[degrees_col_name]]
+    )
 
   # Info columns
   if (!is.null(origin_col_name)) {

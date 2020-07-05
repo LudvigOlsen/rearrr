@@ -60,7 +60,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Calculate distances in the two dimensions (x and y)
@@ -77,7 +77,6 @@
 #'   cols = c("x", "y"),
 #'   origin_fn = centroid
 #' )
-#'
 #' }
 distance <- function(data,
                      cols = NULL,
@@ -91,9 +90,10 @@ distance <- function(data,
   checkmate::assert_string(distance_col_name, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
@@ -111,17 +111,16 @@ distance <- function(data,
     distance_col_name = distance_col_name,
     origin_col_name = origin_col_name
   )
-
 }
 
 
 calculate_distances_mutator_method_ <- function(data,
-                                               cols,
-                                               origin,
-                                               origin_fn,
-                                               distance_col_name,
-                                               origin_col_name,
-                                               ...) {
+                                                cols,
+                                                origin,
+                                                origin_fn,
+                                                distance_col_name,
+                                                origin_col_name,
+                                                ...) {
 
   # Number of dimensions
   # Each column is a dimension
@@ -154,12 +153,11 @@ calculate_distances_mutator_method_ <- function(data,
   data[[distance_col_name]] <- distances
 
   data
-
 }
 
 
 # Helper used in multiple places
-calculate_distances_ <- function(dim_vectors, to){
+calculate_distances_ <- function(dim_vectors, to) {
 
   # Distance formula:
   # d(P1, P2) = sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
@@ -175,9 +173,9 @@ calculate_distances_ <- function(dim_vectors, to){
   distances <- distance_terms %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
-    purrr::map_dbl(~{sqrt(sum(.x))})
+    purrr::map_dbl(~ {
+      sqrt(sum(.x))
+    })
 
   distances
-
 }
-

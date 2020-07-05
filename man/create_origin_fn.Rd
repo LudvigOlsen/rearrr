@@ -53,11 +53,11 @@ y[[5]] <- NA
 mean_origin_fn(x, y, z)
 
 # Should be the same as
-c(mean(x, na.rm = TRUE),
+c(
+  mean(x, na.rm = TRUE),
   mean(y, na.rm = TRUE),
   mean(z, na.rm = TRUE)
 )
-
 }
 }
 \seealso{

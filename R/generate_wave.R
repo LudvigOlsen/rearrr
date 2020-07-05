@@ -55,7 +55,6 @@
 #'   ggplot(aes(x = x, y = cosine)) +
 #'   geom_path() +
 #'   theme_minimal()
-#'
 #' }
 generate_wave <- function(ts,
                           fs = 44100,

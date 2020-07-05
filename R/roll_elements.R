@@ -84,7 +84,7 @@
 #' # Create a data frame
 #' df <- data.frame(
 #'   "x" = 1:20,
-#'   "y" = runif(20)*10,
+#'   "y" = runif(20) * 10,
 #'   "g" = rep(1:4, each = 5)
 #' )
 #'
@@ -104,7 +104,6 @@
 #'   n_fn = median_index,
 #'   negate = TRUE
 #' )
-#'
 #' }
 roll_elements <- function(data,
                           cols = NULL,
@@ -115,15 +114,16 @@ roll_elements <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_numeric(n,
-                            any.missing = FALSE,
-                            finite = TRUE,
-                            null.ok = TRUE,
-                            add = assert_collection)
+    any.missing = FALSE,
+    finite = TRUE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
   checkmate::assert_function(n_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(n_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if ((is.null(n) && is.null(n_fn)) ||
-      (!is.null(n) && !is.null(n_fn))) {
+    (!is.null(n) && !is.null(n_fn))) {
     assert_collection$push("exactly one of {'n', 'n_fn'} must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -163,8 +163,9 @@ roll_elements <- function(data,
   if (isTRUE(uses_tmp_index)) {
     if (!is.null(n_col_name)) {
       out[[n_col_name]] <- purrr::map(out[[n_col_name]],
-                                      .f = setNames,
-                                      nm = ".index")
+        .f = setNames,
+        nm = ".index"
+      )
     }
     out <- out[order(out[[tmp_index_col]]), , drop = FALSE]
     out[[tmp_index_col]] <- NULL
@@ -179,8 +180,10 @@ roll_elements_vec <- function(data,
                               n = NULL,
                               n_fn = NULL,
                               ...) {
-  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
-                    checkmate::check_factor(data))
+  checkmate::assert(
+    checkmate::check_vector(data, strict = TRUE),
+    checkmate::check_factor(data)
+  )
   roll_elements(
     data = data,
     n = n,
@@ -191,12 +194,12 @@ roll_elements_vec <- function(data,
 }
 
 roll_elements_rearranger_method_ <- function(data,
-                                            cols,
-                                            n,
-                                            n_fn,
-                                            n_fn_args,
-                                            n_col_name,
-                                            inverse_direction) {
+                                             cols,
+                                             n,
+                                             n_fn,
+                                             n_fn_args,
+                                             n_col_name,
+                                             inverse_direction) {
   # Initial check of n
   if (!is.null(n) && all(n == 0)) {
     return(data)
@@ -252,5 +255,4 @@ roll_elements_rearranger_method_ <- function(data,
   }
 
   data
-
 }

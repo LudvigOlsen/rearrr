@@ -156,7 +156,7 @@ dim_values(
   data = df,
   cols = c("x", "y", "o"),
   origin_fn = centroid,
-  dimming_fn = function(x, d){
+  dimming_fn = function(x, d) {
     x * 1 / (2^(1 + d))
   }
 )
@@ -171,16 +171,18 @@ df_dimmed <- df \%>\%
   dim_values(
     cols = c("x", "y", "o"),
     origin_fn = centroid
-)
+  )
 
 # Plot the dimmed data such that the alpha (opacity) is
 # controlled by the dimming
 # (Note: This works because the `o` column is 1 for all values)
-ggplot(data = df_dimmed,
-       aes(x = x, y = y, alpha = o_dimmed, color = .cluster)) +
+ggplot(
+  data = df_dimmed,
+  aes(x = x, y = y, alpha = o_dimmed, color = .cluster)
+) +
   geom_point() +
   theme_minimal() +
-  labs(x = "x", y="y", color="Cluster", alpha = "o_dimmed")
+  labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
 }
 }
 \seealso{

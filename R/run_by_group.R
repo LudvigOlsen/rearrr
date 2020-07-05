@@ -1,6 +1,6 @@
 
 # Apply function to groups
-run_by_group <- function(data, fn, ...){
+run_by_group <- function(data, fn, ...) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -9,6 +9,8 @@ run_by_group <- function(data, fn, ...){
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  purrr::map_dfr(.x = split(x = dplyr::ungroup(data), f = dplyr::group_indices(data)),
-                 .f = fn, ...)
+  purrr::map_dfr(
+    .x = split(x = dplyr::ungroup(data), f = dplyr::group_indices(data)),
+    .f = fn, ...
+  )
 }

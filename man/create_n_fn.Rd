@@ -78,10 +78,11 @@ y[[5]] <- NA
 mean_n_fn(x, y, z)
 
 # Should be the same as
-round(c(mean(x, na.rm = TRUE),
-        mean(y, na.rm = TRUE),
-        mean(z, na.rm = TRUE)))
-
+round(c(
+  mean(x, na.rm = TRUE),
+  mean(y, na.rm = TRUE),
+  mean(z, na.rm = TRUE)
+))
 }
 }
 \author{

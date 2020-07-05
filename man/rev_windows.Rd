@@ -56,8 +56,10 @@ df <- data.frame(
   "A" = sample(1:10),
   "B" = runif(10),
   "C" = LETTERS[1:10],
-  "G" = c(1, 1, 1, 1, 1,
-          2, 2, 2, 2, 2),
+  "G" = c(
+    1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2
+  ),
   stringsAsFactors = FALSE
 )
 
@@ -70,13 +72,15 @@ rev_windows(df, window_size = 3, keep_windows = TRUE)
 
 # Grouped by G
 df \%>\%
-  dplyr::select(G, index) \%>\%  # For clarity
+  dplyr::select(G, index) \%>\% # For clarity
   dplyr::group_by(G) \%>\%
   rev_windows(window_size = 3)
 
 # Plot the extreme pairs
-plot(x = 1:10,
-     y = rev_windows(1:10, window_size = 3))
+plot(
+  x = 1:10,
+  y = rev_windows(1:10, window_size = 3)
+)
 }
 }
 \seealso{

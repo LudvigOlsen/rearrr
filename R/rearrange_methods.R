@@ -11,28 +11,28 @@
 rearrange_center_by <- function(data, cols,
                                 shuffle_sides,
                                 what = "max") {
-
   stopifnot(length(cols) == 1)
   col <- cols
 
   size <- nrow(data)
 
-  if (size < 2){
+  if (size < 2) {
     return(data)
   }
 
   # NOTE: The extra comma is on purpose!
   # 'drop' is required for single-column data frames
-  data <- data[order(data[[col]], decreasing = what == "min"),
-               , drop = FALSE]
+  data <- data[order(data[[col]], decreasing = what == "min"), ,
+    drop = FALSE
+  ]
 
   # If uneven length
   # extract max and remove from vec
   middle_row <- NULL
-  if (size %% 2 == 1){
-    if (what == "max"){
+  if (size %% 2 == 1) {
+    if (what == "max") {
       middle_val <- max(data[[col]])
-    } else if (what == "min"){
+    } else if (what == "min") {
       middle_val <- min(data[[col]])
     }
     # Extract and remove middle row
@@ -43,9 +43,10 @@ rearrange_center_by <- function(data, cols,
 
   # Create extreme pairs factor
   extreme_pairs <- create_rearrange_factor_pair_extremes_(
-    size = size)
+    size = size
+  )
 
-  if (isTRUE(shuffle_sides)){
+  if (isTRUE(shuffle_sides)) {
     # Add noise to the pair indices to randomize the order
     # of the members
     member_noise <- runif(length(extreme_pairs), -0.1, 0.1)
@@ -62,11 +63,12 @@ rearrange_center_by <- function(data, cols,
   data[[tmp_order_var]] <- NULL
 
   # Insert middle if it was removed
-  if (!is.null(middle_row)){
+  if (!is.null(middle_row)) {
     data <- insert_row_(
       data = data,
       new_row = middle_row,
-      after = size %/% 2)
+      after = size %/% 2
+    )
   }
 
   data
@@ -77,31 +79,29 @@ rearrange_center_by <- function(data, cols,
 ##  Order by group                                                          ####
 
 
-order_by_group <- function(data, group_col, shuffle_members, shuffle_pairs){
-
+order_by_group <- function(data, group_col, shuffle_members, shuffle_pairs) {
   backup_group_col <- isTRUE(shuffle_pairs) || isTRUE(shuffle_members)
-  if (isTRUE(backup_group_col)){
+  if (isTRUE(backup_group_col)) {
     tmp_backup_group_col <- create_tmp_var(data, tmp_var = "group_col_backup_")
     data[[tmp_backup_group_col]] <- data[[group_col]]
   }
 
-  if (isTRUE(shuffle_pairs)){
+  if (isTRUE(shuffle_pairs)) {
     # Randomize levels
     data[[group_col]] <- as.numeric(
       factor(data[[group_col]], levels = sample(unique(data[[group_col]])))
     )
   }
-  if (isTRUE(shuffle_members)){
+  if (isTRUE(shuffle_members)) {
     # Add random noise to the group indices
     indices_noise <- runif(nrow(data), -0.1, 0.1)
     data[[group_col]] <- as.numeric(data[[group_col]]) + indices_noise
-
   }
 
   # Order data frame by the groups
   data <- data[order(data[[group_col]]), , drop = FALSE]
 
-  if (isTRUE(backup_group_col)){
+  if (isTRUE(backup_group_col)) {
     # Revert to original group col
     data[[group_col]] <- data[[tmp_backup_group_col]]
     data[[tmp_backup_group_col]] <- NULL
@@ -120,23 +120,22 @@ rearrange_position_at <- function(data,
                                   position,
                                   shuffle_sides,
                                   what = "max") {
-
   stopifnot(length(cols) == 1)
   col <- cols
 
   size <- nrow(data)
   even_nrows <- size %% 2 == 0
 
-  if (position > nrow(data)){
+  if (position > nrow(data)) {
     stop("'position' was higher than the number of rows in 'data'.")
   }
 
-  if (size < 2){
+  if (size < 2) {
     return(data)
   }
 
   # Convert percentage to index position
-  if (is_between_(position, 0, 1)){
+  if (is_between_(position, 0, 1)) {
     # TODO floor or round?
     position <- floor(unname(
       quantile(seq_len(size), probs = position)
@@ -149,19 +148,21 @@ rearrange_position_at <- function(data,
 
   # Check if edge case
   # Order is determined by position
-  if (position %in% c(size, 1)){
+  if (position %in% c(size, 1)) {
     data <- data[order(data[[col]],
-                       decreasing = ifelse(
-                         what == "max",
-                         !isTRUE(above_midline),
-                         isTRUE(above_midline))
-    ),
-    , drop = FALSE]
+      decreasing = ifelse(
+        what == "max",
+        !isTRUE(above_midline),
+        isTRUE(above_midline)
+      )
+    ), ,
+    drop = FALSE
+    ]
     return(data)
   }
 
   # Find extra positions
-  if (isTRUE(above_midline)){
+  if (isTRUE(above_midline)) {
     n_extra_positions <- size - 2 * (size - position) - 1
     if (n_extra_positions == 0) {
       # position is center
@@ -171,7 +172,8 @@ rearrange_position_at <- function(data,
           col = col,
           shuffle_sides = shuffle_sides,
           what = what
-        ))
+        )
+      )
     }
     data <- data[order(data[[col]], decreasing = what != "max"), , drop = FALSE]
     extra_positions <- seq_len(n_extra_positions)
@@ -194,14 +196,13 @@ rearrange_position_at <- function(data,
   )
 
   # Combine subsets
-  if (isTRUE(above_midline)){
+  if (isTRUE(above_midline)) {
     data <- dplyr::bind_rows(extra_rows, center_rows)
   } else {
     data <- dplyr::bind_rows(center_rows, extra_rows)
   }
 
   data
-
 }
 
 
@@ -209,10 +210,9 @@ rearrange_position_at <- function(data,
 ##  Reverse windows                                                         ####
 
 # 'col' is a required arg in the function but is ignored
-rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, cols = NULL){
-
+rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, cols = NULL) {
   size <- nrow(data)
-  if (size < 2){
+  if (size < 2) {
     return(data)
   }
   num_windows <- ceiling(size / window_size)
@@ -232,9 +232,8 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, 
 ##  By Distance - closest to / furthest from                                ####
 
 
-rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, decreasing){
-
-  if (nrow(data) < 2){
+rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, decreasing) {
+  if (nrow(data) < 2) {
     return(data)
   }
 
@@ -260,7 +259,7 @@ rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, d
   tmp_distances_col <- create_tmp_var(data, ".tmp_distances")
   data[[tmp_distances_col]] <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
-  if (isTRUE(shuffle_ties)){
+  if (isTRUE(shuffle_ties)) {
     # Shuffle the data frame
     data <- data[sample(seq_len(nrow(data))), , drop = FALSE]
   } else {
@@ -287,12 +286,11 @@ rearrange_pair_extremes <- function(data, cols,
                                     shuffle_members,
                                     shuffle_pairs,
                                     keep_factors,
-                                    factor_name){
-
+                                    factor_name) {
   stopifnot(length(cols) == 1)
   col <- cols
 
-  if (nrow(data) < 2){
+  if (nrow(data) < 2) {
     return(data)
   }
 
@@ -313,7 +311,8 @@ rearrange_pair_extremes <- function(data, cols,
     data = data,
     group_col = local_tmp_rearrange_var,
     shuffle_members = shuffle_members,
-    shuffle_pairs = shuffle_pairs)
+    shuffle_pairs = shuffle_pairs
+  )
 
   # TODO Perform recursive pairing
 
@@ -330,8 +329,8 @@ rearrange_pair_extremes <- function(data, cols,
       base_deselect_(cols = local_tmp_rearrange_var)
   } else if (local_tmp_rearrange_var != factor_name) {
     data <- base_rename_(data,
-                        before = local_tmp_rearrange_var,
-                        after = factor_name
+      before = local_tmp_rearrange_var,
+      after = factor_name
     )
     data[[factor_name]] <- as.factor(data[[factor_name]])
   }

@@ -97,8 +97,10 @@ df <- data.frame(
   "Index" = 1:10,
   "A" = sample(1:10),
   "B" = runif(10),
-  "G" = c(1, 1, 1, 2, 2,
-          2, 3, 3, 3, 3),
+  "G" = c(
+    1, 1, 1, 2, 2,
+    2, 3, 3, 3, 3
+  ),
   stringsAsFactors = FALSE
 )
 
@@ -106,16 +108,20 @@ df <- data.frame(
 flip_values(df$A)
 flip_values(df, cols = "A")
 flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
-flip_values(df, cols = c("A", "B"), origin = c(3, 0.3),
-            suffix = "",  keep_original = FALSE)
+flip_values(df,
+  cols = c("A", "B"), origin = c(3, 0.3),
+  suffix = "", keep_original = FALSE
+)
 flip_values(df, cols = c("A", "B"), origin_fn = create_origin_fn(max))
 
 # Grouped by G
 df \%>\%
   dplyr::group_by(G) \%>\%
-  flip_values(cols = c("A", "B"),
-              origin_fn = create_origin_fn(median),
-              keep_original = FALSE)
+  flip_values(
+    cols = c("A", "B"),
+    origin_fn = create_origin_fn(median),
+    keep_original = FALSE
+  )
 
 # Plot A and flipped A
 
@@ -125,17 +131,17 @@ df <- df \%>\%
   flip_values(cols = "A", suffix = "_flip_3", origin = 3, origin_col_name = NULL)
 
 # Plot A and A flipped around its median
-ggplot(df, aes(x=Index, y=A)) +
-  geom_line(aes(color="A")) +
-  geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
-  geom_hline(aes(color="Median A", yintercept = median(A))) +
+ggplot(df, aes(x = Index, y = A)) +
+  geom_line(aes(color = "A")) +
+  geom_line(aes(y = A_flip_median, color = "Flipped A (median)")) +
+  geom_hline(aes(color = "Median A", yintercept = median(A))) +
   theme_minimal()
 
 # Plot A and A flipped around the value 3
-ggplot(df, aes(x=Index, y=A)) +
-  geom_line(aes(color="A")) +
-  geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
-  geom_hline(aes(color="3", yintercept = 3)) +
+ggplot(df, aes(x = Index, y = A)) +
+  geom_line(aes(color = "A")) +
+  geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
+  geom_hline(aes(color = "3", yintercept = 3)) +
   theme_minimal()
 }
 }

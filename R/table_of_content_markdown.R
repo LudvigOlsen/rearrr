@@ -32,10 +32,10 @@
 #' @param toc_depth Maximum depth for TOC, relative to base_level. Default is
 #'   `toc_depth = 3`, which results in a TOC of at most 3 levels.
 render_toc <- function(
-  filename,
-  toc_header_name = "Table of Contents",
-  base_level = NULL,
-  toc_depth = 3) {
+                       filename,
+                       toc_header_name = "Table of Contents",
+                       base_level = NULL,
+                       toc_depth = 3) {
   x <- readLines(filename, warn = FALSE)
   x <- gsub("<a.*<img.*a>", "", x) # My addition, remove links with images in
   x <- paste(x, collapse = "\n")

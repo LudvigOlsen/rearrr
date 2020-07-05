@@ -82,11 +82,15 @@
 #' # Create a data frame
 #' df <- data.frame(
 #'   "x" = 1:12,
-#'   "y" = c(1, 2, 3, 4, 9, 10, 11,
-#'           12, 15, 16, 17, 18),
+#'   "y" = c(
+#'     1, 2, 3, 4, 9, 10, 11,
+#'     12, 15, 16, 17, 18
+#'   ),
 #'   "z" = runif(12),
-#'   "g" = c(1, 1, 1, 1, 2, 2,
-#'           2, 2, 3, 3, 3, 3)
+#'   "g" = c(
+#'     1, 1, 1, 1, 2, 2,
+#'     2, 2, 3, 3, 3, 3
+#'   )
 #' )
 #'
 #' # Rotate values 45 degrees around x-axis
@@ -94,105 +98,110 @@
 #'
 #' # Rotate all axes around the centroid
 #' df_rotated <- df %>%
-#'   rotate_3d(x_col = "x",
-#'            y_col = "y",
-#'            z_col = "z",
-#'            x_deg = c(0, 72, 144, 216, 288),
-#'            y_deg = c(0, 72, 144, 216, 288),
-#'            z_deg = c(0, 72, 144, 216, 288),
-#'            origin_fn = centroid)
+#'   rotate_3d(
+#'     x_col = "x",
+#'     y_col = "y",
+#'     z_col = "z",
+#'     x_deg = c(0, 72, 144, 216, 288),
+#'     y_deg = c(0, 72, 144, 216, 288),
+#'     z_deg = c(0, 72, 144, 216, 288),
+#'     origin_fn = centroid
+#'   )
 #' df_rotated
 #'
 #' # Plot rotations
 #' ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_line(alpha = .4) +
 #'   geom_point() +
 #'   theme_minimal() +
-#'   labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
+#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 #'
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
-#'   x=df_rotated$x_rotated,
-#'   y=df_rotated$y_rotated,
-#'   z=df_rotated$z_rotated,
-#'   type="scatter3d",
-#'   mode="markers",
-#'   color=df_rotated$.degrees_str
+#'   x = df_rotated$x_rotated,
+#'   y = df_rotated$y_rotated,
+#'   z = df_rotated$z_rotated,
+#'   type = "scatter3d",
+#'   mode = "markers",
+#'   color = df_rotated$.degrees_str
 #' )
 #'
 #' # Rotate randomly around all axes
 #' df_rotated <- df %>%
-#'   rotate_3d(x_col = "x",
-#'            y_col = "y",
-#'            z_col = "z",
-#'            x_deg = round(runif(10, min = 0, max = 360)),
-#'            y_deg = round(runif(10, min = 0, max = 360)),
-#'            z_deg = round(runif(10, min = 0, max = 360)),
-#'            origin_fn = centroid)
+#'   rotate_3d(
+#'     x_col = "x",
+#'     y_col = "y",
+#'     z_col = "z",
+#'     x_deg = round(runif(10, min = 0, max = 360)),
+#'     y_deg = round(runif(10, min = 0, max = 360)),
+#'     z_deg = round(runif(10, min = 0, max = 360)),
+#'     origin_fn = centroid
+#'   )
 #' df_rotated
 #'
 #' # Plot rotations
 #' ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_line(alpha = .4) +
 #'   geom_point() +
 #'   theme_minimal() +
-#'   labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
+#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 #'
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
-#'   x=df_rotated$x_rotated,
-#'   y=df_rotated$y_rotated,
-#'   z=df_rotated$z_rotated,
-#'   type="scatter3d",
-#'   mode="markers",
-#'   color=df_rotated$.degrees_str
+#'   x = df_rotated$x_rotated,
+#'   y = df_rotated$y_rotated,
+#'   z = df_rotated$z_rotated,
+#'   type = "scatter3d",
+#'   mode = "markers",
+#'   color = df_rotated$.degrees_str
 #' )
 #'
 #' # Rotate around group centroids
 #' df_grouped <- df %>%
 #'   dplyr::group_by(g) %>%
-#'   rotate_3d(x_col = "x",
-#'            y_col = "y",
-#'            z_col = "z",
-#'            x_deg = c(0, 72, 144, 216, 288),
-#'            y_deg = c(0, 72, 144, 216, 288),
-#'            z_deg = c(0, 72, 144, 216, 288),
-#'            origin_fn = centroid)
+#'   rotate_3d(
+#'     x_col = "x",
+#'     y_col = "y",
+#'     z_col = "z",
+#'     x_deg = c(0, 72, 144, 216, 288),
+#'     y_deg = c(0, 72, 144, 216, 288),
+#'     z_deg = c(0, 72, 144, 216, 288),
+#'     origin_fn = centroid
+#'   )
 #'
 #' # Plot A and A rotated around group centroids
 #' ggplot(df_grouped, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
 #'   geom_point() +
 #'   theme_minimal() +
-#'   labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
+#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 #'
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
-#'   x=df_grouped$x_rotated,
-#'   y=df_grouped$y_rotated,
-#'   z=df_grouped$z_rotated,
-#'   type="scatter3d",
-#'   mode="markers",
-#'   color=df_grouped$.degrees_str
+#'   x = df_grouped$x_rotated,
+#'   y = df_grouped$y_rotated,
+#'   z = df_grouped$z_rotated,
+#'   type = "scatter3d",
+#'   mode = "markers",
+#'   color = df_grouped$.degrees_str
 #' )
-#'
 #' }
 rotate_3d <- function(data,
-                     x_col,
-                     y_col,
-                     z_col,
-                     x_deg = 0,
-                     y_deg = 0,
-                     z_deg = 0,
-                     suffix = "_rotated",
-                     origin = c(0, 0, 0),
-                     origin_fn = NULL,
-                     keep_original = TRUE,
-                     degrees_col_name = ".degrees",
-                     origin_col_name = ".origin") {
+                      x_col,
+                      y_col,
+                      z_col,
+                      x_deg = 0,
+                      y_deg = 0,
+                      z_deg = 0,
+                      suffix = "_rotated",
+                      origin = c(0, 0, 0),
+                      origin_fn = NULL,
+                      keep_original = TRUE,
+                      degrees_col_name = ".degrees",
+                      origin_col_name = ".origin") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.cols = 3, add = assert_collection)
@@ -227,9 +236,10 @@ rotate_3d <- function(data,
   checkmate::assert_string(degrees_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            len = 3,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    len = 3,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   checkmate::assert_character(
@@ -291,28 +301,29 @@ rotate_3d <- function(data,
   }
 
   output
-
 }
 
 
 rotate_3d_mutator_method_ <- function(data,
-                                    cols,
-                                    x_deg,
-                                    y_deg,
-                                    z_deg,
-                                    suffix,
-                                    origin,
-                                    origin_fn,
-                                    origin_col_name) {
+                                      cols,
+                                      x_deg,
+                                      y_deg,
+                                      z_deg,
+                                      suffix,
+                                      origin,
+                                      origin_fn,
+                                      origin_col_name) {
   # Extract columns
   x_col <- cols[[1]]
   y_col <- cols[[2]]
   z_col <- cols[[3]]
 
   # Create rotation matrix
-  rotation_matrix <- create_rotation_matrix_3d_(x_deg = x_deg,
-                                              y_deg = y_deg,
-                                              z_deg = z_deg)
+  rotation_matrix <- create_rotation_matrix_3d_(
+    x_deg = x_deg,
+    y_deg = y_deg,
+    z_deg = z_deg
+  )
 
   # Extract x and y values
   x <- data[[x_col]]
@@ -343,9 +354,9 @@ rotate_3d_mutator_method_ <- function(data,
   xyz_matrix <- rotation_matrix %*% xyz_matrix
 
   # Extract x and y
-  x <- xyz_matrix[1,]
-  y <- xyz_matrix[2,]
-  z <- xyz_matrix[3,]
+  x <- xyz_matrix[1, ]
+  y <- xyz_matrix[2, ]
+  z <- xyz_matrix[3, ]
 
   # Move origin
   x <- x + origin[[1]]
@@ -363,5 +374,4 @@ rotate_3d_mutator_method_ <- function(data,
   }
 
   data
-
 }

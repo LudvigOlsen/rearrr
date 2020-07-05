@@ -58,7 +58,6 @@ centroid(df, cols = c("x", "y", "z"))
 df \%>\%
   dplyr::group_by(g) \%>\%
   centroid(cols = c("x", "y", "z"))
-
 }
 }
 \seealso{

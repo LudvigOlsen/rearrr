@@ -112,47 +112,54 @@ set.seed(1)
 # Create a data frame
 df <- data.frame(
   "Index" = 1:12,
-  "A" = c(1, 2, 3, 4, 9, 10, 11,
-          12, 15, 16, 17, 18),
-  "G" = c(1, 1, 1, 1, 2, 2,
-          2, 2, 3, 3, 3, 3)
+  "A" = c(
+    1, 2, 3, 4, 9, 10, 11,
+    12, 15, 16, 17, 18
+  ),
+  "G" = c(
+    1, 1, 1, 1, 2, 2,
+    2, 2, 3, 3, 3, 3
+  )
 )
 
 # Rotate values
-rotate_2d(df, 45, x_col="Index", y_col="A")
+rotate_2d(df, 45, x_col = "Index", y_col = "A")
 
 # Rotate A around the centroid
 df_rotated <- df \%>\%
-  rotate_2d(x_col = "Index",
-           y_col = "A",
-           degrees = c(0, 120, 240),
-           origin_fn = centroid)
+  rotate_2d(
+    x_col = "Index",
+    y_col = "A",
+    degrees = c(0, 120, 240),
+    origin_fn = centroid
+  )
 df_rotated
 
 # Plot A and A rotated around overall centroid
 ggplot(df_rotated, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
-  geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_line(alpha = .4) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Index", y="Value", color="Degrees")
+  labs(x = "Index", y = "Value", color = "Degrees")
 
 # Rotate around group centroids
 df_grouped <- df \%>\%
   dplyr::group_by(G) \%>\%
-  rotate_2d(x_col = "Index",
-           y_col = "A",
-           degrees = c(0, 120, 240),
-           origin_fn = centroid)
+  rotate_2d(
+    x_col = "Index",
+    y_col = "A",
+    degrees = c(0, 120, 240),
+    origin_fn = centroid
+  )
 df_grouped
 
 # Plot A and A rotated around group centroids
-ggplot(df_grouped, aes(x=Index_rotated, y=A_rotated, color = factor(.degrees))) +
+ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Index", y="Value", color="Degrees")
-
+  labs(x = "Index", y = "Value", color = "Degrees")
 }
 }
 \seealso{

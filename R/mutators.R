@@ -21,22 +21,24 @@
 #' @return
 #'  The mutated \code{data.frame} (\code{tibble}) / \code{vector}.
 mutator_ <- function(data,
-                    mutate_fn,
-                    check_fn,
-                    col = NULL,
-                    new_name = NULL,
-                    force_df = FALSE,
-                    allowed_types = c("numeric", "factor"),
-                    ...) {
+                     mutate_fn,
+                     check_fn,
+                     col = NULL,
+                     new_name = NULL,
+                     force_df = FALSE,
+                     allowed_types = c("numeric", "factor"),
+                     ...) {
   # Prepare 'data' and 'col'
   # Includes a set of checks
   prepped <-
-    prepare_input_data_(data = data,
-                       cols = col,
-                       new_name = new_name)
+    prepare_input_data_(
+      data = data,
+      cols = col,
+      new_name = new_name
+    )
   data <- prepped[["data"]]
   col <- prepped[["cols"]]
-  new_name = prepped[["new_name"]]
+  new_name <- prepped[["new_name"]]
   was_vector <- prepped[["was_vector"]]
 
   if (isTRUE(prepped[["use_index"]])) {
@@ -47,13 +49,15 @@ mutator_ <- function(data,
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
   checkmate::assert_string(col,
-                           min.chars = 1,
-                           null.ok = FALSE,
-                           add = assert_collection)
+    min.chars = 1,
+    null.ok = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_string(new_name,
-                           min.chars = 1,
-                           null.ok = FALSE,
-                           add = assert_collection)
+    min.chars = 1,
+    null.ok = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -66,8 +70,9 @@ mutator_ <- function(data,
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # This is for checks we want to perform after preparing 'data' and 'col'
-  if (!is.null(check_fn))
+  if (!is.null(check_fn)) {
     check_fn(data = data, col = col, ...)
+  }
   # End of argument checks ####
 
   # Apply mutator method
@@ -90,7 +95,6 @@ mutator_ <- function(data,
     )
 
   data
-
 }
 
 
@@ -117,22 +121,24 @@ mutator_ <- function(data,
 #' @return
 #'  The mutated \code{data.frame} (\code{tibble}).
 multi_mutator_ <- function(data,
-                          mutate_fn,
-                          check_fn,
-                          cols = NULL,
-                          suffix = "_mutated",
-                          force_df = TRUE,
-                          allowed_types = c("numeric", "factor"),
-                          allow_missing = FALSE,
-                          min_dims = 1,
-                          keep_original = TRUE,
-                          ...) {
+                           mutate_fn,
+                           check_fn,
+                           cols = NULL,
+                           suffix = "_mutated",
+                           force_df = TRUE,
+                           allowed_types = c("numeric", "factor"),
+                           allow_missing = FALSE,
+                           min_dims = 1,
+                           keep_original = TRUE,
+                           ...) {
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data_(data = data,
-                                cols = cols,
-                                min_dims = min_dims,
-                                allow_missing = allow_missing)
+  prepped <- prepare_input_data_(
+    data = data,
+    cols = cols,
+    min_dims = min_dims,
+    allow_missing = allow_missing
+  )
   data <- prepped[["data"]]
   cols <- prepped[["cols"]]
   was_vector <- prepped[["was_vector"]]
@@ -168,8 +174,9 @@ multi_mutator_ <- function(data,
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # This is for checks we want to perform after preparing 'data' and 'col'
-  if (!is.null(check_fn))
+  if (!is.null(check_fn)) {
     check_fn(data = data, cols = cols, ...)
+  }
   # End of argument checks ####
 
   # Store grp_keys
@@ -210,5 +217,4 @@ multi_mutator_ <- function(data,
     )
 
   data
-
 }

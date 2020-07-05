@@ -77,8 +77,10 @@
 #'   "Index" = 1:10,
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
-#'   "G" = c(1, 1, 1, 2, 2,
-#'           2, 3, 3, 3, 3),
+#'   "G" = c(
+#'     1, 1, 1, 2, 2,
+#'     2, 3, 3, 3, 3
+#'   ),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -86,16 +88,20 @@
 #' flip_values(df$A)
 #' flip_values(df, cols = "A")
 #' flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
-#' flip_values(df, cols = c("A", "B"), origin = c(3, 0.3),
-#'             suffix = "",  keep_original = FALSE)
+#' flip_values(df,
+#'   cols = c("A", "B"), origin = c(3, 0.3),
+#'   suffix = "", keep_original = FALSE
+#' )
 #' flip_values(df, cols = c("A", "B"), origin_fn = create_origin_fn(max))
 #'
 #' # Grouped by G
 #' df %>%
 #'   dplyr::group_by(G) %>%
-#'   flip_values(cols = c("A", "B"),
-#'               origin_fn = create_origin_fn(median),
-#'               keep_original = FALSE)
+#'   flip_values(
+#'     cols = c("A", "B"),
+#'     origin_fn = create_origin_fn(median),
+#'     keep_original = FALSE
+#'   )
 #'
 #' # Plot A and flipped A
 #'
@@ -105,17 +111,17 @@
 #'   flip_values(cols = "A", suffix = "_flip_3", origin = 3, origin_col_name = NULL)
 #'
 #' # Plot A and A flipped around its median
-#' ggplot(df, aes(x=Index, y=A)) +
-#'   geom_line(aes(color="A")) +
-#'   geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
-#'   geom_hline(aes(color="Median A", yintercept = median(A))) +
+#' ggplot(df, aes(x = Index, y = A)) +
+#'   geom_line(aes(color = "A")) +
+#'   geom_line(aes(y = A_flip_median, color = "Flipped A (median)")) +
+#'   geom_hline(aes(color = "Median A", yintercept = median(A))) +
 #'   theme_minimal()
 #'
 #' # Plot A and A flipped around the value 3
-#' ggplot(df, aes(x=Index, y=A)) +
-#'   geom_line(aes(color="A")) +
-#'   geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
-#'   geom_hline(aes(color="3", yintercept = 3)) +
+#' ggplot(df, aes(x = Index, y = A)) +
+#'   geom_line(aes(color = "A")) +
+#'   geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
+#'   geom_hline(aes(color = "3", yintercept = 3)) +
 #'   theme_minimal()
 #' }
 flip_values <- function(data,
@@ -129,9 +135,10 @@ flip_values <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -151,11 +158,11 @@ flip_values <- function(data,
 }
 
 flip_mutator_method_ <- function(data,
-                                cols,
-                                suffix,
-                                origin,
-                                origin_fn,
-                                origin_col_name) {
+                                 cols,
+                                 suffix,
+                                 origin,
+                                 origin_fn,
+                                 origin_col_name) {
 
   # Number of dimensions
   # Each column is a dimension
@@ -179,14 +186,16 @@ flip_mutator_method_ <- function(data,
   # Flip around the origin
   dim_vectors <-
     purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      flip_around_(vec=.x, around = .y)
+      flip_around_(vec = .x, around = .y)
     })
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions_(data = data,
-                   new_vectors = dim_vectors,
-                   suffix = suffix)
+    add_dimensions_(
+      data = data,
+      new_vectors = dim_vectors,
+      suffix = suffix
+    )
 
   # Add info columns
   if (!is.null(origin_col_name)) {

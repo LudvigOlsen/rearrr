@@ -58,8 +58,7 @@
 #'   most_centered(cols = c("x", "y", "z"))
 #' }
 most_centered <- function(..., cols = NULL, na.rm = FALSE) {
-
-  most_centered_coord_fn <- function(...){
+  most_centered_coord_fn <- function(...) {
     # Convert inputs to list
     dim_vectors <- list(...)
 
@@ -81,8 +80,10 @@ most_centered <- function(..., cols = NULL, na.rm = FALSE) {
     # End of argument checks ####
 
     # Calculate distances to the centroid
-    distances <- calculate_distances_(dim_vectors = dim_vectors,
-                                     to = centroid(..., na.rm = na.rm))
+    distances <- calculate_distances_(
+      dim_vectors = dim_vectors,
+      to = centroid(..., na.rm = na.rm)
+    )
 
     # Return coordinates of the data point with the shortest distance
     purrr::transpose(dim_vectors) %>%
@@ -98,7 +99,4 @@ most_centered <- function(..., cols = NULL, na.rm = FALSE) {
     fn_name = "most_centered_fn",
     coordinate_name = "most_centered"
   )
-
 }
-
-

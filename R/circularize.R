@@ -59,8 +59,10 @@
 #' # First cluster the groups a bit to move the
 #' # circles away from each other
 #' df_circ <- df %>%
-#'   cluster_groups(cols = "y", group_cols = "g",
-#'                  suffix = "") %>%
+#'   cluster_groups(
+#'     cols = "y", group_cols = "g",
+#'     suffix = ""
+#'   ) %>%
 #'   dplyr::group_by(g) %>%
 #'   circularize(y_col = "y")
 #'
@@ -95,22 +97,25 @@
 #' # To contract with multiple multipliers at once,
 #' # we wrap the call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
-#'   .x = 1:10/10,
-#'   .f = function(mult){
+#'   .x = 1:10 / 10,
+#'   .f = function(mult) {
 #'     expand_distances(
 #'       data = df_circ,
 #'       cols = c(".circle_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid)
-#'   })
+#'       origin_fn = centroid
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' df_expanded %>%
-#'   ggplot(aes(x = .circle_x_expanded, y = y_expanded,
-#'              color = .degrees, alpha = .multiplier)) +
+#'   ggplot(aes(
+#'     x = .circle_x_expanded, y = y_expanded,
+#'     color = .degrees, alpha = .multiplier
+#'   )) +
 #'   geom_point() +
 #'   theme_minimal()
-#'
 #' }
 circularize <- function(data,
                         y_col = NULL,
@@ -148,13 +153,11 @@ circularize <- function(data,
     degrees_col_name = degrees_col_name,
     origin_col_name = origin_col_name
   )
-
 }
 
 
 circularize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
-                                       x_col_name, degrees_col_name, origin_col_name, suffix = NULL){
-
+                                        x_col_name, degrees_col_name, origin_col_name, suffix = NULL) {
   col <- cols
 
   # Create tmp var names
@@ -172,41 +175,43 @@ circularize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
     head(rep(c(1, 2), ceiling(nrow(data) / 2)), nrow(data))
 
   # Find minimum value
-  if (is.null(.min)){
+  if (is.null(.min)) {
     .min <- min(data[[col]])
   }
 
   # Find maximum value
-  if (is.null(.max)){
+  if (is.null(.max)) {
     .max <- max(data[[col]])
   }
 
   # Properties of circle
   diameter <- .max - .min
-  radius <- diameter/2
-  origin <- .max-radius
+  radius <- diameter / 2
+  origin <- .max - radius
 
   # y = r * sin(theta), x = r * cos(theta)
   # sin(theta) = y/r
   y_r <- (data[[col]] - origin) / radius
   # Truncate numbers slightly outside the scope of asin (i.e. -1, 1)
-  y_r <- ifelse(is_between_(y_r, 1, 1+1e-10), 1, y_r)
-  y_r <- ifelse(is_between_(y_r, -(1+1e-10), -1), -1, y_r)
+  y_r <- ifelse(is_between_(y_r, 1, 1 + 1e-10), 1, y_r)
+  y_r <- ifelse(is_between_(y_r, -(1 + 1e-10), -1), -1, y_r)
   # Calculate angles in radians
   angle <- asin(y_r)
   data[[x_col_name]] <- radius * cos(angle)
   data[[x_col_name]] <- ifelse(data[[tmp_side_col]] == 1,
-                               -data[[x_col_name]],
-                               data[[x_col_name]])
+    -data[[x_col_name]],
+    data[[x_col_name]]
+  )
 
-  if (!is.null(degrees_col_name)){
+  if (!is.null(degrees_col_name)) {
     data[[degrees_col_name]] <- radians_to_degrees(angle) - 90
     # Make it counterclockwise
     data[[degrees_col_name]] <- -1 * data[[degrees_col_name]]
     # Separate sides
     data[[degrees_col_name]] <- ifelse(data[[tmp_side_col]] == 2,
-                                       360 - data[[degrees_col_name]],
-                                       data[[degrees_col_name]])
+      360 - data[[degrees_col_name]],
+      data[[degrees_col_name]]
+    )
     # Shift values such that (max(x), 0) is 0/360 degrees
     data <- roll_values(
       data = data,
@@ -219,7 +224,7 @@ circularize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
     )
   }
 
-  if (!is.null(origin_col_name)){
+  if (!is.null(origin_col_name)) {
     data[[origin_col_name]] <- list_coordinates_(c(0, origin), c(x_col_name, col))
   }
 
@@ -232,5 +237,4 @@ circularize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
   data[[x_col_name]] <- data[[x_col_name]] + offset_x
 
   data
-
 }

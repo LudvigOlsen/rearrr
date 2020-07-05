@@ -58,8 +58,10 @@
 #' # First cluster the groups a bit to move the
 #' # triangles away from each other
 #' df_tri <- df %>%
-#'   cluster_groups(cols = "y", group_cols = "g",
-#'                  suffix = "") %>%
+#'   cluster_groups(
+#'     cols = "y", group_cols = "g",
+#'     suffix = ""
+#'   ) %>%
 #'   dplyr::group_by(g) %>%
 #'   triangularize(y_col = "y")
 #'
@@ -94,22 +96,25 @@
 #' # To contract with multiple multipliers at once,
 #' # we wrap the call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
-#'   .x = 1:10/10,
-#'   .f = function(mult){
+#'   .x = 1:10 / 10,
+#'   .f = function(mult) {
 #'     expand_distances(
 #'       data = df_tri,
 #'       cols = c(".triangle_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid)
-#'   })
+#'       origin_fn = centroid
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' df_expanded %>%
-#'   ggplot(aes(x = .triangle_x_expanded, y = y_expanded,
-#'              color = .edge, alpha = .multiplier)) +
+#'   ggplot(aes(
+#'     x = .triangle_x_expanded, y = y_expanded,
+#'     color = .edge, alpha = .multiplier
+#'   )) +
 #'   geom_point() +
 #'   theme_minimal()
-#'
 #' }
 triangularize <- function(data,
                           y_col = NULL,
@@ -145,18 +150,16 @@ triangularize <- function(data,
     x_col_name = x_col_name,
     edge_col_name = edge_col_name
   )
-
 }
 
 triangularize_mutator_method_ <- function(data,
-                                         cols,
-                                         .min,
-                                         .max,
-                                         offset_x,
-                                         x_col_name,
-                                         edge_col_name,
-                                         suffix = NULL) {
-
+                                          cols,
+                                          .min,
+                                          .max,
+                                          offset_x,
+                                          x_col_name,
+                                          edge_col_name,
+                                          suffix = NULL) {
   col <- cols
 
   # Create tmp var names
@@ -170,19 +173,19 @@ triangularize_mutator_method_ <- function(data,
   data <- data[order(data[[col]]), , drop = FALSE]
 
   # Find minimum value
-  if (is.null(.min)){
+  if (is.null(.min)) {
     .min <- min(data[[col]])
   }
 
   # Find maximum value
-  if (is.null(.max)){
+  if (is.null(.max)) {
     .max <- max(data[[col]])
   }
 
   # Properties of triangle
   height <- .max - .min
   # Pythagoras comes in handy!
-  side_length <- sqrt(2 * (height / 2) ^ 2)
+  side_length <- sqrt(2 * (height / 2)^2)
   width <- height
 
   # Dividing into sides (left/right)
@@ -219,10 +222,12 @@ triangularize_mutator_method_ <- function(data,
   # Get data points per section (top, bottom)
   top <-
     data[data[[col]] >= midline, ,
-         drop = FALSE]
+      drop = FALSE
+    ]
   bottom <-
     data[data[[col]] < midline, ,
-         drop = FALSE]
+      drop = FALSE
+    ]
 
   ## Create x-coordinate
 
@@ -257,8 +262,9 @@ triangularize_mutator_method_ <- function(data,
 
   # Push to sides
   new_data[[x_col_name]] <- ifelse(new_data[[tmp_side_col]] == 1,
-                                   0,
-                                   new_data[[x_col_name]])
+    0,
+    new_data[[x_col_name]]
+  )
 
   # Clean up
   new_data <- new_data[order(new_data[[tmp_index_col]]), , drop = FALSE]
@@ -270,5 +276,4 @@ triangularize_mutator_method_ <- function(data,
   new_data[[x_col_name]] <- new_data[[x_col_name]] + offset_x
 
   new_data
-
 }

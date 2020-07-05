@@ -69,7 +69,6 @@ df \%>\%
   ggplot(aes(x = x, y = cosine)) +
   geom_path() +
   theme_minimal()
-
 }
 }
 \keyword{internal}

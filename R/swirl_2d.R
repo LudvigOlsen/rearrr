@@ -85,7 +85,7 @@
 #'   "y" = 1,
 #'   "r1" = runif(50),
 #'   "r2" = runif(50) * 35,
-#'   "g" = rep(1:5, each=10)
+#'   "g" = rep(1:5, each = 10)
 #' )
 #'
 #' # Rotate values
@@ -99,7 +99,7 @@
 #'   y_col = "y",
 #'   origin_fn = centroid,
 #'   scale_fn = function(x) {
-#'     x ^ 1.6
+#'     x^1.6
 #'   }
 #' )
 #'
@@ -132,7 +132,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "r1", y = "r2")
-#'
 #' }
 swirl_2d <- function(data,
                      radius,
@@ -162,9 +161,10 @@ swirl_2d <- function(data,
   checkmate::assert_string(radius_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            len = 2,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    len = 2,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(scale_fn, nargs = 1, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -174,7 +174,7 @@ swirl_2d <- function(data,
   if (is.data.frame(data) && is.null(x_col)) {
     assert_collection$push("when 'data' is a data.frame, 'x_col' must be specified.")
   }
-  if (length(c(x_col, y_col)) == 2 && x_col == y_col){
+  if (length(c(x_col, y_col)) == 2 && x_col == y_col) {
     assert_collection$push("'x_col' and 'y_col' cannot be the same column.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -207,25 +207,24 @@ swirl_2d <- function(data,
       out
     }
   )
-
 }
 
 swirl_2d_mutator_method_ <- function(data,
-                                   cols,
-                                   radius,
-                                   scale_fn,
-                                   suffix,
-                                   origin,
-                                   origin_fn,
-                                   degrees_col_name,
-                                   origin_col_name){
+                                     cols,
+                                     radius,
+                                     scale_fn,
+                                     suffix,
+                                     origin,
+                                     origin_fn,
+                                     degrees_col_name,
+                                     origin_col_name) {
 
   # Extract columns
   x_col <- cols[[1]]
   y_col <- cols[[2]]
 
   # Convert columns to list of vectors
-  dim_vectors <- as.list(data[, cols, drop=FALSE])
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
   origin <- apply_coordinate_fn_(
@@ -245,7 +244,7 @@ swirl_2d_mutator_method_ <- function(data,
   # Scale distances
   scaled_distances <- scale_fn(distances)
 
-  if (length(scaled_distances) != length(distances)){
+  if (length(scaled_distances) != length(distances)) {
     stop("the output of 'scale_fn' must have the same length as the input.")
   }
 

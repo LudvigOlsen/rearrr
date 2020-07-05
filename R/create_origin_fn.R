@@ -48,17 +48,19 @@
 #' mean_origin_fn(x, y, z)
 #'
 #' # Should be the same as
-#' c(mean(x, na.rm = TRUE),
+#' c(
+#'   mean(x, na.rm = TRUE),
 #'   mean(y, na.rm = TRUE),
 #'   mean(z, na.rm = TRUE)
 #' )
-#'
 #' }
 create_origin_fn <- function(fn, ...) {
   args <- list(...)
-  function(...){
+  function(...) {
     list(...) %>%
-      purrr::map(.f = function(x){rlang::exec(.fn = fn, x, !!!args)}) %>%
+      purrr::map(.f = function(x) {
+        rlang::exec(.fn = fn, x, !!!args)
+      }) %>%
       unlist(recursive = TRUE, use.names = FALSE)
   }
 }

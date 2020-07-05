@@ -71,10 +71,11 @@
 #' mean_n_fn(x, y, z)
 #'
 #' # Should be the same as
-#' round(c(mean(x, na.rm = TRUE),
-#'         mean(y, na.rm = TRUE),
-#'         mean(z, na.rm = TRUE)))
-#'
+#' round(c(
+#'   mean(x, na.rm = TRUE),
+#'   mean(y, na.rm = TRUE),
+#'   mean(z, na.rm = TRUE)
+#' ))
 #' }
 create_n_fn <- function(fn,
                         use_index = FALSE,
@@ -108,7 +109,7 @@ create_n_fn <- function(fn,
     input %>%
       purrr::map(
         .f = function(x) {
-          negate_fn(round_fn(rlang::exec(.fn = fn, x,!!!args)))
+          negate_fn(round_fn(rlang::exec(.fn = fn, x, !!!args)))
         }
       ) %>%
       unlist(recursive = TRUE, use.names = FALSE)
@@ -148,15 +149,15 @@ create_n_fn <- function(fn,
 #'
 #' # Negate result
 #' median_index(x, y, z, negate = TRUE)
-#'
 #' }
 median_index <- function(...,
                          negate = FALSE,
                          round_fn = round) {
   create_n_fn(median,
-              use_index = TRUE,
-              negate = negate,
-              round_fn = round_fn)(...)
+    use_index = TRUE,
+    negate = negate,
+    round_fn = round_fn
+  )(...)
 }
 
 #' @rdname median_index

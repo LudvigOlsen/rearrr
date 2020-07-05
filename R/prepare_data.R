@@ -5,10 +5,10 @@
 
 
 prepare_input_data_ <- function(data,
-                               cols,
-                               min_dims = 1,
-                               new_name = NULL,
-                               allow_missing = FALSE) {
+                                cols,
+                                min_dims = 1,
+                                new_name = NULL,
+                                allow_missing = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
 
@@ -33,13 +33,15 @@ prepare_input_data_ <- function(data,
       assert_collection$push("when 'data' is not a data.frame, 'col(s)' must be 'NULL'.")
       checkmate::reportAssertions(assert_collection)
     }
-    data <- data.frame("Value" = data,
-                       stringsAsFactors = FALSE)
-    cols = "Value"
+    data <- data.frame(
+      "Value" = data,
+      stringsAsFactors = FALSE
+    )
+    cols <- "Value"
     was_vector <- TRUE
     if (min_dims == 2) {
       data[["Index"]] <- seq_len(nrow(data))
-      cols = c("Index", "Value")
+      cols <- c("Index", "Value")
       data <- data[, cols, drop = FALSE]
     }
   } else {
@@ -59,7 +61,7 @@ prepare_input_data_ <- function(data,
   if (is.null(new_name)) {
     if (isTRUE(was_vector) && min_dims == 2) {
       new_name <- "Value"
-    } else{
+    } else {
       new_name <- cols
     }
   }
@@ -104,11 +106,11 @@ prepare_input_data_ <- function(data,
 }
 
 prepare_output_data_ <- function(data,
-                                cols,
-                                use_index,
-                                to_vector,
-                                exclude_cols = NULL,
-                                group_keys = NULL) {
+                                 cols,
+                                 use_index,
+                                 to_vector,
+                                 exclude_cols = NULL,
+                                 group_keys = NULL) {
   # Remove tmp column if 'cols' was 'NULL'
   if (isTRUE(use_index)) {
     data[[cols]] <- NULL
@@ -116,7 +118,7 @@ prepare_output_data_ <- function(data,
 
   # Return as vector if that is what we were passed
   if (isTRUE(to_vector) &&
-      ncol(data) == 1) {
+    ncol(data) == 1) {
     return(data[[1]])
   }
 
@@ -126,8 +128,8 @@ prepare_output_data_ <- function(data,
 
   # When 'data' contains group summaries, we add the group keys
   if (!is.null(group_keys) &&
-      length(intersect(colnames(group_keys), colnames(data))) == 0 &&
-      nrow(data) == nrow(group_keys)) {
+    length(intersect(colnames(group_keys), colnames(data))) == 0 &&
+    nrow(data) == nrow(group_keys)) {
     data <- dplyr::bind_cols(group_keys, data)
   }
 

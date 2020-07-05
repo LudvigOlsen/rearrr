@@ -45,7 +45,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Measure row-wise
@@ -90,15 +90,13 @@ vector_length <- function(data,
     by_row = by_row,
     len_col_name = len_col_name
   )
-
 }
 
 vector_length_mutator_method_ <- function(data,
-                                         cols,
-                                         by_row,
-                                         len_col_name,
-                                         ...) {
-
+                                          cols,
+                                          by_row,
+                                          len_col_name,
+                                          ...) {
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   if (isTRUE(by_row)) {
@@ -113,7 +111,6 @@ vector_length_mutator_method_ <- function(data,
   data[[len_col_name]] <- vec_lengths
 
   data
-
 }
 
 
@@ -121,9 +118,10 @@ vec_lengths_rowwise_ <- function(dim_vectors) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_list(dim_vectors,
-                         any.missing = FALSE,
-                         types = "numeric",
-                         add = assert_collection)
+    any.missing = FALSE,
+    types = "numeric",
+    add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
   if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))) {
     assert_collection$push("all 'dim_vectors' must have the same length.")
@@ -147,5 +145,5 @@ vec_lengths_colwise_ <- function(dim_vectors) {
 }
 
 vec_length_ <- function(x) {
-  sqrt(sum(x ^ 2))
+  sqrt(sum(x^2))
 }

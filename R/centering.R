@@ -45,8 +45,10 @@
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
 #'   "C" = LETTERS[1:10],
-#'   "G" = c(1, 1, 1, 2, 2,
-#'           2, 3, 3, 3, 3),
+#'   "G" = c(
+#'     1, 1, 1, 2, 2,
+#'     2, 3, 3, 3, 3
+#'   ),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -63,7 +65,7 @@
 #'
 #' # Grouped by G
 #' df %>%
-#'   dplyr::select(G, A) %>%  # For clarity
+#'   dplyr::select(G, A) %>% # For clarity
 #'   dplyr::group_by(G) %>%
 #'   center_max(col = "A")
 #'
@@ -73,7 +75,7 @@
 #' }
 center_max <- function(data,
                        col = NULL,
-                       shuffle_sides = FALSE){
+                       shuffle_sides = FALSE) {
   centering_rearranger_(
     data = data,
     col = col,
@@ -124,8 +126,10 @@ center_max <- function(data,
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
 #'   "C" = LETTERS[1:10],
-#'   "G" = c(1, 1, 1, 2, 2,
-#'           2, 3, 3, 3, 3),
+#'   "G" = c(
+#'     1, 1, 1, 2, 2,
+#'     2, 3, 3, 3, 3
+#'   ),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -142,7 +146,7 @@ center_max <- function(data,
 #'
 #' # Grouped by G
 #' df %>%
-#'   dplyr::select(G, A) %>%  # For clarity
+#'   dplyr::select(G, A) %>% # For clarity
 #'   dplyr::group_by(G) %>%
 #'   center_min(col = "A")
 #'
@@ -152,7 +156,7 @@ center_max <- function(data,
 #' }
 center_min <- function(data,
                        col = NULL,
-                       shuffle_sides = FALSE){
+                       shuffle_sides = FALSE) {
   centering_rearranger_(
     data = data,
     col = col,

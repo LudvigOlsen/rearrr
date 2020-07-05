@@ -117,7 +117,7 @@ df <- data.frame(
   "y" = 1,
   "r1" = runif(50),
   "r2" = runif(50) * 35,
-  "g" = rep(1:5, each=10)
+  "g" = rep(1:5, each = 10)
 )
 
 # Rotate values
@@ -131,7 +131,7 @@ df_swirled <- swirl_2d(
   y_col = "y",
   origin_fn = centroid,
   scale_fn = function(x) {
-    x ^ 1.6
+    x^1.6
   }
 )
 
@@ -164,7 +164,6 @@ df_swirled \%>\%
   geom_point() +
   theme_minimal() +
   labs(x = "r1", y = "r2")
-
 }
 }
 \seealso{

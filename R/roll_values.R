@@ -78,7 +78,7 @@
 #'
 #' # Change values first, then wrap to range
 #' x <- c(1:7)
-#' x <- x ^ 2
+#' x <- x^2
 #' wrap_to_range(x, .min = 1, .max = 7)
 #'
 #' # With 1 in-between .min and .max
@@ -139,7 +139,6 @@
 #'   .max = 5,
 #'   between = 1
 #' )
-#'
 #' }
 roll_values <- function(data,
                         cols = NULL,
@@ -155,13 +154,15 @@ roll_values <- function(data,
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_number(add, finite = TRUE, add = assert_collection)
   checkmate::assert_number(.min,
-                           finite = TRUE,
-                           null.ok = TRUE,
-                           add = assert_collection)
+    finite = TRUE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
   checkmate::assert_number(.max,
-                           finite = TRUE,
-                           null.ok = TRUE,
-                           add = assert_collection)
+    finite = TRUE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
   checkmate::assert_number(between, finite = TRUE, lower = 0, add = assert_collection)
   checkmate::assert_string(range_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(na.rm, add = assert_collection)
@@ -193,7 +194,6 @@ roll_values <- function(data,
     na.rm = na.rm,
     range_col_name = range_col_name
   )
-
 }
 
 #' @rdname roll_values
@@ -266,14 +266,14 @@ wrap_to_range_vec <- function(data,
 
 
 roll_values_mutator_method_ <- function(data,
-                                       cols,
-                                       add,
-                                       .min,
-                                       .max,
-                                       between,
-                                       na.rm,
-                                       suffix,
-                                       range_col_name) {
+                                        cols,
+                                        add,
+                                        .min,
+                                        .max,
+                                        between,
+                                        na.rm,
+                                        suffix,
+                                        range_col_name) {
   # Number of dimensions
   # Each column is a dimension
   num_dims <- length(cols)
@@ -311,10 +311,10 @@ roll_values_mutator_method_ <- function(data,
 
   # In case one of .min/.max was provided and the
   # other is measured and different length
-  if (length(.min) != length(.max)){
-    if (length(.min) == 1){
+  if (length(.min) != length(.max)) {
+    if (length(.min) == 1) {
       .min <- rep(.min, length(.max))
-    } else if (length(.max) == 1){
+    } else if (length(.max) == 1) {
       .max <- rep(.max, length(.min))
     }
   }
@@ -348,23 +348,24 @@ roll_values_mutator_method_ <- function(data,
   # Add info columns
   if (!is.null(range_col_name)) {
     data[[range_col_name]] <- list_coordinates_(.range, cols)
-    data <- paste_ranges_column_(data = data,
-                                col = range_col_name,
-                                include_min = TRUE,
-                                include_max = between > 0)
+    data <- paste_ranges_column_(
+      data = data,
+      col = range_col_name,
+      include_min = TRUE,
+      include_max = between > 0
+    )
   }
 
   data
-
 }
 
 
 roll_values_inner_ <- function(data,
-                              add,
-                              .min,
-                              .max,
-                              between,
-                              na.rm) {
+                               add,
+                               .min,
+                               .max,
+                               between,
+                               na.rm) {
   if (.min > .max) {
     stop("'.min' was greater than '.max'.")
   }
@@ -375,5 +376,4 @@ roll_values_inner_ <- function(data,
 
   # Wrap to range
   (data - .min) %% (.max - .min + between) + .min
-
 }

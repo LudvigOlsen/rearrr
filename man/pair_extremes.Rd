@@ -138,8 +138,10 @@ df <- data.frame(
   "A" = sample(1:10),
   "B" = runif(10),
   "C" = LETTERS[1:10],
-  "G" = c(1, 1, 1, 2, 2,
-          2, 3, 3, 3, 3),
+  "G" = c(
+    1, 1, 1, 2, 2,
+    2, 3, 3, 3, 3
+  ),
   stringsAsFactors = FALSE
 )
 
@@ -159,19 +161,25 @@ pair_extremes(df, col = "A", shuffle_pairs = TRUE)
 
 # Grouped by G
 df \%>\%
-  dplyr::select(G, A) \%>\%  # For clarity
+  dplyr::select(G, A) \%>\% # For clarity
   dplyr::group_by(G) \%>\%
   pair_extremes(col = "A")
 
 # Plot the extreme pairs
-plot(x = 1:10,
-     y = pair_extremes(df, col = "B")$B)
+plot(
+  x = 1:10,
+  y = pair_extremes(df, col = "B")$B
+)
 # With shuffled pair members (run a few times)
-plot(x = 1:10,
-     y = pair_extremes(df, col = "B", shuffle_members = TRUE)$B)
+plot(
+  x = 1:10,
+  y = pair_extremes(df, col = "B", shuffle_members = TRUE)$B
+)
 # With shuffled pairs (run a few times)
-plot(x = rep(1:5, each = 2),
-     y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B)
+plot(
+  x = rep(1:5, each = 2),
+  y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B
+)
 }
 }
 \seealso{

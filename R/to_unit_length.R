@@ -31,7 +31,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Scale row-wise
@@ -73,45 +73,44 @@ to_unit_length <- function(data,
     keep_original = TRUE,
     by_row = by_row
   )
-
 }
 
 to_unit_length_mutator_method_ <- function(data,
-                                          cols,
-                                          by_row,
-                                          suffix) {
-
+                                           cols,
+                                           by_row,
+                                           suffix) {
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
-  if (isTRUE(by_row)){
+  if (isTRUE(by_row)) {
     unit_dim_vectors <- to_unit_lengths_rowwise_(dim_vectors)
   } else {
     unit_dim_vectors <- to_unit_lengths_colwise_(dim_vectors)
   }
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions_(data = data,
-                         new_vectors = setNames(unit_dim_vectors, cols),
-                         suffix = suffix)
+  data <- add_dimensions_(
+    data = data,
+    new_vectors = setNames(unit_dim_vectors, cols),
+    suffix = suffix
+  )
 
   data
-
 }
 
 # Normalize vector to Unit length
 to_unit_vector_ <- function(x) {
   checkmate::assert_numeric(x, any.missing = FALSE)
-  if (sum(x ^ 2) == 0){
+  if (sum(x^2) == 0) {
     return(x)
   }
-  x / sqrt(sum(x ^ 2))
+  x / sqrt(sum(x^2))
 }
 
 # Normalize dimensions
 # One vector per dimension
-to_unit_lengths_rowwise_ <- function(dim_vectors){
+to_unit_lengths_rowwise_ <- function(dim_vectors) {
   checkmate::assert_list(dim_vectors, any.missing = FALSE, types = "numeric")
-  if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))){
+  if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))) {
     stop("All 'dim_vectors' must have the same length.")
   }
   purrr::transpose(dim_vectors) %>%
@@ -121,9 +120,9 @@ to_unit_lengths_rowwise_ <- function(dim_vectors){
     purrr::simplify_all()
 }
 
-to_unit_lengths_colwise_ <- function(dim_vectors){
+to_unit_lengths_colwise_ <- function(dim_vectors) {
   checkmate::assert_list(dim_vectors, any.missing = FALSE, types = "numeric")
-  if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))){
+  if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))) {
     stop("All 'dim_vectors' must have the same length.")
   }
   dim_vectors %>%

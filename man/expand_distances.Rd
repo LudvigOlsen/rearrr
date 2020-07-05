@@ -146,7 +146,7 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = rep(1:4, each=5)
+  "g" = rep(1:4, each = 5)
 )
 
 # Expand distances in the two dimensions (x and y)
@@ -189,23 +189,29 @@ expand_distances(
 # call in purrr::map_dfr
 df_expanded <- purrr::map_dfr(
   .x = c(1, 3, 5),
-  .f = function(exponent){
-  expand_distances(
-    data = df,
-    cols = c("x", "y"),
-    multiplier = exponent,
-    origin_fn = centroid,
-    exponentiate = TRUE,
-    add_one_exp = TRUE)
-})
+  .f = function(exponent) {
+    expand_distances(
+      data = df,
+      cols = c("x", "y"),
+      multiplier = exponent,
+      origin_fn = centroid,
+      exponentiate = TRUE,
+      add_one_exp = TRUE
+    )
+  }
+)
 df_expanded
 
 # Plot the expansions of x and y around the overall centroid
 ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
-  geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_vline(
+    xintercept = df_expanded[[".origin"]][[1]][[1]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
+  geom_hline(
+    yintercept = df_expanded[[".origin"]][[1]][[2]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
   geom_path(size = 0.2) +
   geom_point() +
   theme_minimal() +
@@ -216,21 +222,27 @@ ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponent
 # call in purrr::map_dfr
 df_expanded <- purrr::map_dfr(
   .x = c(1, 3, 5),
-  .f = function(multiplier){
-  expand_distances(df,
-         cols = c("x", "y"),
-         multiplier = multiplier,
-         origin_fn = centroid,
-         exponentiate = FALSE)
-})
+  .f = function(multiplier) {
+    expand_distances(df,
+      cols = c("x", "y"),
+      multiplier = multiplier,
+      origin_fn = centroid,
+      exponentiate = FALSE
+    )
+  }
+)
 df_expanded
 
 # Plot the expansions of x and y around the overall centroid
 ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multiplier))) +
-  geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_vline(
+    xintercept = df_expanded[[".origin"]][[1]][[1]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
+  geom_hline(
+    yintercept = df_expanded[[".origin"]][[1]][[2]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
   geom_path(size = 0.2, alpha = .8) +
   geom_point() +
   theme_minimal() +
@@ -256,7 +268,6 @@ ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))
   geom_point() +
   theme_minimal() +
   labs(x = "x", y = "y", color = "g")
-
 }
 }
 \seealso{

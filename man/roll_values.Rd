@@ -131,7 +131,7 @@ roll_values(c(0:360), .min = 0, .max = 180)
 
 # Change values first, then wrap to range
 x <- c(1:7)
-x <- x ^ 2
+x <- x^2
 wrap_to_range(x, .min = 1, .max = 7)
 
 # With 1 in-between .min and .max
@@ -192,7 +192,6 @@ wrap_to_range(
   .max = 5,
   between = 1
 )
-
 }
 }
 \seealso{

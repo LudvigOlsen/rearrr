@@ -86,8 +86,10 @@ df_circ \%>\%
 # First cluster the groups a bit to move the
 # circles away from each other
 df_circ <- df \%>\%
-  cluster_groups(cols = "y", group_cols = "g",
-                 suffix = "") \%>\%
+  cluster_groups(
+    cols = "y", group_cols = "g",
+    suffix = ""
+  ) \%>\%
   dplyr::group_by(g) \%>\%
   circularize(y_col = "y")
 
@@ -122,22 +124,25 @@ df_circ <- circularize(df, y_col = "y")
 # To contract with multiple multipliers at once,
 # we wrap the call in purrr::map_dfr
 df_expanded <- purrr::map_dfr(
-  .x = 1:10/10,
-  .f = function(mult){
+  .x = 1:10 / 10,
+  .f = function(mult) {
     expand_distances(
       data = df_circ,
       cols = c(".circle_x", "y"),
       multiplier = mult,
-      origin_fn = centroid)
-  })
+      origin_fn = centroid
+    )
+  }
+)
 df_expanded
 
 df_expanded \%>\%
-  ggplot(aes(x = .circle_x_expanded, y = y_expanded,
-             color = .degrees, alpha = .multiplier)) +
+  ggplot(aes(
+    x = .circle_x_expanded, y = y_expanded,
+    color = .degrees, alpha = .multiplier
+  )) +
   geom_point() +
   theme_minimal()
-
 }
 }
 \seealso{

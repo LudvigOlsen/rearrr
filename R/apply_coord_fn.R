@@ -16,7 +16,6 @@ apply_coord_fn_ <- function(...,
                             coord_fn,
                             fn_name,
                             coordinate_name) {
-
   if (is.data.frame(list(...)[[1]])) {
     if (rlang::dots_n(...) != 1) {
       stop("When passing a data.frame in '...', the length of '...' should be 1.")
@@ -70,16 +69,15 @@ apply_coord_fn_df_ <- function(data,
     fn_name = fn_name,
     coordinate_name = coordinate_name
   )
-
 }
 
 
 apply_coord_fn_df_mutator_method_ <- function(data,
-                                             cols,
-                                             coord_fn,
-                                             fn_name,
-                                             coordinate_name,
-                                             ...) {
+                                              cols,
+                                              coord_fn,
+                                              fn_name,
+                                              coordinate_name,
+                                              ...) {
   # Convert columns to list of vectors
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
@@ -97,5 +95,4 @@ apply_coord_fn_df_mutator_method_ <- function(data,
 
   as.data.frame(as.list(coords)) %>%
     setNames(cols)
-
 }

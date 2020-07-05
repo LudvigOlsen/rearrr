@@ -131,7 +131,7 @@
 #'   data = df,
 #'   cols = c("x", "y", "o"),
 #'   origin_fn = centroid,
-#'   dimming_fn = function(x, d){
+#'   dimming_fn = function(x, d) {
 #'     x * 1 / (2^(1 + d))
 #'   }
 #' )
@@ -146,22 +146,26 @@
 #'   dim_values(
 #'     cols = c("x", "y", "o"),
 #'     origin_fn = centroid
-#' )
+#'   )
 #'
 #' # Plot the dimmed data such that the alpha (opacity) is
 #' # controlled by the dimming
 #' # (Note: This works because the `o` column is 1 for all values)
-#' ggplot(data = df_dimmed,
-#'        aes(x = x, y = y, alpha = o_dimmed, color = .cluster)) +
+#' ggplot(
+#'   data = df_dimmed,
+#'   aes(x = x, y = y, alpha = o_dimmed, color = .cluster)
+#' ) +
 #'   geom_point() +
 #'   theme_minimal() +
-#'   labs(x = "x", y="y", color="Cluster", alpha = "o_dimmed")
+#'   labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
 #' }
 dim_values <- function(data,
                        cols,
-                       dimming_fn = create_dimming_fn(numerator = 1,
-                                                      exponent = 2,
-                                                      add_to_distance = 1),
+                       dimming_fn = create_dimming_fn(
+                         numerator = 1,
+                         exponent = 2,
+                         add_to_distance = 1
+                       ),
                        origin = 0,
                        origin_fn = NULL,
                        dim_col = cols[[length(cols)]],
@@ -173,14 +177,15 @@ dim_values <- function(data,
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(dimming_fn, nargs = 2, add = assert_collection)
   checkmate::assert_string(dim_col, min.chars = 1, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  if (!is.null(dim_col) && !is.null(cols) && dim_col %ni% cols){
+  if (!is.null(dim_col) && !is.null(cols) && dim_col %ni% cols) {
     assert_collection$push("'dim_col' must be in 'cols'.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -202,17 +207,16 @@ dim_values <- function(data,
     dim_col = dim_col,
     origin_col_name = origin_col_name
   )
-
 }
 
-dim_values_mutator_method_ <- function(data, cols, dimming_fn, origin, origin_fn, dim_col, suffix, origin_col_name){
+dim_values_mutator_method_ <- function(data, cols, dimming_fn, origin, origin_fn, dim_col, suffix, origin_col_name) {
 
   # Number of dimensions
   # Each column is a dimension
   num_dims <- length(cols)
 
   # If cols was originally NULL, dim_col will also be NULL
-  if (is.null(dim_col)){
+  if (is.null(dim_col)) {
     dim_col <- cols[[length(cols)]]
   }
 
@@ -238,7 +242,7 @@ dim_values_mutator_method_ <- function(data, cols, dimming_fn, origin, origin_fn
   # Apply dimmer
   dimmed_dimension <- dimming_fn(dim_vectors[[dim_col]], distances)
 
-  if (length(dimmed_dimension) != length(distances)){
+  if (length(dimmed_dimension) != length(distances)) {
     stop("the output of 'dimming_fn' must have the same length as the input.")
   }
 
@@ -246,10 +250,14 @@ dim_values_mutator_method_ <- function(data, cols, dimming_fn, origin, origin_fn
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions_(data = data,
-                   new_vectors = setNames(list(dim_vectors[[dim_col]]),
-                                          dim_col),
-                   suffix = suffix)
+    add_dimensions_(
+      data = data,
+      new_vectors = setNames(
+        list(dim_vectors[[dim_col]]),
+        dim_col
+      ),
+      suffix = suffix
+    )
 
   # Add origin coordinates
   if (!is.null(origin_col_name)) {
@@ -257,5 +265,4 @@ dim_values_mutator_method_ <- function(data, cols, dimming_fn, origin, origin_fn
   }
 
   data
-
 }

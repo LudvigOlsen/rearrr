@@ -83,58 +83,65 @@
 #' # Create a data frame
 #' df <- data.frame(
 #'   "Index" = 1:12,
-#'   "A" = c(1, 2, 3, 4, 9, 10, 11,
-#'           12, 15, 16, 17, 18),
-#'   "G" = c(1, 1, 1, 1, 2, 2,
-#'           2, 2, 3, 3, 3, 3)
+#'   "A" = c(
+#'     1, 2, 3, 4, 9, 10, 11,
+#'     12, 15, 16, 17, 18
+#'   ),
+#'   "G" = c(
+#'     1, 1, 1, 1, 2, 2,
+#'     2, 2, 3, 3, 3, 3
+#'   )
 #' )
 #'
 #' # Rotate values
-#' rotate_2d(df, 45, x_col="Index", y_col="A")
+#' rotate_2d(df, 45, x_col = "Index", y_col = "A")
 #'
 #' # Rotate A around the centroid
 #' df_rotated <- df %>%
-#'   rotate_2d(x_col = "Index",
-#'            y_col = "A",
-#'            degrees = c(0, 120, 240),
-#'            origin_fn = centroid)
+#'   rotate_2d(
+#'     x_col = "Index",
+#'     y_col = "A",
+#'     degrees = c(0, 120, 240),
+#'     origin_fn = centroid
+#'   )
 #' df_rotated
 #'
 #' # Plot A and A rotated around overall centroid
 #' ggplot(df_rotated, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
-#'   geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype="dashed") +
-#'   geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_line(alpha = .4) +
 #'   geom_point() +
 #'   theme_minimal() +
-#'   labs(x = "Index", y="Value", color="Degrees")
+#'   labs(x = "Index", y = "Value", color = "Degrees")
 #'
 #' # Rotate around group centroids
 #' df_grouped <- df %>%
 #'   dplyr::group_by(G) %>%
-#'   rotate_2d(x_col = "Index",
-#'            y_col = "A",
-#'            degrees = c(0, 120, 240),
-#'            origin_fn = centroid)
+#'   rotate_2d(
+#'     x_col = "Index",
+#'     y_col = "A",
+#'     degrees = c(0, 120, 240),
+#'     origin_fn = centroid
+#'   )
 #' df_grouped
 #'
 #' # Plot A and A rotated around group centroids
-#' ggplot(df_grouped, aes(x=Index_rotated, y=A_rotated, color = factor(.degrees))) +
+#' ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
 #'   geom_point() +
 #'   theme_minimal() +
-#'   labs(x = "Index", y="Value", color="Degrees")
-#'
+#'   labs(x = "Index", y = "Value", color = "Degrees")
 #' }
 rotate_2d <- function(data,
-                     degrees,
-                     x_col = NULL,
-                     y_col = NULL,
-                     suffix = "_rotated",
-                     origin = c(0, 0),
-                     origin_fn = NULL,
-                     keep_original = TRUE,
-                     degrees_col_name = ".degrees",
-                     origin_col_name = ".origin") {
+                      degrees,
+                      x_col = NULL,
+                      y_col = NULL,
+                      suffix = "_rotated",
+                      origin = c(0, 0),
+                      origin_fn = NULL,
+                      keep_original = TRUE,
+                      degrees_col_name = ".degrees",
+                      origin_col_name = ".origin") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_numeric(
@@ -151,9 +158,10 @@ rotate_2d <- function(data,
   checkmate::assert_string(degrees_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            len = 2,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    len = 2,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if (is.data.frame(data) && is.null(y_col)) {
@@ -162,7 +170,7 @@ rotate_2d <- function(data,
   if (is.data.frame(data) && is.null(x_col)) {
     assert_collection$push("when 'data' is a data.frame, 'x_col' must be specified.")
   }
-  if (length(c(x_col, y_col)) == 2 && x_col == y_col){
+  if (length(c(x_col, y_col)) == 2 && x_col == y_col) {
     assert_collection$push("'x_col' and 'y_col' cannot be the same column.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -193,23 +201,22 @@ rotate_2d <- function(data,
       out
     }
   )
-
 }
 
 
 rotate_2d_mutator_method_ <- function(data,
-                                    cols,
-                                    degrees,
-                                    suffix,
-                                    origin,
-                                    origin_fn,
-                                    origin_col_name) {
+                                      cols,
+                                      degrees,
+                                      suffix,
+                                      origin,
+                                      origin_fn,
+                                      origin_col_name) {
   # Extract columns
   x_col <- cols[[1]]
   y_col <- cols[[2]]
 
   # Create rotation matrix based on the degrees
-  rotation_matrix <- create_rotation_matrix_2d_(deg=degrees)
+  rotation_matrix <- create_rotation_matrix_2d_(deg = degrees)
 
   # Extract x and y values
   if (is.null(x_col)) {
@@ -243,8 +250,8 @@ rotate_2d_mutator_method_ <- function(data,
   xy_matrix <- rotation_matrix %*% xy_matrix
 
   # Extract x and y
-  x <- xy_matrix[1,]
-  y <- xy_matrix[2,]
+  x <- xy_matrix[1, ]
+  y <- xy_matrix[2, ]
 
   # Move origin
   x <- x + origin[[1]]
@@ -260,5 +267,4 @@ rotate_2d_mutator_method_ <- function(data,
   }
 
   data
-
 }

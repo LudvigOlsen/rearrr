@@ -94,8 +94,10 @@ df <- data.frame(
   "index" = 1:10,
   "A" = sample(1:10),
   "B" = runif(10),
-  "G" = c(1, 1, 1, 2, 2,
-          2, 3, 3, 3, 3),
+  "G" = c(
+    1, 1, 1, 2, 2,
+    2, 3, 3, 3, 3
+  ),
   stringsAsFactors = FALSE
 )
 
@@ -109,29 +111,37 @@ furthest_from(df, cols = "B", origin = 0.5)$B
 furthest_from(df, cols = "B", origin_fn = centroid)$B
 
 # Shuffle the elements with the same distance to the origin
-furthest_from(df, cols = "A",
-              origin_fn = create_origin_fn(median),
-              shuffle_ties = TRUE)$A
+furthest_from(df,
+  cols = "A",
+  origin_fn = create_origin_fn(median),
+  shuffle_ties = TRUE
+)$A
 
 # Grouped by G
 df \%>\%
-  dplyr::select(G, A) \%>\%  # For clarity
+  dplyr::select(G, A) \%>\% # For clarity
   dplyr::group_by(G) \%>\%
-  furthest_from(cols = "A",
-                origin_fn = create_origin_fn(median))
+  furthest_from(
+    cols = "A",
+    origin_fn = create_origin_fn(median)
+  )
 
 # Plot the centered values
 plot(
   x = 1:10,
-  y = furthest_from(df, cols = "B",
-                    origin_fn = create_origin_fn(median))$B,
+  y = furthest_from(df,
+    cols = "B",
+    origin_fn = create_origin_fn(median)
+  )$B,
   xlab = "Position", ylab = "B"
 )
 plot(
   x = 1:10,
-  y = furthest_from(df, cols = "A",
-                    origin_fn = create_origin_fn(median),
-                    shuffle_ties = TRUE)$A,
+  y = furthest_from(df,
+    cols = "A",
+    origin_fn = create_origin_fn(median),
+    shuffle_ties = TRUE
+  )$A,
   xlab = "Position", ylab = "A"
 )
 
