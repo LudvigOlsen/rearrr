@@ -1026,8 +1026,9 @@ df_clusters %>%
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|
 |`create_origin_fn()`   |Creates function for finding origin coordinates (like `centroid()`).   |
-|`centroid()`           |Calculates the mean of each supplied vector.                           |
+|`centroid()`           |Calculates the mean of each supplied vector/column.                    |
 |`most_centered()`      |Finds coordinates of data point closest to the centroid.               |
+|`midrange()`           |Calculates the midrange of each supplied vector/column.                |
 |`create_n_fn()`        |Creates function for finding the number of positions to move.          |
 |`median_index()`       |Calculates median index of each supplied vector.                       |
 |`quantile_index()`     |Calculates quantile of indices for each supplied vector.               |

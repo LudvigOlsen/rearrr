@@ -4,20 +4,22 @@
 \alias{centroid}
 \title{Find the coordinates for the centroid}
 \usage{
-centroid(..., na.rm = FALSE)
+centroid(..., cols = NULL, na.rm = FALSE)
 }
 \arguments{
-\item{...}{Numeric vectors.}
+\item{...}{\code{Numeric vectors} or a single \code{data.frame}.}
+
+\item{cols}{Names of columns to use when \code{`...`} is a single \code{data.frame}.}
 
 \item{na.rm}{Whether to ignore missing values when calculating means. (Logical)}
 }
 \value{
-\code{vector} with the means of each supplied vector.
+Means of the supplied \code{vectors}/\code{columns}. Either as a \code{vector} or a \code{data.frame}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Calculates the mean for each of the passed vectors.
+Calculates the mean of each passed \code{vector}/\code{column}.
 }
 \examples{
 \donttest{
@@ -35,8 +37,37 @@ z <- runif(10)
 # Find centroid coordinates
 # Aka. the means of each vector
 centroid(x, y, z)
+
+#
+# For data.frames
+#
+
+# Create data frame
+df <- data.frame(
+  "x" = x,
+  "y" = y,
+  "z" = z,
+  "g" = rep(1:2, each = 5)
+)
+
+# Find centroid coordinates
+# Aka. the means of each column
+centroid(df, cols = c("x", "y", "z"))
+
+# When 'df' is grouped
+df \%>\%
+  dplyr::group_by(g) \%>\%
+  centroid(cols = c("x", "y", "z"))
+
 }
+}
+\seealso{
+Other coordinate functions: 
+\code{\link{create_origin_fn}()},
+\code{\link{midrange}()},
+\code{\link{most_centered}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{coordinate functions}

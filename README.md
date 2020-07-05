@@ -15,7 +15,7 @@
 [![metacran
 downloads](https://cranlogs.r-pkg.org/badges/rearrr)](https://cran.r-project.org/package=rearrr)
 [![minimal R
-version](https://img.shields.io/badge/R%3E%3D-3.2.0-6666ff.svg)](https://cran.r-project.org/)
+version](https://img.shields.io/badge/R%3E%3D-3.5-6666ff.svg)](https://cran.r-project.org/)
 [![Codecov test
 coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/rearrr?branch=master)
 [![Travis build
@@ -671,8 +671,9 @@ generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1
 | Function             | Description                                                          |
 | :------------------- | :------------------------------------------------------------------- |
 | `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
-| `centroid()`         | Calculates the mean of each supplied vector.                         |
+| `centroid()`         | Calculates the mean of each supplied vector/column.                  |
 | `most_centered()`    | Finds coordinates of data point closest to the centroid.             |
+| `midrange()`         | Calculates the midrange of each supplied vector/column.              |
 | `create_n_fn()`      | Creates function for finding the number of positions to move.        |
 | `median_index()`     | Calculates median index of each supplied vector.                     |
 | `quantile_index()`   | Calculates quantile of indices for each supplied vector.             |

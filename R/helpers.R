@@ -296,6 +296,7 @@ list_coordinates <- function(coordinates, names) {
 # Paste a list column where each element is c(x = 1, y = d)
 paste_coordinates_column <- function(data, col) {
   str_name <- paste0(col, "_str")
+  # data[[col]] <- purrr::map(.x = data[[col]], .f = ~{purrr::map(.f = round(.x, digits = digits))})
   data[[str_name]] <- paste0(data[[col]])
   data[[str_name]] <-  substr(data[[str_name]],
                               start = 3,

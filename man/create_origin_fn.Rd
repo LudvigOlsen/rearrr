@@ -60,6 +60,13 @@ c(mean(x, na.rm = TRUE),
 
 }
 }
+\seealso{
+Other coordinate functions: 
+\code{\link{centroid}()},
+\code{\link{midrange}()},
+\code{\link{most_centered}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{coordinate functions}

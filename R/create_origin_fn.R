@@ -11,6 +11,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param fn Function to apply to each dimension. Should return a numeric scalar.
 #' @param ... Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.
+#' @family coordinate functions
 #' @export
 #' @return Function with the dots (\code{...}) argument that applies the \code{`fn`} function to
 #'  each element in \code{...} (usually one vector per dimension).
