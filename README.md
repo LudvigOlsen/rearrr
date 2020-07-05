@@ -7,8 +7,10 @@
 
 **Rearrrange Data**  
 **Authors:** [Ludvig R. Olsen](http://ludvigolsen.dk/) (
-<r-pkgs@ludvigolsen.dk> ) <br/> **License:**
-[MIT](https://opensource.org/licenses/MIT) <br/> **Started:** April
+<r-pkgs@ludvigolsen.dk> )
+<a href='https://twitter.com/ludvigolsen'><img src='man/figures/icons8-twitter.svg' height="17" /></a><br/>
+**License:** [MIT](https://opensource.org/licenses/MIT) <br/>
+**Started:** April
 2020
 
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/rearrr)](https://cran.r-project.org/package=rearrr)

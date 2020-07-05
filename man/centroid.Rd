@@ -25,6 +25,7 @@ Calculates the mean of each passed \code{vector}/\code{column}.
 \donttest{
 # Attach packages
 library(rearrr)
+library(dplyr)
 
 # Set seed
 set.seed(1)

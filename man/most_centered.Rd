@@ -27,6 +27,7 @@ shortest distance to the centroid.
 \donttest{
 # Attach packages
 library(rearrr)
+library(dplyr)
 
 # Set seed
 set.seed(1)
