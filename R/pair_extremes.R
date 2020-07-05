@@ -32,7 +32,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams extreme_pairing_rearranger
+#' @inheritParams extreme_pairing_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the sorting factor added.
@@ -98,7 +98,7 @@ pair_extremes <- function(data,
                           keep_factors = FALSE,
                           factor_name = ".pair"){
 
-  extreme_pairing_rearranger(
+  extreme_pairing_rearranger_(
     data = data,
     col = col,
     unequal_method = unequal_method,

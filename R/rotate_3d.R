@@ -68,7 +68,7 @@
 #'  As specified at [Wikipedia/Rotation_matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
 #' @family mutate functions
 #' @family rotation functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -260,9 +260,9 @@ rotate_3d <- function(data,
     .x = purrr::transpose(list(x_deg, y_deg, z_deg)) %>%
       purrr::simplify_all(),
     .f = function(degrees) {
-      out <- multi_mutator(
+      out <- multi_mutator_(
         data = data,
-        mutate_fn = rotate_3d_mutator_method,
+        mutate_fn = rotate_3d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
         min_dims = 3,
@@ -279,7 +279,7 @@ rotate_3d <- function(data,
 
       if (!is.null(degrees_col_name)) {
         out[[degrees_col_name]] <-
-          list_coordinates(degrees, names = c(x_col, y_col, z_col))
+          list_coordinates_(degrees, names = c(x_col, y_col, z_col))
       }
 
       out
@@ -287,7 +287,7 @@ rotate_3d <- function(data,
   )
 
   if (!is.null(degrees_col_name)) {
-    output <- paste_coordinates_column(output, degrees_col_name)
+    output <- paste_coordinates_column_(output, degrees_col_name)
   }
 
   output
@@ -295,7 +295,7 @@ rotate_3d <- function(data,
 }
 
 
-rotate_3d_mutator_method <- function(data,
+rotate_3d_mutator_method_ <- function(data,
                                     cols,
                                     x_deg,
                                     y_deg,
@@ -310,7 +310,7 @@ rotate_3d_mutator_method <- function(data,
   z_col <- cols[[3]]
 
   # Create rotation matrix
-  rotation_matrix <- create_rotation_matrix3d(x_deg = x_deg,
+  rotation_matrix <- create_rotation_matrix_3d_(x_deg = x_deg,
                                               y_deg = y_deg,
                                               z_deg = z_deg)
 
@@ -320,7 +320,7 @@ rotate_3d_mutator_method <- function(data,
   z <- data[[z_col]]
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = list(x, y, z),
     coordinates = origin,
     fn = origin_fn,
@@ -359,7 +359,7 @@ rotate_3d_mutator_method <- function(data,
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, names = cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, names = cols)
   }
 
   data

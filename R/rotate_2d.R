@@ -69,7 +69,7 @@
 #'  As specified at [Wikipedia/Rotation_matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
 #' @family mutate functions
 #' @family rotation functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -172,9 +172,9 @@ rotate_2d <- function(data,
   purrr::map_dfr(
     .x = degrees,
     .f = function(degree) {
-      out <- multi_mutator(
+      out <- multi_mutator_(
         data = data,
-        mutate_fn = rotate_2d_mutator_method,
+        mutate_fn = rotate_2d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
         min_dims = 2,
@@ -197,7 +197,7 @@ rotate_2d <- function(data,
 }
 
 
-rotate_2d_mutator_method <- function(data,
+rotate_2d_mutator_method_ <- function(data,
                                     cols,
                                     degrees,
                                     suffix,
@@ -209,7 +209,7 @@ rotate_2d_mutator_method <- function(data,
   y_col <- cols[[2]]
 
   # Create rotation matrix based on the degrees
-  rotation_matrix <- create_rotation_matrix2d(deg=degrees)
+  rotation_matrix <- create_rotation_matrix_2d_(deg=degrees)
 
   # Extract x and y values
   if (is.null(x_col)) {
@@ -221,7 +221,7 @@ rotate_2d_mutator_method <- function(data,
   y <- data[[y_col]]
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = list(x, y),
     coordinates = origin,
     fn = origin_fn,
@@ -256,7 +256,7 @@ rotate_2d_mutator_method <- function(data,
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, names = cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, names = cols)
   }
 
   data

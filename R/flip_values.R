@@ -61,7 +61,7 @@
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @family mutate functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -137,9 +137,9 @@ flip_values <- function(data,
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = flip_mutator_method,
+    mutate_fn = flip_mutator_method_,
     check_fn = NULL,
     suffix = suffix,
     keep_original = keep_original,
@@ -150,7 +150,7 @@ flip_values <- function(data,
   )
 }
 
-flip_mutator_method <- function(data,
+flip_mutator_method_ <- function(data,
                                 cols,
                                 suffix,
                                 origin,
@@ -165,7 +165,7 @@ flip_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -184,13 +184,13 @@ flip_mutator_method <- function(data,
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions(data = data,
+    add_dimensions_(data = data,
                    new_vectors = dim_vectors,
                    suffix = suffix)
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
 
   data

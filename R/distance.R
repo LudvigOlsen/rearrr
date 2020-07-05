@@ -45,7 +45,7 @@
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the additional columns (distances and origin coordinates).
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @family measuring functions
 #' @examples
 #' \donttest{
@@ -99,9 +99,9 @@ distance <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = calculate_distances_mutator_method,
+    mutate_fn = calculate_distances_mutator_method_,
     check_fn = NULL,
     cols = cols,
     force_df = TRUE,
@@ -115,7 +115,7 @@ distance <- function(data,
 }
 
 
-calculate_distances_mutator_method <- function(data,
+calculate_distances_mutator_method_ <- function(data,
                                                cols,
                                                origin,
                                                origin_fn,
@@ -131,7 +131,7 @@ calculate_distances_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -145,11 +145,11 @@ calculate_distances_mutator_method <- function(data,
   # Calculate distances
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
   distances <-
-    calculate_distances(dim_vectors = dim_vectors, to = origin)
+    calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
   data[[distance_col_name]] <- distances
 
@@ -159,7 +159,7 @@ calculate_distances_mutator_method <- function(data,
 
 
 # Helper used in multiple places
-calculate_distances <- function(dim_vectors, to){
+calculate_distances_ <- function(dim_vectors, to){
 
   # Distance formula:
   # d(P1, P2) = sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )

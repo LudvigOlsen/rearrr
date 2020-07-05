@@ -20,7 +20,7 @@
 #' @keywords internal
 #' @return
 #'  The mutated \code{data.frame} (\code{tibble}) / \code{vector}.
-mutator <- function(data,
+mutator_ <- function(data,
                     mutate_fn,
                     check_fn,
                     col = NULL,
@@ -31,7 +31,7 @@ mutator <- function(data,
   # Prepare 'data' and 'col'
   # Includes a set of checks
   prepped <-
-    prepare_input_data(data = data,
+    prepare_input_data_(data = data,
                        cols = col,
                        new_name = new_name)
   data <- prepped[["data"]]
@@ -82,7 +82,7 @@ mutator <- function(data,
 
   # Clean up output
   data <-
-    prepare_output_data(
+    prepare_output_data_(
       data = data,
       cols = col,
       use_index = FALSE,
@@ -112,11 +112,11 @@ mutator <- function(data,
 #' @param min_dims Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 #'  setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.
 #' @param allow_missing Whether to allow missing values (\code{NA}s). (Logical)
-#' @inheritParams mutator
+#' @inheritParams mutator_
 #' @keywords internal
 #' @return
 #'  The mutated \code{data.frame} (\code{tibble}).
-multi_mutator <- function(data,
+multi_mutator_ <- function(data,
                           mutate_fn,
                           check_fn,
                           cols = NULL,
@@ -129,7 +129,7 @@ multi_mutator <- function(data,
                           ...) {
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data,
+  prepped <- prepare_input_data_(data = data,
                                 cols = cols,
                                 min_dims = min_dims,
                                 allow_missing = allow_missing)
@@ -200,7 +200,7 @@ multi_mutator <- function(data,
 
   # Clean up output
   data <-
-    prepare_output_data(
+    prepare_output_data_(
       data = data,
       cols = cols,
       use_index = FALSE,

@@ -27,7 +27,7 @@
 #'  When \code{`data`} is a \code{vector} and
 #'  no extra factors are returned by \code{`rearrange_fn`},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
-rearranger <- function(data,
+rearranger_ <- function(data,
                        rearrange_fn,
                        check_fn,
                        cols = NULL,
@@ -38,12 +38,12 @@ rearranger <- function(data,
   # Internal check, shouldn't reach user
   # We need to keep col as argument to inherit docs for it in wrappers
   if (!rlang::is_missing(col)) {
-    deprecate_stop("0.0.0", "rearrr:::rearranger(col = )")
+    deprecate_stop("0.0.0", "rearrr:::rearranger_(col = )")
   }
 
   # Prepare 'data' and 'col'
   # Includes a set of checks
-  prepped <- prepare_input_data(data = data, cols = cols)
+  prepped <- prepare_input_data_(data = data, cols = cols)
   data <- prepped[["data"]]
   cols <- prepped[["cols"]]
   use_index <- prepped[["use_index"]]
@@ -78,7 +78,7 @@ rearranger <- function(data,
 
   # Clean up output
   data <-
-    prepare_output_data(
+    prepare_output_data_(
       data = data,
       cols = cols,
       use_index = use_index,
@@ -95,13 +95,13 @@ rearranger <- function(data,
 
 #' Wrapper for running positioning rearrange methods
 #'
-#' @inheritParams rearranger
+#' @inheritParams rearranger_
 #' @param position Index or quantile (in \code{0-1}) at which to position the element of interest.
 #' @param shuffle_sides Whether to shuffle which elements are left and right of the position. (Logical)
 #' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
 #' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-positioning_rearranger <- function(data, col = NULL, position = NULL, shuffle_sides = FALSE, what = "max"){
+positioning_rearranger_ <- function(data, col = NULL, position = NULL, shuffle_sides = FALSE, what = "max"){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -122,7 +122,7 @@ positioning_rearranger <- function(data, col = NULL, position = NULL, shuffle_si
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger(data = data,
+  rearranger_(data = data,
              rearrange_fn = rearrange_position_at,
              check_fn = NULL,
              cols = col,
@@ -137,12 +137,12 @@ positioning_rearranger <- function(data, col = NULL, position = NULL, shuffle_si
 
 #' Wrapper for running centering rearrange methods
 #'
-#' @inheritParams rearranger
+#' @inheritParams rearranger_
 #' @param shuffle_sides Whether to shuffle which elements are left and right of the center. (Logical)
 #' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
 #' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what = "max"){
+centering_rearranger_ <- function(data, col = NULL, shuffle_sides = FALSE, what = "max"){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -154,7 +154,7 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger(data = data,
+  rearranger_(data = data,
              rearrange_fn = rearrange_center_by,
              check_fn = NULL,
              cols = col,
@@ -168,7 +168,7 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
 
 #' Wrapper for running extreme pairing
 #'
-#' @inheritParams rearranger
+#' @inheritParams rearranger_
 #' @param shuffle_members Whether to shuffle the pair members. (Logical)
 #' @param shuffle_pairs Whether to shuffle the pairs. (Logical)
 #' @param keep_factors Whether to keep the sorting factor(s) in the \code{data.frame}. \code{Logical}.
@@ -242,7 +242,7 @@ centering_rearranger <- function(data, col = NULL, shuffle_sides = FALSE, what =
 #'
 #'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
-extreme_pairing_rearranger <- function(
+extreme_pairing_rearranger_ <- function(
   data,
   col = NULL,
   unequal_method = "middle",
@@ -268,7 +268,7 @@ extreme_pairing_rearranger <- function(
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger(data = data,
+  rearranger_(data = data,
              rearrange_fn = rearrange_pair_extremes,
              check_fn = NULL,
              cols = col,
@@ -287,7 +287,7 @@ extreme_pairing_rearranger <- function(
 
 #' Wrapper for running centering rearrange methods
 #'
-#' @inheritParams rearranger
+#' @inheritParams rearranger_
 #' @param window_size Size of the windows. (Logical)
 #' @param keep_windows Whether to keep the factor with window identifiers. (Logical)
 #' @param factor_name Name of the factor with window identifiers. (Logical)
@@ -300,7 +300,7 @@ extreme_pairing_rearranger <- function(
 #'
 #'  When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
-rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, factor_name = ".window"){
+rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, factor_name = ".window"){
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -311,7 +311,7 @@ rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, fact
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger(data = data,
+  rearranger_(data = data,
              rearrange_fn = rearrange_rev_windows,
              check_fn = NULL,
              window_size = window_size,
@@ -327,7 +327,7 @@ rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, fact
 
 #' Wrapper for running closest to / furthest from rearrange methods
 #'
-#' @inheritParams rearranger
+#' @inheritParams rearranger_
 #' @param origin Coordinates of the origin to calculate distances to.
 #'  Must be either a single constant to use in all dimensions
 #'  or a \code{vector} with one constant per dimension.
@@ -362,7 +362,7 @@ rev_windows_rearranger <- function(data, window_size, keep_windows = FALSE, fact
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-by_distance_rearranger <- function(data, cols, origin = NULL, origin_fn = NULL,
+by_distance_rearranger_ <- function(data, cols, origin = NULL, origin_fn = NULL,
                                    shuffle_ties = FALSE, decreasing = FALSE){
 
   # TODO Allow target to be on length num_groups and find a way to pass
@@ -386,7 +386,7 @@ by_distance_rearranger <- function(data, cols, origin = NULL, origin_fn = NULL,
   # End of argument checks ####
 
   # Rearrange 'data'
-  rearranger(data = data,
+  rearranger_(data = data,
              cols = cols,
              rearrange_fn = rearrange_by_distance,
              allowed_types = c("numeric", "factor"),

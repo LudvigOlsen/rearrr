@@ -27,7 +27,7 @@
 #' @return \code{data.frame} (\code{tibble}) with the added x-coordinates and an identifier
 #'  for the edge the data point is a part of.
 #' @family forming functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -135,9 +135,9 @@ hexagonalize <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = hexagonalize_mutator_method,
+    mutate_fn = hexagonalize_mutator_method_,
     check_fn = NULL,
     cols = y_col,
     force_df = TRUE,
@@ -152,7 +152,7 @@ hexagonalize <- function(data,
 }
 
 
-hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
+hexagonalize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
                                         x_col_name, edge_col_name, suffix = NULL){
 
   col <- cols

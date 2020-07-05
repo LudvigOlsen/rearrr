@@ -1,6 +1,6 @@
 
 # Doesn't seem to be that meaningful. Leaving in case I get ideas.
-sine_up <- function(data,
+sine_up_ <- function(data,
                     cols,
                     fs = NULL,
                     periods = NULL,
@@ -16,7 +16,7 @@ sine_up <- function(data,
 
   if (is.null(fs)) {
     fs <-
-      apply_coordinate_fn(
+      apply_coordinate_fn_(
         dim_vectors = dim_vectors,
         coordinates = fs,
         fn = create_origin_fn(function(x) {
@@ -47,7 +47,7 @@ sine_up <- function(data,
     })
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(data = data,
+  data <- add_dimensions_(data = data,
                          new_vectors = setNames(sined_dim_vectors, cols),
                          suffix = suffix)
 

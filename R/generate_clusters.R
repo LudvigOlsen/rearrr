@@ -101,7 +101,7 @@ generate_clusters <- function(num_rows,
   colnames(data) <- cols
 
   # Create groups
-  data <- ndist_windows(data = data,
+  data <- ndist_windows_(data = data,
                         num_windows = num_clusters,
                         factor_name = cluster_col_name)
 

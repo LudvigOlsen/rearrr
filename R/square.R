@@ -128,9 +128,9 @@ square <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = square_mutator_method,
+    mutate_fn = square_mutator_method_,
     check_fn = NULL,
     cols = y_col,
     force_df = TRUE,
@@ -146,7 +146,7 @@ square <- function(data,
 
 # Note: It's a rotated square (so diamond'ish)
 # so height and width are the diagonals of the square
-square_mutator_method <- function(data,
+square_mutator_method_ <- function(data,
                                   cols,
                                   .min,
                                   .max,

@@ -148,9 +148,9 @@ roll_elements <- function(data,
     inverse_direction <- TRUE
   }
 
-  out <- rearranger(
+  out <- rearranger_(
     data = data,
-    rearrange_fn = roll_elements_rearranger_method,
+    rearrange_fn = roll_elements_rearranger_method_,
     check_fn = NULL,
     cols = cols,
     n = n,
@@ -190,7 +190,7 @@ roll_elements_vec <- function(data,
   )
 }
 
-roll_elements_rearranger_method <- function(data,
+roll_elements_rearranger_method_ <- function(data,
                                             cols,
                                             n,
                                             n_fn,
@@ -210,7 +210,7 @@ roll_elements_rearranger_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find n
-  n <- apply_coordinate_fn(
+  n <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = n,
     fn = n_fn,
@@ -238,7 +238,7 @@ roll_elements_rearranger_method <- function(data,
     })
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(
+  data <- add_dimensions_(
     data = data,
     new_vectors = setNames(dim_vectors, cols),
     suffix = ""
@@ -248,7 +248,7 @@ roll_elements_rearranger_method <- function(data,
     if (isTRUE(inverse_direction)) {
       n <- -1 * n
     }
-    data[[n_col_name]] <- list_coordinates(n, cols)
+    data[[n_col_name]] <- list_coordinates_(n, cols)
   }
 
   data

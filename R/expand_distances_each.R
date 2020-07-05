@@ -107,7 +107,7 @@
 #'  and subtract it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @family expander functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -291,9 +291,9 @@ expand_distances_each <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = expand_each_mutator_method,
+    mutate_fn = expand_each_mutator_method_,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
@@ -312,7 +312,7 @@ expand_distances_each <- function(data,
 }
 
 
-expand_each_mutator_method <- function(data,
+expand_each_mutator_method_ <- function(data,
                                        cols,
                                        suffix,
                                        multipliers,
@@ -331,7 +331,7 @@ expand_each_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -343,7 +343,7 @@ expand_each_mutator_method <- function(data,
   )
 
   # Find multiplier if specified
-  multipliers <- apply_coordinate_fn(
+  multipliers <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = multipliers,
     fn = multipliers_fn,
@@ -400,21 +400,21 @@ expand_each_mutator_method <- function(data,
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions(data = data,
+    add_dimensions_(data = data,
                    new_vectors = dim_vectors,
                    suffix = suffix)
 
   # Add info columns
   if (!is.null(mult_col_name)){
     if (length(multipliers) > 1) {
-      data[[mult_col_name]] <- list_coordinates(multipliers, cols)
-      data <- paste_coordinates_column(data = data, col = mult_col_name)
+      data[[mult_col_name]] <- list_coordinates_(multipliers, cols)
+      data <- paste_coordinates_column_(data = data, col = mult_col_name)
     } else{
       data[[mult_col_name]] <- multipliers
     }
   }
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
   data
 

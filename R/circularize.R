@@ -23,7 +23,7 @@
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the added x-coordinates and the angle in degrees.
 #' @family forming functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -134,9 +134,9 @@ circularize <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = circularize_mutator_method,
+    mutate_fn = circularize_mutator_method_,
     check_fn = NULL,
     cols = y_col,
     force_df = TRUE,
@@ -152,7 +152,7 @@ circularize <- function(data,
 }
 
 
-circularize_mutator_method <- function(data, cols, .min, .max, offset_x,
+circularize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
                                        x_col_name, degrees_col_name, origin_col_name, suffix = NULL){
 
   col <- cols
@@ -220,7 +220,7 @@ circularize_mutator_method <- function(data, cols, .min, .max, offset_x,
   }
 
   if (!is.null(origin_col_name)){
-    data[[origin_col_name]] <- list_coordinates(c(0, origin), c(x_col_name, col))
+    data[[origin_col_name]] <- list_coordinates_(c(0, origin), c(x_col_name, col))
   }
 
   # Clean up

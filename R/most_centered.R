@@ -81,7 +81,7 @@ most_centered <- function(..., cols = NULL, na.rm = FALSE) {
     # End of argument checks ####
 
     # Calculate distances to the centroid
-    distances <- calculate_distances(dim_vectors = dim_vectors,
+    distances <- calculate_distances_(dim_vectors = dim_vectors,
                                      to = centroid(..., na.rm = na.rm))
 
     # Return coordinates of the data point with the shortest distance

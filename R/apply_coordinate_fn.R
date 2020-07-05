@@ -4,7 +4,7 @@
 #   Apply coordinate function                                               ####
 
 
-apply_coordinate_fn <- function(dim_vectors,
+apply_coordinate_fn_ <- function(dim_vectors,
                                 coordinates,
                                 fn,
                                 num_dims,

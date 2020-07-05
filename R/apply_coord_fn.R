@@ -58,9 +58,9 @@ apply_coord_fn_df_ <- function(data,
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = apply_coord_fn_df_mutator_method,
+    mutate_fn = apply_coord_fn_df_mutator_method_,
     check_fn = NULL,
     min_dims = 1,
     cols = cols,
@@ -74,7 +74,7 @@ apply_coord_fn_df_ <- function(data,
 }
 
 
-apply_coord_fn_df_mutator_method <- function(data,
+apply_coord_fn_df_mutator_method_ <- function(data,
                                              cols,
                                              coord_fn,
                                              fn_name,
@@ -84,7 +84,7 @@ apply_coord_fn_df_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  coords <- apply_coordinate_fn(
+  coords <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = NULL,
     fn = coord_fn,

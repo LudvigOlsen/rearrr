@@ -24,7 +24,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rev_windows_rearranger
+#' @inheritParams rev_windows_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the windows factor added.
@@ -72,7 +72,7 @@ rev_windows <- function(data,
                         window_size,
                         keep_windows = FALSE,
                         factor_name = ".window") {
-  rev_windows_rearranger(
+  rev_windows_rearranger_(
     data,
     window_size = window_size,
     keep_windows = keep_windows,

@@ -4,7 +4,7 @@
 #   Prepare 'data' and 'cols'                                               ####
 
 
-prepare_input_data <- function(data,
+prepare_input_data_ <- function(data,
                                cols,
                                min_dims = 1,
                                new_name = NULL,
@@ -103,7 +103,7 @@ prepare_input_data <- function(data,
   )
 }
 
-prepare_output_data <- function(data,
+prepare_output_data_ <- function(data,
                                 cols,
                                 use_index,
                                 to_vector,

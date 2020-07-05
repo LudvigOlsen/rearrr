@@ -51,7 +51,7 @@
 #' @param range_col_name Name of new column with the min-max range. If \code{NULL}, no column is added.
 #'
 #'  \strong{N.B.} Ignored when \code{`data`} is a \code{vector}.
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @export
 #' @return \code{`data`} with new columns with values in the specified min-max range(s)
 #'  and columns with the applied ranges.
@@ -175,9 +175,9 @@ roll_values <- function(data,
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = roll_values_mutator_method,
+    mutate_fn = roll_values_mutator_method_,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
@@ -265,7 +265,7 @@ wrap_to_range_vec <- function(data,
 }
 
 
-roll_values_mutator_method <- function(data,
+roll_values_mutator_method_ <- function(data,
                                        cols,
                                        add,
                                        .min,
@@ -283,7 +283,7 @@ roll_values_mutator_method <- function(data,
 
   # Find minimums
   if (is.null(.min)) {
-    .min <- apply_coordinate_fn(
+    .min <- apply_coordinate_fn_(
       dim_vectors = dim_vectors,
       coordinates = .min,
       fn = create_origin_fn(min, na.rm = na.rm),
@@ -297,7 +297,7 @@ roll_values_mutator_method <- function(data,
 
   # Find maximums
   if (is.null(.max)) {
-    .max <- apply_coordinate_fn(
+    .max <- apply_coordinate_fn_(
       dim_vectors = dim_vectors,
       coordinates = .max,
       fn = create_origin_fn(max, na.rm = na.rm),
@@ -328,7 +328,7 @@ roll_values_mutator_method <- function(data,
   # Roll each dimension
   dim_vectors <-
     purrr::map2(.x = dim_vectors, .y = .range, .f = ~ {
-      roll_values_inner(
+      roll_values_inner_(
         data = .x,
         add = add,
         .min = .y[[1]],
@@ -339,7 +339,7 @@ roll_values_mutator_method <- function(data,
     })
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(
+  data <- add_dimensions_(
     data = data,
     new_vectors = setNames(dim_vectors, cols),
     suffix = suffix
@@ -347,8 +347,8 @@ roll_values_mutator_method <- function(data,
 
   # Add info columns
   if (!is.null(range_col_name)) {
-    data[[range_col_name]] <- list_coordinates(.range, cols)
-    data <- paste_ranges_column(data = data,
+    data[[range_col_name]] <- list_coordinates_(.range, cols)
+    data <- paste_ranges_column_(data = data,
                                 col = range_col_name,
                                 include_min = TRUE,
                                 include_max = between > 0)
@@ -359,7 +359,7 @@ roll_values_mutator_method <- function(data,
 }
 
 
-roll_values_inner <- function(data,
+roll_values_inner_ <- function(data,
                               add,
                               .min,
                               .max,

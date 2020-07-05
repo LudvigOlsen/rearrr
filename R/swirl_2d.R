@@ -68,7 +68,7 @@
 #' @return \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
 #' @family mutate functions
 #' @family rotation functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -184,9 +184,9 @@ swirl_2d <- function(data,
   purrr::map_dfr(
     .x = radius,
     .f = function(radi) {
-      out <- multi_mutator(
+      out <- multi_mutator_(
         data = data,
-        mutate_fn = swirl_2d_mutator_method,
+        mutate_fn = swirl_2d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
         min_dims = 2,
@@ -210,7 +210,7 @@ swirl_2d <- function(data,
 
 }
 
-swirl_2d_mutator_method <- function(data,
+swirl_2d_mutator_method_ <- function(data,
                                    cols,
                                    radius,
                                    scale_fn,
@@ -228,7 +228,7 @@ swirl_2d_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop=FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -240,7 +240,7 @@ swirl_2d_mutator_method <- function(data,
   )
 
   # Calculate distances to origin
-  distances <- calculate_distances(dim_vectors = dim_vectors, to = origin)
+  distances <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
   # Scale distances
   scaled_distances <- scale_fn(distances)
@@ -250,7 +250,7 @@ swirl_2d_mutator_method <- function(data,
   }
 
   # Convert distances to degrees
-  degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = radius)
+  degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = radius)
 
   # Add degrees column
   deg_tmp_var <- create_tmp_var(data = data, tmp_var = ".__degrees__", disallowed = degrees_col_name)
@@ -279,7 +279,7 @@ swirl_2d_mutator_method <- function(data,
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, names = cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, names = cols)
   }
   if (!is.null(degrees_col_name)) {
     data[[degrees_col_name]] <- data[[deg_tmp_var]]

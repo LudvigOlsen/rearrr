@@ -28,7 +28,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams positioning_rearranger
+#' @inheritParams positioning_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
@@ -77,7 +77,7 @@ position_max <- function(data,
                          col = NULL,
                          position = NULL,
                          shuffle_sides = FALSE) {
-  positioning_rearranger(
+  positioning_rearranger_(
     data = data,
     col = col,
     position = position,
@@ -111,7 +111,7 @@ position_max <- function(data,
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams positioning_rearranger
+#' @inheritParams positioning_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
@@ -160,7 +160,7 @@ position_min <- function(data,
                          col = NULL,
                          position = NULL,
                          shuffle_sides = FALSE) {
-  positioning_rearranger(
+  positioning_rearranger_(
     data = data,
     col = col,
     position = position,

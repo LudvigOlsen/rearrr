@@ -2,7 +2,7 @@
 
 # https://en.wikipedia.org/wiki/Rotation_matrix
 # x = roll(γ) ; y = pitch(β) ; z = yaw(α)
-create_rotation_matrix3d <- function(x_deg = 0,
+create_rotation_matrix_3d_ <- function(x_deg = 0,
                                      y_deg = 0,
                                      z_deg = 0) {
   # Check arguments ####
@@ -43,7 +43,7 @@ create_rotation_matrix3d <- function(x_deg = 0,
   ncol = 3)
 }
 
-create_rotation_matrix2d <- function(deg = 0) {
+create_rotation_matrix_2d_ <- function(deg = 0) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()

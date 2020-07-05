@@ -98,7 +98,7 @@
 #'  and subtract it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @family expander functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -255,9 +255,9 @@ expand_distances <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = expand_mutator_method,
+    mutate_fn = expand_mutator_method_,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
@@ -276,7 +276,7 @@ expand_distances <- function(data,
 }
 
 
-expand_mutator_method <- function(data,
+expand_mutator_method_ <- function(data,
                                   cols,
                                   suffix,
                                   multiplier,
@@ -295,7 +295,7 @@ expand_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -307,7 +307,7 @@ expand_mutator_method <- function(data,
   )
 
   # Find multiplier if specified
-  multiplier <- apply_coordinate_fn(
+  multiplier <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = multiplier,
     fn = multiplier_fn,
@@ -327,12 +327,13 @@ expand_mutator_method <- function(data,
 
   # Calculate distances
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
-  distances <-
-    calculate_distances(dim_vectors = dim_vectors, to = rep(0, num_dims))
+  distances <- calculate_distances_(
+    dim_vectors = dim_vectors,
+    to = rep(0, num_dims)
+  )
 
   # Unit length points
-  norm_dim_vectors <-
-    to_unit_lengths_rowwise(dim_vectors)
+  norm_dim_vectors <- to_unit_lengths_rowwise_(dim_vectors)
 
   # Apply expansion
   if (isTRUE(exponentiate)) {
@@ -366,7 +367,7 @@ expand_mutator_method <- function(data,
   # Add expanded columns to data
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(data = data,
+  data <- add_dimensions_(data = data,
                          new_vectors = setNames(expanded_dim_vectors, cols),
                          suffix = suffix)
 
@@ -375,7 +376,7 @@ expand_mutator_method <- function(data,
     data[[mult_col_name]] <- multiplier
   }
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
 
   data

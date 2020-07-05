@@ -63,7 +63,7 @@ rearrange_center_by <- function(data, cols,
 
   # Insert middle if it was removed
   if (!is.null(middle_row)){
-    data <- insert_row(
+    data <- insert_row_(
       data = data,
       new_row = middle_row,
       after = size %/% 2)
@@ -166,7 +166,7 @@ rearrange_position_at <- function(data,
     if (n_extra_positions == 0) {
       # position is center
       return(
-        centering_rearranger(
+        centering_rearranger_(
           data = data,
           col = col,
           shuffle_sides = shuffle_sides,
@@ -186,7 +186,7 @@ rearrange_position_at <- function(data,
   center_rows <- data[-extra_positions, , drop = FALSE]
 
   # Center max or min
-  center_rows <- centering_rearranger(
+  center_rows <- centering_rearranger_(
     data = center_rows,
     col = col,
     shuffle_sides = shuffle_sides,
@@ -246,7 +246,7 @@ rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, d
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -258,7 +258,7 @@ rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, d
   )
 
   tmp_distances_col <- create_tmp_var(data, ".tmp_distances")
-  data[[tmp_distances_col]] <- calculate_distances(dim_vectors = dim_vectors, to = origin)
+  data[[tmp_distances_col]] <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
   if (isTRUE(shuffle_ties)){
     # Shuffle the data frame
@@ -327,9 +327,9 @@ rearrange_pair_extremes <- function(data, cols,
   # Remove rearrange factor if it shouldn't be returned
   if (!isTRUE(keep_factors)) {
     data <- data %>%
-      base_deselect(cols = local_tmp_rearrange_var)
+      base_deselect_(cols = local_tmp_rearrange_var)
   } else if (local_tmp_rearrange_var != factor_name) {
-    data <- base_rename(data,
+    data <- base_rename_(data,
                         before = local_tmp_rearrange_var,
                         after = factor_name
     )

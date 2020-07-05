@@ -25,7 +25,7 @@
 #' @param keep_centroids Whether to ensure the clusters have their original centroids. (Logical)
 #' @param multiplier Numeric constant to multiply the distance to the group centroid by. A smaller value
 #'  makes the clusters more compact and vice versa.
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the clustered columns.
 #' @details

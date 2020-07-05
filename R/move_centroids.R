@@ -27,9 +27,9 @@ move_centroid <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = move_centroid_mutator_method,
+    mutate_fn = move_centroid_mutator_method_,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
@@ -43,7 +43,7 @@ move_centroid <- function(data,
 }
 
 
-move_centroid_mutator_method <- function(data,
+move_centroid_mutator_method_ <- function(data,
                                          cols,
                                          to = 0,
                                          to_fn = NULL,
@@ -58,7 +58,7 @@ move_centroid_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find current centroid if specified
-  old_centroid <- apply_coordinate_fn(
+  old_centroid <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = NULL,
     fn = centroid,
@@ -70,7 +70,7 @@ move_centroid_mutator_method <- function(data,
   )
 
   # Find to if specified
-  to <- apply_coordinate_fn(
+  to <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = to,
     fn = to_fn,
@@ -90,13 +90,13 @@ move_centroid_mutator_method <- function(data,
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions(data = data,
+    add_dimensions_(data = data,
                    new_vectors = dim_vectors,
                    suffix = suffix)
 
   # Add info columns
   if (!is.null(change_col_name)){
-    data[[change_col_name]] <- list_coordinates(to_move, cols)
+    data[[change_col_name]] <- list_coordinates_(to_move, cols)
   }
 
 

@@ -15,7 +15,7 @@
 #'
 #'  Note: Disable when \code{`data`} is a \code{vector}.
 #' @export
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @family scaling functions
 #' @return Scaled \code{vector} or \code{data.frame} (\code{tibble}) with the scaled columns.
 #' @examples
@@ -63,9 +63,9 @@ to_unit_length <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = to_unit_length_mutator_method,
+    mutate_fn = to_unit_length_mutator_method_,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
@@ -76,7 +76,7 @@ to_unit_length <- function(data,
 
 }
 
-to_unit_length_mutator_method <- function(data,
+to_unit_length_mutator_method_ <- function(data,
                                           cols,
                                           by_row,
                                           suffix) {
@@ -84,13 +84,13 @@ to_unit_length_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   if (isTRUE(by_row)){
-    unit_dim_vectors <- to_unit_lengths_rowwise(dim_vectors)
+    unit_dim_vectors <- to_unit_lengths_rowwise_(dim_vectors)
   } else {
-    unit_dim_vectors <- to_unit_lengths_colwise(dim_vectors)
+    unit_dim_vectors <- to_unit_lengths_colwise_(dim_vectors)
   }
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(data = data,
+  data <- add_dimensions_(data = data,
                          new_vectors = setNames(unit_dim_vectors, cols),
                          suffix = suffix)
 
@@ -99,7 +99,7 @@ to_unit_length_mutator_method <- function(data,
 }
 
 # Normalize vector to Unit length
-to_unit_vector <- function(x) {
+to_unit_vector_ <- function(x) {
   checkmate::assert_numeric(x, any.missing = FALSE)
   if (sum(x ^ 2) == 0){
     return(x)
@@ -109,23 +109,23 @@ to_unit_vector <- function(x) {
 
 # Normalize dimensions
 # One vector per dimension
-to_unit_lengths_rowwise <- function(dim_vectors){
+to_unit_lengths_rowwise_ <- function(dim_vectors){
   checkmate::assert_list(dim_vectors, any.missing = FALSE, types = "numeric")
   if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))){
     stop("All 'dim_vectors' must have the same length.")
   }
   purrr::transpose(dim_vectors) %>%
     purrr::simplify_all() %>%
-    purrr::map(to_unit_vector) %>%
+    purrr::map(to_unit_vector_) %>%
     purrr::transpose() %>%
     purrr::simplify_all()
 }
 
-to_unit_lengths_colwise <- function(dim_vectors){
+to_unit_lengths_colwise_ <- function(dim_vectors){
   checkmate::assert_list(dim_vectors, any.missing = FALSE, types = "numeric")
   if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))){
     stop("All 'dim_vectors' must have the same length.")
   }
   dim_vectors %>%
-    purrr::map(to_unit_vector)
+    purrr::map(to_unit_vector_)
 }

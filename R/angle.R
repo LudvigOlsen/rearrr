@@ -55,7 +55,7 @@
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the additional columns (degrees and origin coordinates).
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @family measuring functions
 #' @examples
 #' \donttest{
@@ -124,9 +124,9 @@ angle <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = angle_mutator_method,
+    mutate_fn = angle_mutator_method_,
     check_fn = NULL,
     min_dims = 2,
     cols = c(x_col, y_col),
@@ -141,7 +141,7 @@ angle <- function(data,
 }
 
 
-angle_mutator_method <- function(data,
+angle_mutator_method_ <- function(data,
                                  cols,
                                  origin,
                                  origin_fn,
@@ -153,7 +153,7 @@ angle_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -175,7 +175,7 @@ angle_mutator_method <- function(data,
 
   # Info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
 
   data

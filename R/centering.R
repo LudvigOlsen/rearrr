@@ -27,7 +27,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams centering_rearranger
+#' @inheritParams centering_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
@@ -74,7 +74,7 @@
 center_max <- function(data,
                        col = NULL,
                        shuffle_sides = FALSE){
-  centering_rearranger(
+  centering_rearranger_(
     data = data,
     col = col,
     shuffle_sides = shuffle_sides,
@@ -106,7 +106,7 @@ center_max <- function(data,
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams centering_rearranger
+#' @inheritParams centering_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
@@ -153,7 +153,7 @@ center_max <- function(data,
 center_min <- function(data,
                        col = NULL,
                        shuffle_sides = FALSE){
-  centering_rearranger(
+  centering_rearranger_(
     data = data,
     col = col,
     shuffle_sides = shuffle_sides,

@@ -88,7 +88,7 @@
 #'    \item Applies the \code{`dimming_fn`} to the \code{`dim_col`} based on the distances.
 #'  }
 #' @family mutate functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -187,9 +187,9 @@ dim_values <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = dim_values_mutator_method,
+    mutate_fn = dim_values_mutator_method_,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
@@ -205,7 +205,7 @@ dim_values <- function(data,
 
 }
 
-dim_values_mutator_method <- function(data, cols, dimming_fn, origin, origin_fn, dim_col, suffix, origin_col_name){
+dim_values_mutator_method_ <- function(data, cols, dimming_fn, origin, origin_fn, dim_col, suffix, origin_col_name){
 
   # Number of dimensions
   # Each column is a dimension
@@ -220,7 +220,7 @@ dim_values_mutator_method <- function(data, cols, dimming_fn, origin, origin_fn,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -233,7 +233,7 @@ dim_values_mutator_method <- function(data, cols, dimming_fn, origin, origin_fn,
 
   # Calculate distances
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
-  distances <- calculate_distances(dim_vectors = dim_vectors, to = origin)
+  distances <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
   # Apply dimmer
   dimmed_dimension <- dimming_fn(dim_vectors[[dim_col]], distances)
@@ -246,14 +246,14 @@ dim_values_mutator_method <- function(data, cols, dimming_fn, origin, origin_fn,
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions(data = data,
+    add_dimensions_(data = data,
                    new_vectors = setNames(list(dim_vectors[[dim_col]]),
                                           dim_col),
                    suffix = suffix)
 
   # Add origin coordinates
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
 
   data

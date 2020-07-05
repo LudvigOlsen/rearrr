@@ -132,9 +132,9 @@ triangularize <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = triangularize_mutator_method,
+    mutate_fn = triangularize_mutator_method_,
     check_fn = NULL,
     cols = y_col,
     force_df = TRUE,
@@ -148,7 +148,7 @@ triangularize <- function(data,
 
 }
 
-triangularize_mutator_method <- function(data,
+triangularize_mutator_method_ <- function(data,
                                          cols,
                                          .min,
                                          .max,

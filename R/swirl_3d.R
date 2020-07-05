@@ -73,7 +73,7 @@
 #' @return \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
 #' @family mutate functions
 #' @family rotation functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -315,9 +315,9 @@ swirl_3d <- function(data,
     .x = purrr::transpose(list(x_radius, y_radius, z_radius)) %>%
       purrr::simplify_all(),
     .f = function(radiuses) {
-      out <- multi_mutator(
+      out <- multi_mutator_(
         data = data,
-        mutate_fn = swirl_3d_mutator_method,
+        mutate_fn = swirl_3d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
         min_dims = 3,
@@ -335,7 +335,7 @@ swirl_3d <- function(data,
       )
 
       if (!is.null(radius_col_name)) {
-        out[[radius_col_name]] <- list_coordinates(
+        out[[radius_col_name]] <- list_coordinates_(
           radiuses,
           names = c(x_col, y_col, z_col))
       }
@@ -346,14 +346,14 @@ swirl_3d <- function(data,
   )
 
   if (!is.null(radius_col_name)) {
-    output <- paste_coordinates_column(output, radius_col_name)
+    output <- paste_coordinates_column_(output, radius_col_name)
   }
 
   output
 
 }
 
-swirl_3d_mutator_method <- function(data,
+swirl_3d_mutator_method_ <- function(data,
                                     cols,
                                     x_radius,
                                     y_radius,
@@ -374,7 +374,7 @@ swirl_3d_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop=FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -386,7 +386,7 @@ swirl_3d_mutator_method <- function(data,
   )
 
   # Calculate distances to origin
-  distances <- calculate_distances(dim_vectors = dim_vectors, to = origin)
+  distances <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
   # Scale distances
   scaled_distances <- scale_fn(distances)
@@ -396,9 +396,9 @@ swirl_3d_mutator_method <- function(data,
   }
 
   # Convert distances to degrees
-  x_degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = x_radius)
-  y_degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = y_radius)
-  z_degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = z_radius)
+  x_degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = x_radius)
+  y_degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = y_radius)
+  z_degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = z_radius)
 
   # Add degrees column
   deg_tmp_var <- create_tmp_var(data = data, tmp_var = ".__degrees__", disallowed = degrees_col_name)
@@ -427,7 +427,7 @@ swirl_3d_mutator_method <- function(data,
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, names = cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, names = cols)
   }
   if (!is.null(degrees_col_name)) {
     data[[degrees_col_name]] <- data[[deg_tmp_var]]

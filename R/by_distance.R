@@ -36,7 +36,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams by_distance_rearranger
+#' @inheritParams by_distance_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
@@ -106,7 +106,7 @@ closest_to <- function(data,
                        origin = NULL,
                        origin_fn = NULL,
                        shuffle_ties = FALSE) {
-  by_distance_rearranger(
+  by_distance_rearranger_(
     data = data,
     cols = cols,
     origin = origin,
@@ -148,7 +148,7 @@ closest_to <- function(data,
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams by_distance_rearranger
+#' @inheritParams by_distance_rearranger_
 #' @aliases farthest_from
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -219,7 +219,7 @@ furthest_from <- function(data,
                           origin = NULL,
                           origin_fn = NULL,
                           shuffle_ties = FALSE){
-  by_distance_rearranger(
+  by_distance_rearranger_(
     data = data,
     cols = cols,
     origin = origin,
