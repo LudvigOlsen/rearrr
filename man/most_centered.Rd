@@ -2,7 +2,7 @@
 % Please edit documentation in R/most_centered.R
 \name{most_centered}
 \alias{most_centered}
-\title{Find the coordinates for data point closest to the centroid}
+\title{Find the coordinates for the data point closest to the centroid}
 \usage{
 most_centered(..., cols = NULL, na.rm = FALSE)
 }

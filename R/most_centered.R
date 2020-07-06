@@ -3,7 +3,7 @@
 #   __________________ #< c3a51e3301fd0446cdd35cb99e5740a3 ># __________________
 #   most_centered                                                           ####
 
-#' @title Find the coordinates for data point closest to the centroid
+#' @title Find the coordinates for the data point closest to the centroid
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
