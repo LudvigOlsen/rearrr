@@ -47,17 +47,17 @@ yet.
 
 <div style="width: 100%; text-align: center; display: block;">
 
-<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/rearrange_example_optimized.gif' width="338" style="padding-bottom:28px; padding-right:28px;" />
+<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/rearrange_example_optimized.gif' width="338" style="padding-bottom:28px !important; padding-right:28px !important;" />
 
-<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/swirl3d_example_optimized.gif' width="338" style="padding-bottom:28px;" />
+<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/swirl3d_example_optimized.gif' width="338" style="padding-bottom:28px !important;" />
 
 </div>
 
 <div style="width: 100%; text-align: center; display: block;">
 
-<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/formers_example_optimized.gif' width="338" style="padding-bottom:28px; padding-right:28px;" />
+<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/formers_example_optimized.gif' width="338" style="padding-bottom:28px !important; padding-right:28px !important;" />
 
-<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/functions_example_optimized.gif' width="338" style="padding-bottom:28px;" />
+<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/functions_example_optimized.gif' width="338" style="padding-bottom:28px !important;" />
 
 </div>
 
