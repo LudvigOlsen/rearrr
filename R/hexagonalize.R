@@ -131,7 +131,7 @@ hexagonalize <- function(data,
                          edge_col_name = ".edge") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(x_col_name, add = assert_collection)
+  checkmate::assert_string(x_col_name, min.chars = 1, add = assert_collection)
   checkmate::assert_string(edge_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.min, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
@@ -145,6 +145,7 @@ hexagonalize <- function(data,
     mutate_fn = hexagonalize_mutator_method_,
     check_fn = NULL,
     cols = y_col,
+    suffix = "",
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -232,7 +233,6 @@ hexagonalize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
       old_min = .min,
       old_max = middle_lower
     )
-
 
   # Edge numbers
   if (!is.null(edge_col_name)){

@@ -129,7 +129,7 @@ circularize <- function(data,
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(x_col_name, add = assert_collection)
+  checkmate::assert_string(x_col_name, min.chars = 1, add = assert_collection)
   checkmate::assert_string(degrees_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.min, null.ok = TRUE, add = assert_collection)
@@ -144,6 +144,7 @@ circularize <- function(data,
     mutate_fn = circularize_mutator_method_,
     check_fn = NULL,
     cols = y_col,
+    suffix = "",
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,

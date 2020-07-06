@@ -437,7 +437,7 @@ test_that("distance()", {
   side_effects_17191 <- xpectr::capture_side_effects(distance(data = df, cols = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, distance_col_name = ".distance", origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
-    xpectr::strip("When 'data' is a data frame, 'cols' must be specified."),
+    xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error_class']]),

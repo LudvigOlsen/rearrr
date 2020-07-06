@@ -144,7 +144,7 @@ multi_mutator_ <- function(data,
   was_vector <- prepped[["was_vector"]]
 
   if (isTRUE(prepped[["use_index"]])) {
-    stop("When 'data' is a data frame, 'cols' must be specified.")
+    stop("When 'data' is a data.frame, 'cols' must be specified.")
   }
 
   # Check arguments ####
@@ -188,7 +188,7 @@ multi_mutator_ <- function(data,
     group_columns <- colnames(grp_keys)
     non_group_columns <- setdiff(colnames(data), group_columns)
     exclude_cols <- non_group_columns
-    if (suffix == "") {
+    if (suffix == "" || isTRUE(was_vector)) {
       # The cols will be overwritten
       # so we shouldn't exclude them
       exclude_cols <- setdiff(exclude_cols, cols)

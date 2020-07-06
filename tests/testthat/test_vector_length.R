@@ -558,7 +558,7 @@ test_that("fuzz testing vector_length()", {
   side_effects_19346 <- xpectr::capture_side_effects(vector_length(data = df, cols = NULL, by_row = TRUE, len_col_name = ".vec_len"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
-    xpectr::strip("When 'data' is a data frame, 'cols' must be specified."),
+    xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error_class']]),

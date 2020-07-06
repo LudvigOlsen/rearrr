@@ -415,7 +415,7 @@ test_that("expand_distances_each()", {
   side_effects_14577 <- xpectr::capture_side_effects(expand_distances_each(data = df, cols = NULL, multipliers = 1.5, multipliers_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
-    xpectr::strip("When 'data' is a data frame, 'cols' must be specified."),
+    xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error_class']]),

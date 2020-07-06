@@ -459,7 +459,7 @@ test_that("fuzz testing flipped_values()", {
   side_effects_19782 <- xpectr::capture_side_effects(flip_values(data = df, cols = NULL, origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error']]),
-    xpectr::strip("When 'data' is a data frame, 'cols' must be specified."),
+    xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error_class']]),
