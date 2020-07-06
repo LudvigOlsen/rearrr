@@ -275,11 +275,15 @@ Mutators change the values of the data points.
 xpectr::set_test_seed(1)
 
 # Draw random numbers 
-random_sample <- round(runif(10), digits=4)
+random_sample <- round(runif(10), digits = 4)
 random_sample
 #>  [1] 0.2655 0.3721 0.5729 0.9082 0.2017 0.8984 0.9447 0.6608 0.6291 0.0618
 
-rotate_2d(random_sample, degrees = 60, origin_fn = centroid)
+rotate_2d(
+  data = random_sample,
+  degrees = 60,
+  origin_fn = centroid
+)
 #> # A tibble: 10 x 6
 #>    Index  Value Index_rotated Value_rotated .origin   .degrees
 #>    <int>  <dbl>         <dbl>         <dbl> <list>       <dbl>
@@ -308,30 +312,35 @@ df <- data.frame(
   "x" = 1:12,
   "y" = c(1, 2, 3, 4, 9, 10, 11,
           12, 15, 16, 17, 18),
-  "z" = runif(12),
-  "g" = rep(1:3, each=4)
+  "z" = runif(12)
 )
 
 # Perform rotation
-rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", 
-         x_deg = 45, y_deg = 90, z_deg = 135, 
-         origin_fn = centroid)
-#> # A tibble: 12 x 10
-#>        x     y     z     g x_rotated y_rotated z_rotated .origin .degrees
-#>    <int> <dbl> <dbl> <int>     <dbl>     <dbl>     <dbl> <list>  <list>  
-#>  1     1     1 0.168     1    15.3        9.54    5.96   <dbl [… <dbl [3…
-#>  2     2     2 0.808     1    14.3       10.2     4.96   <dbl [… <dbl [3…
-#>  3     3     3 0.385     1    13.3        9.76    3.96   <dbl [… <dbl [3…
-#>  4     4     4 0.328     1    12.3        9.70    2.96   <dbl [… <dbl [3…
-#>  5     5     9 0.602     2     7.33       9.97    1.96   <dbl [… <dbl [3…
-#>  6     6    10 0.604     2     6.33       9.98    0.962  <dbl [… <dbl [3…
-#>  7     7    11 0.125     2     5.33       9.50   -0.0384 <dbl [… <dbl [3…
-#>  8     8    12 0.295     2     4.33       9.67   -1.04   <dbl [… <dbl [3…
-#>  9     9    15 0.578     3     1.33       9.95   -2.04   <dbl [… <dbl [3…
-#> 10    10    16 0.631     3     0.333     10.0    -3.04   <dbl [… <dbl [3…
-#> 11    11    17 0.512     3    -0.667      9.88   -4.04   <dbl [… <dbl [3…
-#> 12    12    18 0.505     3    -1.67       9.88   -5.04   <dbl [… <dbl [3…
-#> # … with 1 more variable: .degrees_str <chr>
+rotate_3d(
+  data = df,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  x_deg = 45,
+  y_deg = 90,
+  z_deg = 135,
+  origin_fn = centroid
+)
+#> # A tibble: 12 x 9
+#>        x     y     z x_rotated y_rotated z_rotated .origin .degrees .degrees_str
+#>    <int> <dbl> <dbl>     <dbl>     <dbl>     <dbl> <list>  <list>   <chr>       
+#>  1     1     1 0.168    15.3        9.54    5.96   <dbl [… <dbl [3… x=45,y=90,z…
+#>  2     2     2 0.808    14.3       10.2     4.96   <dbl [… <dbl [3… x=45,y=90,z…
+#>  3     3     3 0.385    13.3        9.76    3.96   <dbl [… <dbl [3… x=45,y=90,z…
+#>  4     4     4 0.328    12.3        9.70    2.96   <dbl [… <dbl [3… x=45,y=90,z…
+#>  5     5     9 0.602     7.33       9.97    1.96   <dbl [… <dbl [3… x=45,y=90,z…
+#>  6     6    10 0.604     6.33       9.98    0.962  <dbl [… <dbl [3… x=45,y=90,z…
+#>  7     7    11 0.125     5.33       9.50   -0.0384 <dbl [… <dbl [3… x=45,y=90,z…
+#>  8     8    12 0.295     4.33       9.67   -1.04   <dbl [… <dbl [3… x=45,y=90,z…
+#>  9     9    15 0.578     1.33       9.95   -2.04   <dbl [… <dbl [3… x=45,y=90,z…
+#> 10    10    16 0.631     0.333     10.0    -3.04   <dbl [… <dbl [3… x=45,y=90,z…
+#> 11    11    17 0.512    -0.667      9.88   -4.04   <dbl [… <dbl [3… x=45,y=90,z…
+#> 12    12    18 0.505    -1.67       9.88   -5.04   <dbl [… <dbl [3… x=45,y=90,z…
 ```
 
 <img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
@@ -342,7 +351,7 @@ rotate_3d(df, x_col = "x", y_col = "y", z_col = "z",
 
 ``` r
 # Rotate values
-swirl_2d(rep(1, 50), radius = 95)
+swirl_2d(data = rep(1, 50), radius = 95)
 #> # A tibble: 50 x 7
 #>    Index Value Index_swirled Value_swirled .origin   .degrees .radius
 #>    <int> <dbl>         <dbl>         <dbl> <list>       <dbl>   <dbl>
@@ -383,7 +392,14 @@ df <- data.frame(
 )
 
 # They see me swiiirling
-swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original = FALSE)
+swirl_3d(
+  data = df,
+  x_radius = 45,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  keep_original = FALSE
+)
 #> # A tibble: 50 x 7
 #>    x_swirled y_swirled z_swirled .origin   .degrees  .radius   .radius_str 
 #>        <dbl>     <dbl>     <dbl> <list>    <list>    <list>    <chr>       
@@ -411,7 +427,7 @@ swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original 
 ``` r
 # 1d expansion
 expand_distances(
-  random_sample,
+  data = random_sample,
   multiplier = 3,
   origin_fn = centroid,
   exponentiate = TRUE
@@ -477,7 +493,11 @@ df <- data.frame(
   "g" = rep(c(1, 2, 3, 4, 5), each = 10)
 ) 
 
-cluster_groups(df, cols = c("x", "y"), group_col = "g")
+cluster_groups(
+  data = df, 
+  cols = c("x", "y"), 
+  group_col = "g"
+)
 #> # A tibble: 50 x 5
 #>        x     y x_clustered y_clustered     g
 #>    <dbl> <dbl>       <dbl>       <dbl> <dbl>
@@ -506,7 +526,10 @@ df_clustered$o <- 1
 # based on the data point's distance to the most central point in the cluster
 df_clustered %>% 
   dplyr::group_by(g) %>% 
-  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = most_centered)
+  dim_values(
+    cols = c("x_clustered", "y_clustered", "o"), 
+    origin_fn = most_centered
+  )
 #> # A tibble: 50 x 6
 #>    x_clustered y_clustered     g     o o_dimmed .origin  
 #>          <dbl>       <dbl> <dbl> <dbl>    <dbl> <list>   
@@ -533,7 +556,10 @@ median(random_sample)
 #> [1] 0.601
 
 # Flip the random numbers around the median
-flip_values(data = random_sample, origin_fn = create_origin_fn(median))
+flip_values(
+  data = random_sample, 
+  origin_fn = create_origin_fn(median)
+)
 #> # A tibble: 10 x 3
 #>     Value Value_flipped .origin  
 #>     <dbl>         <dbl> <list>   
@@ -662,7 +688,12 @@ triangularize(runif(200))
 ### Generate clusters
 
 ``` r
-generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1.6)
+generate_clusters(
+  num_rows = 50,
+  num_cols = 5,
+  num_clusters = 5,
+  compactness = 1.6
+)
 #> # A tibble: 50 x 6
 #>       D1    D2    D3     D4    D5 .cluster
 #>    <dbl> <dbl> <dbl>  <dbl> <dbl> <fct>   

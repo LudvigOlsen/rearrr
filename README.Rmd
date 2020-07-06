@@ -316,10 +316,14 @@ Mutators change the values of the data points.
 xpectr::set_test_seed(1)
 
 # Draw random numbers 
-random_sample <- round(runif(10), digits=4)
+random_sample <- round(runif(10), digits = 4)
 random_sample
 
-rotate_2d(random_sample, degrees = 60, origin_fn = centroid)
+rotate_2d(
+  data = random_sample,
+  degrees = 60,
+  origin_fn = centroid
+)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -349,14 +353,20 @@ df <- data.frame(
   "x" = 1:12,
   "y" = c(1, 2, 3, 4, 9, 10, 11,
           12, 15, 16, 17, 18),
-  "z" = runif(12),
-  "g" = rep(1:3, each=4)
+  "z" = runif(12)
 )
 
 # Perform rotation
-rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", 
-         x_deg = 45, y_deg = 90, z_deg = 135, 
-         origin_fn = centroid)
+rotate_3d(
+  data = df,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  x_deg = 45,
+  y_deg = 90,
+  z_deg = 135,
+  origin_fn = centroid
+)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -388,7 +398,7 @@ rotate_df %>%
 
 ```{r}
 # Rotate values
-swirl_2d(rep(1, 50), radius = 95)
+swirl_2d(data = rep(1, 50), radius = 95)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=8.9, eval=FALSE}
@@ -490,7 +500,14 @@ df <- data.frame(
 )
 
 # They see me swiiirling
-swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z", keep_original = FALSE)
+swirl_3d(
+  data = df,
+  x_radius = 45,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  keep_original = FALSE
+)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=7.6, fig.height=8.1, eval=FALSE}
@@ -612,7 +629,7 @@ combined +
 ```{r}
 # 1d expansion
 expand_distances(
-  random_sample,
+  data = random_sample,
   multiplier = 3,
   origin_fn = centroid,
   exponentiate = TRUE
@@ -709,7 +726,11 @@ df <- data.frame(
   "g" = rep(c(1, 2, 3, 4, 5), each = 10)
 ) 
 
-cluster_groups(df, cols = c("x", "y"), group_col = "g")
+cluster_groups(
+  data = df, 
+  cols = c("x", "y"), 
+  group_col = "g"
+)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -739,7 +760,10 @@ df_clustered$o <- 1
 # based on the data point's distance to the most central point in the cluster
 df_clustered %>% 
   dplyr::group_by(g) %>% 
-  dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = most_centered)
+  dim_values(
+    cols = c("x_clustered", "y_clustered", "o"), 
+    origin_fn = most_centered
+  )
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -761,7 +785,10 @@ ggplot(df_dimmed, aes(x = x_clustered, y = y_clustered, alpha = o_dimmed, color 
 median(random_sample)
 
 # Flip the random numbers around the median
-flip_values(data = random_sample, origin_fn = create_origin_fn(median))
+flip_values(
+  data = random_sample, 
+  origin_fn = create_origin_fn(median)
+)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -1013,7 +1040,12 @@ xpectr::set_test_seed(10)
 ```
 
 ```{r}
-generate_clusters(num_rows = 50, num_cols = 5, num_clusters = 5, compactness = 1.6)
+generate_clusters(
+  num_rows = 50,
+  num_cols = 5,
+  num_clusters = 5,
+  compactness = 1.6
+)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
