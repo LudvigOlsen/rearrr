@@ -1,6 +1,7 @@
 
 # rearrr 0.0.0.9000
 
+
 ## New rearrangers
 
 * Adds `center_max()` for centering the highest value with values decreasing around it. (Rearranger)
@@ -17,6 +18,9 @@
 
 * Adds `closest_to()` and `furthest_from()` for arranging values by how far they are from an origin (e.g. a target value / index in 1d). (Rearranger)
 
+* Adds `roll_elements()` for rolling/shifting the position of the elements. (Rearranger)
+
+
 ## New mutators
 
 * Adds `cluster_groups()` for moving data points into clusters around their group centroid. (Mutator)
@@ -31,21 +35,64 @@
 
 * Adds `flip_values()` for flipping values around a center value. (Mutator)
 
-## New helpers
+* Adds `roll_values()` and `wrap_to_range()` for rolling/shifting values and wrapping to a range. (Mutator)
 
-* Adds `distance()` for calculating distances to a specified origin. (Helper)
+* Adds `transfer_centroids()` for transferring centroids from one `data.frame` to another. (Mutator)
+
+
+## Formers
+
+* Adds `circularize()` for creating x-coordinates to a set of y-coordinates so they form a circle. (Former)
+
+* Adds `hexagonalize()` for creating x-coordinates to a set of y-coordinates so they form a hexagon. (Former)
+
+* Adds `square()` for creating x-coordinates to a set of y-coordinates so they form a square. (Former)
+
+* Adds `triangularize()` for creating x-coordinates to a set of y-coordinates so they form a triangle. (Former)
+
+
+## New generators
+
+* Adds `generate_clusters()` for generating n-dimensional clusters. (Generator)
+
+
+## New measuring functions
+
+* Adds `distance()` for calculating distances to a specified origin. (Measuring function)
+
+* Adds `angle()` for calculating the angle between points and an origin. (Measuring function)
+
+* Adds `vector_length()` for calculating vector length/magnitude row-wise or column-wise. (Measuring function)
+
+
+## New scalers
+
+* Adds `min_max_scale()` for scaling values to a specified range. (Scaler)
+
+* Adds `to_unit_length()` for scaling vectors to unit length row-wise or column-wise. (Scaler)
+
+
+## New converters
+
+* Adds `radians_to_degrees()` and `degrees_to_radians()`. (Converters)
+
+
+## New helpers
 
 * Adds `most_centered()` for finding the coordinates of the data point closest to the centroid. (Helper)
 
-* Adds `centroid()` for finding the centroid from multiple vectors (dimensions). (Helper)
+* Adds `centroid()` for finding the centroid from multiple vectors/columns (dimensions). (Helper)
 
-* Adds `transfer_centroids()` for transfering centroids from one `data.frame` to another. (Helper)
-
-* Adds `min_max_scale()` for scaling values to a specified range. (Helper)
+* Adds `midrange()` for finding the midrange of vectors/columns. (Helper)
 
 * Adds `create_origin_fn()` for creating a function for finding origin coordinates (like `centroid()`). (Helper)
 
-* Adds `generate_clusters()` for generating n-dimensional clusters. (Helper)
+* Adds `create_n_fn()` for creating a function for finding the number of positions to move, e.g. in `roll_elements()`. (Helper)
+
+* Adds `median_index()` for finding the median index of each supplied vector. (Helper)
+
+* Adds `quantile_index()` for finding the *n*th quantile of the index of each supplied vector. (Helper)
+
 
 ## Welcome message (important!)
 
