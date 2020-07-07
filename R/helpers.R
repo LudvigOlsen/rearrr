@@ -291,8 +291,23 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
 
 # When 1 coordinate but multiple names, it recycles the coordinate
 list_coordinates_ <- function(coordinates, names) {
+  checkmate::assert(
+    checkmate::check_numeric(coordinates),
+    checkmate::check_list(coordinates, types = "numeric")
+  )
+  checkmate::assert_character(names, any.missing = FALSE,
+                              min.chars = 1, unique = TRUE)
   if (length(coordinates) == 1 && length(names) > 1) {
     coordinates <- rep(coordinates, length(names))
+  }
+  if (length(coordinates) > 1 &&
+      length(coordinates) != length(names)) {
+    stop(
+      paste0(
+        "When 'coordinates' has length >1, 'coordinates' and 'names'",
+        " must have same length."
+      )
+    )
   }
   list(setNames(coordinates, names))
 }
@@ -396,10 +411,8 @@ calculate_swirl_degrees_ <- function(distances, radius) {
   (distances / (2 * radius) * 360) %% 360
 }
 
-
 ##  .................. #< 60cfc78f594e5611a6eaaf34a2b212ae ># ..................
 ##  Package imports                                                         ####
-
 
 
 #' @importFrom dplyr %>%
