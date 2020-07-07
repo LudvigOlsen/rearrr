@@ -345,7 +345,9 @@ add_dimensions_ <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, add = assert_collection)
-  checkmate::assert_list(new_vectors, add = assert_collection)
+  checkmate::assert_list(new_vectors, names = "unique",
+                         types = c("numeric", "character", "factor"),
+                         add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
   checkmate::assert_flag(overwrite, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -386,7 +388,7 @@ add_dimensions_ <- function(data,
 ##  Conversions                                                             ####
 
 calculate_swirl_degrees_ <- function(distances, radius) {
-  checkmate::assert_numeric(distances, any.missing = FALSE)
+  checkmate::assert_numeric(distances, lower = 0, any.missing = FALSE)
   checkmate::assert_number(radius)
   if (radius == 0) {
     return(distances * 0)
