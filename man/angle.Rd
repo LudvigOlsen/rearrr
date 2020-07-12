@@ -52,10 +52,12 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Calculates the angle between each data point and the origin with:
+Calculates the angle between each data point \eqn{(x2, y2)} and the origin \eqn{(x1, y1)} with:
 \deqn{atan2(y2 - y1, x2 - x1)}
 
-And converts to degrees (\code{0-360}), measured counterclockwise from the \code{(x > 0, y = 0)} line.
+And converts to degrees \code{[0-360)}, measured counterclockwise from the \code{\{x > x1, y = y1\}} line.
+
+\ifelse{html}{\out{<img src='figures/angle_wheel.jpg' width="120" alt='Angles wheel'>}}{}
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and finding the angle to e.g. the centroid
