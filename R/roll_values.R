@@ -273,7 +273,8 @@ roll_values_mutator_method_ <- function(data,
                                         between,
                                         na.rm,
                                         suffix,
-                                        range_col_name) {
+                                        range_col_name,
+                                        ...) {
   # Number of dimensions
   # Each column is a dimension
   num_dims <- length(cols)

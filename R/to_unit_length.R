@@ -78,7 +78,9 @@ to_unit_length <- function(data,
 to_unit_length_mutator_method_ <- function(data,
                                            cols,
                                            by_row,
-                                           suffix) {
+                                           suffix,
+                                           ...) {
+
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   if (isTRUE(by_row)) {

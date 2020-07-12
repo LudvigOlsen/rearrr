@@ -157,8 +157,17 @@ circularize <- function(data,
 }
 
 
-circularize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
-                                        x_col_name, degrees_col_name, origin_col_name, suffix = NULL) {
+circularize_mutator_method_ <- function(data,
+                                        cols,
+                                        .min,
+                                        .max,
+                                        offset_x,
+                                        x_col_name,
+                                        degrees_col_name,
+                                        origin_col_name,
+                                        suffix = NULL,
+                                        ...) {
+
   col <- cols
 
   # Create tmp var names

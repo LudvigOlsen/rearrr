@@ -199,7 +199,8 @@ roll_elements_rearranger_method_ <- function(data,
                                              n_fn,
                                              n_fn_args,
                                              n_col_name,
-                                             inverse_direction) {
+                                             inverse_direction,
+                                             ...) {
   # Initial check of n
   if (!is.null(n) && all(n == 0)) {
     return(data)

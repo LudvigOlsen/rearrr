@@ -5,99 +5,6 @@
 #   Mutators                                                                ####
 
 
-#' Wrapper for running mutator methods
-#'
-#' @param data \code{data.frame} or \code{vector}.
-#' @param col Column to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.
-#' @param new_name Name of the new column with the mutated values. If \code{NULL}, the original \code{`col`} column is mutated directly.
-#' @param mutate_fn Mutator to apply.
-#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`col`}.
-#'  Should not return anything.
-#' @param force_df Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.
-#' @param allowed_types Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
-#'  columns not mentioned in the \code{`col(s)`} argument.
-#' @param ... Named arguments for the \code{`mutate_fn`}.
-#' @keywords internal
-#' @return
-#'  The mutated \code{data.frame} (\code{tibble}) / \code{vector}.
-mutator_ <- function(data,
-                     mutate_fn,
-                     check_fn,
-                     col = NULL,
-                     new_name = NULL,
-                     force_df = FALSE,
-                     allowed_types = c("numeric", "factor"),
-                     ...) {
-  # Prepare 'data' and 'col'
-  # Includes a set of checks
-  prepped <-
-    prepare_input_data_(
-      data = data,
-      cols = col,
-      new_name = new_name
-    )
-  data <- prepped[["data"]]
-  col <- prepped[["cols"]]
-  new_name <- prepped[["new_name"]]
-  was_vector <- prepped[["was_vector"]]
-
-  if (isTRUE(prepped[["use_index"]])) {
-    stop("When 'data' is a data frame, 'col' must be specified.")
-  }
-
-  # Check arguments ####
-  assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_data_frame(data, min.rows = 1, add = assert_collection)
-  checkmate::assert_string(col,
-    min.chars = 1,
-    null.ok = FALSE,
-    add = assert_collection
-  )
-  checkmate::assert_string(new_name,
-    min.chars = 1,
-    null.ok = FALSE,
-    add = assert_collection
-  )
-  checkmate::assert_function(mutate_fn, add = assert_collection)
-  checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
-  checkmate::reportAssertions(assert_collection)
-  checkmate::assert_data_frame(
-    data[[col]],
-    types = allowed_types,
-    .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col' column"),
-    add = assert_collection
-  )
-  checkmate::reportAssertions(assert_collection)
-  # Extra checks
-  # This is for checks we want to perform after preparing 'data' and 'col'
-  if (!is.null(check_fn)) {
-    check_fn(data = data, col = col, ...)
-  }
-  # End of argument checks ####
-
-  # Apply mutator method
-  data <-
-    run_by_group(
-      data = data,
-      fn = mutate_fn,
-      col = col,
-      new_name = new_name,
-      ...
-    )
-
-  # Clean up output
-  data <-
-    prepare_output_data_(
-      data = data,
-      cols = col,
-      use_index = FALSE,
-      to_vector = was_vector && !force_df
-    )
-
-  data
-}
-
-
 ##  .................. #< fe0bd7a2242b745b16ba66e9d280aab4 ># ..................
 ##  Multicolumn mutator                                                     ####
 
@@ -105,18 +12,16 @@ mutator_ <- function(data,
 #' Wrapper for running multi-column mutator methods
 #'
 #' @param cols Columns to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.
-#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`cols`}.
-#'  Should not return anything.
 #' @param suffix Suffix to add to the names of the generated columns.
 #'
 #'  Use an empty string (i.e. \code{""}) to overwrite the original columns.
 #' @param keep_original Whether to keep the original columns. (Logical)
 #'
 #'  Some columns may have been overwritten, in which case only the newest versions are returned.
-#' @param min_dims Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
-#'  setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.
 #' @param allow_missing Whether to allow missing values (\code{NA}s). (Logical)
-#' @inheritParams mutator_
+#' @param mutate_fn Mutator to apply.
+#' @param ... Named arguments for the \code{`mutate_fn`}.
+#' @inheritParams rearrr_fn_
 #' @keywords internal
 #' @return
 #'  The mutated \code{data.frame} (\code{tibble}).
@@ -130,6 +35,7 @@ multi_mutator_ <- function(data,
                            allow_missing = FALSE,
                            min_dims = 1,
                            keep_original = TRUE,
+                           origin_fn = NULL, # For docs inheritance
                            ...) {
   # Prepare 'data' and 'col'
   # Includes a set of checks
@@ -161,6 +67,7 @@ multi_mutator_ <- function(data,
   )
   checkmate::assert_function(mutate_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
   checkmate::assert_flag(force_df, add = assert_collection)
   checkmate::assert_flag(keep_original, add = assert_collection)
@@ -202,6 +109,7 @@ multi_mutator_ <- function(data,
       fn = mutate_fn,
       cols = cols,
       suffix = suffix,
+      origin_fn = origin_fn,
       ...
     )
 

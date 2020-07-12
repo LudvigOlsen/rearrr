@@ -35,35 +35,11 @@
 #'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to dim around.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
-#'
 #' @param dimming_fn \code{Function} for calculating the dimmed values.
-#'  Must take \strong{two} input arguments where the
-#'  \emph{first} is a \code{vector} with the values in the dimming dimension,
-#'  and the \emph{second} is a \code{vector} with corresponding distances to the origin.
+#'
+#'  \strong{Input}: \strong{Two} input arguments:
+#'  1) A \code{vector} with the values in the dimming dimension.
+#'  2) A \code{vector} with corresponding distances to the origin.
 #'
 #'  E.g.:
 #'
@@ -209,7 +185,15 @@ dim_values <- function(data,
   )
 }
 
-dim_values_mutator_method_ <- function(data, cols, dimming_fn, origin, origin_fn, dim_col, suffix, origin_col_name) {
+dim_values_mutator_method_ <- function(data,
+                                       cols,
+                                       dimming_fn,
+                                       origin,
+                                       origin_fn,
+                                       dim_col,
+                                       suffix,
+                                       origin_col_name,
+                                       ...) {
 
   # Number of dimensions
   # Each column is a dimension

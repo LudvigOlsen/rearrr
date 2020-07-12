@@ -10,7 +10,8 @@
 
 rearrange_center_by <- function(data, cols,
                                 shuffle_sides,
-                                what = "max") {
+                                what = "max",
+                                ...) {
   stopifnot(length(cols) == 1)
   col <- cols
 
@@ -79,7 +80,8 @@ rearrange_center_by <- function(data, cols,
 ##  Order by group                                                          ####
 
 
-order_by_group <- function(data, group_col, shuffle_members, shuffle_pairs) {
+order_by_group <- function(data, group_col, shuffle_members, shuffle_pairs, ...) {
+
   backup_group_col <- isTRUE(shuffle_pairs) || isTRUE(shuffle_members)
   if (isTRUE(backup_group_col)) {
     tmp_backup_group_col <- create_tmp_var(data, tmp_var = "group_col_backup_")
@@ -119,7 +121,8 @@ rearrange_position_at <- function(data,
                                   cols,
                                   position,
                                   shuffle_sides,
-                                  what = "max") {
+                                  what = "max",
+                                  ...) {
   stopifnot(length(cols) == 1)
   col <- cols
 
@@ -210,7 +213,7 @@ rearrange_position_at <- function(data,
 ##  Reverse windows                                                         ####
 
 # 'col' is a required arg in the function but is ignored
-rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, cols = NULL) {
+rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, cols = NULL, ...) {
   size <- nrow(data)
   if (size < 2) {
     return(data)
@@ -232,7 +235,7 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, 
 ##  By Distance - closest to / furthest from                                ####
 
 
-rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, decreasing) {
+rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, decreasing, ...) {
   if (nrow(data) < 2) {
     return(data)
   }
@@ -286,7 +289,8 @@ rearrange_pair_extremes <- function(data, cols,
                                     shuffle_members,
                                     shuffle_pairs,
                                     keep_factors,
-                                    factor_name) {
+                                    factor_name,
+                                    ...) {
   stopifnot(length(cols) == 1)
   col <- cols
 

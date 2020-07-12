@@ -157,8 +157,16 @@ hexagonalize <- function(data,
 }
 
 
-hexagonalize_mutator_method_ <- function(data, cols, .min, .max, offset_x,
-                                         x_col_name, edge_col_name, suffix = NULL) {
+hexagonalize_mutator_method_ <- function(data,
+                                         cols,
+                                         .min,
+                                         .max,
+                                         offset_x,
+                                         x_col_name,
+                                         edge_col_name,
+                                         suffix = NULL,
+                                         ...) {
+
   col <- cols
 
   # Create tmp var names

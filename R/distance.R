@@ -17,30 +17,6 @@
 #'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to calculate distances to.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param distance_col_name Name of new column with the distances.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export

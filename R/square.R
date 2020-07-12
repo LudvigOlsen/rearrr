@@ -158,7 +158,8 @@ square_mutator_method_ <- function(data,
                                    offset_x,
                                    x_col_name,
                                    edge_col_name,
-                                   suffix = NULL) {
+                                   suffix = NULL,
+                                   ...) {
   col <- cols
 
   # Create tmp var names

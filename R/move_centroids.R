@@ -48,7 +48,8 @@ move_centroid_mutator_method_ <- function(data,
                                           to = 0,
                                           to_fn = NULL,
                                           suffix = "",
-                                          change_col_name = ".moved") {
+                                          change_col_name = ".moved",
+                                          ...) {
   if (length(to) %ni% c(1, length(cols))) {
     stop("the 'to' must have length 1 or same length as 'cols'.")
   }

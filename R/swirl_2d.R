@@ -27,31 +27,6 @@
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 2 elements (i.e. origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to swirl the values around.
-#'  Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values and
-#'  a \code{vector} with y-values).
-#'  It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y).
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param scale_fn Function for scaling the distances before calculating the degrees.
 #'  Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
 #'  return a \code{numeric vector} (the scaled distances) of the same length. E.g.:
@@ -217,7 +192,8 @@ swirl_2d_mutator_method_ <- function(data,
                                      origin,
                                      origin_fn,
                                      degrees_col_name,
-                                     origin_col_name) {
+                                     origin_col_name,
+                                     ...) {
 
   # Extract columns
   x_col <- cols[[1]]

@@ -10,16 +10,14 @@
 
 #' Wrapper for running rearranging methods
 #'
-#' @param data \code{data.frame} or \code{vector}.
 #' @param cols Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 #'  the row numbers are used.
 #' @param col Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 #'  the row numbers are used.
 #' @param rearrange_fn Rearrange function to apply.
-#' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`cols`}.
-#'  Should not return anything.
 #' @param ... Named arguments for the \code{`rearrange_fn`}.
 #' @keywords internal
+#' @inheritParams rearrr_fn_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with (a) sorting factor(s) added.
@@ -33,6 +31,7 @@ rearranger_ <- function(data,
                         cols = NULL,
                         allowed_types = c("numeric", "factor", "character"),
                         col = deprecated(), # Keep it so we can have the docs
+                        origin_fn = NULL, # For docs
                         ...) {
 
   # Internal check, shouldn't reach user
@@ -58,6 +57,7 @@ rearranger_ <- function(data,
   )
   checkmate::assert_function(rearrange_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_data_frame(data[, cols, drop = FALSE],
     types = allowed_types,
     .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col(s)' columns"),
@@ -78,6 +78,7 @@ rearranger_ <- function(data,
       data = data,
       fn = rearrange_fn,
       cols = cols,
+      origin_fn = origin_fn,
       ...
     )
 
@@ -344,30 +345,6 @@ rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, fac
 #'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to calculate distances to.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param shuffle_ties Whether to shuffle elements with the same distance to the origin. (Logical)
 #' @param decreasing Whether to order by decreasing distances to the origin. (Logical)
 #' @keywords internal

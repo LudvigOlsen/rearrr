@@ -35,31 +35,19 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 \item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to rotate the values around.
-Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values and
-a \code{vector} with y-values).
-It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y).
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 

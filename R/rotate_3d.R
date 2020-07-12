@@ -22,31 +22,6 @@
 #' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
 #' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to rotate the values around.
-#'  Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values,
-#'  a \code{vector} with y-values, and a \code{vector} with z-values).
-#'  It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y, origin_z).
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #'
 #'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the degrees
@@ -312,7 +287,8 @@ rotate_3d_mutator_method_ <- function(data,
                                       suffix,
                                       origin,
                                       origin_fn,
-                                      origin_col_name) {
+                                      origin_col_name,
+                                      ...) {
   # Extract columns
   x_col <- cols[[1]]
   y_col <- cols[[2]]
