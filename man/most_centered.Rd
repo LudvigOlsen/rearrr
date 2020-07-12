@@ -11,7 +11,7 @@ most_centered(..., cols = NULL, na.rm = FALSE)
 
 \item{cols}{Names of columns to use when \code{`...`} is a single \code{data.frame}.}
 
-\item{na.rm}{Whether to ignore missing values when calculating centroid coordinates. (Logical)}
+\item{na.rm}{Whether to ignore missing values. At least one data point must be complete. (Logical)}
 }
 \value{
 The coordinates for the data point closest to the centroid.
@@ -21,7 +21,11 @@ Either as a \code{vector} or a \code{data.frame}.
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 Returns the coordinates for the data point with the
-shortest distance to the centroid.
+shortest distance to the \code{\link[rearrr:centroid]{centroid}}.
+
+To get a logical vector (\code{TRUE}/\code{FALSE}) indicating
+whether a data point is the most centered,
+use \code{\link[rearrr:is_most_centered]{is_most_centered()}}.
 }
 \examples{
 \donttest{
@@ -64,12 +68,19 @@ most_centered(df, cols = c("x", "y", "z"))
 df \%>\%
   dplyr::group_by(g) \%>\%
   most_centered(cols = c("x", "y", "z"))
+
+# Filter to only include most centered data points
+df \%>\%
+  dplyr::group_by(g) \%>\%
+  dplyr::filter(is_most_centered(x, y, z))
+
 }
 }
 \seealso{
 Other coordinate functions: 
 \code{\link{centroid}()},
 \code{\link{create_origin_fn}()},
+\code{\link{is_most_centered}()},
 \code{\link{midrange}()}
 }
 \author{

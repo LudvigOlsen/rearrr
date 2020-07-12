@@ -743,6 +743,7 @@ generate_clusters(
 | `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
 | `centroid()`         | Calculates the mean of each supplied vector/column.                  |
 | `most_centered()`    | Finds coordinates of data point closest to the centroid.             |
+| `is_most_centered()` | Indicates whether a data point is the most centered.                 |
 | `midrange()`         | Calculates the midrange of each supplied vector/column.              |
 | `create_n_fn()`      | Creates function for finding the number of positions to move.        |
 | `median_index()`     | Calculates median index of each supplied vector.                     |

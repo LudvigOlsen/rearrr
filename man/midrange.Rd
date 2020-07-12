@@ -67,6 +67,7 @@ df \%>\%
 Other coordinate functions: 
 \code{\link{centroid}()},
 \code{\link{create_origin_fn}()},
+\code{\link{is_most_centered}()},
 \code{\link{most_centered}()}
 }
 \author{

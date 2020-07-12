@@ -63,6 +63,7 @@ c(
 \seealso{
 Other coordinate functions: 
 \code{\link{centroid}()},
+\code{\link{is_most_centered}()},
 \code{\link{midrange}()},
 \code{\link{most_centered}()}
 }
