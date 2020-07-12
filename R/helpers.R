@@ -288,7 +288,7 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
 ##  .................. #< 60cfc78f594e5611a6eaaf34a2b212ae ># ..................
 ##  Range outliers                                                          ####
 
-split_range_outliers <- function(data,
+split_range_outliers_ <- function(data,
                                  col,
                                  .min = NULL,
                                  .max = NULL) {
@@ -333,7 +333,7 @@ split_range_outliers <- function(data,
        "outliers" = outliers)
 }
 
-add_na_column <- function(data, col, val = NA_real_, as_list = FALSE){
+add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE){
   if (isTRUE(as_list))
     data[[col]] <- rep(list(val), nrow(data))
   else

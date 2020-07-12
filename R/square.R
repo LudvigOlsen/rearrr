@@ -187,7 +187,7 @@ square_mutator_method_ <- function(data,
   }
 
   # Set range outliers no NA
-  data_list <- split_range_outliers(
+  data_list <- split_range_outliers_(
     data = data,
     col = col,
     .min = .min,
@@ -237,13 +237,13 @@ square_mutator_method_ <- function(data,
       na.rm = TRUE
     )
 
-  outliers <- add_na_column(data = outliers, col = x_col_name)
+  outliers <- add_na_column_(data = outliers, col = x_col_name)
 
   # Edge numbers
   if (!is.null(edge_col_name)){
     top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 4, 1)
     bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 3, 2)
-    outliers <- add_na_column(data = outliers, col = edge_col_name)
+    outliers <- add_na_column_(data = outliers, col = edge_col_name)
   }
 
   # Combine datasets
