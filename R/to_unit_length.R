@@ -9,6 +9,8 @@
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #'  Scales the vectors to unit length \emph{row-wise} or \emph{column-wise}.
+#'
+#'  The \code{*_vec()} version take and return a vector.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param cols Names of columns in \code{`data`} to scale.
 #' @param by_row Whether to scale row vectors instead of column vectors. (Logical)
@@ -49,6 +51,7 @@
 #'   to_unit_length(cols = c("x", "y"), by_row = FALSE)
 #'
 #' # Scale a vector
+#' to_unit_length_vec(c(1:10))
 #' to_unit_length(c(1:10), suffix = "")
 #' vector_length(to_unit_length(c(1:10), suffix = ""))
 #' }
@@ -72,6 +75,15 @@ to_unit_length <- function(data,
     force_df = FALSE,
     keep_original = TRUE,
     by_row = by_row
+  )
+}
+
+#' @rdname to_unit_length
+to_unit_length_vec <- function(data){
+  checkmate::assert_numeric(data)
+  to_unit_length(
+    data = data,
+    suffix = ""
   )
 }
 
