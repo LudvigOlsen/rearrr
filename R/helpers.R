@@ -292,7 +292,36 @@ split_range_outliers <- function(data,
                                  col,
                                  .min = NULL,
                                  .max = NULL) {
-  mask <- ((data[[col]] < .min) + (data[[col]] > .max)) == 1
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_string(col, min.chars = 1, add = assert_collection)
+  checkmate::assert_number(.min, finite = TRUE, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_number(.max, finite = TRUE, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (col %ni% colnames(data)){
+    assert_collection$push("'col' not found in 'data'.")
+  }
+  if (!is.null(.min) && !is.null(.max) && .min >= .max){
+    assert_collection$push("'.min' must be smaller than .max or 'NULL'.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+  rownames(data) <- NULL
+
+  # Create min/max masks (bools)
+  if (!is.null(.min)){
+    min_mask <- data[[col]] < .min
+  } else {
+    min_mask <- rep(0, nrow(data))
+  }
+  if (!is.null(.max)){
+    max_mask <- data[[col]] > .max
+  } else {
+    max_mask <- rep(0, nrow(data))
+  }
+
+  mask <- (min_mask + max_mask) == 1
   outlier_inds <- seq_len(nrow(data))[mask]
   if (length(outlier_inds) == 0){
     outliers <- data[-seq_len(nrow(data)), ]
