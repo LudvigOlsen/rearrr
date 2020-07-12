@@ -15,6 +15,8 @@
 #'  latter can be useful when supplying a grouped \code{data.frame} and flipping around e.g. the centroid
 #'  of each group.
 #'
+#'  The \code{*_vec()} version take and return a vector.
+#'
 #'  \strong{Example}:
 #'
 #'  The column values:
@@ -130,6 +132,19 @@ flip_values <- function(data,
     origin_fn = origin_fn,
     origin_col_name = origin_col_name
   )
+}
+
+#' @rdname flip_values
+flip_values_vec <- function(data, origin = 0, origin_fn = create_origin_fn(median)){
+  checkmate::assert_numeric(data)
+  flip_values(
+    data = data,
+    origin = origin,
+    origin_fn = origin_fn,
+    suffix = "",
+    keep_original = FALSE,
+    origin_col_name = NULL
+  )[[1]]
 }
 
 flip_mutator_method_ <- function(data,

@@ -2,6 +2,7 @@
 % Please edit documentation in R/flip_values.R
 \name{flip_values}
 \alias{flip_values}
+\alias{flip_values_vec}
 \title{Flip the values around an origin}
 \usage{
 flip_values(
@@ -13,6 +14,8 @@ flip_values(
   keep_original = TRUE,
   origin_col_name = ".origin"
 )
+
+flip_values_vec(data, origin = 0, origin_fn = create_origin_fn(median))
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
@@ -58,6 +61,8 @@ the origin coordinate to flip the values around.
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and flipping around e.g. the centroid
 of each group.
+
+The \code{*_vec()} version take and return a vector.
 
 \strong{Example}:
 
