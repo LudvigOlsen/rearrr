@@ -135,6 +135,7 @@ flip_values <- function(data,
 }
 
 #' @rdname flip_values
+#' @export
 flip_values_vec <- function(data, origin = 0, origin_fn = create_origin_fn(median)){
   checkmate::assert_numeric(data)
   flip_values(

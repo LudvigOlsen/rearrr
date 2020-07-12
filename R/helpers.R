@@ -284,7 +284,6 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
 }
 
 
-
 ##  .................. #< 60cfc78f594e5611a6eaaf34a2b212ae ># ..................
 ##  Range outliers                                                          ####
 
@@ -341,8 +340,6 @@ add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE){
   data
 }
 
-
-#   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
 
 ##  .................. #< 4405b38854cdc7cc63ac70477e1c9953 ># ..................
 ##  Output helpers                                                          ####

@@ -79,6 +79,7 @@ to_unit_length <- function(data,
 }
 
 #' @rdname to_unit_length
+#' @export
 to_unit_length_vec <- function(data){
   checkmate::assert_numeric(data)
   to_unit_length(
