@@ -184,6 +184,16 @@ triangularize_mutator_method_ <- function(data,
     .max <- max(data[[col]])
   }
 
+  # Set range outliers no NA
+  data_list <- split_range_outliers(
+    data = data,
+    col = col,
+    .min = .min,
+    .max = .max
+  )
+  data <- data_list[["data"]]
+  outliers <- data_list[["outliers"]]
+
   # Properties of triangle
   height <- .max - .min
   # Pythagoras comes in handy!
@@ -253,15 +263,18 @@ triangularize_mutator_method_ <- function(data,
       old_max = midline
     )
 
+  outliers <- add_na_column(data = outliers, col = x_col_name)
+
   # Edge numbers
   if (!is.null(edge_col_name)){
     top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 3, 1)
     bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 3, 2)
+    outliers <- add_na_column(data = outliers, col = edge_col_name)
   }
 
   # Combine datasets
   new_data <- dplyr::bind_rows(
-    top, bottom
+    top, bottom, outliers
   )
 
   # Push to sides

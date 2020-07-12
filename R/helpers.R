@@ -284,10 +284,40 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
 }
 
 
+
+##  .................. #< 60cfc78f594e5611a6eaaf34a2b212ae ># ..................
+##  Range outliers                                                          ####
+
+split_range_outliers <- function(data,
+                                 col,
+                                 .min = NULL,
+                                 .max = NULL) {
+  mask <- ((data[[col]] < .min) + (data[[col]] > .max)) == 1
+  outlier_inds <- seq_len(nrow(data))[mask]
+  if (length(outlier_inds) == 0){
+    outliers <- data[-seq_len(nrow(data)), ]
+  } else {
+    outliers <- data[outlier_inds, ]
+    data <- data[-outlier_inds, ]
+  }
+  list("data" = data,
+       "outliers" = outliers)
+}
+
+add_na_column <- function(data, col, val = NA_real_, as_list = FALSE){
+  if (isTRUE(as_list))
+    data[[col]] <- rep(list(val), nrow(data))
+  else
+    data[[col]] <- rep(val, nrow(data))
+  data
+}
+
+
 #   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
 
 ##  .................. #< 4405b38854cdc7cc63ac70477e1c9953 ># ..................
 ##  Output helpers                                                          ####
+
 
 # When 1 coordinate but multiple names, it recycles the coordinate
 list_coordinates_ <- function(coordinates, names) {

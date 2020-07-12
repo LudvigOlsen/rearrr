@@ -125,7 +125,7 @@ test_that("hexagonalize()", {
   side_effects_18304 <- xpectr::capture_side_effects(hexagonalize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has type\n * 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -347,12 +347,12 @@ test_that("hexagonalize()", {
     tolerance = 1e-4)
   expect_equal(
     output_17050[["x"]],
-    c(3.4641, -1.73205, 0, 1.73205, -3.03109, 3.03109, -3.03109, 3.03109,
-      -1.73205, 0),
+    c(NA, NA, 0, 1.73205, -3.03109, 3.03109, -3.03109, 3.03109, -1.73205,
+      0),
     tolerance = 1e-4)
   expect_equal(
     output_17050[[".edge"]],
-    structure(c(4L, 3L, 4L, 3L, 5L, 2L, 5L, 2L, 6L, 1L), .Label = c("1",
+    structure(c(NA, NA, 4L, 3L, 5L, 2L, 5L, 2L, 6L, 1L), .Label = c("1",
       "2", "3", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
@@ -427,11 +427,11 @@ test_that("hexagonalize()", {
   expect_equal(
     output_19346[["x"]],
     c(0, 1.73205, -3.03109, 3.03109, -3.03109, 3.03109, -1.73205, 0,
-      1.73205, -3.4641),
+      NA, NA),
     tolerance = 1e-4)
   expect_equal(
     output_19346[[".edge"]],
-    structure(c(4L, 3L, 5L, 2L, 5L, 2L, 6L, 1L, 6L, 1L), .Label = c("1",
+    structure(c(4L, 3L, 5L, 2L, 5L, 2L, 6L, 1L, NA, NA), .Label = c("1",
       "2", "3", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
@@ -896,7 +896,6 @@ test_that("hexagonalize()", {
 
   ## Finished testing 'hexagonalize'                                          ####
   #
-
 })
 
 test_that("circularize()", {
@@ -1026,7 +1025,7 @@ test_that("circularize()", {
   side_effects_18304 <- xpectr::capture_side_effects(circularize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has type\n * 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -1239,19 +1238,8 @@ test_that("circularize()", {
   # Testing circularize(data = c(1:10), y_col = NULL, .m...
   # Changed from baseline: .min = 3
   xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_17050[['warnings']]),
-    xpectr::strip("NaNs produced"),
-    fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_17050[['messages']]),
-    xpectr::strip(character(0)),
-    fixed = TRUE)
   # Assigning output
-  output_17050 <- xpectr::suppress_mw(circularize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"))
+  output_17050 <- circularize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_17050),
@@ -1264,12 +1252,12 @@ test_that("circularize()", {
     tolerance = 1e-4)
   expect_equal(
     output_17050[["x"]],
-    c(NaN, NaN, 0, 2.44949, -3.16228, 3.4641, -3.4641, 3.16228, -2.44949,
+    c(NA, NA, 0, 2.44949, -3.16228, 3.4641, -3.4641, 3.16228, -2.44949,
       0),
     tolerance = 1e-4)
   expect_equal(
     output_17050[[".degrees"]],
-    c(NaN, NaN, 270, 314.41531, 205.37693, 351.78679, 171.78679, 25.37693,
+    c(NA, NA, 270, 314.41531, 205.37693, 351.78679, 171.78679, 25.37693,
       134.41531, 90),
     tolerance = 1e-4)
   # Testing column names
@@ -1330,19 +1318,8 @@ test_that("circularize()", {
   # Testing circularize(data = c(1:10), y_col = NULL, .m...
   # Changed from baseline: .max = 8
   xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19346[['warnings']]),
-    xpectr::strip("NaNs produced"),
-    fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19346[['messages']]),
-    xpectr::strip(character(0)),
-    fixed = TRUE)
   # Assigning output
-  output_19346 <- xpectr::suppress_mw(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"))
+  output_19346 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19346),
@@ -1355,13 +1332,13 @@ test_that("circularize()", {
     tolerance = 1e-4)
   expect_equal(
     output_19346[["x"]],
-    c(0, 2.44949, -3.16228, 3.4641, -3.4641, 3.16228, -2.44949, 0, NaN,
-      NaN),
+    c(0, 2.44949, -3.16228, 3.4641, -3.4641, 3.16228, -2.44949, 0, NA,
+      NA),
     tolerance = 1e-4)
   expect_equal(
     output_19346[[".degrees"]],
     c(270, 314.41531, 205.37693, 351.78679, 171.78679, 25.37693, 134.41531,
-      90, NaN, NaN),
+      90, NA, NA),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
@@ -2053,7 +2030,7 @@ test_that("triangularize()", {
   side_effects_18304 <- xpectr::capture_side_effects(triangularize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has type\n * 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -2270,11 +2247,11 @@ test_that("triangularize()", {
     tolerance = 1e-4)
   expect_equal(
     output_17050[["x"]],
-    c(0, 0, 0, 1, 2, 0, 3, 0, 1, 0),
+    c(NA, NA, 0, 0, 2, 3, 3, 0, 1, 0),
     tolerance = 1e-4)
   expect_equal(
     output_17050[[".edge"]],
-    structure(c(3L, 3L, 2L, 2L, 2L, 3L, 1L, 3L, 1L, 3L), .Label = c("1",
+    structure(c(NA, NA, 3L, 3L, 2L, 2L, 1L, 3L, 1L, 3L), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
@@ -2348,11 +2325,11 @@ test_that("triangularize()", {
     tolerance = 1e-4)
   expect_equal(
     output_19346[["x"]],
-    c(0, 0, 2, 3, 3, 0, 1, 0, -1, 0),
+    c(0, 0, 2, 3, 3, 0, 1, 0, NA, NA),
     tolerance = 1e-4)
   expect_equal(
     output_19346[[".edge"]],
-    structure(c(3L, 3L, 2L, 2L, 1L, 3L, 1L, 3L, 1L, 3L), .Label = c("1",
+    structure(c(3L, 3L, 2L, 2L, 1L, 3L, 1L, 3L, NA, NA), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
@@ -2940,7 +2917,7 @@ test_that("square()", {
   side_effects_18304 <- xpectr::capture_side_effects(square(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has type\n * 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -3165,11 +3142,11 @@ test_that("square()", {
     tolerance = 1e-4)
   expect_equal(
     output_17050[["x"]],
-    c(2, -1, 0, 1, -2, 3, -3, 2, -1, 0),
+    c(NA, NA, 0, 1, -2, 3, -3, 2, -1, 0),
     tolerance = 1e-4)
   expect_equal(
     output_17050[[".edge"]],
-    structure(c(3L, 2L, 3L, 2L, 3L, 2L, 4L, 1L, 4L, 1L), .Label = c("1",
+    structure(c(NA, NA, 3L, 2L, 3L, 2L, 4L, 1L, 4L, 1L), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
@@ -3243,11 +3220,11 @@ test_that("square()", {
     tolerance = 1e-4)
   expect_equal(
     output_19346[["x"]],
-    c(0, 1, -2, 3, -3, 2, -1, 0, 1, -2),
+    c(0, 1, -2, 3, -3, 2, -1, 0, NA, NA),
     tolerance = 1e-4)
   expect_equal(
     output_19346[[".edge"]],
-    structure(c(3L, 2L, 3L, 2L, 4L, 1L, 4L, 1L, 4L, 1L), .Label = c("1",
+    structure(c(3L, 2L, 3L, 2L, 4L, 1L, 4L, 1L, NA, NA), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
@@ -3707,5 +3684,4 @@ test_that("square()", {
 
   ## Finished testing 'square'                                                ####
   #
-
 })

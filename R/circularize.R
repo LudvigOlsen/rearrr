@@ -194,6 +194,16 @@ circularize_mutator_method_ <- function(data,
     .max <- max(data[[col]])
   }
 
+  # Set range outliers no NA
+  data_list <- split_range_outliers(
+    data = data,
+    col = col,
+    .min = .min,
+    .max = .max
+  )
+  data <- data_list[["data"]]
+  outliers <- data_list[["outliers"]]
+
   # Properties of circle
   diameter <- .max - .min
   radius <- diameter / 2
@@ -212,6 +222,7 @@ circularize_mutator_method_ <- function(data,
     -data[[x_col_name]],
     data[[x_col_name]]
   )
+  outliers <- add_na_column(data = outliers, col = x_col_name)
 
   if (!is.null(degrees_col_name)) {
     data[[degrees_col_name]] <- radians_to_degrees(angle) - 90
@@ -232,11 +243,17 @@ circularize_mutator_method_ <- function(data,
       suffix = "",
       range_col_name = NULL
     )
+    outliers <- add_na_column(data = outliers, col = degrees_col_name)
   }
 
   if (!is.null(origin_col_name)) {
     data[[origin_col_name]] <- list_coordinates_(c(0, origin), c(x_col_name, col))
+    outliers <- add_na_column(data = outliers, col = origin_col_name, as_list = TRUE)
   }
+
+  data <- dplyr::bind_rows(
+    data, outliers
+  )
 
   # Clean up
   data <- data[order(data[[tmp_index_col]]), , drop = FALSE]
