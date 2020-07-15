@@ -89,6 +89,7 @@ to_unit_length_vec <- function(data){
 }
 
 to_unit_length_mutator_method_ <- function(data,
+                                           grp_id,
                                            cols,
                                            by_row,
                                            suffix,

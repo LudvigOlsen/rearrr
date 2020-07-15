@@ -351,7 +351,7 @@ rotate_3d(
 
 ``` r
 # Rotate values
-swirl_2d(data = rep(1, 50), radius = 95)
+swirl_2d(data = rep(1, 50), radius = 95, origin = c(0, 0))
 #> # A tibble: 50 x 7
 #>    Index Value Index_swirled Value_swirled .origin   .degrees .radius
 #>    <int> <dbl>         <dbl>         <dbl> <list>       <dbl>   <dbl>
@@ -398,6 +398,7 @@ swirl_3d(
   x_col = "x",
   y_col = "y",
   z_col = "z",
+  origin = c(0, 0, 0),
   keep_original = FALSE
 )
 #> # A tibble: 50 x 7

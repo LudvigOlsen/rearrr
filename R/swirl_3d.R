@@ -70,8 +70,15 @@
 #'   "g" = rep(1:5, each = 10)
 #' )
 #'
-#' # Swirl values
-#' swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col = "z")
+#' # Swirl values around (0, 0, 0)
+#' swirl_3d(
+#'   data = df,
+#'   x_radius = 45,
+#'   x_col = "x",
+#'   y_col = "y",
+#'   z_col = "z",
+#'   origin = c(0, 0, 0)
+#' )
 #'
 #' # Swirl around the centroid
 #' df_swirled <- swirl_3d(
@@ -206,8 +213,10 @@
 #' ggplot(
 #'   df_rotated,
 #'   aes(
-#'     x = r1_swirled, y = r2_swirled,
-#'     color = .degrees_str, alpha = o_swirled
+#'     x = r1_swirled,
+#'     y = r2_swirled,
+#'     color = .degrees_str,
+#'     alpha = o_swirled
 #'   )
 #' ) +
 #'   geom_vline(xintercept = mean(df$r1), size = 0.2, alpha = .4, linetype = "dashed") +
@@ -224,7 +233,7 @@ swirl_3d <- function(data,
                      y_radius = 0,
                      z_radius = 0,
                      suffix = "_swirled",
-                     origin = c(0, 0, 0),
+                     origin = NULL,
                      origin_fn = NULL,
                      scale_fn = identity,
                      keep_original = TRUE,
@@ -263,6 +272,7 @@ swirl_3d <- function(data,
   checkmate::assert_numeric(origin,
     len = 3,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -334,6 +344,7 @@ swirl_3d <- function(data,
 }
 
 swirl_3d_mutator_method_ <- function(data,
+                                     grp_id,
                                      cols,
                                      x_radius,
                                      y_radius,
@@ -363,6 +374,7 @@ swirl_3d_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = FALSE
   )
 

@@ -142,7 +142,7 @@ dim_values <- function(data,
                          exponent = 2,
                          add_to_distance = 1
                        ),
-                       origin = 0,
+                       origin = NULL,
                        origin_fn = NULL,
                        dim_col = cols[[length(cols)]],
                        suffix = "_dimmed",
@@ -155,6 +155,7 @@ dim_values <- function(data,
   checkmate::assert_numeric(origin,
     min.len = 1,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -186,6 +187,7 @@ dim_values <- function(data,
 }
 
 dim_values_mutator_method_ <- function(data,
+                                       grp_id,
                                        cols,
                                        dimming_fn,
                                        origin,
@@ -216,6 +218,7 @@ dim_values_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 

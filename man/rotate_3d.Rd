@@ -13,7 +13,7 @@ rotate_3d(
   y_deg = 0,
   z_deg = 0,
   suffix = "_rotated",
-  origin = c(0, 0, 0),
+  origin = NULL,
   origin_fn = NULL,
   keep_original = TRUE,
   degrees_col_name = ".degrees",
@@ -111,8 +111,8 @@ df <- data.frame(
   )
 )
 
-# Rotate values 45 degrees around x-axis
-rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45)
+# Rotate values 45 degrees around x-axis at (0, 0, 0)
+rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45, origin = c(0, 0, 0))
 
 # Rotate all axes around the centroid
 df_rotated <- df \%>\%

@@ -24,7 +24,7 @@ test_that("expand_distances()", {
   #     "cols" = list(c("x", "y", "z"), c("x", "y"), "x", 1, NA),
   #     "multiplier" = list(1.5, 2.5, 0.5, NA),
   #     "multiplier_fn" = list(NULL, function(...){mean(centroid(...))}, centroid, NA),
-  #     "origin" = list(c(0.5,0.5,0.5), 0, NA),
+  #     "origin" = list(NULL, c(0.5,0.5,0.5), NA),
   #     "origin_fn" = list(centroid, most_centered, median, NA),
   #     "exponentiate" = list(FALSE, TRUE),
   #     "add_one_exp" = list(TRUE),
@@ -35,7 +35,9 @@ test_that("expand_distances()", {
   #   extra_combinations = list(
   #     list("data" = dplyr::group_by(df, g), "multiplier_fn" = function(...){mean(centroid(...))}),
   #     list("exponentiate" = TRUE, "add_one_exp" = FALSE),
-  #     list("origin_fn" = NULL, origin = 0, "exponentiate" = TRUE, "add_one_exp" = FALSE)
+  #     list("origin_fn" = NULL, origin = 0, "exponentiate" = TRUE, "add_one_exp" = FALSE),
+  #     list("origin" = c(0.5, 0.5, 0.5), "origin_fn" = NULL),
+  #     list("multiplier" = NULL, "multiplier_fn" = function(...){mean(centroid(...))})
   #   ),
   #   indentation = 2,
   #   copy_env = FALSE
@@ -49,7 +51,7 @@ test_that("expand_distances()", {
   # Testing expand_distances(data = df, cols = c("x", "y...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_19148 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19148),
@@ -113,7 +115,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19370 <- xpectr::capture_side_effects(expand_distances(data = c(1, 2, 3, 4, 5, 6), cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19370 <- xpectr::capture_side_effects(expand_distances(data = c(1, 2, 3, 4, 5, 6), cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -128,7 +130,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(expand_distances(data = matrix(1:10, nrow = 5, ncol = 2), cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(expand_distances(data = matrix(1:10, nrow = 5, ncol = 2), cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'matrix'\n * checkmate::check_vector(data): Must be of type 'vector', not 'matrix'\n * checkmate::check_factor(data): Must be of type 'factor', not 'matrix'"),
@@ -143,7 +145,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(expand_distances(data = NA, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(expand_distances(data = NA, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
@@ -158,7 +160,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(expand_distances(data = NULL, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(expand_distances(data = NULL, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -171,10 +173,23 @@ test_that("expand_distances()", {
   # Testing expand_distances(data = dplyr::group_by(df, ...
   # Changed from baseline: data, multiplier_fn
   xpectr::set_test_seed(42)
-  # Assigning output
-  output_15190 <- expand_distances(data = dplyr::group_by(df, g), cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = function(...) {
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15190 <- xpectr::capture_side_effects(expand_distances(data = dplyr::group_by(df, g), cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = function(...) {
       mean(centroid(...))
-  }, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  }, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15190[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15190[['messages']]),
+    xpectr::strip("When 'multiplier_fn' is specified, 'multiplier', is ignored.\n"),
+    fixed = TRUE)
+  # Assigning output
+  output_15190 <- xpectr::suppress_mw(expand_distances(data = dplyr::group_by(df, g), cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = function(...) {
+      mean(centroid(...))
+  }, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"))
   # Testing class
   expect_equal(
     class(output_15190),
@@ -238,7 +253,7 @@ test_that("expand_distances()", {
   # Changed from baseline: cols = c("x", "y")
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- expand_distances(data = df, cols = c("x", "y"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_17365 <- expand_distances(data = df, cols = c("x", "y"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_17365),
@@ -301,7 +316,7 @@ test_that("expand_distances()", {
   # Changed from baseline: cols = "x"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11346 <- expand_distances(data = df, cols = "x", multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_11346 <- expand_distances(data = df, cols = "x", multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_11346),
@@ -365,7 +380,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(expand_distances(data = df, cols = 1, multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(expand_distances(data = df, cols = 1, multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': Must be of type 'character', not 'double'."),
@@ -380,7 +395,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(expand_distances(data = df, cols = NA, multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(expand_distances(data = df, cols = NA, multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': Contains missing values (element 1)."),
@@ -395,7 +410,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(expand_distances(data = df, cols = NULL, multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14577 <- xpectr::capture_side_effects(expand_distances(data = df, cols = NULL, multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
     xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
@@ -410,7 +425,7 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = NA, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = NA, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'multiplier': May not be NA."),
@@ -424,7 +439,7 @@ test_that("expand_distances()", {
   # Changed from baseline: multiplier = 2.5
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19346 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 2.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_19346 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 2.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19346),
@@ -487,7 +502,7 @@ test_that("expand_distances()", {
   # Changed from baseline: multiplier = 0.5
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12554 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 0.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_12554 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 0.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_12554),
@@ -551,10 +566,10 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = NULL, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14622 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = NULL, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Must be of type 'number', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * At least one of {'multiplier', 'multiplier_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error_class']]),
@@ -562,12 +577,12 @@ test_that("expand_distances()", {
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
-  # Changed from baseline: multiplier_fn = funct...
+  # Changed from baseline: multiplier, multiplie...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19400 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = function(...) {
+  output_19400 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = NULL, multiplier_fn = function(...) {
       mean(centroid(...))
-  }, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  }, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19400),
@@ -628,17 +643,96 @@ test_that("expand_distances()", {
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
+  # Changed from baseline: multiplier_fn = funct...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19782 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = function(...) {
+      mean(centroid(...))
+  }, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19782[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19782[['messages']]),
+    xpectr::strip("When 'multiplier_fn' is specified, 'multiplier', is ignored.\n"),
+    fixed = TRUE)
+  # Assigning output
+  output_19782 <- xpectr::suppress_mw(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = function(...) {
+      mean(centroid(...))
+  }, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"))
+  # Testing class
+  expect_equal(
+    class(output_19782),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_19782[["g"]],
+    c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19782[["x"]],
+    c(0.78518, 0.79788, 0.42666, 0.73707, 0.62946, 0.55951, 0.68354,
+      0.34028, 0.63815, 0.66557, 0.52452, 0.67358, 0.79651, 0.40914,
+      0.52712, 0.79956, 0.82135, 0.33048, 0.53436, 0.58303),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19782[["y"]],
+    c(0.75933, 0.32288, 0.80773, 0.78365, 0.29079, 0.53703, 0.4663,
+      0.76031, 0.49868, 0.72054, 0.66442, 0.70631, 0.46511, 0.63452,
+      0.24603, 0.71878, 0.24796, 0.3622, 0.7608, 0.59267),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19782[["z"]],
+    c(0.44438, 0.47644, 0.24927, 0.78312, 0.47415, 0.77402, 0.7342,
+      0.5929, 0.78166, 0.58084, 0.41808, 0.42567, 0.45518, 0.67543,
+      0.25013, 0.65495, 0.61417, 0.3256, 0.37682, 0.52129),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19782[[".multiplier"]],
+    c(0.57029, 0.57029, 0.57029, 0.57029, 0.57029, 0.57029, 0.57029,
+      0.57029, 0.57029, 0.57029, 0.57029, 0.57029, 0.57029, 0.57029,
+      0.57029, 0.57029, 0.57029, 0.57029, 0.57029, 0.57029),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_19782),
+    c("g", "x", "y", "z", ".multiplier", ".origin"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19782),
+    c("integer", "numeric", "numeric", "numeric", "numeric", "list"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19782),
+    c("integer", "double", "double", "double", "double", "list"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19782),
+    c(20L, 6L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19782)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing expand_distances(data = df, cols = c("x", "y...
   # Changed from baseline: multiplier_fn = centroid
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = centroid, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11174 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = centroid, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19782[['error']]),
+    xpectr::strip(side_effects_11174[['error']]),
     xpectr::strip("output of 'multiplier_fn' must have length 1 but had length 3."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19782[['error_class']]),
+    xpectr::strip(side_effects_11174[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -647,76 +741,87 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NA, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14749 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NA, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error']]),
+    xpectr::strip(side_effects_14749[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'multiplier_fn': Must be a function (or 'NULL'), not 'logical'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(side_effects_14749[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
-  # Changed from baseline: origin = 0
+  # Changed from baseline: origin = c(0.5, 0.5, ...
   xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15603 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15603[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15603[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
   # Assigning output
-  output_14749 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = 0, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_15603 <- xpectr::suppress_mw(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"))
   # Testing class
   expect_equal(
-    class(output_14749),
+    class(output_15603),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_14749[["g"]],
+    output_15603[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_14749[["x"]],
+    output_15603[["x"]],
     c(1.06564, 1.09904, 0.12264, 0.9391, 0.65605, 0.47207, 0.79831,
       -0.10457, 0.67892, 0.75102, 0.38004, 0.7721, 1.09544, 0.07657,
       0.38687, 1.10345, 1.16077, -0.13034, 0.40592, 0.53393),
     tolerance = 1e-4)
   expect_equal(
-    output_14749[["y"]],
+    output_15603[["y"]],
     c(1.0724, -0.07559, 1.19969, 1.13635, -0.15999, 0.48767, 0.30165,
       1.07496, 0.3868, 0.97036, 0.82274, 0.93293, 0.29851, 0.7441,
       -0.27773, 0.96572, -0.27265, 0.02784, 1.07625, 0.63402),
     tolerance = 1e-4)
   expect_equal(
-    output_14749[["z"]],
+    output_15603[["z"]],
     c(0.30413, 0.38845, -0.20906, 1.1951, 0.38242, 1.17116, 1.06642,
       0.69476, 1.19124, 0.66305, 0.23493, 0.25491, 0.33252, 0.91183,
       -0.2068, 0.85799, 0.75071, -0.00831, 0.12642, 0.50641),
     tolerance = 1e-4)
   expect_equal(
-    output_14749[[".multiplier"]],
+    output_15603[[".multiplier"]],
     c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
       1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_14749),
+    names(output_15603),
     c("g", "x", "y", "z", ".multiplier", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_14749),
+    xpectr::element_classes(output_15603),
     c("integer", "numeric", "numeric", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_14749),
+    xpectr::element_types(output_15603),
     c("integer", "double", "double", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_14749),
+    dim(output_15603),
     c(20L, 6L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_14749)),
+    colnames(dplyr::group_keys(output_15603)),
     character(0),
     fixed = TRUE)
 
@@ -725,25 +830,10 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NA, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_15603[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
-    fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_15603[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
-    fixed = TRUE)
-
-  # Testing expand_distances(data = df, cols = c("x", "y...
-  # Changed from baseline: origin = NULL
-  xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_19040 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NA, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'numeric', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error_class']]),
@@ -751,10 +841,10 @@ test_that("expand_distances()", {
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
-  # Changed from baseline: origin, origin_fn, ex...
+  # Changed from baseline: origin, origin_fn
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11387 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = 0, origin_fn = NULL, exponentiate = TRUE, add_one_exp = FALSE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_11387 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = NULL, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_11387),
@@ -767,31 +857,31 @@ test_that("expand_distances()", {
     tolerance = 1e-4)
   expect_equal(
     output_11387[["x"]],
-    c(1.05935, 0.95688, 0.29042, 1.04772, 0.56599, 0.56971, 0.81284,
-      0.14234, 0.73591, 0.79036, 0.44141, 0.76715, 0.97478, 0.26454,
-      0.31488, 1.13668, 1.06704, 0.06367, 0.48818, 0.55361),
+    c(1.12221, 1.15561, 0.17921, 0.99567, 0.71262, 0.52864, 0.85488,
+      -0.048, 0.73549, 0.8076, 0.43661, 0.82867, 1.15201, 0.13314,
+      0.44344, 1.16002, 1.21734, -0.07377, 0.4625, 0.5905),
     tolerance = 1e-4)
   expect_equal(
     output_11387[["y"]],
-    c(1.04687, 0.14164, 1.00368, 1.19435, 0.07271, 0.56435, 0.4306,
-      0.95733, 0.50066, 0.93714, 0.71128, 0.86523, 0.40476, 0.7096,
-      0.00269, 1.00718, 0.008, 0.11254, 0.93176, 0.60444),
+    c(1.10605, -0.04193, 1.23334, 1.17, -0.12634, 0.52132, 0.33531,
+      1.10861, 0.42045, 1.00401, 0.85639, 0.96658, 0.33216, 0.77775,
+      -0.24408, 0.99937, -0.239, 0.06149, 1.1099, 0.66767),
     tolerance = 1e-4)
   expect_equal(
     output_11387[["z"]],
-    c(0.43953, 0.44498, 0.03799, 1.22825, 0.38079, 1.05094, 0.97966,
-      0.67643, 1.0876, 0.6937, 0.32153, 0.36991, 0.41559, 0.81267,
-      0.02652, 0.90546, 0.73877, 0.09281, 0.26833, 0.50824),
+    c(0.31934, 0.40366, -0.19385, 1.21031, 0.39763, 1.18636, 1.08163,
+      0.70997, 1.20645, 0.67826, 0.25014, 0.27012, 0.34773, 0.92704,
+      -0.1916, 0.87319, 0.76592, 0.0069, 0.14163, 0.52162),
     tolerance = 1e-4)
   expect_equal(
-    output_11387[[".exponent"]],
+    output_11387[[".multiplier"]],
     c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
       1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_11387),
-    c("g", "x", "y", "z", ".exponent", ".origin"),
+    c("g", "x", "y", "z", ".multiplier", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -814,10 +904,10 @@ test_that("expand_distances()", {
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
-  # Changed from baseline: origin_fn = most_cent...
+  # Changed from baseline: origin, origin_fn, ex...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19888 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = most_centered, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_19888 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = 0, origin_fn = NULL, exponentiate = TRUE, add_one_exp = FALSE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19888),
@@ -830,31 +920,31 @@ test_that("expand_distances()", {
     tolerance = 1e-4)
   expect_equal(
     output_19888[["x"]],
-    c(1.09204, 1.12545, 0.14904, 0.96551, 0.68245, 0.49848, 0.82472,
-      -0.07817, 0.70532, 0.77743, 0.40645, 0.7985, 1.12184, 0.10298,
-      0.41327, 1.12986, 1.18717, -0.10394, 0.43233, 0.56033),
+    c(1.05935, 0.95688, 0.29042, 1.04772, 0.56599, 0.56971, 0.81284,
+      0.14234, 0.73591, 0.79036, 0.44141, 0.76715, 0.97478, 0.26454,
+      0.31488, 1.13668, 1.06704, 0.06367, 0.48818, 0.55361),
     tolerance = 1e-4)
   expect_equal(
     output_19888[["y"]],
-    c(1.05016, -0.09782, 1.17745, 1.11411, -0.18223, 0.46543, 0.27942,
-      1.05272, 0.36457, 0.94812, 0.8005, 0.91069, 0.27627, 0.72187,
-      -0.29997, 0.94348, -0.29489, 0.0056, 1.05401, 0.61178),
+    c(1.04687, 0.14164, 1.00368, 1.19435, 0.07271, 0.56435, 0.4306,
+      0.95733, 0.50066, 0.93714, 0.71128, 0.86523, 0.40476, 0.7096,
+      0.00269, 1.00718, 0.008, 0.11254, 0.93176, 0.60444),
     tolerance = 1e-4)
   expect_equal(
     output_19888[["z"]],
-    c(0.31213, 0.39645, -0.20106, 1.2031, 0.39042, 1.17916, 1.07443,
-      0.70276, 1.19924, 0.67105, 0.24293, 0.26292, 0.34052, 0.91983,
-      -0.1988, 0.86599, 0.75871, -0.00031, 0.13443, 0.51441),
+    c(0.43953, 0.44498, 0.03799, 1.22825, 0.38079, 1.05094, 0.97966,
+      0.67643, 1.0876, 0.6937, 0.32153, 0.36991, 0.41559, 0.81267,
+      0.02652, 0.90546, 0.73877, 0.09281, 0.26833, 0.50824),
     tolerance = 1e-4)
   expect_equal(
-    output_19888[[".multiplier"]],
+    output_19888[[".exponent"]],
     c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
       1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_19888),
-    c("g", "x", "y", "z", ".multiplier", ".origin"),
+    c("g", "x", "y", "z", ".exponent", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -877,17 +967,80 @@ test_that("expand_distances()", {
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
+  # Changed from baseline: origin_fn = most_cent...
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19466 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = most_centered, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  # Testing class
+  expect_equal(
+    class(output_19466),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_19466[["g"]],
+    c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["x"]],
+    c(1.09204, 1.12545, 0.14904, 0.96551, 0.68245, 0.49848, 0.82472,
+      -0.07817, 0.70532, 0.77743, 0.40645, 0.7985, 1.12184, 0.10298,
+      0.41327, 1.12986, 1.18717, -0.10394, 0.43233, 0.56033),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["y"]],
+    c(1.05016, -0.09782, 1.17745, 1.11411, -0.18223, 0.46543, 0.27942,
+      1.05272, 0.36457, 0.94812, 0.8005, 0.91069, 0.27627, 0.72187,
+      -0.29997, 0.94348, -0.29489, 0.0056, 1.05401, 0.61178),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["z"]],
+    c(0.31213, 0.39645, -0.20106, 1.2031, 0.39042, 1.17916, 1.07443,
+      0.70276, 1.19924, 0.67105, 0.24293, 0.26292, 0.34052, 0.91983,
+      -0.1988, 0.86599, 0.75871, -0.00031, 0.13443, 0.51441),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[[".multiplier"]],
+    c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
+      1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_19466),
+    c("g", "x", "y", "z", ".multiplier", ".origin"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19466),
+    c("integer", "numeric", "numeric", "numeric", "numeric", "list"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19466),
+    c("integer", "double", "double", "double", "double", "list"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19466),
+    c(20L, 6L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19466)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing expand_distances(data = df, cols = c("x", "y...
   # Changed from baseline: origin_fn = median
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = median, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = median, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (3) but had length 1."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(side_effects_10824[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -896,139 +1049,91 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10824 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = NA, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = NA, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_10824[['error']]),
+    xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin_fn': Must be a function (or 'NULL'), not 'logical'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_10824[['error_class']]),
+    xpectr::strip(side_effects_15142[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
   # Changed from baseline: origin_fn = NULL
   xpectr::set_test_seed(42)
-  # Assigning output
-  output_15142 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = NULL, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
-  # Testing class
+  # Testing side effects
+  # Assigning side effects
+  side_effects_13902 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = NULL, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    class(output_15142),
-    c("tbl_df", "tbl", "data.frame"),
+    xpectr::strip(side_effects_13902[['error']]),
+    xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
-  # Testing column values
   expect_equal(
-    output_15142[["g"]],
-    c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
-    tolerance = 1e-4)
-  expect_equal(
-    output_15142[["x"]],
-    c(1.12221, 1.15561, 0.17921, 0.99567, 0.71262, 0.52864, 0.85488,
-      -0.048, 0.73549, 0.8076, 0.43661, 0.82867, 1.15201, 0.13314,
-      0.44344, 1.16002, 1.21734, -0.07377, 0.4625, 0.5905),
-    tolerance = 1e-4)
-  expect_equal(
-    output_15142[["y"]],
-    c(1.10605, -0.04193, 1.23334, 1.17, -0.12634, 0.52132, 0.33531,
-      1.10861, 0.42045, 1.00401, 0.85639, 0.96658, 0.33216, 0.77775,
-      -0.24408, 0.99937, -0.239, 0.06149, 1.1099, 0.66767),
-    tolerance = 1e-4)
-  expect_equal(
-    output_15142[["z"]],
-    c(0.31934, 0.40366, -0.19385, 1.21031, 0.39763, 1.18636, 1.08163,
-      0.70997, 1.20645, 0.67826, 0.25014, 0.27012, 0.34773, 0.92704,
-      -0.1916, 0.87319, 0.76592, 0.0069, 0.14163, 0.52162),
-    tolerance = 1e-4)
-  expect_equal(
-    output_15142[[".multiplier"]],
-    c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
-      1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_15142),
-    c("g", "x", "y", "z", ".multiplier", ".origin"),
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_15142),
-    c("integer", "numeric", "numeric", "numeric", "numeric", "list"),
-    fixed = TRUE)
-  # Testing column types
-  expect_equal(
-    xpectr::element_types(output_15142),
-    c("integer", "double", "double", "double", "double", "list"),
-    fixed = TRUE)
-  # Testing dimensions
-  expect_equal(
-    dim(output_15142),
-    c(20L, 6L))
-  # Testing group keys
-  expect_equal(
-    colnames(dplyr::group_keys(output_15142)),
-    character(0),
+    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   # Testing expand_distances(data = df, cols = c("x", "y...
   # Changed from baseline: exponentiate = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_13902 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = TRUE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_19057 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = TRUE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
-    class(output_13902),
+    class(output_19057),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_13902[["g"]],
+    output_19057[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_13902[["x"]],
+    output_19057[["x"]],
     c(1.11589, 1.16026, 0.04216, 0.98551, 0.66099, 0.45752, 0.81647,
       -0.20277, 0.68596, 0.76082, 0.36317, 0.78431, 1.13989, 0.01958,
       0.34806, 1.15767, 1.24584, -0.24979, 0.3839, 0.53254),
     tolerance = 1e-4)
   expect_equal(
-    output_13902[["y"]],
+    output_19057[["y"]],
     c(1.12849, -0.15658, 1.30344, 1.21737, -0.24378, 0.47945, 0.27561,
       1.14441, 0.36746, 0.99899, 0.84123, 0.96104, 0.27374, 0.76288,
       -0.42266, 1.00978, -0.40314, -0.05883, 1.13033, 0.63519),
     tolerance = 1e-4)
   expect_equal(
-    output_13902[["z"]],
+    output_19057[["z"]],
     c(0.279, 0.37056, -0.33038, 1.28974, 0.36537, 1.23726, 1.11898,
       0.71725, 1.26206, 0.67247, 0.21355, 0.23374, 0.31428, 0.95234,
       -0.33325, 0.89421, 0.78493, -0.09486, 0.0835, 0.50599),
     tolerance = 1e-4)
   expect_equal(
-    output_13902[[".exponent"]],
+    output_19057[[".exponent"]],
     c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
       1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_13902),
+    names(output_19057),
     c("g", "x", "y", "z", ".exponent", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_13902),
+    xpectr::element_classes(output_19057),
     c("integer", "numeric", "numeric", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_13902),
+    xpectr::element_types(output_19057),
     c("integer", "double", "double", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_13902),
+    dim(output_19057),
     c(20L, 6L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_13902)),
+    colnames(dplyr::group_keys(output_19057)),
     character(0),
     fixed = TRUE)
 
@@ -1037,13 +1142,13 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = NULL, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = NULL, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'exponentiate': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(side_effects_14469[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1051,62 +1156,62 @@ test_that("expand_distances()", {
   # Changed from baseline: exponentiate, add_one...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14469 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = TRUE, add_one_exp = FALSE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_18360 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = TRUE, add_one_exp = FALSE, suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
-    class(output_14469),
+    class(output_18360),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_14469[["g"]],
+    output_18360[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_14469[["x"]],
+    output_18360[["x"]],
     c(0.8214, 0.8524, 0.33444, 0.78459, 0.63328, 0.55072, 0.69291, 0.24368,
       0.64284, 0.66328, 0.52757, 0.67338, 0.8142, 0.372, 0.4814, 0.83829,
       0.91517, 0.19552, 0.51999, 0.59909),
     tolerance = 1e-4)
   expect_equal(
-    output_14469[["y"]],
+    output_18360[["y"]],
     c(0.79977, 0.25075, 0.92663, 0.86662, 0.22595, 0.53206, 0.45287,
       0.82863, 0.4858, 0.71385, 0.66108, 0.70585, 0.45525, 0.64676,
       0.07532, 0.75025, 0.10405, 0.26427, 0.79609, 0.57914),
     tolerance = 1e-4)
   expect_equal(
-    output_14469[["z"]],
+    output_18360[["z"]],
     c(0.42627, 0.46051, 0.11024, 0.88003, 0.46095, 0.81396, 0.7613,
       0.61502, 0.82882, 0.57864, 0.42194, 0.42602, 0.44792, 0.70183,
       0.1012, 0.68083, 0.65191, 0.2278, 0.34881, 0.52615),
     tolerance = 1e-4)
   expect_equal(
-    output_14469[[".exponent"]],
+    output_18360[[".exponent"]],
     c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
       1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_14469),
+    names(output_18360),
     c("g", "x", "y", "z", ".exponent", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_14469),
+    xpectr::element_classes(output_18360),
     c("integer", "numeric", "numeric", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_14469),
+    xpectr::element_types(output_18360),
     c("integer", "double", "double", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_14469),
+    dim(output_18360),
     c(20L, 6L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_14469)),
+    colnames(dplyr::group_keys(output_18360)),
     character(0),
     fixed = TRUE)
 
@@ -1115,13 +1220,13 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = NULL, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = NULL, suffix = "", keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'add_one_exp': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error_class']]),
+    xpectr::strip(side_effects_17375[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1129,83 +1234,83 @@ test_that("expand_distances()", {
   # Changed from baseline: suffix = "_expanded"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17375 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "_expanded", keep_original = TRUE, origin_col_name = ".origin")
+  output_18110 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "_expanded", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
-    class(output_17375),
+    class(output_18110),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17375[["x"]],
+    output_18110[["x"]],
     c(0.91481, 0.93708, 0.28614, 0.83045, 0.64175, 0.5191, 0.73659,
       0.13467, 0.65699, 0.70506, 0.45774, 0.71911, 0.93467, 0.25543,
       0.46229, 0.94001, 0.97823, 0.11749, 0.475, 0.56033),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["y"]],
+    output_18110[["y"]],
     c(0.90403, 0.13871, 0.98889, 0.94667, 0.08244, 0.51421, 0.3902,
       0.90574, 0.44697, 0.836, 0.7376, 0.81106, 0.38811, 0.68517,
       0.00395, 0.83292, 0.00733, 0.20766, 0.9066, 0.61178),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["z"]],
+    output_18110[["z"]],
     c(0.37956, 0.43577, 0.03743, 0.97354, 0.43175, 0.95758, 0.88775,
       0.63998, 0.97097, 0.61884, 0.33343, 0.34675, 0.39849, 0.78469,
       0.03894, 0.7488, 0.67728, 0.17126, 0.26109, 0.51441),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["g"]],
+    output_18110[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["x_expanded"]],
+    output_18110[["x_expanded"]],
     c(1.06564, 1.09904, 0.12264, 0.9391, 0.65605, 0.47207, 0.79831,
       -0.10457, 0.67892, 0.75102, 0.38004, 0.7721, 1.09544, 0.07657,
       0.38687, 1.10345, 1.16077, -0.13034, 0.40592, 0.53393),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["y_expanded"]],
+    output_18110[["y_expanded"]],
     c(1.0724, -0.07559, 1.19969, 1.13635, -0.15999, 0.48767, 0.30165,
       1.07496, 0.3868, 0.97036, 0.82274, 0.93293, 0.29851, 0.7441,
       -0.27773, 0.96572, -0.27265, 0.02784, 1.07625, 0.63402),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["z_expanded"]],
+    output_18110[["z_expanded"]],
     c(0.30413, 0.38845, -0.20906, 1.1951, 0.38242, 1.17116, 1.06642,
       0.69476, 1.19124, 0.66305, 0.23493, 0.25491, 0.33252, 0.91183,
       -0.2068, 0.85799, 0.75071, -0.00831, 0.12642, 0.50641),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[[".multiplier"]],
+    output_18110[[".multiplier"]],
     c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
       1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_17375),
+    names(output_18110),
     c("x", "y", "z", "g", "x_expanded", "y_expanded", "z_expanded",
       ".multiplier", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17375),
+    xpectr::element_classes(output_18110),
     c("numeric", "numeric", "numeric", "integer", "numeric", "numeric",
       "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17375),
+    xpectr::element_types(output_18110),
     c("double", "double", "double", "integer", "double", "double", "double",
       "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17375),
+    dim(output_18110),
     c(20L, 9L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17375)),
+    colnames(dplyr::group_keys(output_18110)),
     character(0),
     fixed = TRUE)
 
@@ -1214,13 +1319,13 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18110 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = NA, keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13881 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = NA, keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18110[['error']]),
+    xpectr::strip(side_effects_13881[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18110[['error_class']]),
+    xpectr::strip(side_effects_13881[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1229,13 +1334,13 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13881 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = NULL, keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16851 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = NULL, keep_original = TRUE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13881[['error']]),
+    xpectr::strip(side_effects_16851[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13881[['error_class']]),
+    xpectr::strip(side_effects_16851[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1244,13 +1349,13 @@ test_that("expand_distances()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16851 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = NULL, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10039 <- xpectr::capture_side_effects(expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = NULL, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_16851[['error']]),
+    xpectr::strip(side_effects_10039[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_16851[['error_class']]),
+    xpectr::strip(side_effects_10039[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1258,62 +1363,62 @@ test_that("expand_distances()", {
   # Changed from baseline: origin_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10039 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = NULL)
+  output_18329 <- expand_distances(data = df, cols = c("x", "y", "z"), multiplier = 1.5, multiplier_fn = NULL, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = NULL)
   # Testing class
   expect_equal(
-    class(output_10039),
+    class(output_18329),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_10039[["g"]],
+    output_18329[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_10039[["x"]],
+    output_18329[["x"]],
     c(1.06564, 1.09904, 0.12264, 0.9391, 0.65605, 0.47207, 0.79831,
       -0.10457, 0.67892, 0.75102, 0.38004, 0.7721, 1.09544, 0.07657,
       0.38687, 1.10345, 1.16077, -0.13034, 0.40592, 0.53393),
     tolerance = 1e-4)
   expect_equal(
-    output_10039[["y"]],
+    output_18329[["y"]],
     c(1.0724, -0.07559, 1.19969, 1.13635, -0.15999, 0.48767, 0.30165,
       1.07496, 0.3868, 0.97036, 0.82274, 0.93293, 0.29851, 0.7441,
       -0.27773, 0.96572, -0.27265, 0.02784, 1.07625, 0.63402),
     tolerance = 1e-4)
   expect_equal(
-    output_10039[["z"]],
+    output_18329[["z"]],
     c(0.30413, 0.38845, -0.20906, 1.1951, 0.38242, 1.17116, 1.06642,
       0.69476, 1.19124, 0.66305, 0.23493, 0.25491, 0.33252, 0.91183,
       -0.2068, 0.85799, 0.75071, -0.00831, 0.12642, 0.50641),
     tolerance = 1e-4)
   expect_equal(
-    output_10039[[".multiplier"]],
+    output_18329[[".multiplier"]],
     c(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5,
       1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_10039),
+    names(output_18329),
     c("g", "x", "y", "z", ".multiplier"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_10039),
+    xpectr::element_classes(output_18329),
     c("integer", "numeric", "numeric", "numeric", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_10039),
+    xpectr::element_types(output_18329),
     c("integer", "double", "double", "double", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_10039),
+    dim(output_18329),
     c(20L, 5L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_10039)),
+    colnames(dplyr::group_keys(output_18329)),
     character(0),
     fixed = TRUE)
 

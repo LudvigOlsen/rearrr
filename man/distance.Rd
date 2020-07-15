@@ -7,7 +7,7 @@
 distance(
   data,
   cols = NULL,
-  origin = 0,
+  origin = NULL,
   origin_fn = NULL,
   distance_col_name = ".distance",
   origin_col_name = ".origin"

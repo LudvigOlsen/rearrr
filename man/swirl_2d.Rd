@@ -10,7 +10,7 @@ swirl_2d(
   x_col = NULL,
   y_col = NULL,
   suffix = "_swirled",
-  origin = c(0, 0),
+  origin = NULL,
   origin_fn = NULL,
   scale_fn = identity,
   keep_original = TRUE,
@@ -108,8 +108,14 @@ df <- data.frame(
   "g" = rep(1:5, each = 10)
 )
 
-# Rotate values
-swirl_2d(df, radius = 45, x_col = "x", y_col = "y")
+# Swirl values around (0, 0)
+swirl_2d(
+  data = df,
+  radius = 45,
+  x_col = "x",
+  y_col = "y",
+  origin = c(0, 0)
+)
 
 # Swirl around the centroid
 df_swirled <- swirl_2d(

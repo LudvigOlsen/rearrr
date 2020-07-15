@@ -63,8 +63,14 @@
 #'   "g" = rep(1:5, each = 10)
 #' )
 #'
-#' # Rotate values
-#' swirl_2d(df, radius = 45, x_col = "x", y_col = "y")
+#' # Swirl values around (0, 0)
+#' swirl_2d(
+#'   data = df,
+#'   radius = 45,
+#'   x_col = "x",
+#'   y_col = "y",
+#'   origin = c(0, 0)
+#' )
 #'
 #' # Swirl around the centroid
 #' df_swirled <- swirl_2d(
@@ -113,7 +119,7 @@ swirl_2d <- function(data,
                      x_col = NULL,
                      y_col = NULL,
                      suffix = "_swirled",
-                     origin = c(0, 0),
+                     origin = NULL,
                      origin_fn = NULL,
                      scale_fn = identity,
                      keep_original = TRUE,
@@ -138,6 +144,7 @@ swirl_2d <- function(data,
   checkmate::assert_numeric(origin,
     len = 2,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -185,6 +192,7 @@ swirl_2d <- function(data,
 }
 
 swirl_2d_mutator_method_ <- function(data,
+                                     grp_id,
                                      cols,
                                      radius,
                                      scale_fn,
@@ -211,6 +219,7 @@ swirl_2d_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = FALSE
   )
 

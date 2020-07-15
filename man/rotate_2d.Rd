@@ -10,7 +10,7 @@ rotate_2d(
   x_col = NULL,
   y_col = NULL,
   suffix = "_rotated",
-  origin = c(0, 0),
+  origin = NULL,
   origin_fn = NULL,
   keep_original = TRUE,
   degrees_col_name = ".degrees",
@@ -110,8 +110,8 @@ df <- data.frame(
   )
 )
 
-# Rotate values
-rotate_2d(df, 45, x_col = "Index", y_col = "A")
+# Rotate values around (0, 0)
+rotate_2d(df, degrees = 45, x_col = "Index", y_col = "A", origin = c(0, 0))
 
 # Rotate A around the centroid
 df_rotated <- df \%>\%

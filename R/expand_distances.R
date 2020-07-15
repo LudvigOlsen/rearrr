@@ -215,9 +215,9 @@
 #' }
 expand_distances <- function(data,
                              cols = NULL,
-                             multiplier = 1,
+                             multiplier = NULL,
                              multiplier_fn = NULL,
-                             origin = 0,
+                             origin = NULL,
                              origin_fn = NULL,
                              exponentiate = FALSE,
                              add_one_exp = TRUE,
@@ -232,9 +232,10 @@ expand_distances <- function(data,
   checkmate::assert_numeric(origin,
     min.len = 1,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
-  checkmate::assert_number(multiplier, add = assert_collection)
+  checkmate::assert_number(multiplier, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(exponentiate, add = assert_collection)
   checkmate::assert_flag(add_one_exp, add = assert_collection)
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -264,6 +265,7 @@ expand_distances <- function(data,
 
 
 expand_mutator_method_ <- function(data,
+                                   grp_id,
                                    cols,
                                    suffix,
                                    multiplier,
@@ -291,6 +293,7 @@ expand_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 
@@ -303,6 +306,7 @@ expand_mutator_method_ <- function(data,
     coordinate_name = "multiplier",
     fn_name = "multiplier_fn",
     dim_var_name = NULL,
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 

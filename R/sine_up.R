@@ -1,6 +1,7 @@
 
 # Doesn't seem to be that meaningful. Leaving in case I get ideas.
 sine_up_ <- function(data,
+                     grp_id,
                      cols,
                      fs = NULL,
                      periods = NULL,
@@ -26,6 +27,7 @@ sine_up_ <- function(data,
         coordinate_name = "fs",
         fn_name = "fs_fn",
         dim_var_name = "cols",
+        grp_id = grp_id,
         allow_len_one = TRUE
       )
   }

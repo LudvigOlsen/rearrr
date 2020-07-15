@@ -11,19 +11,45 @@ apply_coordinate_fn_ <- function(dim_vectors,
                                  coordinate_name,
                                  fn_name,
                                  dim_var_name,
+                                 grp_id,
                                  allow_len_one = FALSE,
                                  extra_args = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_list(dim_vectors, types = "numeric", any.missing = FALSE, min.len = 1, add = assert_collection)
-  checkmate::assert_numeric(coordinates, any.missing = FALSE, null.ok = !is.null(fn), min.len = 1, add = assert_collection)
+  checkmate::assert_numeric(coordinates, any.missing = FALSE, null.ok = TRUE, min.len = 1, add = assert_collection)
   checkmate::assert_function(fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(num_dims, lower = 1, add = assert_collection)
+  checkmate::assert_number(grp_id, lower = 1, add = assert_collection)
   checkmate::assert_string(coordinate_name, add = assert_collection)
   checkmate::assert_string(fn_name, add = assert_collection)
   checkmate::assert_string(dim_var_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(allow_len_one, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+
+  if ((is.null(coordinates) && is.null(fn))) {
+    assert_collection$push(
+      paste0(
+        "At least one of {'",
+        coordinate_name,
+        "', '",
+        fn_name,
+        "'} must be specified (not 'NULL')."
+      )
+    )
+  }
+  if (!is.null(coordinates) && !is.null(fn)){
+    if (grp_id == 1){
+      message(paste0(
+        "When '", fn_name,
+        "' is specified, '",
+        coordinate_name,
+        "', is ignored."
+      ))
+    }
+    coordinates <- NULL
+  }
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 

@@ -56,7 +56,7 @@
 #' }
 distance <- function(data,
                      cols = NULL,
-                     origin = 0,
+                     origin = NULL,
                      origin_fn = NULL,
                      distance_col_name = ".distance",
                      origin_col_name = ".origin") {
@@ -68,6 +68,7 @@ distance <- function(data,
   checkmate::assert_numeric(origin,
     min.len = 1,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -91,6 +92,7 @@ distance <- function(data,
 
 
 calculate_distances_mutator_method_ <- function(data,
+                                                grp_id,
                                                 cols,
                                                 origin,
                                                 origin_fn,
@@ -114,6 +116,7 @@ calculate_distances_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 

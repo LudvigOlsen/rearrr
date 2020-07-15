@@ -235,7 +235,15 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, 
 ##  By Distance - closest to / furthest from                                ####
 
 
-rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, decreasing, ...) {
+rearrange_by_distance <- function(data,
+                                  grp_id,
+                                  cols,
+                                  origin,
+                                  origin_fn,
+                                  shuffle_ties,
+                                  decreasing,
+                                  ...) {
+
   if (nrow(data) < 2) {
     return(data)
   }
@@ -256,6 +264,7 @@ rearrange_by_distance <- function(data, cols, origin, origin_fn, shuffle_ties, d
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 

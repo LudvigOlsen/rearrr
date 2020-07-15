@@ -94,6 +94,7 @@ vector_length <- function(data,
 
 
 vector_length_mutator_method_ <- function(data,
+                                          grp_id,
                                           cols,
                                           by_row,
                                           len_col_name,

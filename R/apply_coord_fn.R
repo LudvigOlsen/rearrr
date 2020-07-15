@@ -73,6 +73,7 @@ apply_coord_fn_df_ <- function(data,
 
 
 apply_coord_fn_df_mutator_method_ <- function(data,
+                                              grp_id,
                                               cols,
                                               coord_fn,
                                               fn_name,
@@ -90,6 +91,7 @@ apply_coord_fn_df_mutator_method_ <- function(data,
     coordinate_name = coordinate_name,
     fn_name = fn_name,
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 

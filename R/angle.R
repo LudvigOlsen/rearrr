@@ -119,6 +119,7 @@ angle <- function(data,
 
 
 angle_mutator_method_ <- function(data,
+                                  grp_id,
                                   cols,
                                   origin,
                                   origin_fn,
@@ -138,6 +139,7 @@ angle_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "c(x_col, y_col)",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 

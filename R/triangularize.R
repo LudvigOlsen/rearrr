@@ -154,6 +154,7 @@ triangularize <- function(data,
 }
 
 triangularize_mutator_method_ <- function(data,
+                                          grp_id,
                                           cols,
                                           .min,
                                           .max,

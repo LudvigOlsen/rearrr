@@ -103,7 +103,7 @@
 #' }
 flip_values <- function(data,
                         cols = NULL,
-                        origin = 0,
+                        origin = NULL,
                         origin_fn = create_origin_fn(median),
                         suffix = "_flipped",
                         keep_original = TRUE,
@@ -114,6 +114,7 @@ flip_values <- function(data,
   checkmate::assert_numeric(origin,
     min.len = 1,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -134,9 +135,10 @@ flip_values <- function(data,
   )
 }
 
+
 #' @rdname flip_values
 #' @export
-flip_values_vec <- function(data, origin = 0, origin_fn = create_origin_fn(median)){
+flip_values_vec <- function(data, origin = NULL, origin_fn = create_origin_fn(median)){
   checkmate::assert_numeric(data)
   flip_values(
     data = data,
@@ -148,7 +150,9 @@ flip_values_vec <- function(data, origin = 0, origin_fn = create_origin_fn(media
   )[[1]]
 }
 
+
 flip_mutator_method_ <- function(data,
+                                 grp_id,
                                  cols,
                                  suffix,
                                  origin,
@@ -172,6 +176,7 @@ flip_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 

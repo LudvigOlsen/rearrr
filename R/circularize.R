@@ -158,6 +158,7 @@ circularize <- function(data,
 
 
 circularize_mutator_method_ <- function(data,
+                                        grp_id,
                                         cols,
                                         .min,
                                         .max,

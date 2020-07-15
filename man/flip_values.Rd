@@ -8,14 +8,14 @@
 flip_values(
   data,
   cols = NULL,
-  origin = 0,
+  origin = NULL,
   origin_fn = create_origin_fn(median),
   suffix = "_flipped",
   keep_original = TRUE,
   origin_col_name = ".origin"
 )
 
-flip_values_vec(data, origin = 0, origin_fn = create_origin_fn(median))
+flip_values_vec(data, origin = NULL, origin_fn = create_origin_fn(median))
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}

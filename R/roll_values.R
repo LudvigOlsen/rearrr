@@ -266,6 +266,7 @@ wrap_to_range_vec <- function(data,
 
 
 roll_values_mutator_method_ <- function(data,
+                                        grp_id,
                                         cols,
                                         add,
                                         .min,
@@ -292,6 +293,7 @@ roll_values_mutator_method_ <- function(data,
       coordinate_name = ".min",
       fn_name = "min()",
       dim_var_name = "cols",
+      grp_id = grp_id,
       allow_len_one = TRUE
     )
   }
@@ -306,6 +308,7 @@ roll_values_mutator_method_ <- function(data,
       coordinate_name = ".max",
       fn_name = "max()",
       dim_var_name = "cols",
+      grp_id = grp_id,
       allow_len_one = TRUE
     )
   }

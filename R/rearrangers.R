@@ -106,7 +106,11 @@ rearranger_ <- function(data,
 #' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
 #' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-positioning_rearranger_ <- function(data, col = NULL, position = NULL, shuffle_sides = FALSE, what = "max") {
+positioning_rearranger_ <- function(data,
+                                    col = NULL,
+                                    position = NULL,
+                                    shuffle_sides = FALSE,
+                                    what = "max") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -149,7 +153,10 @@ positioning_rearranger_ <- function(data, col = NULL, position = NULL, shuffle_s
 #' @param what What to position. \code{"max"} or \code{"min"}. (Character)
 #' @keywords internal
 #' @return Sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-centering_rearranger_ <- function(data, col = NULL, shuffle_sides = FALSE, what = "max") {
+centering_rearranger_ <- function(data,
+                                  col = NULL,
+                                  shuffle_sides = FALSE,
+                                  what = "max") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -251,8 +258,7 @@ centering_rearranger_ <- function(data, col = NULL, shuffle_sides = FALSE, what 
 #'
 #'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
-extreme_pairing_rearranger_ <- function(
-                                        data,
+extreme_pairing_rearranger_ <- function(data,
                                         col = NULL,
                                         unequal_method = "middle",
                                         shuffle_members = FALSE,
@@ -311,7 +317,10 @@ extreme_pairing_rearranger_ <- function(
 #'
 #'  When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
-rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, factor_name = ".window") {
+rev_windows_rearranger_ <- function(data,
+                                    window_size,
+                                    keep_windows = FALSE,
+                                    factor_name = ".window") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -350,8 +359,12 @@ rev_windows_rearranger_ <- function(data, window_size, keep_windows = FALSE, fac
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-by_distance_rearranger_ <- function(data, cols, origin = NULL, origin_fn = NULL,
-                                    shuffle_ties = FALSE, decreasing = FALSE) {
+by_distance_rearranger_ <- function(data,
+                                    cols,
+                                    origin = NULL,
+                                    origin_fn = NULL,
+                                    shuffle_ties = FALSE,
+                                    decreasing = FALSE) {
 
   # TODO Allow target to be on length num_groups and find a way to pass
   # the groups to the split.

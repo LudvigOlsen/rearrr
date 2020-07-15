@@ -194,6 +194,7 @@ roll_elements_vec <- function(data,
 }
 
 roll_elements_rearranger_method_ <- function(data,
+                                             grp_id,
                                              cols,
                                              n,
                                              n_fn,
@@ -222,6 +223,7 @@ roll_elements_rearranger_method_ <- function(data,
     coordinate_name = "n",
     fn_name = "n_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE,
     extra_args = n_fn_args
   )

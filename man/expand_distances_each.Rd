@@ -7,9 +7,9 @@
 expand_distances_each(
   data,
   cols = NULL,
-  multipliers = 1,
+  multipliers = NULL,
   multipliers_fn = NULL,
-  origin = 0,
+  origin = NULL,
   origin_fn = NULL,
   exponentiate = FALSE,
   add_one_exp = TRUE,

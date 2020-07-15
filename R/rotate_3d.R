@@ -68,8 +68,8 @@
 #'   )
 #' )
 #'
-#' # Rotate values 45 degrees around x-axis
-#' rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45)
+#' # Rotate values 45 degrees around x-axis at (0, 0, 0)
+#' rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45, origin = c(0, 0, 0))
 #'
 #' # Rotate all axes around the centroid
 #' df_rotated <- df %>%
@@ -172,7 +172,7 @@ rotate_3d <- function(data,
                       y_deg = 0,
                       z_deg = 0,
                       suffix = "_rotated",
-                      origin = c(0, 0, 0),
+                      origin = NULL,
                       origin_fn = NULL,
                       keep_original = TRUE,
                       degrees_col_name = ".degrees",
@@ -213,6 +213,7 @@ rotate_3d <- function(data,
   checkmate::assert_numeric(origin,
     len = 3,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -280,6 +281,7 @@ rotate_3d <- function(data,
 
 
 rotate_3d_mutator_method_ <- function(data,
+                                      grp_id,
                                       cols,
                                       x_deg,
                                       y_deg,
@@ -315,6 +317,7 @@ rotate_3d_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = FALSE
   )
 

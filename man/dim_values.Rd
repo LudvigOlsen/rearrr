@@ -8,7 +8,7 @@ dim_values(
   data,
   cols,
   dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1),
-  origin = 0,
+  origin = NULL,
   origin_fn = NULL,
   dim_col = cols[[length(cols)]],
   suffix = "_dimmed",

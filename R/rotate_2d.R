@@ -68,8 +68,8 @@
 #'   )
 #' )
 #'
-#' # Rotate values
-#' rotate_2d(df, 45, x_col = "Index", y_col = "A")
+#' # Rotate values around (0, 0)
+#' rotate_2d(df, degrees = 45, x_col = "Index", y_col = "A", origin = c(0, 0))
 #'
 #' # Rotate A around the centroid
 #' df_rotated <- df %>%
@@ -112,7 +112,7 @@ rotate_2d <- function(data,
                       x_col = NULL,
                       y_col = NULL,
                       suffix = "_rotated",
-                      origin = c(0, 0),
+                      origin = NULL,
                       origin_fn = NULL,
                       keep_original = TRUE,
                       degrees_col_name = ".degrees",
@@ -135,6 +135,7 @@ rotate_2d <- function(data,
   checkmate::assert_numeric(origin,
     len = 2,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -180,6 +181,7 @@ rotate_2d <- function(data,
 
 
 rotate_2d_mutator_method_ <- function(data,
+                                      grp_id,
                                       cols,
                                       degrees,
                                       suffix,
@@ -212,6 +214,7 @@ rotate_2d_mutator_method_ <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = FALSE
   )
 

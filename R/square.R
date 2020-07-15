@@ -152,6 +152,7 @@ square <- function(data,
 # Note: It's a rotated square (so diamond'ish)
 # so height and width are the diagonals of the square
 square_mutator_method_ <- function(data,
+                                   grp_id,
                                    cols,
                                    .min,
                                    .max,
