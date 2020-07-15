@@ -58,7 +58,6 @@ as.list(environment(non_smoothed_dimming_fn))
 
 # Use median_origin_fn
 non_smoothed_dimming_fn(x, d)
-
 }
 }
 \author{

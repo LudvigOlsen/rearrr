@@ -221,7 +221,8 @@ test_that("examples in roll_elements()", {
   df <- data.frame(
     "x" = 1:20,
     "y" = runif(20)*10,
-    "g" = rep(1:4, each = 5)
+    "g" = rep(1:4, each = 5),
+    stringsAsFactors = FALSE
   )
 
 
@@ -449,7 +450,8 @@ test_that("fuzz testing roll_elements()", {
   df <- data.frame(
     "x" = 1:20,
     "y" = runif(20)*10,
-    "g" = rep(1:4, each = 5)
+    "g" = rep(1:4, each = 5),
+    stringsAsFactors = FALSE
   )
 
 

@@ -7,9 +7,9 @@
 expand_distances_each(
   data,
   cols = NULL,
-  multipliers = 1,
+  multipliers = NULL,
   multipliers_fn = NULL,
-  origin = 0,
+  origin = NULL,
   origin_fn = NULL,
   exponentiate = FALSE,
   add_one_exp = TRUE,
@@ -45,30 +45,19 @@ or a \code{vector} with one constant per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to expand the values around.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a \code{vector} with one constant per dimension.
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{exponentiate}{Whether to exponentiate instead of multiplying. (Logical)}
 
@@ -155,7 +144,7 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = rep(1:4, each=5)
+  "g" = rep(1:4, each = 5)
 )
 
 # Expand values in the two dimensions (x and y)
@@ -196,47 +185,59 @@ expand_distances_each(
 # call in purrr::map_dfr
 df_expanded <- purrr::map_dfr(
   .x = c(1, 2.0, 3.0, 4.0),
-  .f = function(exponent){
-  expand_distances_each(
-    data = df,
-    cols = c("x", "y"),
-    multipliers = exponent,
-    origin_fn = centroid,
-    exponentiate = TRUE,
-    add_one_exp = TRUE)
-})
+  .f = function(exponent) {
+    expand_distances_each(
+      data = df,
+      cols = c("x", "y"),
+      multipliers = exponent,
+      origin_fn = centroid,
+      exponentiate = TRUE,
+      add_one_exp = TRUE
+    )
+  }
+)
 df_expanded
 
 # Plot the expansions of x and y around the overall centroid
 ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponents))) +
-  geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_vline(
+    xintercept = df_expanded[[".origin"]][[1]][[1]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
+  geom_hline(
+    yintercept = df_expanded[[".origin"]][[1]][[2]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
   geom_point() +
   theme_minimal() +
-  labs(x = "x", y="y", color="Exponent")
+  labs(x = "x", y = "y", color = "Exponent")
 
 # Expand x and y around the centroid using multiplication
 # To compare multiple multipliers, we wrap the
 # call in purrr::map_dfr
 df_expanded <- purrr::map_dfr(
   .x = c(1, 2.0, 3.0, 4.0),
-  .f = function(multiplier){
-  expand_distances_each(df,
-         cols = c("x", "y"),
-         multipliers = multiplier,
-         origin_fn = centroid,
-         exponentiate = FALSE)
-})
+  .f = function(multiplier) {
+    expand_distances_each(df,
+      cols = c("x", "y"),
+      multipliers = multiplier,
+      origin_fn = centroid,
+      exponentiate = FALSE
+    )
+  }
+)
 df_expanded
 
 # Plot the expansions of x and y around the overall centroid
 ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multipliers))) +
-  geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_vline(
+    xintercept = df_expanded[[".origin"]][[1]][[1]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
+  geom_hline(
+    yintercept = df_expanded[[".origin"]][[1]][[2]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
   geom_point() +
   theme_minimal() +
   labs(x = "x", y = "y", color = "Multiplier")
@@ -255,10 +256,14 @@ df_expanded
 # Plot the expansions of x and y around the overall centroid
 # Note how the y axis is expanded a lot more than the x-axis
 ggplot(df_expanded, aes(x = x_expanded, y = y_expanded)) +
-  geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-             size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_vline(
+    xintercept = df_expanded[[".origin"]][[1]][[1]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
+  geom_hline(
+    yintercept = df_expanded[[".origin"]][[1]][[2]],
+    size = 0.2, alpha = .4, linetype = "dashed"
+  ) +
   geom_line(aes(color = "Expanded")) +
   geom_point(aes(color = "Expanded")) +
   geom_line(aes(x = x, y = y, color = "Original")) +
@@ -282,11 +287,10 @@ df_contracted <- df \%>\%
 
 # Plot the clustered data point on top of the original data points
 ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))) +
-  geom_point(aes(x=x, y=y, color = factor(g)), alpha = 0.3, shape=16) +
+  geom_point(aes(x = x, y = y, color = factor(g)), alpha = 0.3, shape = 16) +
   geom_point() +
   theme_minimal() +
-  labs(x = "x", y="y", color="g")
-
+  labs(x = "x", y = "y", color = "g")
 }
 }
 \seealso{

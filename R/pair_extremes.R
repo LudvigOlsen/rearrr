@@ -32,7 +32,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams extreme_pairing_rearranger
+#' @inheritParams extreme_pairing_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the sorting factor added.
@@ -54,8 +54,10 @@
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
 #'   "C" = LETTERS[1:10],
-#'   "G" = c(1, 1, 1, 2, 2,
-#'           2, 3, 3, 3, 3),
+#'   "G" = c(
+#'     1, 1, 1, 2, 2,
+#'     2, 3, 3, 3, 3
+#'   ),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -75,19 +77,25 @@
 #'
 #' # Grouped by G
 #' df %>%
-#'   dplyr::select(G, A) %>%  # For clarity
+#'   dplyr::select(G, A) %>% # For clarity
 #'   dplyr::group_by(G) %>%
 #'   pair_extremes(col = "A")
 #'
 #' # Plot the extreme pairs
-#' plot(x = 1:10,
-#'      y = pair_extremes(df, col = "B")$B)
+#' plot(
+#'   x = 1:10,
+#'   y = pair_extremes(df, col = "B")$B
+#' )
 #' # With shuffled pair members (run a few times)
-#' plot(x = 1:10,
-#'      y = pair_extremes(df, col = "B", shuffle_members = TRUE)$B)
+#' plot(
+#'   x = 1:10,
+#'   y = pair_extremes(df, col = "B", shuffle_members = TRUE)$B
+#' )
 #' # With shuffled pairs (run a few times)
-#' plot(x = rep(1:5, each = 2),
-#'      y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B)
+#' plot(
+#'   x = rep(1:5, each = 2),
+#'   y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B
+#' )
 #' }
 pair_extremes <- function(data,
                           col = NULL,
@@ -96,9 +104,8 @@ pair_extremes <- function(data,
                           shuffle_members = FALSE,
                           shuffle_pairs = FALSE,
                           keep_factors = FALSE,
-                          factor_name = ".pair"){
-
-  extreme_pairing_rearranger(
+                          factor_name = ".pair") {
+  extreme_pairing_rearranger_(
     data = data,
     col = col,
     unequal_method = unequal_method,

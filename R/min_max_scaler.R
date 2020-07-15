@@ -39,7 +39,6 @@
 #' # Scale
 #' min_max_scale(x, new_min = -1, new_max = 0)
 #' min_max_scale(x, new_min = -1, new_max = 0, old_max = 3)
-#'
 #' }
 min_max_scale <- function(x,
                           new_min,

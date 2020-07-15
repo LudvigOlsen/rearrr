@@ -13,7 +13,7 @@ rotate_3d(
   y_deg = 0,
   z_deg = 0,
   suffix = "_rotated",
-  origin = c(0, 0, 0),
+  origin = NULL,
   origin_fn = NULL,
   keep_original = TRUE,
   degrees_col_name = ".degrees",
@@ -37,31 +37,19 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 \item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to rotate the values around.
-Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values,
-a \code{vector} with y-values, and a \code{vector} with z-values).
-It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y, origin_z).
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
@@ -112,103 +100,112 @@ set.seed(3)
 # Create a data frame
 df <- data.frame(
   "x" = 1:12,
-  "y" = c(1, 2, 3, 4, 9, 10, 11,
-          12, 15, 16, 17, 18),
+  "y" = c(
+    1, 2, 3, 4, 9, 10, 11,
+    12, 15, 16, 17, 18
+  ),
   "z" = runif(12),
-  "g" = c(1, 1, 1, 1, 2, 2,
-          2, 2, 3, 3, 3, 3)
+  "g" = c(
+    1, 1, 1, 1, 2, 2,
+    2, 2, 3, 3, 3, 3
+  )
 )
 
-# Rotate values 45 degrees around x-axis
-rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45)
+# Rotate values 45 degrees around x-axis at (0, 0, 0)
+rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45, origin = c(0, 0, 0))
 
 # Rotate all axes around the centroid
 df_rotated <- df \%>\%
-  rotate_3d(x_col = "x",
-           y_col = "y",
-           z_col = "z",
-           x_deg = c(0, 72, 144, 216, 288),
-           y_deg = c(0, 72, 144, 216, 288),
-           z_deg = c(0, 72, 144, 216, 288),
-           origin_fn = centroid)
+  rotate_3d(
+    x_col = "x",
+    y_col = "y",
+    z_col = "z",
+    x_deg = c(0, 72, 144, 216, 288),
+    y_deg = c(0, 72, 144, 216, 288),
+    z_deg = c(0, 72, 144, 216, 288),
+    origin_fn = centroid
+  )
 df_rotated
 
 # Plot rotations
 ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_line(alpha = .4) +
   geom_point() +
   theme_minimal() +
-  labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
+  labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
 # Plot 3d with plotly
 plotly::plot_ly(
-  x=df_rotated$x_rotated,
-  y=df_rotated$y_rotated,
-  z=df_rotated$z_rotated,
-  type="scatter3d",
-  mode="markers",
-  color=df_rotated$.degrees_str
+  x = df_rotated$x_rotated,
+  y = df_rotated$y_rotated,
+  z = df_rotated$z_rotated,
+  type = "scatter3d",
+  mode = "markers",
+  color = df_rotated$.degrees_str
 )
 
 # Rotate randomly around all axes
 df_rotated <- df \%>\%
-  rotate_3d(x_col = "x",
-           y_col = "y",
-           z_col = "z",
-           x_deg = round(runif(10, min = 0, max = 360)),
-           y_deg = round(runif(10, min = 0, max = 360)),
-           z_deg = round(runif(10, min = 0, max = 360)),
-           origin_fn = centroid)
+  rotate_3d(
+    x_col = "x",
+    y_col = "y",
+    z_col = "z",
+    x_deg = round(runif(10, min = 0, max = 360)),
+    y_deg = round(runif(10, min = 0, max = 360)),
+    z_deg = round(runif(10, min = 0, max = 360)),
+    origin_fn = centroid
+  )
 df_rotated
 
 # Plot rotations
 ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_line(alpha = .4) +
   geom_point() +
   theme_minimal() +
-  labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
+  labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
 # Plot 3d with plotly
 plotly::plot_ly(
-  x=df_rotated$x_rotated,
-  y=df_rotated$y_rotated,
-  z=df_rotated$z_rotated,
-  type="scatter3d",
-  mode="markers",
-  color=df_rotated$.degrees_str
+  x = df_rotated$x_rotated,
+  y = df_rotated$y_rotated,
+  z = df_rotated$z_rotated,
+  type = "scatter3d",
+  mode = "markers",
+  color = df_rotated$.degrees_str
 )
 
 # Rotate around group centroids
 df_grouped <- df \%>\%
   dplyr::group_by(g) \%>\%
-  rotate_3d(x_col = "x",
-           y_col = "y",
-           z_col = "z",
-           x_deg = c(0, 72, 144, 216, 288),
-           y_deg = c(0, 72, 144, 216, 288),
-           z_deg = c(0, 72, 144, 216, 288),
-           origin_fn = centroid)
+  rotate_3d(
+    x_col = "x",
+    y_col = "y",
+    z_col = "z",
+    x_deg = c(0, 72, 144, 216, 288),
+    y_deg = c(0, 72, 144, 216, 288),
+    z_deg = c(0, 72, 144, 216, 288),
+    origin_fn = centroid
+  )
 
 # Plot A and A rotated around group centroids
 ggplot(df_grouped, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
   geom_point() +
   theme_minimal() +
-  labs(x = "x", y="y", color="degrees", alpha="z (opacity)")
+  labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
 # Plot 3d with plotly
 plotly::plot_ly(
-  x=df_grouped$x_rotated,
-  y=df_grouped$y_rotated,
-  z=df_grouped$z_rotated,
-  type="scatter3d",
-  mode="markers",
-  color=df_grouped$.degrees_str
+  x = df_grouped$x_rotated,
+  y = df_grouped$y_rotated,
+  z = df_grouped$z_rotated,
+  type = "scatter3d",
+  mode = "markers",
+  color = df_grouped$.degrees_str
 )
-
 }
 }
 \seealso{

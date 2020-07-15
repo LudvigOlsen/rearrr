@@ -8,7 +8,8 @@ test_that("angle() works", {
   df <- data.frame(
     "x" = runif(20),
     "y" = runif(20),
-    "g" = rep(1:4, each=5)
+    "g" = rep(1:4, each = 5),
+    stringsAsFactors = FALSE
   )
 
 
@@ -86,7 +87,8 @@ test_that("fuzz testing angle()", {
   df <- data.frame(
     "x" = runif(20),
     "y" = runif(20),
-    "g" = rep(1:4, each=5)
+    "g" = rep(1:4, each = 5),
+    stringsAsFactors = FALSE
   )
 
   # Generate expectations for 'angle'

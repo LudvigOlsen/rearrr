@@ -1,5 +1,5 @@
 library(rearrr)
-context("flipped_values()")
+context("flip_values()")
 
 
 test_that("fuzz testing flipped_values()", {
@@ -11,7 +11,8 @@ test_that("fuzz testing flipped_values()", {
     "y" = runif(15),
     "z" = runif(15),
     "i" = 1:15,
-    "g" = rep(c(1, 2, 3, 4, 5), each = 3)
+    "g" = rep(c(1, 2, 3, 4, 5), each = 3),
+    stringsAsFactors = FALSE
   )
 
   # Generate expectations for 'flip_values'
@@ -23,7 +24,7 @@ test_that("fuzz testing flipped_values()", {
   #   args_values = list(
   #     "data" = list(df, dplyr::group_by(df, g), c(1,2,3,4,5), 1),
   #     "cols" = list(c("x", "y"), c("x", "y", "z"), "x", "", "hej", 1, NA),
-  #     "origin" = list(0, "hej", NA),
+  #     "origin" = list(NULL, 0, "hej", NA),
   #     "origin_fn" = list(create_origin_fn(median), create_origin_fn(mean), create_origin_fn(max), median),
   #     "suffix" = list("", "_flipped"),
   #     "keep_original" = list(FALSE, TRUE),
@@ -46,7 +47,7 @@ test_that("fuzz testing flipped_values()", {
   # Testing flip_values(data = df, cols = c("x", "y"), o...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_19148 <- flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19148),
@@ -94,7 +95,7 @@ test_that("fuzz testing flipped_values()", {
   # Changed from baseline: data = dplyr::group_b...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19370 <- flip_values(data = dplyr::group_by(df, g), cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_19370 <- flip_values(data = dplyr::group_by(df, g), cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19370),
@@ -146,7 +147,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(flip_values(data = c(1, 2, 3, 4, 5), cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(flip_values(data = c(1, 2, 3, 4, 5), cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -161,7 +162,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(flip_values(data = 1, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(flip_values(data = 1, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -176,7 +177,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(flip_values(data = NULL, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(flip_values(data = NULL, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -191,7 +192,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15190 <- xpectr::capture_side_effects(flip_values(data = 1:5, cols = "x", origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15190 <- xpectr::capture_side_effects(flip_values(data = 1:5, cols = "x", origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -206,10 +207,10 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17365 <- xpectr::capture_side_effects(flip_values(data = "hej", cols = NULL, origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17365 <- xpectr::capture_side_effects(flip_values(data = "hej", cols = NULL, origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1\n * has type 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error_class']]),
@@ -221,7 +222,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(flip_values(data = NA, cols = NULL, origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11346 <- xpectr::capture_side_effects(flip_values(data = NA, cols = NULL, origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
@@ -298,7 +299,7 @@ test_that("fuzz testing flipped_values()", {
   # Changed from baseline: cols = c("x", "y", "z")
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14577 <- flip_values(data = df, cols = c("x", "y", "z"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_14577 <- flip_values(data = df, cols = c("x", "y", "z"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_14577),
@@ -352,7 +353,7 @@ test_that("fuzz testing flipped_values()", {
   # Changed from baseline: cols = "x"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17191 <- flip_values(data = df, cols = "x", origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_17191 <- flip_values(data = df, cols = "x", origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_17191),
@@ -390,12 +391,12 @@ test_that("fuzz testing flipped_values()", {
     character(0),
     fixed = TRUE)
 
-  # Testing flip_values(data = df, cols = "", origin = 0...
+  # Testing flip_values(data = df, cols = "", origin = N...
   # Changed from baseline: cols = ""
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(flip_values(data = df, cols = "", origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(flip_values(data = df, cols = "", origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': All elements must have at least 1 characters."),
@@ -410,7 +411,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(flip_values(data = df, cols = "hej", origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(flip_values(data = df, cols = "hej", origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * These names in the 'col(s)' argument were not found in 'data': hej."),
@@ -420,12 +421,12 @@ test_that("fuzz testing flipped_values()", {
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
-  # Testing flip_values(data = df, cols = 1, origin = 0,...
+  # Testing flip_values(data = df, cols = 1, origin = NU...
   # Changed from baseline: cols = 1
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(flip_values(data = df, cols = 1, origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14622 <- xpectr::capture_side_effects(flip_values(data = df, cols = 1, origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': Must be of type 'character', not 'double'."),
@@ -435,12 +436,12 @@ test_that("fuzz testing flipped_values()", {
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
-  # Testing flip_values(data = df, cols = NA, origin = 0...
+  # Testing flip_values(data = df, cols = NA, origin = N...
   # Changed from baseline: cols = NA
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(flip_values(data = df, cols = NA, origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(flip_values(data = df, cols = NA, origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': Contains missing values (element 1)."),
@@ -455,10 +456,10 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(flip_values(data = df, cols = NULL, origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(flip_values(data = df, cols = NULL, origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error']]),
-    xpectr::strip("When 'data' is a data frame, 'cols' must be specified."),
+    xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error_class']]),
@@ -466,17 +467,76 @@ test_that("fuzz testing flipped_values()", {
     fixed = TRUE)
 
   # Testing flip_values(data = df, cols = c("x", "y"), o...
+  # Changed from baseline: origin = 0
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_11174 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11174[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11174[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
+  # Assigning output
+  output_11174 <- xpectr::suppress_mw(flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"))
+  # Testing class
+  expect_equal(
+    class(output_11174),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_11174[["x"]],
+    c(0.39918, 0.37691, 1.02785, 0.48354, 0.67224, 0.79489, 0.5774,
+      1.17932, 0.65699, 0.60892, 0.85624, 0.59487, 0.37931, 1.05856,
+      0.85169),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11174[["y"]],
+    c(0.18065, 0.14244, 1.00318, 0.64567, 0.56033, 0.21663, 0.98196,
+      0.13177, 0.174, 1.03823, 0.60645, 0.73046, 0.21493, 0.6737,
+      0.28466),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_11174),
+    c("x", "y", ".origin"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_11174),
+    c("numeric", "numeric", "list"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_11174),
+    c("double", "double", "list"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_11174),
+    c(15L, 3L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_11174)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing flip_values(data = df, cols = c("x", "y"), o...
   # Changed from baseline: origin = "hej"
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = "hej", origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14749 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = "hej", origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'numeric', not 'character'."),
+    xpectr::strip(side_effects_14749[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'numeric' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(side_effects_14749[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -485,25 +545,10 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = NA, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_14749[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
-    fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_14749[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
-    fixed = TRUE)
-
-  # Testing flip_values(data = df, cols = c("x", "y"), o...
-  # Changed from baseline: origin = NULL
-  xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = NA, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'numeric', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error_class']]),
@@ -514,7 +559,7 @@ test_that("fuzz testing flipped_values()", {
   # Changed from baseline: origin_fn = create_or...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19040 <- flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(mean), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_19040 <- flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(mean), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_19040),
@@ -562,7 +607,7 @@ test_that("fuzz testing flipped_values()", {
   # Changed from baseline: origin_fn = create_or...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11387 <- flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(max), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_11387 <- flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(max), suffix = "", keep_original = FALSE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_11387),
@@ -611,7 +656,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = median, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19888 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = median, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (2) but had length 1."),
@@ -624,56 +669,23 @@ test_that("fuzz testing flipped_values()", {
   # Testing flip_values(data = df, cols = c("x", "y"), o...
   # Changed from baseline: origin_fn = NULL
   xpectr::set_test_seed(42)
-  # Assigning output
-  output_19466 <- flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
-  # Testing class
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19466 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
-    class(output_19466),
-    c("tbl_df", "tbl", "data.frame"),
+    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
-  # Testing column values
   expect_equal(
-    output_19466[["x"]],
-    c(-0.91481, -0.93708, -0.28614, -0.83045, -0.64175, -0.5191, -0.73659,
-      -0.13467, -0.65699, -0.70506, -0.45774, -0.71911, -0.93467,
-      -0.25543, -0.46229),
-    tolerance = 1e-4)
-  expect_equal(
-    output_19466[["y"]],
-    c(-0.94001, -0.97823, -0.11749, -0.475, -0.56033, -0.90403, -0.13871,
-      -0.98889, -0.94667, -0.08244, -0.51421, -0.3902, -0.90574, -0.44697,
-      -0.836),
-    tolerance = 1e-4)
-  # Testing column names
-  expect_equal(
-    names(output_19466),
-    c("x", "y", ".origin"),
-    fixed = TRUE)
-  # Testing column classes
-  expect_equal(
-    xpectr::element_classes(output_19466),
-    c("numeric", "numeric", "list"),
-    fixed = TRUE)
-  # Testing column types
-  expect_equal(
-    xpectr::element_types(output_19466),
-    c("double", "double", "list"),
-    fixed = TRUE)
-  # Testing dimensions
-  expect_equal(
-    dim(output_19466),
-    c(15L, 3L))
-  # Testing group keys
-  expect_equal(
-    colnames(dplyr::group_keys(output_19466)),
-    character(0),
+    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   # Testing flip_values(data = df, cols = c("x", "y"), o...
   # Changed from baseline: suffix = "_flipped"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10824 <- flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "_flipped", keep_original = FALSE, origin_col_name = ".origin")
+  output_10824 <- flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "_flipped", keep_original = FALSE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_10824),
@@ -722,7 +734,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = NULL, keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = NULL, keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'NULL'."),
@@ -736,7 +748,7 @@ test_that("fuzz testing flipped_values()", {
   # Changed from baseline: keep_original = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_13902 <- flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = TRUE, origin_col_name = ".origin")
+  output_13902 <- flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = TRUE, origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_13902),
@@ -799,7 +811,7 @@ test_that("fuzz testing flipped_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = NULL, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19057 <- xpectr::capture_side_effects(flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = NULL, origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
@@ -813,7 +825,7 @@ test_that("fuzz testing flipped_values()", {
   # Changed from baseline: origin_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14469 <- flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = NULL)
+  output_14469 <- flip_values(data = df, cols = c("x", "y"), origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = NULL)
   # Testing class
   expect_equal(
     class(output_14469),
@@ -859,10 +871,6 @@ test_that("fuzz testing flipped_values()", {
 
   ## Finished testing 'flip_values'                                           ####
   #
-
-
-
-  # Make sure df is the same!
   ## Testing 'df'                                                           ####
   ## Initially generated by xpectr
   xpectr::set_test_seed(42)
@@ -923,6 +931,134 @@ test_that("fuzz testing flipped_values()", {
     fixed = TRUE)
   ## Finished testing 'df'                                                  ####
 
+
+})
+
+test_that("testing flip_values_vec()", {
+  xpectr::set_test_seed(42)
+
+
+  ## Testing 'flip_values_vec(runif(10), origin = 0.3, ori...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_14577 <- flip_values_vec(runif(10), origin = 0.3, origin_fn = NULL)
+  # Testing class
+  expect_equal(
+    class(output_14577),
+    "numeric",
+    fixed = TRUE)
+  # Testing type
+  expect_type(
+    output_14577,
+    type = "double")
+  # Testing values
+  expect_equal(
+    output_14577,
+    c(-0.31481, -0.33708, 0.31386, -0.23045, -0.04175, 0.0809, -0.13659,
+      0.46533, -0.05699, -0.10506),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_14577),
+    NULL,
+    fixed = TRUE)
+  # Testing length
+  expect_equal(
+    length(output_14577),
+    10L)
+  # Testing sum of element lengths
+  expect_equal(
+    sum(xpectr::element_lengths(output_14577)),
+    10L)
+  ## Finished testing 'flip_values_vec(runif(10), origin = 0.3, ori...'     ####
+
+
+
+  ## Testing 'flip_values_vec(runif(10), origin = NULL, or...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19370 <- flip_values_vec(runif(10), origin = NULL, origin_fn = centroid)
+  # Testing class
+  expect_equal(
+    class(output_19370),
+    "numeric",
+    fixed = TRUE)
+  # Testing type
+  expect_type(
+    output_19370,
+    type = "double")
+  # Testing values
+  expect_equal(
+    output_19370,
+    c(0.35772, 0.33545, 0.98638, 0.44208, 0.63078, 0.75343, 0.53594,
+      1.13786, 0.61553, 0.56746),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_19370),
+    NULL,
+    fixed = TRUE)
+  # Testing length
+  expect_equal(
+    length(output_19370),
+    10L)
+  # Testing sum of element lengths
+  expect_equal(
+    sum(xpectr::element_lengths(output_19370)),
+    10L)
+  ## Finished testing 'flip_values_vec(runif(10), origin = NULL, or...'     ####
+
+
+
+
+
+  ## Testing 'flip_values_vec(runif(10), origin = 0, origi...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19148 <- xpectr::capture_side_effects(flip_values_vec(runif(10), origin = 0, origin_fn = centroid), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19148[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19148[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
+  # Assigning output
+  output_19148 <- xpectr::suppress_mw(flip_values_vec(runif(10), origin = 0, origin_fn = centroid))
+  # Testing class
+  expect_equal(
+    class(output_19148),
+    "numeric",
+    fixed = TRUE)
+  # Testing type
+  expect_type(
+    output_19148,
+    type = "double")
+  # Testing values
+  expect_equal(
+    output_19148,
+    c(0.35772, 0.33545, 0.98638, 0.44208, 0.63078, 0.75343, 0.53594,
+      1.13786, 0.61553, 0.56746),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_19148),
+    NULL,
+    fixed = TRUE)
+  # Testing length
+  expect_equal(
+    length(output_19148),
+    10L)
+  # Testing sum of element lengths
+  expect_equal(
+    sum(xpectr::element_lengths(output_19148)),
+    10L)
+  ## Finished testing 'flip_values_vec(runif(10), origin = 0, origi...'     ####
 
 })
 

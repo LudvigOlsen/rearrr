@@ -10,7 +10,7 @@ rotate_2d(
   x_col = NULL,
   y_col = NULL,
   suffix = "_rotated",
-  origin = c(0, 0),
+  origin = NULL,
   origin_fn = NULL,
   keep_original = TRUE,
   degrees_col_name = ".degrees",
@@ -35,31 +35,19 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 \item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to rotate the values around.
-Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values and
-a \code{vector} with y-values).
-It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y).
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
@@ -112,47 +100,54 @@ set.seed(1)
 # Create a data frame
 df <- data.frame(
   "Index" = 1:12,
-  "A" = c(1, 2, 3, 4, 9, 10, 11,
-          12, 15, 16, 17, 18),
-  "G" = c(1, 1, 1, 1, 2, 2,
-          2, 2, 3, 3, 3, 3)
+  "A" = c(
+    1, 2, 3, 4, 9, 10, 11,
+    12, 15, 16, 17, 18
+  ),
+  "G" = c(
+    1, 1, 1, 1, 2, 2,
+    2, 2, 3, 3, 3, 3
+  )
 )
 
-# Rotate values
-rotate_2d(df, 45, x_col="Index", y_col="A")
+# Rotate values around (0, 0)
+rotate_2d(df, degrees = 45, x_col = "Index", y_col = "A", origin = c(0, 0))
 
 # Rotate A around the centroid
 df_rotated <- df \%>\%
-  rotate_2d(x_col = "Index",
-           y_col = "A",
-           degrees = c(0, 120, 240),
-           origin_fn = centroid)
+  rotate_2d(
+    x_col = "Index",
+    y_col = "A",
+    degrees = c(0, 120, 240),
+    origin_fn = centroid
+  )
 df_rotated
 
 # Plot A and A rotated around overall centroid
 ggplot(df_rotated, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
-  geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_line(alpha = .4) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Index", y="Value", color="Degrees")
+  labs(x = "Index", y = "Value", color = "Degrees")
 
 # Rotate around group centroids
 df_grouped <- df \%>\%
   dplyr::group_by(G) \%>\%
-  rotate_2d(x_col = "Index",
-           y_col = "A",
-           degrees = c(0, 120, 240),
-           origin_fn = centroid)
+  rotate_2d(
+    x_col = "Index",
+    y_col = "A",
+    degrees = c(0, 120, 240),
+    origin_fn = centroid
+  )
 df_grouped
 
 # Plot A and A rotated around group centroids
-ggplot(df_grouped, aes(x=Index_rotated, y=A_rotated, color = factor(.degrees))) +
+ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Index", y="Value", color="Degrees")
-
+  labs(x = "Index", y = "Value", color = "Degrees")
 }
 }
 \seealso{

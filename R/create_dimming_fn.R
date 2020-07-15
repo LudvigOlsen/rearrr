@@ -52,9 +52,8 @@
 #'
 #' # Use median_origin_fn
 #' non_smoothed_dimming_fn(x, d)
-#'
 #' }
-create_dimming_fn <- function(numerator = 1, exponent = 2, add_to_distance = 1){
+create_dimming_fn <- function(numerator = 1, exponent = 2, add_to_distance = 1) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -65,6 +64,6 @@ create_dimming_fn <- function(numerator = 1, exponent = 2, add_to_distance = 1){
   # End of argument checks ####
 
   function(x, d) {
-    x * (numerator / ((add_to_distance + d) ^ exponent))
+    x * (numerator / ((add_to_distance + d)^exponent))
   }
 }

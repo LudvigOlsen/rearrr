@@ -1,11 +1,12 @@
 
 # Doesn't seem to be that meaningful. Leaving in case I get ideas.
-sine_up <- function(data,
-                    cols,
-                    fs = NULL,
-                    periods = NULL,
-                    phase = 0,
-                    suffix = "_sined") {
+sine_up_ <- function(data,
+                     grp_id,
+                     cols,
+                     fs = NULL,
+                     periods = NULL,
+                     phase = 0,
+                     suffix = "_sined") {
 
   # Number of dimensions
   # Each column is a dimension
@@ -16,7 +17,7 @@ sine_up <- function(data,
 
   if (is.null(fs)) {
     fs <-
-      apply_coordinate_fn(
+      apply_coordinate_fn_(
         dim_vectors = dim_vectors,
         coordinates = fs,
         fn = create_origin_fn(function(x) {
@@ -26,12 +27,13 @@ sine_up <- function(data,
         coordinate_name = "fs",
         fn_name = "fs_fn",
         dim_var_name = "cols",
+        grp_id = grp_id,
         allow_len_one = TRUE
       )
   }
 
-  if (!is.null(periods)){
-    fs <- fs/periods
+  if (!is.null(periods)) {
+    fs <- fs / periods
   }
 
   print(fs)
@@ -39,18 +41,20 @@ sine_up <- function(data,
   # Move origin
   # x <- x - origin_coordinate
   sined_dim_vectors <-
-    purrr::map2(.x = dim_vectors, .y = fs,  .f = ~ {
+    purrr::map2(.x = dim_vectors, .y = fs, .f = ~ {
       .x * generate_sine_wave(.x,
-                         fs = .y,
-                         amplitude = 1,
-                         phase = phase)
+        fs = .y,
+        amplitude = 1,
+        phase = phase
+      )
     })
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(data = data,
-                         new_vectors = setNames(sined_dim_vectors, cols),
-                         suffix = suffix)
+  data <- add_dimensions_(
+    data = data,
+    new_vectors = setNames(sined_dim_vectors, cols),
+    suffix = suffix
+  )
 
   data
-
 }

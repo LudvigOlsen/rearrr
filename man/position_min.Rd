@@ -52,8 +52,10 @@ df <- data.frame(
   "A" = sample(1:10),
   "B" = runif(10),
   "C" = LETTERS[1:10],
-  "G" = c(1, 1, 1, 2, 2,
-          2, 3, 3, 3, 3),
+  "G" = c(
+    1, 1, 1, 2, 2,
+    2, 3, 3, 3, 3
+  ),
   stringsAsFactors = FALSE
 )
 
@@ -71,7 +73,7 @@ position_min(df, col = "A", position = 3, shuffle_sides = TRUE)$A
 
 # Grouped by G
 df \%>\%
-  dplyr::select(G, A) \%>\%  # For clarity
+  dplyr::select(G, A) \%>\% # For clarity
   dplyr::group_by(G) \%>\%
   position_min(col = "A", position = 2)
 

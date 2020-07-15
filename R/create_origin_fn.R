@@ -11,6 +11,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param fn Function to apply to each dimension. Should return a numeric scalar.
 #' @param ... Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.
+#' @family coordinate functions
 #' @export
 #' @return Function with the dots (\code{...}) argument that applies the \code{`fn`} function to
 #'  each element in \code{...} (usually one vector per dimension).
@@ -47,17 +48,19 @@
 #' mean_origin_fn(x, y, z)
 #'
 #' # Should be the same as
-#' c(mean(x, na.rm = TRUE),
+#' c(
+#'   mean(x, na.rm = TRUE),
 #'   mean(y, na.rm = TRUE),
 #'   mean(z, na.rm = TRUE)
 #' )
-#'
 #' }
 create_origin_fn <- function(fn, ...) {
   args <- list(...)
-  function(...){
+  function(...) {
     list(...) %>%
-      purrr::map(.f = function(x){rlang::exec(.fn = fn, x, !!!args)}) %>%
+      purrr::map(.f = function(x) {
+        rlang::exec(.fn = fn, x, !!!args)
+      }) %>%
       unlist(recursive = TRUE, use.names = FALSE)
   }
 }

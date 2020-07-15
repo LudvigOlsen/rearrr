@@ -34,30 +34,6 @@
 #'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to expand the distances around.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param multiplier Constant to multiply/exponentiate the distances to the origin by.
 #'
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multiplier becomes an \emph{exponent}.
@@ -98,7 +74,7 @@
 #'  and subtract it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @family expander functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -114,7 +90,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Expand distances in the two dimensions (x and y)
@@ -157,23 +133,29 @@
 #' # call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
 #'   .x = c(1, 3, 5),
-#'   .f = function(exponent){
-#'   expand_distances(
-#'     data = df,
-#'     cols = c("x", "y"),
-#'     multiplier = exponent,
-#'     origin_fn = centroid,
-#'     exponentiate = TRUE,
-#'     add_one_exp = TRUE)
-#' })
+#'   .f = function(exponent) {
+#'     expand_distances(
+#'       data = df,
+#'       cols = c("x", "y"),
+#'       multiplier = exponent,
+#'       origin_fn = centroid,
+#'       exponentiate = TRUE,
+#'       add_one_exp = TRUE
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
 #' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
-#'   geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_vline(
+#'     xintercept = df_expanded[[".origin"]][[1]][[1]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
+#'   geom_hline(
+#'     yintercept = df_expanded[[".origin"]][[1]][[2]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
 #'   geom_path(size = 0.2) +
 #'   geom_point() +
 #'   theme_minimal() +
@@ -184,21 +166,27 @@
 #' # call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
 #'   .x = c(1, 3, 5),
-#'   .f = function(multiplier){
-#'   expand_distances(df,
-#'          cols = c("x", "y"),
-#'          multiplier = multiplier,
-#'          origin_fn = centroid,
-#'          exponentiate = FALSE)
-#' })
+#'   .f = function(multiplier) {
+#'     expand_distances(df,
+#'       cols = c("x", "y"),
+#'       multiplier = multiplier,
+#'       origin_fn = centroid,
+#'       exponentiate = FALSE
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
 #' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multiplier))) +
-#'   geom_vline(xintercept = df_expanded[[".origin"]][[1]][[1]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = df_expanded[[".origin"]][[1]][[2]],
-#'              size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_vline(
+#'     xintercept = df_expanded[[".origin"]][[1]][[1]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
+#'   geom_hline(
+#'     yintercept = df_expanded[[".origin"]][[1]][[2]],
+#'     size = 0.2, alpha = .4, linetype = "dashed"
+#'   ) +
 #'   geom_path(size = 0.2, alpha = .8) +
 #'   geom_point() +
 #'   theme_minimal() +
@@ -224,13 +212,12 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "g")
-#'
 #' }
 expand_distances <- function(data,
                              cols = NULL,
-                             multiplier = 1,
+                             multiplier = NULL,
                              multiplier_fn = NULL,
-                             origin = 0,
+                             origin = NULL,
                              origin_fn = NULL,
                              exponentiate = FALSE,
                              add_one_exp = TRUE,
@@ -243,10 +230,12 @@ expand_distances <- function(data,
   checkmate::assert_string(mult_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
-  checkmate::assert_number(multiplier, add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
+  checkmate::assert_number(multiplier, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(exponentiate, add = assert_collection)
   checkmate::assert_flag(add_one_exp, add = assert_collection)
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
@@ -255,9 +244,9 @@ expand_distances <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = expand_mutator_method,
+    mutate_fn = expand_mutator_method_,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
@@ -272,21 +261,22 @@ expand_distances <- function(data,
     mult_col_name = mult_col_name,
     origin_col_name = origin_col_name
   )
-
 }
 
 
-expand_mutator_method <- function(data,
-                                  cols,
-                                  suffix,
-                                  multiplier,
-                                  multiplier_fn,
-                                  origin,
-                                  origin_fn,
-                                  exponentiate,
-                                  add_one_exp,
-                                  mult_col_name,
-                                  origin_col_name) {
+expand_mutator_method_ <- function(data,
+                                   grp_id,
+                                   cols,
+                                   suffix,
+                                   multiplier,
+                                   multiplier_fn,
+                                   origin,
+                                   origin_fn,
+                                   exponentiate,
+                                   add_one_exp,
+                                   mult_col_name,
+                                   origin_col_name,
+                                   ...) {
   # Number of dimensions
   # Each column is a dimension
   num_dims <- length(cols)
@@ -295,7 +285,7 @@ expand_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -303,11 +293,12 @@ expand_mutator_method <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 
   # Find multiplier if specified
-  multiplier <- apply_coordinate_fn(
+  multiplier <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = multiplier,
     fn = multiplier_fn,
@@ -315,6 +306,7 @@ expand_mutator_method <- function(data,
     coordinate_name = "multiplier",
     fn_name = "multiplier_fn",
     dim_var_name = NULL,
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 
@@ -327,19 +319,20 @@ expand_mutator_method <- function(data,
 
   # Calculate distances
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
-  distances <-
-    calculate_distances(dim_vectors = dim_vectors, to = rep(0, num_dims))
+  distances <- calculate_distances_(
+    dim_vectors = dim_vectors,
+    to = rep(0, num_dims)
+  )
 
   # Unit length points
-  norm_dim_vectors <-
-    to_unit_lengths_rowwise(dim_vectors)
+  norm_dim_vectors <- to_unit_lengths_rowwise_(dim_vectors)
 
   # Apply expansion
   if (isTRUE(exponentiate)) {
     # Add 1 to distances to avoid contraction when below 1
     distances <- distances + sum(isTRUE(add_one_exp))
     # Exponentiate distances
-    expo_distances <- distances ^ multiplier
+    expo_distances <- distances^multiplier
     # Substract the added 1
     expo_distances <- expo_distances - sum(isTRUE(add_one_exp))
 
@@ -348,7 +341,6 @@ expand_mutator_method <- function(data,
       purrr::map(.x = norm_dim_vectors, .f = ~ {
         .x * expo_distances
       })
-
   } else {
     # Add the multiplied distance
     expanded_dim_vectors <-
@@ -366,18 +358,19 @@ expand_mutator_method <- function(data,
   # Add expanded columns to data
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(data = data,
-                         new_vectors = setNames(expanded_dim_vectors, cols),
-                         suffix = suffix)
+  data <- add_dimensions_(
+    data = data,
+    new_vectors = setNames(expanded_dim_vectors, cols),
+    suffix = suffix
+  )
 
   # Add info columns
   if (!is.null(mult_col_name)) {
     data[[mult_col_name]] <- multiplier
   }
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
 
   data
-
 }

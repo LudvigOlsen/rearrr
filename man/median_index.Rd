@@ -48,7 +48,6 @@ quantile_index(x, y, z, prob = 0.2)
 
 # Negate result
 median_index(x, y, z, negate = TRUE)
-
 }
 }
 \author{

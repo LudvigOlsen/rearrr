@@ -10,7 +10,8 @@ test_that("fuzz testing swirl_2d()", {
     "x" = runif(15),
     "y" = runif(15),
     "z" = runif(15),
-    "g" = rep(c(1, 2, 3, 4, 5), each = 3)
+    "g" = rep(c(1, 2, 3, 4, 5), each = 3),
+    stringsAsFactors = FALSE
   ) %>%
     dplyr::as_tibble()
 
@@ -35,8 +36,8 @@ test_that("fuzz testing swirl_2d()", {
   #     "origin_col_name" = list(".origin", ".origi")
   #   ),
   #   extra_combinations = list(
-  #     list("data" = c(1, 2, 3, 4, 5), "x_col" = NULL, "y_col" = NULL, "origin_fn" = centroid),
-  #     list("data" = c(1, 2, 3, 4, 5), "x_col" = "x", "y_col" = NULL, "origin_fn" = centroid),
+  #     list("data" = c(1, 2, 3, 4, 5), "x_col" = NULL, "y_col" = NULL, "origin_fn" = centroid, "origin" = NULL),
+  #     list("data" = c(1, 2, 3, 4, 5), "x_col" = "x", "y_col" = NULL, "origin_fn" = centroid, "origin" = NULL),
   #     list("data" = dplyr::group_by(df, g), "origin_fn" = centroid),
   #     list("keep_original" = TRUE, "suffix" = "_swirly")
   #   ),
@@ -230,8 +231,19 @@ test_that("fuzz testing swirl_2d()", {
   # Testing swirl_2d(data = dplyr::group_by(df, g), radi...
   # Changed from baseline: data, origin_fn
   xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_17365 <- xpectr::capture_side_effects(swirl_2d(data = dplyr::group_by(df, g), radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_17365[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_17365[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
   # Assigning output
-  output_17365 <- swirl_2d(data = dplyr::group_by(df, g), radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin")
+  output_17365 <- xpectr::suppress_mw(swirl_2d(data = dplyr::group_by(df, g), radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"))
   # Testing class
   expect_equal(
     class(output_17365),
@@ -292,7 +304,7 @@ test_that("fuzz testing swirl_2d()", {
   # Changed from baseline: data, x_col, y_col, o...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11346 <- swirl_2d(data = c(1, 2, 3, 4, 5), radius = 1, x_col = NULL, y_col = NULL, suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin")
+  output_11346 <- swirl_2d(data = c(1, 2, 3, 4, 5), radius = 1, x_col = NULL, y_col = NULL, suffix = "", origin = NULL, origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin")
   # Testing class
   expect_equal(
     class(output_11346),
@@ -345,7 +357,7 @@ test_that("fuzz testing swirl_2d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(swirl_2d(data = c(1, 2, 3, 4, 5), radius = 1, x_col = "x", y_col = NULL, suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(swirl_2d(data = c(1, 2, 3, 4, 5), radius = 1, x_col = "x", y_col = NULL, suffix = "", origin = NULL, origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -932,7 +944,7 @@ test_that("fuzz testing swirl_2d()", {
   side_effects_14469 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = NULL, origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14469[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'numeric', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14469[['error_class']]),
@@ -942,8 +954,19 @@ test_that("fuzz testing swirl_2d()", {
   # Testing swirl_2d(data = df, radius = 1, x_col = "x",...
   # Changed from baseline: origin_fn = centroid
   xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_18360 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18360[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18360[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
   # Assigning output
-  output_18360 <- swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin")
+  output_18360 <- xpectr::suppress_mw(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"))
   # Testing class
   expect_equal(
     class(output_18360),
@@ -999,8 +1022,19 @@ test_that("fuzz testing swirl_2d()", {
   # Testing swirl_2d(data = df, radius = 1, x_col = "x",...
   # Changed from baseline: origin_fn = most_cent...
   xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_17375 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = most_centered, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_17375[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_17375[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
   # Assigning output
-  output_17375 <- swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = most_centered, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin")
+  output_17375 <- xpectr::suppress_mw(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = most_centered, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin"))
   # Testing class
   expect_equal(
     class(output_17375),
@@ -1501,5 +1535,4 @@ test_that("fuzz testing swirl_2d()", {
 
   ## Finished testing 'swirl_2d'                                              ####
   #
-
 })

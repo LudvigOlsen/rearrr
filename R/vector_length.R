@@ -21,7 +21,7 @@
 #' @param len_col_name Name of new column with the row vector lengths when
 #'  \code{`data`} is a \code{data.frame} and \code{`by_row`} is \code{TRUE}.
 #' @export
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @family measuring functions
 #' @return Vector length(s).
 #'
@@ -45,7 +45,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Measure row-wise
@@ -78,9 +78,9 @@ vector_length <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = vector_length_mutator_method,
+    mutate_fn = vector_length_mutator_method_,
     check_fn = NULL,
     cols = cols,
     allowed_types = "numeric",
@@ -90,22 +90,22 @@ vector_length <- function(data,
     by_row = by_row,
     len_col_name = len_col_name
   )
-
 }
 
-vector_length_mutator_method <- function(data,
-                                         cols,
-                                         by_row,
-                                         len_col_name,
-                                         ...) {
 
+vector_length_mutator_method_ <- function(data,
+                                          grp_id,
+                                          cols,
+                                          by_row,
+                                          len_col_name,
+                                          ...) {
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   if (isTRUE(by_row)) {
-    vec_lengths <- vec_lengths_rowwise(dim_vectors)
+    vec_lengths <- vec_lengths_rowwise_(dim_vectors)
   } else {
     # Column summaries
-    vec_lengths <- vec_lengths_colwise(dim_vectors)
+    vec_lengths <- vec_lengths_colwise_(dim_vectors)
     return(setNames(vec_lengths, cols))
   }
 
@@ -113,17 +113,17 @@ vector_length_mutator_method <- function(data,
   data[[len_col_name]] <- vec_lengths
 
   data
-
 }
 
 
-vec_lengths_rowwise <- function(dim_vectors) {
+vec_lengths_rowwise_ <- function(dim_vectors) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_list(dim_vectors,
-                         any.missing = FALSE,
-                         types = "numeric",
-                         add = assert_collection)
+    any.missing = FALSE,
+    types = "numeric",
+    add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
   if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))) {
     assert_collection$push("all 'dim_vectors' must have the same length.")
@@ -133,19 +133,19 @@ vec_lengths_rowwise <- function(dim_vectors) {
 
   purrr::transpose(dim_vectors) %>%
     purrr::simplify_all() %>%
-    purrr::map_dbl(vec_length) %>%
+    purrr::map_dbl(vec_length_) %>%
     purrr::simplify()
 }
 
-vec_lengths_colwise <- function(dim_vectors) {
+vec_lengths_colwise_ <- function(dim_vectors) {
   checkmate::assert_list(dim_vectors, any.missing = FALSE, types = "numeric")
   if (!all(length(dim_vectors[[1]]) == lengths(dim_vectors))) {
     stop("All 'dim_vectors' must have the same length.")
   }
   dim_vectors %>%
-    purrr::map(vec_length)
+    purrr::map(vec_length_)
 }
 
-vec_length <- function(x) {
-  sqrt(sum(x ^ 2))
+vec_length_ <- function(x) {
+  sqrt(sum(x^2))
 }

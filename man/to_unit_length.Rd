@@ -2,6 +2,7 @@
 % Please edit documentation in R/to_unit_length.R
 \name{to_unit_length}
 \alias{to_unit_length}
+\alias{to_unit_length_vec}
 \title{Scale to unit length}
 \usage{
 to_unit_length(
@@ -10,6 +11,8 @@ to_unit_length(
   by_row = is.data.frame(data),
   suffix = ifelse(isTRUE(by_row), "_row_unit", "_col_unit")
 )
+
+to_unit_length_vec(data)
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
@@ -31,6 +34,8 @@ Scaled \code{vector} or \code{data.frame} (\code{tibble}) with the scaled column
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 Scales the vectors to unit length \emph{row-wise} or \emph{column-wise}.
+
+The \code{*_vec()} version take and return a vector.
 }
 \examples{
 \donttest{
@@ -45,7 +50,7 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = rep(1:4, each=5)
+  "g" = rep(1:4, each = 5)
 )
 
 # Scale row-wise
@@ -63,6 +68,7 @@ df \%>\%
   to_unit_length(cols = c("x", "y"), by_row = FALSE)
 
 # Scale a vector
+to_unit_length_vec(c(1:10))
 to_unit_length(c(1:10), suffix = "")
 vector_length(to_unit_length(c(1:10), suffix = ""))
 }

@@ -2,28 +2,36 @@
 % Please edit documentation in R/most_centered.R
 \name{most_centered}
 \alias{most_centered}
-\title{Find the coordinates for data point closest to the centroid}
+\title{Find the coordinates for the data point closest to the centroid}
 \usage{
-most_centered(..., na.rm = FALSE)
+most_centered(..., cols = NULL, na.rm = FALSE)
 }
 \arguments{
-\item{...}{Numeric vectors.}
+\item{...}{\code{Numeric vectors} or a single \code{data.frame}.}
 
-\item{na.rm}{Whether to ignore missing values when calculating centroid coordinates. (Logical)}
+\item{cols}{Names of columns to use when \code{`...`} is a single \code{data.frame}.}
+
+\item{na.rm}{Whether to ignore missing values. At least one data point must be complete. (Logical)}
 }
 \value{
-\code{vector} with the coordinates for the data point closest to the centroid.
+The coordinates for the data point closest to the centroid.
+Either as a \code{vector} or a \code{data.frame}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Returns the coordinates for the
-data point with the shortest distance to the centroid.
+Returns the coordinates for the data point with the
+shortest distance to the \code{\link[rearrr:centroid]{centroid}}.
+
+To get a logical vector (\code{TRUE}/\code{FALSE}) indicating
+whether a data point is the most centered,
+use \code{\link[rearrr:is_most_centered]{is_most_centered()}}.
 }
 \examples{
 \donttest{
 # Attach packages
 library(rearrr)
+library(dplyr)
 
 # Set seed
 set.seed(1)
@@ -33,14 +41,49 @@ x <- runif(10)
 y <- runif(10)
 z <- runif(10)
 
-# Find coordinates of data point
+# Find coordinates of the data point
 # closest to the centroid
 most_centered(x, y, z)
 
 # Compare to centroid coordinates
 centroid(x, y, z)
+
+#
+# For data.frames
+#
+
+# Create data frame
+df <- data.frame(
+  "x" = x,
+  "y" = y,
+  "z" = z,
+  "g" = rep(1:2, each = 5)
+)
+
+# Find coordinates of the data point
+# closest to the centroid
+most_centered(df, cols = c("x", "y", "z"))
+
+# When 'df' is grouped
+df \%>\%
+  dplyr::group_by(g) \%>\%
+  most_centered(cols = c("x", "y", "z"))
+
+# Filter to only include most centered data points
+df \%>\%
+  dplyr::group_by(g) \%>\%
+  dplyr::filter(is_most_centered(x, y, z))
+
 }
+}
+\seealso{
+Other coordinate functions: 
+\code{\link{centroid}()},
+\code{\link{create_origin_fn}()},
+\code{\link{is_most_centered}()},
+\code{\link{midrange}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{coordinate functions}

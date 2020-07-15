@@ -1,8 +1,8 @@
 library(rearrr)
-context("calculate_distances()")
+context("calculate_distances_()")
 
 
-test_that("calculate_distances() works in 2d", {
+test_that("calculate_distances_() works in 2d", {
   xpectr::set_test_seed(42)
 
   dim_vectors <- list("a" = runif(10), "b" = runif(10))
@@ -15,7 +15,7 @@ test_that("calculate_distances() works in 2d", {
     sqrt( (as[[i]] - 0.3)^2 + (bs[[i]] - 0.5)^2)
   }) %>% unlist(recursive = T)
 
-  calc_dists <- calculate_distances(dim_vectors = dim_vectors, to = c(0.3, 0.5))
+  calc_dists <- calculate_distances_(dim_vectors = dim_vectors, to = c(0.3, 0.5))
 
   expect_equal(man_dists, calc_dists)
 

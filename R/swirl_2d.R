@@ -27,31 +27,6 @@
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 2 elements (i.e. origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to swirl the values around.
-#'  Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values and
-#'  a \code{vector} with y-values).
-#'  It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y).
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param scale_fn Function for scaling the distances before calculating the degrees.
 #'  Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
 #'  return a \code{numeric vector} (the scaled distances) of the same length. E.g.:
@@ -68,7 +43,7 @@
 #' @return \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
 #' @family mutate functions
 #' @family rotation functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -85,11 +60,17 @@
 #'   "y" = 1,
 #'   "r1" = runif(50),
 #'   "r2" = runif(50) * 35,
-#'   "g" = rep(1:5, each=10)
+#'   "g" = rep(1:5, each = 10)
 #' )
 #'
-#' # Rotate values
-#' swirl_2d(df, radius = 45, x_col = "x", y_col = "y")
+#' # Swirl values around (0, 0)
+#' swirl_2d(
+#'   data = df,
+#'   radius = 45,
+#'   x_col = "x",
+#'   y_col = "y",
+#'   origin = c(0, 0)
+#' )
 #'
 #' # Swirl around the centroid
 #' df_swirled <- swirl_2d(
@@ -99,7 +80,7 @@
 #'   y_col = "y",
 #'   origin_fn = centroid,
 #'   scale_fn = function(x) {
-#'     x ^ 1.6
+#'     x^1.6
 #'   }
 #' )
 #'
@@ -132,14 +113,13 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "r1", y = "r2")
-#'
 #' }
 swirl_2d <- function(data,
                      radius,
                      x_col = NULL,
                      y_col = NULL,
                      suffix = "_swirled",
-                     origin = c(0, 0),
+                     origin = NULL,
                      origin_fn = NULL,
                      scale_fn = identity,
                      keep_original = TRUE,
@@ -162,9 +142,11 @@ swirl_2d <- function(data,
   checkmate::assert_string(radius_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            len = 2,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    len = 2,
+    any.missing = FALSE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(scale_fn, nargs = 1, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -174,7 +156,7 @@ swirl_2d <- function(data,
   if (is.data.frame(data) && is.null(x_col)) {
     assert_collection$push("when 'data' is a data.frame, 'x_col' must be specified.")
   }
-  if (length(c(x_col, y_col)) == 2 && x_col == y_col){
+  if (length(c(x_col, y_col)) == 2 && x_col == y_col) {
     assert_collection$push("'x_col' and 'y_col' cannot be the same column.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -184,9 +166,9 @@ swirl_2d <- function(data,
   purrr::map_dfr(
     .x = radius,
     .f = function(radi) {
-      out <- multi_mutator(
+      out <- multi_mutator_(
         data = data,
-        mutate_fn = swirl_2d_mutator_method,
+        mutate_fn = swirl_2d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
         min_dims = 2,
@@ -207,28 +189,29 @@ swirl_2d <- function(data,
       out
     }
   )
-
 }
 
-swirl_2d_mutator_method <- function(data,
-                                   cols,
-                                   radius,
-                                   scale_fn,
-                                   suffix,
-                                   origin,
-                                   origin_fn,
-                                   degrees_col_name,
-                                   origin_col_name){
+swirl_2d_mutator_method_ <- function(data,
+                                     grp_id,
+                                     cols,
+                                     radius,
+                                     scale_fn,
+                                     suffix,
+                                     origin,
+                                     origin_fn,
+                                     degrees_col_name,
+                                     origin_col_name,
+                                     ...) {
 
   # Extract columns
   x_col <- cols[[1]]
   y_col <- cols[[2]]
 
   # Convert columns to list of vectors
-  dim_vectors <- as.list(data[, cols, drop=FALSE])
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -236,21 +219,22 @@ swirl_2d_mutator_method <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = FALSE
   )
 
   # Calculate distances to origin
-  distances <- calculate_distances(dim_vectors = dim_vectors, to = origin)
+  distances <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
   # Scale distances
   scaled_distances <- scale_fn(distances)
 
-  if (length(scaled_distances) != length(distances)){
+  if (length(scaled_distances) != length(distances)) {
     stop("the output of 'scale_fn' must have the same length as the input.")
   }
 
   # Convert distances to degrees
-  degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = radius)
+  degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = radius)
 
   # Add degrees column
   deg_tmp_var <- create_tmp_var(data = data, tmp_var = ".__degrees__", disallowed = degrees_col_name)
@@ -279,7 +263,7 @@ swirl_2d_mutator_method <- function(data,
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, names = cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, names = cols)
   }
   if (!is.null(degrees_col_name)) {
     data[[degrees_col_name]] <- data[[deg_tmp_var]]

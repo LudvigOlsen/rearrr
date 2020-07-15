@@ -2,17 +2,20 @@
 % Please edit documentation in R/flip_values.R
 \name{flip_values}
 \alias{flip_values}
+\alias{flip_values_vec}
 \title{Flip the values around an origin}
 \usage{
 flip_values(
   data,
   cols = NULL,
-  origin = 0,
+  origin = NULL,
   origin_fn = create_origin_fn(median),
   suffix = "_flipped",
   keep_original = TRUE,
   origin_col_name = ".origin"
 )
+
+flip_values_vec(data, origin = NULL, origin_fn = create_origin_fn(median))
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
@@ -25,30 +28,19 @@ or a \code{vector} with one constant per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin value to flip the values around.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a \code{vector} with one constant per dimension.
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{suffix}{Suffix to add to the names of the generated columns.
 
@@ -69,6 +61,8 @@ the origin coordinate to flip the values around.
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and flipping around e.g. the centroid
 of each group.
+
+The \code{*_vec()} version take and return a vector.
 
 \strong{Example}:
 
@@ -97,8 +91,10 @@ df <- data.frame(
   "Index" = 1:10,
   "A" = sample(1:10),
   "B" = runif(10),
-  "G" = c(1, 1, 1, 2, 2,
-          2, 3, 3, 3, 3),
+  "G" = c(
+    1, 1, 1, 2, 2,
+    2, 3, 3, 3, 3
+  ),
   stringsAsFactors = FALSE
 )
 
@@ -106,16 +102,20 @@ df <- data.frame(
 flip_values(df$A)
 flip_values(df, cols = "A")
 flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
-flip_values(df, cols = c("A", "B"), origin = c(3, 0.3),
-            suffix = "",  keep_original = FALSE)
+flip_values(df,
+  cols = c("A", "B"), origin = c(3, 0.3),
+  suffix = "", keep_original = FALSE
+)
 flip_values(df, cols = c("A", "B"), origin_fn = create_origin_fn(max))
 
 # Grouped by G
 df \%>\%
   dplyr::group_by(G) \%>\%
-  flip_values(cols = c("A", "B"),
-              origin_fn = create_origin_fn(median),
-              keep_original = FALSE)
+  flip_values(
+    cols = c("A", "B"),
+    origin_fn = create_origin_fn(median),
+    keep_original = FALSE
+  )
 
 # Plot A and flipped A
 
@@ -125,17 +125,17 @@ df <- df \%>\%
   flip_values(cols = "A", suffix = "_flip_3", origin = 3, origin_col_name = NULL)
 
 # Plot A and A flipped around its median
-ggplot(df, aes(x=Index, y=A)) +
-  geom_line(aes(color="A")) +
-  geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
-  geom_hline(aes(color="Median A", yintercept = median(A))) +
+ggplot(df, aes(x = Index, y = A)) +
+  geom_line(aes(color = "A")) +
+  geom_line(aes(y = A_flip_median, color = "Flipped A (median)")) +
+  geom_hline(aes(color = "Median A", yintercept = median(A))) +
   theme_minimal()
 
 # Plot A and A flipped around the value 3
-ggplot(df, aes(x=Index, y=A)) +
-  geom_line(aes(color="A")) +
-  geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
-  geom_hline(aes(color="3", yintercept = 3)) +
+ggplot(df, aes(x = Index, y = A)) +
+  geom_line(aes(color = "A")) +
+  geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
+  geom_hline(aes(color = "3", yintercept = 3)) +
   theme_minimal()
 }
 }

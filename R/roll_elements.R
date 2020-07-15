@@ -84,7 +84,7 @@
 #' # Create a data frame
 #' df <- data.frame(
 #'   "x" = 1:20,
-#'   "y" = runif(20)*10,
+#'   "y" = runif(20) * 10,
 #'   "g" = rep(1:4, each = 5)
 #' )
 #'
@@ -104,7 +104,6 @@
 #'   n_fn = median_index,
 #'   negate = TRUE
 #' )
-#'
 #' }
 roll_elements <- function(data,
                           cols = NULL,
@@ -115,15 +114,16 @@ roll_elements <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_numeric(n,
-                            any.missing = FALSE,
-                            finite = TRUE,
-                            null.ok = TRUE,
-                            add = assert_collection)
+    any.missing = FALSE,
+    finite = TRUE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
   checkmate::assert_function(n_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(n_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if ((is.null(n) && is.null(n_fn)) ||
-      (!is.null(n) && !is.null(n_fn))) {
+    (!is.null(n) && !is.null(n_fn))) {
     assert_collection$push("exactly one of {'n', 'n_fn'} must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -148,9 +148,9 @@ roll_elements <- function(data,
     inverse_direction <- TRUE
   }
 
-  out <- rearranger(
+  out <- rearranger_(
     data = data,
-    rearrange_fn = roll_elements_rearranger_method,
+    rearrange_fn = roll_elements_rearranger_method_,
     check_fn = NULL,
     cols = cols,
     n = n,
@@ -163,8 +163,9 @@ roll_elements <- function(data,
   if (isTRUE(uses_tmp_index)) {
     if (!is.null(n_col_name)) {
       out[[n_col_name]] <- purrr::map(out[[n_col_name]],
-                                      .f = setNames,
-                                      nm = ".index")
+        .f = setNames,
+        nm = ".index"
+      )
     }
     out <- out[order(out[[tmp_index_col]]), , drop = FALSE]
     out[[tmp_index_col]] <- NULL
@@ -174,12 +175,15 @@ roll_elements <- function(data,
 }
 
 #' @rdname roll_elements
+#' @export
 roll_elements_vec <- function(data,
                               n = NULL,
                               n_fn = NULL,
                               ...) {
-  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
-                    checkmate::check_factor(data))
+  checkmate::assert(
+    checkmate::check_vector(data, strict = TRUE),
+    checkmate::check_factor(data)
+  )
   roll_elements(
     data = data,
     n = n,
@@ -189,13 +193,15 @@ roll_elements_vec <- function(data,
   )
 }
 
-roll_elements_rearranger_method <- function(data,
-                                            cols,
-                                            n,
-                                            n_fn,
-                                            n_fn_args,
-                                            n_col_name,
-                                            inverse_direction) {
+roll_elements_rearranger_method_ <- function(data,
+                                             grp_id,
+                                             cols,
+                                             n,
+                                             n_fn,
+                                             n_fn_args,
+                                             n_col_name,
+                                             inverse_direction,
+                                             ...) {
   # Initial check of n
   if (!is.null(n) && all(n == 0)) {
     return(data)
@@ -209,7 +215,7 @@ roll_elements_rearranger_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find n
-  n <- apply_coordinate_fn(
+  n <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = n,
     fn = n_fn,
@@ -217,6 +223,7 @@ roll_elements_rearranger_method <- function(data,
     coordinate_name = "n",
     fn_name = "n_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE,
     extra_args = n_fn_args
   )
@@ -237,7 +244,7 @@ roll_elements_rearranger_method <- function(data,
     })
 
   # Add dim_vectors as columns with the suffix
-  data <- add_dimensions(
+  data <- add_dimensions_(
     data = data,
     new_vectors = setNames(dim_vectors, cols),
     suffix = ""
@@ -247,9 +254,8 @@ roll_elements_rearranger_method <- function(data,
     if (isTRUE(inverse_direction)) {
       n <- -1 * n
     }
-    data[[n_col_name]] <- list_coordinates(n, cols)
+    data[[n_col_name]] <- list_coordinates_(n, cols)
   }
 
   data
-
 }

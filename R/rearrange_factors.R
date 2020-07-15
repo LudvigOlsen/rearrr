@@ -26,10 +26,11 @@ create_rearrange_factor_pair_extremes_ <- function(size, unequal_method = "middl
   # .. .. e.g. 1,2,3,4,4,3,2,1,5
   #
 
-  if (size == 1)
+  if (size == 1) {
     return(1)
+  }
   half_size <- floor(size / 2)
-  idx <- 1:(half_size)
+  idx <- seq_len(half_size)
   if (half_size * 2 == size) {
     return(c(idx, rev(idx)))
   } else {

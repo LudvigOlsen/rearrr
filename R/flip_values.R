@@ -15,6 +15,8 @@
 #'  latter can be useful when supplying a grouped \code{data.frame} and flipping around e.g. the centroid
 #'  of each group.
 #'
+#'  The \code{*_vec()} version take and return a vector.
+#'
 #'  \strong{Example}:
 #'
 #'  The column values:
@@ -33,35 +35,10 @@
 #'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin value to flip the values around.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
-#'
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @family mutate functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -77,8 +54,10 @@
 #'   "Index" = 1:10,
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
-#'   "G" = c(1, 1, 1, 2, 2,
-#'           2, 3, 3, 3, 3),
+#'   "G" = c(
+#'     1, 1, 1, 2, 2,
+#'     2, 3, 3, 3, 3
+#'   ),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -86,16 +65,20 @@
 #' flip_values(df$A)
 #' flip_values(df, cols = "A")
 #' flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
-#' flip_values(df, cols = c("A", "B"), origin = c(3, 0.3),
-#'             suffix = "",  keep_original = FALSE)
+#' flip_values(df,
+#'   cols = c("A", "B"), origin = c(3, 0.3),
+#'   suffix = "", keep_original = FALSE
+#' )
 #' flip_values(df, cols = c("A", "B"), origin_fn = create_origin_fn(max))
 #'
 #' # Grouped by G
 #' df %>%
 #'   dplyr::group_by(G) %>%
-#'   flip_values(cols = c("A", "B"),
-#'               origin_fn = create_origin_fn(median),
-#'               keep_original = FALSE)
+#'   flip_values(
+#'     cols = c("A", "B"),
+#'     origin_fn = create_origin_fn(median),
+#'     keep_original = FALSE
+#'   )
 #'
 #' # Plot A and flipped A
 #'
@@ -105,22 +88,22 @@
 #'   flip_values(cols = "A", suffix = "_flip_3", origin = 3, origin_col_name = NULL)
 #'
 #' # Plot A and A flipped around its median
-#' ggplot(df, aes(x=Index, y=A)) +
-#'   geom_line(aes(color="A")) +
-#'   geom_line(aes(y=A_flip_median, color="Flipped A (median)")) +
-#'   geom_hline(aes(color="Median A", yintercept = median(A))) +
+#' ggplot(df, aes(x = Index, y = A)) +
+#'   geom_line(aes(color = "A")) +
+#'   geom_line(aes(y = A_flip_median, color = "Flipped A (median)")) +
+#'   geom_hline(aes(color = "Median A", yintercept = median(A))) +
 #'   theme_minimal()
 #'
 #' # Plot A and A flipped around the value 3
-#' ggplot(df, aes(x=Index, y=A)) +
-#'   geom_line(aes(color="A")) +
-#'   geom_line(aes(y=A_flip_3, color="Flipped A (3)")) +
-#'   geom_hline(aes(color="3", yintercept = 3)) +
+#' ggplot(df, aes(x = Index, y = A)) +
+#'   geom_line(aes(color = "A")) +
+#'   geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
+#'   geom_hline(aes(color = "3", yintercept = 3)) +
 #'   theme_minimal()
 #' }
 flip_values <- function(data,
                         cols = NULL,
-                        origin = 0,
+                        origin = NULL,
                         origin_fn = create_origin_fn(median),
                         suffix = "_flipped",
                         keep_original = TRUE,
@@ -129,17 +112,19 @@ flip_values <- function(data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = flip_mutator_method,
+    mutate_fn = flip_mutator_method_,
     check_fn = NULL,
     suffix = suffix,
     keep_original = keep_original,
@@ -150,12 +135,30 @@ flip_values <- function(data,
   )
 }
 
-flip_mutator_method <- function(data,
-                                cols,
-                                suffix,
-                                origin,
-                                origin_fn,
-                                origin_col_name) {
+
+#' @rdname flip_values
+#' @export
+flip_values_vec <- function(data, origin = NULL, origin_fn = create_origin_fn(median)){
+  checkmate::assert_numeric(data)
+  flip_values(
+    data = data,
+    origin = origin,
+    origin_fn = origin_fn,
+    suffix = "",
+    keep_original = FALSE,
+    origin_col_name = NULL
+  )[[1]]
+}
+
+
+flip_mutator_method_ <- function(data,
+                                 grp_id,
+                                 cols,
+                                 suffix,
+                                 origin,
+                                 origin_fn,
+                                 origin_col_name,
+                                 ...) {
 
   # Number of dimensions
   # Each column is a dimension
@@ -165,7 +168,7 @@ flip_mutator_method <- function(data,
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -173,24 +176,27 @@ flip_mutator_method <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 
   # Flip around the origin
   dim_vectors <-
     purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      flip_around_(vec=.x, around = .y)
+      flip_around_(vec = .x, around = .y)
     })
 
   # Add dim_vectors as columns with the suffix
   data <-
-    add_dimensions(data = data,
-                   new_vectors = dim_vectors,
-                   suffix = suffix)
+    add_dimensions_(
+      data = data,
+      new_vectors = dim_vectors,
+      suffix = suffix
+    )
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
 
   data

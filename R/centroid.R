@@ -8,16 +8,18 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Calculates the mean for each of the passed vectors.
+#'  Calculates the mean of each passed \code{vector}/\code{column}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param ... Numeric vectors.
+#' @inheritParams apply_coord_fn_
 #' @param na.rm Whether to ignore missing values when calculating means. (Logical)
+#' @family coordinate functions
 #' @export
-#' @return \code{vector} with the means of each supplied vector.
+#' @return Means of the supplied \code{vectors}/\code{columns}. Either as a \code{vector} or a \code{data.frame}.
 #' @examples
 #' \donttest{
 #' # Attach packages
 #' library(rearrr)
+#' library(dplyr)
 #'
 #' # Set seed
 #' set.seed(1)
@@ -30,7 +32,35 @@
 #' # Find centroid coordinates
 #' # Aka. the means of each vector
 #' centroid(x, y, z)
+#'
+#' #
+#' # For data.frames
+#' #
+#'
+#' # Create data frame
+#' df <- data.frame(
+#'   "x" = x,
+#'   "y" = y,
+#'   "z" = z,
+#'   "g" = rep(1:2, each = 5)
+#' )
+#'
+#' # Find centroid coordinates
+#' # Aka. the means of each column
+#' centroid(df, cols = c("x", "y", "z"))
+#'
+#' # When 'df' is grouped
+#' df %>%
+#'   dplyr::group_by(g) %>%
+#'   centroid(cols = c("x", "y", "z"))
 #' }
-centroid <- function(..., na.rm = FALSE) {
-  create_origin_fn(mean, na.rm = na.rm)(...)
+centroid <- function(..., cols = NULL, na.rm = FALSE) {
+  # Apply centroid function
+  apply_coord_fn_(
+    ...,
+    cols = cols,
+    coord_fn = create_origin_fn(mean, na.rm = na.rm),
+    fn_name = "centroid_fn",
+    coordinate_name = "centroid"
+  )
 }

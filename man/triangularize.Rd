@@ -87,8 +87,10 @@ df_tri \%>\%
 # First cluster the groups a bit to move the
 # triangles away from each other
 df_tri <- df \%>\%
-  cluster_groups(cols = "y", group_cols = "g",
-                 suffix = "") \%>\%
+  cluster_groups(
+    cols = "y", group_cols = "g",
+    suffix = ""
+  ) \%>\%
   dplyr::group_by(g) \%>\%
   triangularize(y_col = "y")
 
@@ -123,22 +125,25 @@ df_tri <- triangularize(df, y_col = "y")
 # To contract with multiple multipliers at once,
 # we wrap the call in purrr::map_dfr
 df_expanded <- purrr::map_dfr(
-  .x = 1:10/10,
-  .f = function(mult){
+  .x = 1:10 / 10,
+  .f = function(mult) {
     expand_distances(
       data = df_tri,
       cols = c(".triangle_x", "y"),
       multiplier = mult,
-      origin_fn = centroid)
-  })
+      origin_fn = centroid
+    )
+  }
+)
 df_expanded
 
 df_expanded \%>\%
-  ggplot(aes(x = .triangle_x_expanded, y = y_expanded,
-             color = .edge, alpha = .multiplier)) +
+  ggplot(aes(
+    x = .triangle_x_expanded, y = y_expanded,
+    color = .edge, alpha = .multiplier
+  )) +
   geom_point() +
   theme_minimal()
-
 }
 }
 \seealso{

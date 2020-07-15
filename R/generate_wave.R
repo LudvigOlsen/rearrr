@@ -26,7 +26,7 @@
 #' @keywords internal
 #' @return y-values for the wave signal.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -41,7 +41,7 @@
 #' )
 #'
 #' # Generate sine wave
-#' df$sine <- generate_sine_wave(ts = df$x, freq = 1 / 50)
+#' df$sine <- rearrr:::generate_sine_wave(ts = df$x, freq = 1 / 50)
 #'
 #' df %>%
 #'   ggplot(aes(x = x, y = sine)) +
@@ -49,13 +49,12 @@
 #'   theme_minimal()
 #'
 #' # Generate cosine wave
-#' df$cosine <- generate_cosine_wave(ts = df$x, freq = 1 / 50)
+#' df$cosine <- rearrr:::generate_cosine_wave(ts = df$x, freq = 1 / 50)
 #'
 #' df %>%
 #'   ggplot(aes(x = x, y = cosine)) +
 #'   geom_path() +
 #'   theme_minimal()
-#'
 #' }
 generate_wave <- function(ts,
                           fs = 44100,

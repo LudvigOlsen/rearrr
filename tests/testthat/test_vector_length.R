@@ -47,7 +47,8 @@ test_that("testing vector_length()", {
   df <- data.frame(
     "x" = runif(20),
     "y" = runif(20),
-    "z" = runif(20)
+    "z" = runif(20),
+    stringsAsFactors = FALSE
   )
 
   # Rowwise
@@ -99,7 +100,7 @@ test_that("testing vector_length()", {
   # Colwise
   expect_equal(
     vector_length(df, cols = c("x", "y", "z"), by_row = FALSE) %>%
-      as.data.frame(),
+      as.data.frame(stringsAsFactors = FALSE),
     df %>%
       dplyr::summarise_all(.funs = function(x)sqrt(sum(x^2)))
   )
@@ -165,7 +166,8 @@ test_that("fuzz testing vector_length()", {
     "y" = runif(20),
     "z" = runif(20),
     "ch" = LETTERS[1:20],
-    "g" = rep(1:4, each=5)
+    "g" = rep(1:4, each=5),
+    stringsAsFactors = FALSE
   )
 
   # Generate expectations for 'vector_length'
@@ -222,9 +224,8 @@ test_that("fuzz testing vector_length()", {
     tolerance = 1e-4)
   expect_equal(
     output_19148[["ch"]],
-    structure(1:20, .Label = c("A", "B", "C", "D", "E", "F", "G", "H",
-      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"),
-      class = "factor"))
+    c("A", "B", "C", "D", "E", "F", "G", "H",
+      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"))
   expect_equal(
     output_19148[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
@@ -243,12 +244,12 @@ test_that("fuzz testing vector_length()", {
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19148),
-    c("numeric", "numeric", "numeric", "factor", "integer", "numeric"),
+    c("numeric", "numeric", "numeric", "character", "integer", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19148),
-    c("double", "double", "double", "integer", "integer", "double"),
+    c("double", "double", "double", "character", "integer", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
@@ -291,9 +292,8 @@ test_that("fuzz testing vector_length()", {
     tolerance = 1e-4)
   expect_equal(
     output_19370[["ch"]],
-    structure(1:20, .Label = c("A", "B", "C", "D", "E", "F", "G", "H",
-      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"),
-      class = "factor"))
+    c("A", "B", "C", "D", "E", "F", "G", "H",
+      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"))
   expect_equal(
     output_19370[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
@@ -312,12 +312,12 @@ test_that("fuzz testing vector_length()", {
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19370),
-    c("numeric", "numeric", "numeric", "factor", "integer", "numeric"),
+    c("numeric", "numeric", "numeric", "character", "integer", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19370),
-    c("double", "double", "double", "integer", "integer", "double"),
+    c("double", "double", "double", "character", "integer", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
@@ -468,9 +468,8 @@ test_that("fuzz testing vector_length()", {
     tolerance = 1e-4)
   expect_equal(
     output_16569[["ch"]],
-    structure(1:20, .Label = c("A", "B", "C", "D", "E", "F", "G", "H",
-      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"),
-      class = "factor"))
+    c("A", "B", "C", "D", "E", "F", "G", "H",
+      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"))
   expect_equal(
     output_16569[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
@@ -489,12 +488,12 @@ test_that("fuzz testing vector_length()", {
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_16569),
-    c("numeric", "numeric", "numeric", "factor", "integer", "numeric"),
+    c("numeric", "numeric", "numeric", "character", "integer", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_16569),
-    c("double", "double", "double", "integer", "integer", "double"),
+    c("double", "double", "double", "character", "integer", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
@@ -514,7 +513,7 @@ test_that("fuzz testing vector_length()", {
   side_effects_17050 <- xpectr::capture_side_effects(vector_length(data = df, cols = c("x", "y", "ch"), by_row = TRUE, len_col_name = ".vec_len"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''cols' columns': May only contain the following types: {numeric}, but element 3 has type\n * 'factor'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''cols' columns': May only contain the following types: {numeric}, but element 3 has type\n * 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error_class']]),
@@ -559,7 +558,7 @@ test_that("fuzz testing vector_length()", {
   side_effects_19346 <- xpectr::capture_side_effects(vector_length(data = df, cols = NULL, by_row = TRUE, len_col_name = ".vec_len"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
-    xpectr::strip("When 'data' is a data frame, 'cols' must be specified."),
+    xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error_class']]),
@@ -690,9 +689,8 @@ test_that("fuzz testing vector_length()", {
     tolerance = 1e-4)
   expect_equal(
     output_11174[["ch"]],
-    structure(1:20, .Label = c("A", "B", "C", "D", "E", "F", "G", "H",
-      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"),
-      class = "factor"))
+    c("A", "B", "C", "D", "E", "F", "G", "H",
+      "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"))
   expect_equal(
     output_11174[["g"]],
     c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4),
@@ -711,12 +709,12 @@ test_that("fuzz testing vector_length()", {
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_11174),
-    c("numeric", "numeric", "numeric", "factor", "integer", "numeric"),
+    c("numeric", "numeric", "numeric", "character", "integer", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_11174),
-    c("double", "double", "double", "integer", "integer", "double"),
+    c("double", "double", "double", "character", "integer", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(

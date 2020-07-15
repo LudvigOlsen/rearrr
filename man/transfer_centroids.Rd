@@ -45,10 +45,12 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = c(1, 1, 1, 1, 1,
-          2, 2, 2, 2, 2,
-          3, 3, 3, 3, 3,
-          4, 4, 4, 4, 4)
+  "g" = c(
+    1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2,
+    3, 3, 3, 3, 3,
+    4, 4, 4, 4, 4
+  )
 )
 
 # Create another data frame with different x and y values
@@ -79,7 +81,6 @@ df3 <- transfer_centroids(
 df3 \%>\%
   dplyr::group_by(g) \%>\%
   dplyr::summarize_all(mean)
-
 }
 }
 \seealso{

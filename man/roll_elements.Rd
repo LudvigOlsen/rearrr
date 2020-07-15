@@ -91,7 +91,7 @@ set.seed(1)
 # Create a data frame
 df <- data.frame(
   "x" = 1:20,
-  "y" = runif(20)*10,
+  "y" = runif(20) * 10,
   "g" = rep(1:4, each = 5)
 )
 
@@ -111,7 +111,6 @@ roll_elements(
   n_fn = median_index,
   negate = TRUE
 )
-
 }
 }
 \seealso{

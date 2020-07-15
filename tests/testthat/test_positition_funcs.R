@@ -418,10 +418,12 @@ test_that("fuzz testing position_max()", {
   # Testing side effects
   # Assigning side effects
   side_effects_17050 <- xpectr::capture_side_effects(position_max(data = df, col = NULL, position = 0, shuffle_sides = FALSE), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_17050[['error']]),
-    xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_number(position): Element 1 is not >= 1e-20\n * checkmate::check_count(position): Must be >= 1"),
-    fixed = TRUE)
+  # CHANGED: On some platforms, the 1e-20 is apparently converted to 1e020
+  expect_true(
+    xpectr::strip(side_effects_17050[['error']]) %in% c(
+      xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_number(position): Element 1 is not >= 1e-20\n * checkmate::check_count(position): Must be >= 1"),
+      xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_number(position): Element 1 is not >= 1e020\n * checkmate::check_count(position): Must be >= 1")
+    ))
   expect_equal(
     xpectr::strip(side_effects_17050[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
@@ -1077,10 +1079,12 @@ test_that("fuzz testing position_min()", {
   # Testing side effects
   # Assigning side effects
   side_effects_17050 <- xpectr::capture_side_effects(position_min(data = df, col = NULL, position = 0, shuffle_sides = FALSE), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_17050[['error']]),
-    xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_number(position): Element 1 is not >= 1e-20\n * checkmate::check_count(position): Must be >= 1"),
-    fixed = TRUE)
+  # CHANGED: On some platforms, the 1e-20 is apparently converted to 1e020
+  expect_true(
+    xpectr::strip(side_effects_17050[['error']]) %in% c(
+      xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_number(position): Element 1 is not >= 1e-20\n * checkmate::check_count(position): Must be >= 1"),
+      xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_number(position): Element 1 is not >= 1e020\n * checkmate::check_count(position): Must be >= 1")
+    ))
   expect_equal(
     xpectr::strip(side_effects_17050[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),

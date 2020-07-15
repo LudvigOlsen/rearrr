@@ -80,14 +80,20 @@ df <- data.frame(
 )
 
 # Move the data points into clusters
-cluster_groups(df, cols = c("x", "y"),
-               group_col = "g")
-cluster_groups(df, cols = c("x", "y"),
-               group_col = "g",
-               multiplier = 0.1)
-cluster_groups(df, cols = c("x"),
-               group_col = "g",
-               multiplier = 0.1)
+cluster_groups(df,
+  cols = c("x", "y"),
+  group_col = "g"
+)
+cluster_groups(df,
+  cols = c("x", "y"),
+  group_col = "g",
+  multiplier = 0.1
+)
+cluster_groups(df,
+  cols = c("x"),
+  group_col = "g",
+  multiplier = 0.1
+)
 
 #
 # Plotting clusters
@@ -97,7 +103,8 @@ cluster_groups(df, cols = c("x"),
 df_clustered <- cluster_groups(
   data = df,
   cols = c("x", "y"),
-  group_col = "g")
+  group_col = "g"
+)
 
 # Plot the clusters over the original data points
 # As we work with random data, the cluster might overlap
@@ -118,9 +125,10 @@ ggplot(
 
 df_clustered <- cluster_groups(
   data = df,
-  cols=c("x", "y"),
+  cols = c("x", "y"),
   group_col = "g",
-  keep_centroids = TRUE)
+  keep_centroids = TRUE
+)
 
 # Plot the clusters over the original data points
 # As we work with random data, the cluster might overlap
@@ -142,20 +150,19 @@ ggplot(
 # Cluster in 3d
 df_clustered <- cluster_groups(
   data = df,
-  cols=c("x", "y", "z"),
+  cols = c("x", "y", "z"),
   group_col = "g"
 )
 
 # Plot 3d with plotly
 plotly::plot_ly(
-  x=df_clustered$x_clustered,
-  y=df_clustered$y_clustered,
-  z=df_clustered$z_clustered,
-  type="scatter3d",
-  mode="markers",
-  color=df_clustered$g
+  x = df_clustered$x_clustered,
+  y = df_clustered$y_clustered,
+  z = df_clustered$z_clustered,
+  type = "scatter3d",
+  mode = "markers",
+  color = df_clustered$g
 )
-
 }
 }
 \seealso{

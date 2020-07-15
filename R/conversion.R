@@ -27,13 +27,14 @@
 #' # Get back the original degrees
 #' radians_to_degrees(degrees_to_radians(c(90, 180, 270)))
 #' }
-degrees_to_radians <- function(degrees){
+degrees_to_radians <- function(degrees) {
   checkmate::assert_numeric(degrees)
   degrees * (pi / 180)
 }
 
 #' @rdname degrees_to_radians
-radians_to_degrees <- function(radians){
+#' @export
+radians_to_degrees <- function(radians) {
   checkmate::assert_numeric(radians)
   radians / (pi / 180)
 }

@@ -25,30 +25,19 @@ or a \code{vector} with one constant per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to calculate distances to.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a \code{vector} with one constant per dimension.
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
 }
@@ -94,8 +83,10 @@ df <- data.frame(
   "index" = 1:10,
   "A" = sample(1:10),
   "B" = runif(10),
-  "G" = c(1, 1, 1, 2, 2,
-          2, 3, 3, 3, 3),
+  "G" = c(
+    1, 1, 1, 2, 2,
+    2, 3, 3, 3, 3
+  ),
   stringsAsFactors = FALSE
 )
 
@@ -109,29 +100,37 @@ furthest_from(df, cols = "B", origin = 0.5)$B
 furthest_from(df, cols = "B", origin_fn = centroid)$B
 
 # Shuffle the elements with the same distance to the origin
-furthest_from(df, cols = "A",
-              origin_fn = create_origin_fn(median),
-              shuffle_ties = TRUE)$A
+furthest_from(df,
+  cols = "A",
+  origin_fn = create_origin_fn(median),
+  shuffle_ties = TRUE
+)$A
 
 # Grouped by G
 df \%>\%
-  dplyr::select(G, A) \%>\%  # For clarity
+  dplyr::select(G, A) \%>\% # For clarity
   dplyr::group_by(G) \%>\%
-  furthest_from(cols = "A",
-                origin_fn = create_origin_fn(median))
+  furthest_from(
+    cols = "A",
+    origin_fn = create_origin_fn(median)
+  )
 
 # Plot the centered values
 plot(
   x = 1:10,
-  y = furthest_from(df, cols = "B",
-                    origin_fn = create_origin_fn(median))$B,
+  y = furthest_from(df,
+    cols = "B",
+    origin_fn = create_origin_fn(median)
+  )$B,
   xlab = "Position", ylab = "B"
 )
 plot(
   x = 1:10,
-  y = furthest_from(df, cols = "A",
-                    origin_fn = create_origin_fn(median),
-                    shuffle_ties = TRUE)$A,
+  y = furthest_from(df,
+    cols = "A",
+    origin_fn = create_origin_fn(median),
+    shuffle_ties = TRUE
+  )$A,
   xlab = "Position", ylab = "A"
 )
 

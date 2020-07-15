@@ -9,10 +9,12 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Calculates the angle between each data point and the origin with:
+#'  Calculates the angle between each data point \eqn{(x2, y2)} and the origin \eqn{(x1, y1)} with:
 #'  \deqn{atan2(y2 - y1, x2 - x1)}
 #'
-#'  And converts to degrees (\code{0-360}), measured counterclockwise from the \code{(x > 0, y = 0)} line.
+#'  And converts to degrees \code{[0-360)}, measured counterclockwise from the \code{\{x > x1, y = y1\}} line.
+#'
+#'  \ifelse{html}{\out{<img src='figures/angle_wheel.jpg' width="120" alt='Angles wheel'>}}{}
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
 #'  latter can be useful when supplying a grouped \code{data.frame} and finding the angle to e.g. the centroid
@@ -27,35 +29,11 @@
 #'  or a \code{vector} with one constant per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to calculate angle to.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param degrees_col_name Name of new column with the degrees.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the additional columns (degrees and origin coordinates).
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @family measuring functions
 #' @examples
 #' \donttest{
@@ -71,7 +49,7 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = rep(1:4, each=5)
+#'   "g" = rep(1:4, each = 5)
 #' )
 #'
 #' # Calculate angles in the two dimensions (x and y)
@@ -100,15 +78,14 @@
 #'   y_col = "y",
 #'   origin_fn = centroid
 #' )
-#'
 #' }
 angle <- function(data,
-                    x_col = NULL,
-                    y_col = NULL,
-                    origin = c(0, 0),
-                    origin_fn = NULL,
-                    degrees_col_name = ".degrees",
-                    origin_col_name = ".origin") {
+                  x_col = NULL,
+                  y_col = NULL,
+                  origin = c(0, 0),
+                  origin_fn = NULL,
+                  degrees_col_name = ".degrees",
+                  origin_col_name = ".origin") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(degrees_col_name, add = assert_collection)
@@ -116,17 +93,18 @@ angle <- function(data,
   checkmate::assert_string(y_col, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            min.len = 1,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    min.len = 1,
+    any.missing = FALSE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = angle_mutator_method,
+    mutate_fn = angle_mutator_method_,
     check_fn = NULL,
     min_dims = 2,
     cols = c(x_col, y_col),
@@ -137,23 +115,23 @@ angle <- function(data,
     degrees_col_name = degrees_col_name,
     origin_col_name = origin_col_name
   )
-
 }
 
 
-angle_mutator_method <- function(data,
-                                 cols,
-                                 origin,
-                                 origin_fn,
-                                 degrees_col_name,
-                                 origin_col_name,
-                                 ...) {
+angle_mutator_method_ <- function(data,
+                                  grp_id,
+                                  cols,
+                                  origin,
+                                  origin_fn,
+                                  degrees_col_name,
+                                  origin_col_name,
+                                  ...) {
 
   # Convert columns to list of vectors
   dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -161,21 +139,25 @@ angle_mutator_method <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "c(x_col, y_col)",
+    grp_id = grp_id,
     allow_len_one = TRUE
   )
 
-  data[[degrees_col_name]] <- atan2(data[[cols[[2]]]] - origin[[2]],
-                                    data[[cols[[1]]]] - origin[[1]])
+  data[[degrees_col_name]] <- atan2(
+    data[[cols[[2]]]] - origin[[2]],
+    data[[cols[[1]]]] - origin[[1]]
+  )
   data[[degrees_col_name]] <-
     radians_to_degrees(data[[degrees_col_name]])
   data[[degrees_col_name]] <-
     ifelse(sign(data[[degrees_col_name]]) < 0,
-           360 + data[[degrees_col_name]],
-           data[[degrees_col_name]])
+      360 + data[[degrees_col_name]],
+      data[[degrees_col_name]]
+    )
 
   # Info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, cols)
   }
 
   data

@@ -29,31 +29,6 @@
 #' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
 #' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param origin_fn Function for finding the origin coordinates to swirl the values around.
-#'  Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values,
-#'  a \code{vector} with y-values, and a \code{vector} with z-values).
-#'  It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y, origin_z).
-#'
-#'  Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
-#'  the same function to each dimension.
-#'
-#'  E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
-#'
-#'  \code{create_origin_fn(mean)}
-#'
-#'  Which returns the following function:
-#'
-#'  \code{function(...)\{}
-#'
-#'  \verb{  }\code{list(...) \%>\%}
-#'
-#'  \verb{    }\code{purrr::map(mean) \%>\%}
-#'
-#'  \verb{    }\code{unlist(recursive = TRUE,}
-#'
-#'  \verb{           }\code{use.names = FALSE)}
-#'
-#'  \code{\}}
 #' @param scale_fn Function for scaling the distances before calculating the degrees.
 #'  Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
 #'  return a \code{numeric vector} (the scaled distances) of the same length. E.g.:
@@ -73,7 +48,7 @@
 #' @return \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
 #' @family mutate functions
 #' @family rotation functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -92,11 +67,18 @@
 #'   "r1" = runif(50),
 #'   "r2" = runif(50) * 35,
 #'   "o" = 1,
-#'   "g" = rep(1:5, each=10)
+#'   "g" = rep(1:5, each = 10)
 #' )
 #'
-#' # Swirl values
-#' swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z")
+#' # Swirl values around (0, 0, 0)
+#' swirl_3d(
+#'   data = df,
+#'   x_radius = 45,
+#'   x_col = "x",
+#'   y_col = "y",
+#'   z_col = "z",
+#'   origin = c(0, 0, 0)
+#' )
 #'
 #' # Swirl around the centroid
 #' df_swirled <- swirl_3d(
@@ -114,8 +96,8 @@
 #'
 #' # Plot swirls
 #' ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_path(alpha = .4) +
 #'   geom_point() +
 #'   theme_minimal() +
@@ -147,8 +129,8 @@
 #'
 #' # Plot swirls
 #' ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_path(alpha = .4) +
 #'   geom_point() +
 #'   theme_minimal() +
@@ -180,8 +162,8 @@
 #'
 #' # Plot swirls
 #' ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_path(alpha = .4) +
 #'   geom_point() +
 #'   theme_minimal() +
@@ -224,34 +206,40 @@
 #'     y_deg = rep(0, 36),
 #'     z_deg = (1:36) * 10,
 #'     suffix = "",
-#'     origin = df_swirled$.origin[[1]])
+#'     origin = df_swirled$.origin[[1]]
+#'   )
 #'
 #' # Plot rotated swirls
-#' ggplot(df_rotated,
-#'        aes(x = r1_swirled, y = r2_swirled,
-#'            color = .degrees_str, alpha = o_swirled)) +
-#'   geom_vline(xintercept = mean(df$r1), size = 0.2, alpha = .4, linetype="dashed") +
-#'   geom_hline(yintercept = mean(df$r2), size = 0.2, alpha = .4, linetype="dashed") +
+#' ggplot(
+#'   df_rotated,
+#'   aes(
+#'     x = r1_swirled,
+#'     y = r2_swirled,
+#'     color = .degrees_str,
+#'     alpha = o_swirled
+#'   )
+#' ) +
+#'   geom_vline(xintercept = mean(df$r1), size = 0.2, alpha = .4, linetype = "dashed") +
+#'   geom_hline(yintercept = mean(df$r2), size = 0.2, alpha = .4, linetype = "dashed") +
 #'   geom_point(show.legend = FALSE) +
 #'   theme_minimal() +
 #'   labs(x = "r1", y = "r2", color = "radius", alpha = "o (opacity)")
-#'
 #' }
 swirl_3d <- function(data,
-                    x_col,
-                    y_col,
-                    z_col,
-                    x_radius = 0,
-                    y_radius = 0,
-                    z_radius = 0,
-                    suffix = "_swirled",
-                    origin = c(0, 0, 0),
-                    origin_fn = NULL,
-                    scale_fn = identity,
-                    keep_original = TRUE,
-                    degrees_col_name = ".degrees",
-                    radius_col_name = ".radius",
-                    origin_col_name = ".origin") {
+                     x_col,
+                     y_col,
+                     z_col,
+                     x_radius = 0,
+                     y_radius = 0,
+                     z_radius = 0,
+                     suffix = "_swirled",
+                     origin = NULL,
+                     origin_fn = NULL,
+                     scale_fn = identity,
+                     keep_original = TRUE,
+                     degrees_col_name = ".degrees",
+                     radius_col_name = ".radius",
+                     origin_col_name = ".origin") {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -282,9 +270,11 @@ swirl_3d <- function(data,
   checkmate::assert_string(radius_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_numeric(origin,
-                            len = 3,
-                            any.missing = FALSE,
-                            add = assert_collection)
+    len = 3,
+    any.missing = FALSE,
+    null.ok = TRUE,
+    add = assert_collection
+  )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(scale_fn, nargs = 1, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -315,9 +305,9 @@ swirl_3d <- function(data,
     .x = purrr::transpose(list(x_radius, y_radius, z_radius)) %>%
       purrr::simplify_all(),
     .f = function(radiuses) {
-      out <- multi_mutator(
+      out <- multi_mutator_(
         data = data,
-        mutate_fn = swirl_3d_mutator_method,
+        mutate_fn = swirl_3d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
         min_dims = 3,
@@ -335,9 +325,10 @@ swirl_3d <- function(data,
       )
 
       if (!is.null(radius_col_name)) {
-        out[[radius_col_name]] <- list_coordinates(
+        out[[radius_col_name]] <- list_coordinates_(
           radiuses,
-          names = c(x_col, y_col, z_col))
+          names = c(x_col, y_col, z_col)
+        )
       }
 
 
@@ -346,24 +337,25 @@ swirl_3d <- function(data,
   )
 
   if (!is.null(radius_col_name)) {
-    output <- paste_coordinates_column(output, radius_col_name)
+    output <- paste_coordinates_column_(output, radius_col_name)
   }
 
   output
-
 }
 
-swirl_3d_mutator_method <- function(data,
-                                    cols,
-                                    x_radius,
-                                    y_radius,
-                                    z_radius,
-                                    scale_fn,
-                                    suffix,
-                                    origin,
-                                    origin_fn,
-                                    degrees_col_name,
-                                    origin_col_name) {
+swirl_3d_mutator_method_ <- function(data,
+                                     grp_id,
+                                     cols,
+                                     x_radius,
+                                     y_radius,
+                                     z_radius,
+                                     scale_fn,
+                                     suffix,
+                                     origin,
+                                     origin_fn,
+                                     degrees_col_name,
+                                     origin_col_name,
+                                     ...) {
 
   # Extract columns
   x_col <- cols[[1]]
@@ -371,10 +363,10 @@ swirl_3d_mutator_method <- function(data,
   z_col <- cols[[3]]
 
   # Convert columns to list of vectors
-  dim_vectors <- as.list(data[, cols, drop=FALSE])
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
-  origin <- apply_coordinate_fn(
+  origin <- apply_coordinate_fn_(
     dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
@@ -382,30 +374,33 @@ swirl_3d_mutator_method <- function(data,
     coordinate_name = "origin",
     fn_name = "origin_fn",
     dim_var_name = "cols",
+    grp_id = grp_id,
     allow_len_one = FALSE
   )
 
   # Calculate distances to origin
-  distances <- calculate_distances(dim_vectors = dim_vectors, to = origin)
+  distances <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
   # Scale distances
   scaled_distances <- scale_fn(distances)
 
-  if (length(scaled_distances) != length(distances)){
+  if (length(scaled_distances) != length(distances)) {
     stop("the output of 'scale_fn' must have the same length as the input.")
   }
 
   # Convert distances to degrees
-  x_degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = x_radius)
-  y_degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = y_radius)
-  z_degrees <- calculate_swirl_degrees(distances = scaled_distances, radius = z_radius)
+  x_degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = x_radius)
+  y_degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = y_radius)
+  z_degrees <- calculate_swirl_degrees_(distances = scaled_distances, radius = z_radius)
 
   # Add degrees column
   deg_tmp_var <- create_tmp_var(data = data, tmp_var = ".__degrees__", disallowed = degrees_col_name)
   data[[deg_tmp_var]] <- list(x_degrees, y_degrees, z_degrees) %>%
     purrr::transpose() %>%
     purrr::simplify_all() %>%
-    purrr::map( ~{setNames(.x, cols)})
+    purrr::map(~ {
+      setNames(.x, cols)
+    })
 
   # Call rotate_3d for each unique distance
   data <- purrr::map_dfr(.x = split(data, f = scaled_distances), .f = ~ {
@@ -427,7 +422,7 @@ swirl_3d_mutator_method <- function(data,
 
   # Add info columns
   if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates(origin, names = cols)
+    data[[origin_col_name]] <- list_coordinates_(origin, names = cols)
   }
   if (!is.null(degrees_col_name)) {
     data[[degrees_col_name]] <- data[[deg_tmp_var]]

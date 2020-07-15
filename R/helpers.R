@@ -9,7 +9,7 @@
 ##  Is correctly positioned                                                 ####
 
 
-is_correctly_positioned <-
+is_correctly_positioned_ <-
   function(data, col, position, what = "max") {
     target_val <-
       ifelse(what == "max", max(data[[col]]), min(data[[col]]))
@@ -21,7 +21,7 @@ is_correctly_positioned <-
 ##  Swap values                                                             ####
 
 
-swap_values <- function(vec, v1, v2) {
+swap_values_ <- function(vec, v1, v2) {
   v1_ind <- vec[vec == v1]
   v2_ind <- vec[vec == v2]
   vec[v1_ind] <- v2
@@ -34,7 +34,7 @@ swap_values <- function(vec, v1, v2) {
 ##  Base helpers                                                            ####
 
 
-base_rename <-
+base_rename_ <-
   function(data, before, after, warn_at_overwrite = FALSE) {
     #
     # Replaces name of column in data frame
@@ -65,24 +65,25 @@ base_rename <-
   }
 
 # Cols should be col names
-base_select <- function(data, cols) {
+base_select_ <- function(data, cols) {
   tryCatch(
     subset(data, select = cols),
     error = function(e) {
       if (grepl("is missing", e)) {
-        stop("base_select() only work on data frames.")
+        stop("base_select_() only work on data.frames.")
       } else {
-        stop(paste0("base_select() got error from subset(): ", e))
+        stop(paste0("base_select_() got error from subset(): ", e))
       }
     }
   )
 }
 
 # Cols should be col names
-base_deselect <- function(data, cols) {
-  if (!is.character(cols))
+base_deselect_ <- function(data, cols) {
+  if (!is.character(cols)) {
     stop("cols must be names")
-  base_select(data = data, cols = setdiff(names(data), cols))
+  }
+  base_select_(data = data, cols = setdiff(names(data), cols))
 }
 
 
@@ -91,14 +92,15 @@ base_deselect <- function(data, cols) {
 
 
 # Col should be col name
-position_first <- function(data, col) {
-  if (is.numeric(col))
-    stop("col must be name")
+position_first_ <- function(data, col) {
+  if (is.numeric(col)) {
+    stop("'col' must be a name.")
+  }
   # if(is.data.table(data)){
   #   return(data[, c(col, setdiff(names(data), col)), with = FALSE])
   # }
 
-  base_select(data = data, cols = c(col, setdiff(names(data), col)))
+  base_select_(data = data, cols = c(col, setdiff(names(data), col)))
 }
 
 
@@ -108,10 +110,11 @@ position_first <- function(data, col) {
 
 # insertRow2 from https://stackoverflow.com/a/11587051/11832955
 # Note: May not work with rownames!
-insert_row <- function(data, new_row, after) {
+insert_row_ <- function(data, new_row, after) {
   data <- rbind(data, new_row)
-  data <- data[order(c(seq_len(nrow(data) - 1), after + 0.5)),
-               , drop = FALSE] # extra comma on purpose
+  data <- data[order(c(seq_len(nrow(data) - 1), after + 0.5)), ,
+    drop = FALSE
+  ] # extra comma on purpose
   row.names(data) <- NULL
   data
 }
@@ -123,18 +126,17 @@ insert_row <- function(data, new_row, after) {
 
 # Add underscore until var name is unique
 # arg disallowed can add extra things not to be named as
-create_tmp_var <-
-  function(data,
-           tmp_var = ".tmp_index_",
-           disallowed = NULL) {
-    # Extract the disallowed names
-    disallowed <- c(colnames(data), disallowed)
+create_tmp_var <- function(data,
+                           tmp_var = ".tmp_index_",
+                           disallowed = NULL) {
+  # Extract the disallowed names
+  disallowed <- c(colnames(data), disallowed)
 
-    while (tmp_var %in% disallowed) {
-      tmp_var <- paste0(tmp_var, "_")
-    }
-    tmp_var
+  while (tmp_var %in% disallowed) {
+    tmp_var <- paste0(tmp_var, "_")
   }
+  tmp_var
+}
 
 
 ##  .................. #< 3abfddeb36aa8dd83aab2d14c948a5fc ># ..................
@@ -143,18 +145,17 @@ create_tmp_var <-
 
 # Add underscore until value is unique in the vector
 # arg disallowed can add extra things not to be named as
-create_tmp_val <-
-  function(v,
-           tmp_val = ".tmp_val_",
-           disallowed = NULL) {
-    # Extract the disallowed names
-    disallowed <- c(unique(v), disallowed)
+create_tmp_val <- function(v,
+                           tmp_val = ".tmp_val_",
+                           disallowed = NULL) {
+  # Extract the disallowed names
+  disallowed <- c(unique(v), disallowed)
 
-    while (tmp_val %in% disallowed) {
-      tmp_val <- paste0(tmp_val, "_")
-    }
-    tmp_val
+  while (tmp_val %in% disallowed) {
+    tmp_val <- paste0(tmp_val, "_")
   }
+  tmp_val
+}
 
 
 ##  .................. #< e0e05520eb560f3113652056facb7c8f ># ..................
@@ -180,49 +181,53 @@ is_between_ <- function(x, a, b) {
 ##  Greedy windows                                                          ####
 
 
-greedy_windows <-
-  function(data, window_size, factor_name = ".window") {
-    # Check arguments ####
-    assert_collection <- checkmate::makeAssertCollection()
-    checkmate::assert_data_frame(data,
-                                 min.cols = 1,
-                                 min.rows = 1,
-                                 add = assert_collection)
-    checkmate::assert_number(window_size, lower = 1, add = assert_collection)
-    checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
-    checkmate::reportAssertions(assert_collection)
-    # End of argument checks ####
 
-    size <- nrow(data)
-    num_windows <- ceiling(size / window_size)
-    windows <- rep(seq_len(num_windows), each = window_size)
-    data[[factor_name]] <- factor(head(windows, size))
-    data
-  }
+greedy_windows_ <- function(data,
+                            window_size,
+                            factor_name = ".window") {
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data,
+    min.cols = 1,
+    min.rows = 1,
+    add = assert_collection
+  )
+  checkmate::assert_number(window_size, lower = 1, add = assert_collection)
+  checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  size <- nrow(data)
+  num_windows <- ceiling(size / window_size)
+  windows <- rep(seq_len(num_windows), each = window_size)
+  data[[factor_name]] <- factor(head(windows, size))
+  data
+}
 
 
 ##  .................. #< 160fb806ead6df367e8121d143d788b6 ># ..................
 ##  Windows n-distributed                                                   ####
 
-ndist_windows <-
-  function(data, num_windows, factor_name  = ".window") {
-    # Check arguments ####
-    assert_collection <- checkmate::makeAssertCollection()
-    checkmate::assert_data_frame(data, add = assert_collection)
-    checkmate::assert_number(num_windows, lower = 1,  add = assert_collection)
-    checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
-    checkmate::reportAssertions(assert_collection)
-    if (num_windows > nrow(data)) {
-      assert_collection$push("'num_windows' was greater than the number of rows in 'data'.")
-    }
-    checkmate::reportAssertions(assert_collection)
-    # End of argument checks ####
-
-    data[[factor_name]] <-
-      n_dist_group_factor_(v_size = nrow(data), n_windows = num_windows)
-
-    data
+ndist_windows_ <- function(data,
+                           num_windows,
+                           factor_name = ".window") {
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_number(num_windows, lower = 1, add = assert_collection)
+  checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (num_windows > nrow(data)) {
+    assert_collection$push("'num_windows' was greater than the number of rows in 'data'.")
   }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  data[[factor_name]] <-
+    n_dist_group_factor_(v_size = nrow(data), n_windows = num_windows)
+
+  data
+}
 
 
 n_dist_group_factor_ <- function(v_size, n_windows) {
@@ -276,39 +281,117 @@ n_dist_group_factor_ <- function(v_size, n_windows) {
   }
 
   factor(grouping_factor)
-
 }
 
 
-#   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
+##  .................. #< 60cfc78f594e5611a6eaaf34a2b212ae ># ..................
+##  Range outliers                                                          ####
+
+split_range_outliers_ <- function(data,
+                                 col,
+                                 .min = NULL,
+                                 .max = NULL) {
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_string(col, min.chars = 1, add = assert_collection)
+  checkmate::assert_number(.min, finite = TRUE, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_number(.max, finite = TRUE, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (col %ni% colnames(data)){
+    assert_collection$push("'col' not found in 'data'.")
+  }
+  if (!is.null(.min) && !is.null(.max) && .min >= .max){
+    assert_collection$push("'.min' must be smaller than .max or 'NULL'.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+  rownames(data) <- NULL
+
+  # Create min/max masks (bools)
+  if (!is.null(.min)){
+    min_mask <- data[[col]] < .min
+  } else {
+    min_mask <- rep(0, nrow(data))
+  }
+  if (!is.null(.max)){
+    max_mask <- data[[col]] > .max
+  } else {
+    max_mask <- rep(0, nrow(data))
+  }
+
+  mask <- (min_mask + max_mask) == 1
+  outlier_inds <- seq_len(nrow(data))[mask]
+  if (length(outlier_inds) == 0){
+    outliers <- data[-seq_len(nrow(data)), ]
+  } else {
+    outliers <- data[outlier_inds, ]
+    data <- data[-outlier_inds, ]
+  }
+  list("data" = data,
+       "outliers" = outliers)
+}
+
+add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE){
+  if (isTRUE(as_list))
+    data[[col]] <- rep(list(val), nrow(data))
+  else
+    data[[col]] <- rep(val, nrow(data))
+  data
+}
+
+
+##  .................. #< 385b0b542a569ee6b885fc0849f644a6 ># ..................
+##  Input helpers                                                           ####
+
+
+
 
 ##  .................. #< 4405b38854cdc7cc63ac70477e1c9953 ># ..................
 ##  Output helpers                                                          ####
 
+
 # When 1 coordinate but multiple names, it recycles the coordinate
-list_coordinates <- function(coordinates, names) {
+list_coordinates_ <- function(coordinates, names) {
+  checkmate::assert(
+    checkmate::check_numeric(coordinates),
+    checkmate::check_list(coordinates, types = "numeric")
+  )
+  checkmate::assert_character(names, any.missing = FALSE,
+                              min.chars = 1, unique = TRUE)
   if (length(coordinates) == 1 && length(names) > 1) {
     coordinates <- rep(coordinates, length(names))
+  }
+  if (length(coordinates) > 1 &&
+      length(coordinates) != length(names)) {
+    stop(
+      paste0(
+        "When 'coordinates' has length >1, 'coordinates' and 'names'",
+        " must have same length."
+      )
+    )
   }
   list(setNames(coordinates, names))
 }
 
 # Paste a list column where each element is c(x = 1, y = d)
-paste_coordinates_column <- function(data, col) {
+paste_coordinates_column_ <- function(data, col) {
   str_name <- paste0(col, "_str")
+  # data[[col]] <- purrr::map(.x = data[[col]], .f = ~{purrr::map(.f = round(.x, digits = digits))})
   data[[str_name]] <- paste0(data[[col]])
-  data[[str_name]] <-  substr(data[[str_name]],
-                              start = 3,
-                              stop = nchar(data[[str_name]]) - 1)
+  data[[str_name]] <- substr(data[[str_name]],
+    start = 3,
+    stop = nchar(data[[str_name]]) - 1
+  )
   data[[str_name]] <- gsub("[[:blank:]]+", "", data[[str_name]])
 
   data
 }
 
-paste_ranges_column <- function(data,
-                                col,
-                                include_min = TRUE,
-                                include_max = TRUE) {
+paste_ranges_column_ <- function(data,
+                                 col,
+                                 include_min = TRUE,
+                                 include_max = TRUE) {
   str_name <- paste0(col, "_str")
   outer_is_list <- is.list(data[[col]][[1]])
   data[[str_name]] <- data[[col]] %>%
@@ -316,27 +399,32 @@ paste_ranges_column <- function(data,
       purrr::map(.x, .f = unname)
     })
   data[[str_name]] <- paste0(data[[str_name]])
-  data[[str_name]] <-  substr(data[[str_name]],
-                              start = ifelse(outer_is_list, 6, 3),
-                              stop = nchar(data[[str_name]]) - 1)
+  data[[str_name]] <- substr(data[[str_name]],
+    start = ifelse(outer_is_list, 6, 3),
+    stop = nchar(data[[str_name]]) - 1
+  )
   data[[str_name]] <- gsub("[[:blank:]]+", "", data[[str_name]])
   data[[str_name]] <- gsub("c", "", data[[str_name]])
-  if (isTRUE(include_min))
+  if (isTRUE(include_min)) {
     data[[str_name]] <- gsub("\\(", "[", data[[str_name]])
-  if (isTRUE(include_max))
+  }
+  if (isTRUE(include_max)) {
     data[[str_name]] <- gsub("\\)", "]", data[[str_name]])
+  }
 
   data
 }
 
-add_dimensions <- function(data,
-                           new_vectors,
-                           suffix = "",
-                           overwrite = TRUE) {
+add_dimensions_ <- function(data,
+                            new_vectors,
+                            suffix = "",
+                            overwrite = TRUE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, add = assert_collection)
-  checkmate::assert_list(new_vectors, add = assert_collection)
+  checkmate::assert_list(new_vectors, names = "unique",
+                         types = c("numeric", "character", "factor"),
+                         add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
   checkmate::assert_flag(overwrite, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -349,7 +437,7 @@ add_dimensions <- function(data,
   new_data <- data.frame(new_vectors, stringsAsFactors = FALSE)
 
   if (!isTRUE(overwrite) &&
-      length(intersect(colnames(new_data), colnames(data))) > 0) {
+    length(intersect(colnames(new_data), colnames(data))) > 0) {
     stop(
       paste0(
         "Cannot add these dimensions without overwriting existing columns: ",
@@ -376,8 +464,8 @@ add_dimensions <- function(data,
 ##  .................. #< cb9942d54f8fa35406de031d066531dc ># ..................
 ##  Conversions                                                             ####
 
-calculate_swirl_degrees <- function(distances, radius) {
-  checkmate::assert_numeric(distances, any.missing = FALSE)
+calculate_swirl_degrees_ <- function(distances, radius) {
+  checkmate::assert_numeric(distances, lower = 0, any.missing = FALSE)
   checkmate::assert_number(radius)
   if (radius == 0) {
     return(distances * 0)
@@ -385,10 +473,8 @@ calculate_swirl_degrees <- function(distances, radius) {
   (distances / (2 * radius) * 360) %% 360
 }
 
-
 ##  .................. #< 60cfc78f594e5611a6eaaf34a2b212ae ># ..................
 ##  Package imports                                                         ####
-
 
 
 #' @importFrom dplyr %>%
@@ -399,5 +485,6 @@ calculate_swirl_degrees <- function(distances, radius) {
 NULL
 
 # R CMD check NOTE handling
-if (getRversion() >= "2.15.1")
+if (getRversion() >= "2.15.1") {
   utils::globalVariables(c("."))
+}

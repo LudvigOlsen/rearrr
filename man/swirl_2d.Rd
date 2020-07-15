@@ -10,7 +10,7 @@ swirl_2d(
   x_col = NULL,
   y_col = NULL,
   suffix = "_swirled",
-  origin = c(0, 0),
+  origin = NULL,
   origin_fn = NULL,
   scale_fn = identity,
   keep_original = TRUE,
@@ -41,31 +41,19 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 \item{origin}{Coordinates of the origin to swirl around. Must be a \code{vector} with 2 elements (i.e. origin_x, origin_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to swirl the values around.
-Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values and
-a \code{vector} with y-values).
-It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y).
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{scale_fn}{Function for scaling the distances before calculating the degrees.
 Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
@@ -117,11 +105,17 @@ df <- data.frame(
   "y" = 1,
   "r1" = runif(50),
   "r2" = runif(50) * 35,
-  "g" = rep(1:5, each=10)
+  "g" = rep(1:5, each = 10)
 )
 
-# Rotate values
-swirl_2d(df, radius = 45, x_col = "x", y_col = "y")
+# Swirl values around (0, 0)
+swirl_2d(
+  data = df,
+  radius = 45,
+  x_col = "x",
+  y_col = "y",
+  origin = c(0, 0)
+)
 
 # Swirl around the centroid
 df_swirled <- swirl_2d(
@@ -131,7 +125,7 @@ df_swirled <- swirl_2d(
   y_col = "y",
   origin_fn = centroid,
   scale_fn = function(x) {
-    x ^ 1.6
+    x^1.6
   }
 )
 
@@ -164,7 +158,6 @@ df_swirled \%>\%
   geom_point() +
   theme_minimal() +
   labs(x = "r1", y = "r2")
-
 }
 }
 \seealso{

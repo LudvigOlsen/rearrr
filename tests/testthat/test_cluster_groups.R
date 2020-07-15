@@ -12,7 +12,8 @@ test_that("fuzz testing cluster_groups()", {
     "x" = runif(15),
     "y" = runif(15),
     "z" = runif(15),
-    "g" = rep(c(1, 2, 3, 4, 5), each = 3)
+    "g" = rep(c(1, 2, 3, 4, 5), each = 3),
+    stringsAsFactors = FALSE
   )
 
   # Ensure df is the same!

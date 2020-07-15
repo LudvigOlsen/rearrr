@@ -24,7 +24,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
-#' @inheritParams rev_windows_rearranger
+#' @inheritParams rev_windows_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the windows factor added.
@@ -35,6 +35,7 @@
 #' \donttest{
 #' # Attach packages
 #' library(rearrr)
+#' library(dplyr)
 #'
 #' # Set seed
 #' set.seed(1)
@@ -45,8 +46,10 @@
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
 #'   "C" = LETTERS[1:10],
-#'   "G" = c(1, 1, 1, 1, 1,
-#'           2, 2, 2, 2, 2),
+#'   "G" = c(
+#'     1, 1, 1, 1, 1,
+#'     2, 2, 2, 2, 2
+#'   ),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -59,25 +62,24 @@
 #'
 #' # Grouped by G
 #' df %>%
-#'   dplyr::select(G, index) %>%  # For clarity
+#'   dplyr::select(G, index) %>% # For clarity
 #'   dplyr::group_by(G) %>%
 #'   rev_windows(window_size = 3)
 #'
 #' # Plot the extreme pairs
-#' plot(x = 1:10,
-#'      y = rev_windows(1:10, window_size = 3))
+#' plot(
+#'   x = 1:10,
+#'   y = rev_windows(1:10, window_size = 3)
+#' )
 #' }
 rev_windows <- function(data,
                         window_size,
                         keep_windows = FALSE,
                         factor_name = ".window") {
-  rev_windows_rearranger(
+  rev_windows_rearranger_(
     data,
     window_size = window_size,
     keep_windows = keep_windows,
     factor_name = factor_name
   )
 }
-
-
-

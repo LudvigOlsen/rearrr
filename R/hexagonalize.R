@@ -27,7 +27,7 @@
 #' @return \code{data.frame} (\code{tibble}) with the added x-coordinates and an identifier
 #'  for the edge the data point is a part of.
 #' @family forming functions
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -63,8 +63,10 @@
 #' # First cluster the groups a bit to move the
 #' # hexagons away from each other
 #' df_hex <- df %>%
-#'   cluster_groups(cols = "y", group_cols = "g",
-#'                  suffix = "") %>%
+#'   cluster_groups(
+#'     cols = "y", group_cols = "g",
+#'     suffix = ""
+#'   ) %>%
 #'   dplyr::group_by(g) %>%
 #'   hexagonalize(y_col = "y")
 #'
@@ -100,21 +102,24 @@
 #' # we wrap the call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
 #'   .x = c(1, 0.75, 0.5, 0.25, 0.125),
-#'   .f = function(mult){
+#'   .f = function(mult) {
 #'     expand_distances(
 #'       data = df_hex,
 #'       cols = c(".hexagon_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid)
-#'   })
+#'       origin_fn = centroid
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' df_expanded %>%
-#'   ggplot(aes(x = .hexagon_x_expanded, y = y_expanded,
-#'              color = .edge, alpha = .multiplier)) +
+#'   ggplot(aes(
+#'     x = .hexagon_x_expanded, y = y_expanded,
+#'     color = .edge, alpha = .multiplier
+#'   )) +
 #'   geom_point() +
 #'   theme_minimal()
-#'
 #' }
 hexagonalize <- function(data,
                          y_col = NULL,
@@ -126,7 +131,7 @@ hexagonalize <- function(data,
                          edge_col_name = ".edge") {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(x_col_name, add = assert_collection)
+  checkmate::assert_string(x_col_name, min.chars = 1, add = assert_collection)
   checkmate::assert_string(edge_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.min, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
@@ -135,11 +140,12 @@ hexagonalize <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = hexagonalize_mutator_method,
+    mutate_fn = hexagonalize_mutator_method_,
     check_fn = NULL,
     cols = y_col,
+    suffix = "",
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -148,12 +154,19 @@ hexagonalize <- function(data,
     x_col_name = x_col_name,
     edge_col_name = edge_col_name
   )
-
 }
 
 
-hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
-                                        x_col_name, edge_col_name, suffix = NULL){
+hexagonalize_mutator_method_ <- function(data,
+                                         grp_id,
+                                         cols,
+                                         .min,
+                                         .max,
+                                         offset_x,
+                                         x_col_name,
+                                         edge_col_name,
+                                         suffix = NULL,
+                                         ...) {
 
   col <- cols
 
@@ -172,20 +185,30 @@ hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
     head(rep(c(1, 2), ceiling(nrow(data) / 2)), nrow(data))
 
   # Find minimum value
-  if (is.null(.min)){
+  if (is.null(.min)) {
     .min <- min(data[[col]])
   }
 
   # Find maximum value
-  if (is.null(.max)){
+  if (is.null(.max)) {
     .max <- max(data[[col]])
   }
 
+  # Set range outliers no NA
+  data_list <- split_range_outliers_(
+    data = data,
+    col = col,
+    .min = .min,
+    .max = .max
+  )
+  data <- data_list[["data"]]
+  outliers <- data_list[["outliers"]]
+
   # Properties of hexagon
   height <- .max - .min
-  side_length <- height/2
+  side_length <- height / 2
   # Pythagoras comes in handy!
-  width <- sqrt(side_length ^ 2 - (side_length / 2) ^ 2) * 2
+  width <- sqrt(side_length^2 - (side_length / 2)^2) * 2
 
   # Section cutoffs
   middle_upper <- (.max - (side_length / 2))
@@ -194,13 +217,16 @@ hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
   # Get data points per section (top, middle, bottom)
   top <-
     data[data[[col]] >= middle_upper, ,
-         drop = FALSE]
+      drop = FALSE
+    ]
   bottom <-
     data[data[[col]] <= middle_lower, ,
-         drop = FALSE]
+      drop = FALSE
+    ]
   middle <-
     data[is_between_(x = data[[col]], a = middle_lower, b = middle_upper), ,
-         drop = FALSE]
+      drop = FALSE
+    ]
 
   ## Create x-coordinate
 
@@ -215,7 +241,7 @@ hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
     )
 
   # Middle section
-  middle[[x_col_name]] <- width/2
+  middle[[x_col_name]] <- width / 2
 
   # Bottom section
   bottom[[x_col_name]] <-
@@ -227,31 +253,39 @@ hexagonalize_mutator_method <- function(data, cols, .min, .max, offset_x,
       old_max = middle_lower
     )
 
+  outliers <- add_na_column_(data = outliers, col = x_col_name)
 
   # Edge numbers
-  top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 6, 1)
-  middle[[edge_col_name]] <- ifelse(middle[[tmp_side_col]] == 1, 5, 2)
-  bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 4, 3)
+  if (!is.null(edge_col_name)){
+    top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 6, 1)
+    middle[[edge_col_name]] <- ifelse(middle[[tmp_side_col]] == 1, 5, 2)
+    bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 4, 3)
+    outliers <- add_na_column_(data = outliers, col = edge_col_name)
+  }
+
 
   # Combine datasets
   new_data <- dplyr::bind_rows(
-    top, middle, bottom
+    top, middle, bottom, outliers
   )
 
   # Push to sides
   new_data[[x_col_name]] <- ifelse(new_data[[tmp_side_col]] == 1,
-                                   -new_data[[x_col_name]],
-                                   new_data[[x_col_name]])
+    -new_data[[x_col_name]],
+    new_data[[x_col_name]]
+  )
 
   # Clean up
   new_data <- new_data[order(new_data[[tmp_index_col]]), , drop = FALSE]
   new_data[[tmp_index_col]] <- NULL
   new_data[[tmp_side_col]] <- NULL
-  new_data[[edge_col_name]] <- factor(new_data[[edge_col_name]])
+
+  if (!is.null(edge_col_name)){
+    new_data[[edge_col_name]] <- factor(new_data[[edge_col_name]])
+  }
 
   # Offset x
   new_data[[x_col_name]] <- new_data[[x_col_name]] + offset_x
 
   new_data
-
 }

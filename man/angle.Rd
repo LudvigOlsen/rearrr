@@ -28,30 +28,19 @@ or a \code{vector} with one constant per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to calculate angle to.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a \code{vector} with one constant per dimension.
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{degrees_col_name}{Name of new column with the degrees.}
 
@@ -63,10 +52,12 @@ Which returns the following function:
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Calculates the angle between each data point and the origin with:
+Calculates the angle between each data point \eqn{(x2, y2)} and the origin \eqn{(x1, y1)} with:
 \deqn{atan2(y2 - y1, x2 - x1)}
 
-And converts to degrees (\code{0-360}), measured counterclockwise from the \code{(x > 0, y = 0)} line.
+And converts to degrees \code{[0-360)}, measured counterclockwise from the \code{\{x > x1, y = y1\}} line.
+
+\ifelse{html}{\out{<img src='figures/angle_wheel.jpg' width="120" alt='Angles wheel'>}}{}
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and finding the angle to e.g. the centroid
@@ -86,7 +77,7 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = rep(1:4, each=5)
+  "g" = rep(1:4, each = 5)
 )
 
 # Calculate angles in the two dimensions (x and y)
@@ -115,7 +106,6 @@ angle(
   y_col = "y",
   origin_fn = centroid
 )
-
 }
 }
 \seealso{

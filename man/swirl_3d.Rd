@@ -13,7 +13,7 @@ swirl_3d(
   y_radius = 0,
   z_radius = 0,
   suffix = "_swirled",
-  origin = c(0, 0, 0),
+  origin = NULL,
   origin_fn = NULL,
   scale_fn = identity,
   keep_original = TRUE,
@@ -44,31 +44,19 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 \item{origin}{Coordinates of the origin to swirl around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to swirl the values around.
-Each column will be passed as a \code{vector} (i.e. a \code{vector} with x-values,
-a \code{vector} with y-values, and a \code{vector} with z-values).
-It should return a \code{vector} with one constant per dimension (i.e. origin_x, origin_y, origin_z).
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{scale_fn}{Function for scaling the distances before calculating the degrees.
 Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
@@ -126,11 +114,18 @@ df <- data.frame(
   "r1" = runif(50),
   "r2" = runif(50) * 35,
   "o" = 1,
-  "g" = rep(1:5, each=10)
+  "g" = rep(1:5, each = 10)
 )
 
-# Swirl values
-swirl_3d(df, x_radius = 45, x_col = "x", y_col = "y", z_col ="z")
+# Swirl values around (0, 0, 0)
+swirl_3d(
+  data = df,
+  x_radius = 45,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  origin = c(0, 0, 0)
+)
 
 # Swirl around the centroid
 df_swirled <- swirl_3d(
@@ -148,8 +143,8 @@ df_swirled
 
 # Plot swirls
 ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_path(alpha = .4) +
   geom_point() +
   theme_minimal() +
@@ -181,8 +176,8 @@ df_swirled
 
 # Plot swirls
 ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_path(alpha = .4) +
   geom_point() +
   theme_minimal() +
@@ -214,8 +209,8 @@ df_swirled <- swirl_3d(
 
 # Plot swirls
 ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_path(alpha = .4) +
   geom_point() +
   theme_minimal() +
@@ -258,18 +253,24 @@ df_rotated <- df_swirled \%>\%
     y_deg = rep(0, 36),
     z_deg = (1:36) * 10,
     suffix = "",
-    origin = df_swirled$.origin[[1]])
+    origin = df_swirled$.origin[[1]]
+  )
 
 # Plot rotated swirls
-ggplot(df_rotated,
-       aes(x = r1_swirled, y = r2_swirled,
-           color = .degrees_str, alpha = o_swirled)) +
-  geom_vline(xintercept = mean(df$r1), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$r2), size = 0.2, alpha = .4, linetype="dashed") +
+ggplot(
+  df_rotated,
+  aes(
+    x = r1_swirled,
+    y = r2_swirled,
+    color = .degrees_str,
+    alpha = o_swirled
+  )
+) +
+  geom_vline(xintercept = mean(df$r1), size = 0.2, alpha = .4, linetype = "dashed") +
+  geom_hline(yintercept = mean(df$r2), size = 0.2, alpha = .4, linetype = "dashed") +
   geom_point(show.legend = FALSE) +
   theme_minimal() +
   labs(x = "r1", y = "r2", color = "radius", alpha = "o (opacity)")
-
 }
 }
 \seealso{

@@ -8,7 +8,7 @@ dim_values(
   data,
   cols,
   dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1),
-  origin = 0,
+  origin = NULL,
   origin_fn = NULL,
   dim_col = cols[[length(cols)]],
   suffix = "_dimmed",
@@ -24,9 +24,12 @@ The dimming column (\code{`dim_col`}) is dimmed based on all the columns.
 Each column is considered a dimension.}
 
 \item{dimming_fn}{\code{Function} for calculating the dimmed values.
-Must take \strong{two} input arguments where the
-\emph{first} is a \code{vector} with the values in the dimming dimension,
-and the \emph{second} is a \code{vector} with corresponding distances to the origin.
+
+\strong{Input}: \strong{Two} input arguments:
+\enumerate{
+\item A \code{vector} with the values in the dimming dimension.
+\item A \code{vector} with corresponding distances to the origin.
+}
 
 E.g.:
 
@@ -46,30 +49,19 @@ or a \code{vector} with one constant per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
-\item{origin_fn}{Function for finding the origin coordinates to dim around.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a \code{vector} with one constant per dimension.
+\item{origin_fn}{Function for finding the origin coordinates.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{vector} with one constant per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
-E.g. the \code{\link[rearrr:centroid]{centroid()}} function, which is created with:
+E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\code{create_origin_fn(mean)}
-
-Which returns the following function:
-
-\code{function(...)\{}
-
-\verb{  }\code{list(...) \%>\%}
-
-\verb{    }\code{purrr::map(mean) \%>\%}
-
-\verb{    }\code{unlist(recursive = TRUE,}
-
-\verb{           }\code{use.names = FALSE)}
-
-\code{\}}}
+Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{dim_col}{Name of column to dim. Default is the last column in \code{`cols`}. This column must also be in \code{`cols`}.}
 
@@ -156,7 +148,7 @@ dim_values(
   data = df,
   cols = c("x", "y", "o"),
   origin_fn = centroid,
-  dimming_fn = function(x, d){
+  dimming_fn = function(x, d) {
     x * 1 / (2^(1 + d))
   }
 )
@@ -171,16 +163,18 @@ df_dimmed <- df \%>\%
   dim_values(
     cols = c("x", "y", "o"),
     origin_fn = centroid
-)
+  )
 
 # Plot the dimmed data such that the alpha (opacity) is
 # controlled by the dimming
 # (Note: This works because the `o` column is 1 for all values)
-ggplot(data = df_dimmed,
-       aes(x = x, y = y, alpha = o_dimmed, color = .cluster)) +
+ggplot(
+  data = df_dimmed,
+  aes(x = x, y = y, alpha = o_dimmed, color = .cluster)
+) +
   geom_point() +
   theme_minimal() +
-  labs(x = "x", y="y", color="Cluster", alpha = "o_dimmed")
+  labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
 }
 }
 \seealso{

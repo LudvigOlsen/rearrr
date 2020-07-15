@@ -2,9 +2,9 @@
 
 # https://en.wikipedia.org/wiki/Rotation_matrix
 # x = roll(γ) ; y = pitch(β) ; z = yaw(α)
-create_rotation_matrix3d <- function(x_deg = 0,
-                                     y_deg = 0,
-                                     z_deg = 0) {
+create_rotation_matrix_3d_ <- function(x_deg = 0,
+                                       y_deg = 0,
+                                       z_deg = 0) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_number(x_deg, lower = -360, upper = 360, add = assert_collection)
@@ -40,10 +40,11 @@ create_rotation_matrix3d <- function(x_deg = 0,
     )
   ),
   nrow = 3,
-  ncol = 3)
+  ncol = 3
+  )
 }
 
-create_rotation_matrix2d <- function(deg = 0) {
+create_rotation_matrix_2d_ <- function(deg = 0) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -53,21 +54,21 @@ create_rotation_matrix2d <- function(deg = 0) {
 
   if (deg %in% c(-360, 0, 360)) {
     rotation_matrix <- matrix(c(1, 0, 0, 1), nrow = 2, ncol = 2)
-  } else if (deg %in% c(90,-270)) {
+  } else if (deg %in% c(90, -270)) {
     rotation_matrix <- matrix(c(0, 1, -1, 0), nrow = 2, ncol = 2)
-  } else if (deg %in% c(180,-180)) {
+  } else if (deg %in% c(180, -180)) {
     rotation_matrix <- matrix(c(-1, 0, 0, -1), nrow = 2, ncol = 2)
-  } else if (deg %in% c(270,-90)) {
+  } else if (deg %in% c(270, -90)) {
     rotation_matrix <- matrix(c(0, -1, 1, 0), nrow = 2, ncol = 2)
   } else {
     radian <- degrees_to_radians(deg)
     cos_rad <- cos(radian)
     sin_rad <- sin(radian)
     rotation_matrix <- matrix(c(cos_rad, sin_rad, -sin_rad, cos_rad),
-                              nrow = 2,
-                              ncol = 2)
+      nrow = 2,
+      ncol = 2
+    )
   }
 
   rotation_matrix
-
 }

@@ -55,12 +55,13 @@
 #' generate_clusters(
 #'   num_rows = 50, num_cols = 2,
 #'   num_clusters = 5, compactness = 1.6
-#'   ) %>%
+#' ) %>%
 #'   ggplot(
-#'     aes(x = D1, y = D2, color = .cluster)) +
-#'     geom_point() +
-#'     theme_minimal() +
-#'     labs(x = "D1", y = "D2", color = "Cluster")
+#'     aes(x = D1, y = D2, color = .cluster)
+#'   ) +
+#'   geom_point() +
+#'   theme_minimal() +
+#'   labs(x = "D1", y = "D2", color = "Cluster")
 #'
 #' #
 #' # Plot clusters in 3d view
@@ -74,14 +75,13 @@
 #'
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
-#'   x=clusters$D1,
-#'   y=clusters$D2,
-#'   z=clusters$D3,
-#'   type="scatter3d",
-#'   mode="markers",
-#'   color=clusters$.cluster
+#'   x = clusters$D1,
+#'   y = clusters$D2,
+#'   z = clusters$D3,
+#'   type = "scatter3d",
+#'   mode = "markers",
+#'   color = clusters$.cluster
 #' )
-#'
 #' }
 generate_clusters <- function(num_rows,
                               num_cols,
@@ -91,18 +91,23 @@ generate_clusters <- function(num_rows,
                               name_prefix = "D",
                               cluster_col_name = ".cluster") {
   # Generate data frame
-  data <- matrix(data = generator(num_rows * num_cols),
-                 nrow = num_rows,
-                 ncol = num_cols) %>% as.data.frame()
+  data <- matrix(
+    data = generator(num_rows * num_cols),
+    nrow = num_rows,
+    ncol = num_cols
+  ) %>%
+    as.data.frame(stringsAsFactors = FALSE)
 
   # Name columns
   cols <- paste0(name_prefix, seq_len(num_cols))
   colnames(data) <- cols
 
   # Create groups
-  data <- ndist_windows(data = data,
-                        num_windows = num_clusters,
-                        factor_name = cluster_col_name)
+  data <- ndist_windows_(
+    data = data,
+    num_windows = num_clusters,
+    factor_name = cluster_col_name
+  )
 
   # Cluster the groups
   data <- cluster_groups(

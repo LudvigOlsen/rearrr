@@ -84,8 +84,10 @@ df_hex \%>\%
 # First cluster the groups a bit to move the
 # hexagons away from each other
 df_hex <- df \%>\%
-  cluster_groups(cols = "y", group_cols = "g",
-                 suffix = "") \%>\%
+  cluster_groups(
+    cols = "y", group_cols = "g",
+    suffix = ""
+  ) \%>\%
   dplyr::group_by(g) \%>\%
   hexagonalize(y_col = "y")
 
@@ -121,21 +123,24 @@ df_hex <- hexagonalize(df, y_col = "y")
 # we wrap the call in purrr::map_dfr
 df_expanded <- purrr::map_dfr(
   .x = c(1, 0.75, 0.5, 0.25, 0.125),
-  .f = function(mult){
+  .f = function(mult) {
     expand_distances(
       data = df_hex,
       cols = c(".hexagon_x", "y"),
       multiplier = mult,
-      origin_fn = centroid)
-  })
+      origin_fn = centroid
+    )
+  }
+)
 df_expanded
 
 df_expanded \%>\%
-  ggplot(aes(x = .hexagon_x_expanded, y = y_expanded,
-             color = .edge, alpha = .multiplier)) +
+  ggplot(aes(
+    x = .hexagon_x_expanded, y = y_expanded,
+    color = .edge, alpha = .multiplier
+  )) +
   geom_point() +
   theme_minimal()
-
 }
 }
 \seealso{

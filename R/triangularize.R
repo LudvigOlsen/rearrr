@@ -58,8 +58,10 @@
 #' # First cluster the groups a bit to move the
 #' # triangles away from each other
 #' df_tri <- df %>%
-#'   cluster_groups(cols = "y", group_cols = "g",
-#'                  suffix = "") %>%
+#'   cluster_groups(
+#'     cols = "y", group_cols = "g",
+#'     suffix = ""
+#'   ) %>%
 #'   dplyr::group_by(g) %>%
 #'   triangularize(y_col = "y")
 #'
@@ -94,22 +96,25 @@
 #' # To contract with multiple multipliers at once,
 #' # we wrap the call in purrr::map_dfr
 #' df_expanded <- purrr::map_dfr(
-#'   .x = 1:10/10,
-#'   .f = function(mult){
+#'   .x = 1:10 / 10,
+#'   .f = function(mult) {
 #'     expand_distances(
 #'       data = df_tri,
 #'       cols = c(".triangle_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid)
-#'   })
+#'       origin_fn = centroid
+#'     )
+#'   }
+#' )
 #' df_expanded
 #'
 #' df_expanded %>%
-#'   ggplot(aes(x = .triangle_x_expanded, y = y_expanded,
-#'              color = .edge, alpha = .multiplier)) +
+#'   ggplot(aes(
+#'     x = .triangle_x_expanded, y = y_expanded,
+#'     color = .edge, alpha = .multiplier
+#'   )) +
 #'   geom_point() +
 #'   theme_minimal()
-#'
 #' }
 triangularize <- function(data,
                           y_col = NULL,
@@ -123,7 +128,7 @@ triangularize <- function(data,
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_string(x_col_name, add = assert_collection)
+  checkmate::assert_string(x_col_name, min.chars = 1, add = assert_collection)
   checkmate::assert_string(edge_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.min, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
@@ -132,11 +137,12 @@ triangularize <- function(data,
   # End of argument checks ####
 
   # Mutate with each multiplier
-  multi_mutator(
+  multi_mutator_(
     data = data,
-    mutate_fn = triangularize_mutator_method,
+    mutate_fn = triangularize_mutator_method_,
     check_fn = NULL,
     cols = y_col,
+    suffix = "",
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -145,18 +151,18 @@ triangularize <- function(data,
     x_col_name = x_col_name,
     edge_col_name = edge_col_name
   )
-
 }
 
-triangularize_mutator_method <- function(data,
-                                         cols,
-                                         .min,
-                                         .max,
-                                         offset_x,
-                                         x_col_name,
-                                         edge_col_name,
-                                         suffix = NULL) {
-
+triangularize_mutator_method_ <- function(data,
+                                          grp_id,
+                                          cols,
+                                          .min,
+                                          .max,
+                                          offset_x,
+                                          x_col_name,
+                                          edge_col_name,
+                                          suffix = NULL,
+                                          ...) {
   col <- cols
 
   # Create tmp var names
@@ -170,19 +176,29 @@ triangularize_mutator_method <- function(data,
   data <- data[order(data[[col]]), , drop = FALSE]
 
   # Find minimum value
-  if (is.null(.min)){
+  if (is.null(.min)) {
     .min <- min(data[[col]])
   }
 
   # Find maximum value
-  if (is.null(.max)){
+  if (is.null(.max)) {
     .max <- max(data[[col]])
   }
+
+  # Set range outliers no NA
+  data_list <- split_range_outliers_(
+    data = data,
+    col = col,
+    .min = .min,
+    .max = .max
+  )
+  data <- data_list[["data"]]
+  outliers <- data_list[["outliers"]]
 
   # Properties of triangle
   height <- .max - .min
   # Pythagoras comes in handy!
-  side_length <- sqrt(2 * (height / 2) ^ 2)
+  side_length <- sqrt(2 * (height / 2)^2)
   width <- height
 
   # Dividing into sides (left/right)
@@ -219,10 +235,12 @@ triangularize_mutator_method <- function(data,
   # Get data points per section (top, bottom)
   top <-
     data[data[[col]] >= midline, ,
-         drop = FALSE]
+      drop = FALSE
+    ]
   bottom <-
     data[data[[col]] < midline, ,
-         drop = FALSE]
+      drop = FALSE
+    ]
 
   ## Create x-coordinate
 
@@ -246,29 +264,37 @@ triangularize_mutator_method <- function(data,
       old_max = midline
     )
 
+  outliers <- add_na_column_(data = outliers, col = x_col_name)
+
   # Edge numbers
-  top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 3, 1)
-  bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 3, 2)
+  if (!is.null(edge_col_name)){
+    top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 3, 1)
+    bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 3, 2)
+    outliers <- add_na_column_(data = outliers, col = edge_col_name)
+  }
 
   # Combine datasets
   new_data <- dplyr::bind_rows(
-    top, bottom
+    top, bottom, outliers
   )
 
   # Push to sides
   new_data[[x_col_name]] <- ifelse(new_data[[tmp_side_col]] == 1,
-                                   0,
-                                   new_data[[x_col_name]])
+    0,
+    new_data[[x_col_name]]
+  )
 
   # Clean up
   new_data <- new_data[order(new_data[[tmp_index_col]]), , drop = FALSE]
   new_data[[tmp_index_col]] <- NULL
   new_data[[tmp_side_col]] <- NULL
-  new_data[[edge_col_name]] <- factor(new_data[[edge_col_name]])
+
+  if (!is.null(edge_col_name)){
+    new_data[[edge_col_name]] <- factor(new_data[[edge_col_name]])
+  }
 
   # Offset x
   new_data[[x_col_name]] <- new_data[[x_col_name]] + offset_x
 
   new_data
-
 }

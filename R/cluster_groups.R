@@ -25,7 +25,7 @@
 #' @param keep_centroids Whether to ensure the clusters have their original centroids. (Logical)
 #' @param multiplier Numeric constant to multiply the distance to the group centroid by. A smaller value
 #'  makes the clusters more compact and vice versa.
-#' @inheritParams multi_mutator
+#' @inheritParams multi_mutator_
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the clustered columns.
 #' @details
@@ -55,14 +55,20 @@
 #' )
 #'
 #' # Move the data points into clusters
-#' cluster_groups(df, cols = c("x", "y"),
-#'                group_col = "g")
-#' cluster_groups(df, cols = c("x", "y"),
-#'                group_col = "g",
-#'                multiplier = 0.1)
-#' cluster_groups(df, cols = c("x"),
-#'                group_col = "g",
-#'                multiplier = 0.1)
+#' cluster_groups(df,
+#'   cols = c("x", "y"),
+#'   group_col = "g"
+#' )
+#' cluster_groups(df,
+#'   cols = c("x", "y"),
+#'   group_col = "g",
+#'   multiplier = 0.1
+#' )
+#' cluster_groups(df,
+#'   cols = c("x"),
+#'   group_col = "g",
+#'   multiplier = 0.1
+#' )
 #'
 #' #
 #' # Plotting clusters
@@ -72,7 +78,8 @@
 #' df_clustered <- cluster_groups(
 #'   data = df,
 #'   cols = c("x", "y"),
-#'   group_col = "g")
+#'   group_col = "g"
+#' )
 #'
 #' # Plot the clusters over the original data points
 #' # As we work with random data, the cluster might overlap
@@ -93,9 +100,10 @@
 #'
 #' df_clustered <- cluster_groups(
 #'   data = df,
-#'   cols=c("x", "y"),
+#'   cols = c("x", "y"),
 #'   group_col = "g",
-#'   keep_centroids = TRUE)
+#'   keep_centroids = TRUE
+#' )
 #'
 #' # Plot the clusters over the original data points
 #' # As we work with random data, the cluster might overlap
@@ -117,20 +125,19 @@
 #' # Cluster in 3d
 #' df_clustered <- cluster_groups(
 #'   data = df,
-#'   cols=c("x", "y", "z"),
+#'   cols = c("x", "y", "z"),
 #'   group_col = "g"
 #' )
 #'
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
-#'   x=df_clustered$x_clustered,
-#'   y=df_clustered$y_clustered,
-#'   z=df_clustered$z_clustered,
-#'   type="scatter3d",
-#'   mode="markers",
-#'   color=df_clustered$g
+#'   x = df_clustered$x_clustered,
+#'   y = df_clustered$y_clustered,
+#'   z = df_clustered$z_clustered,
+#'   type = "scatter3d",
+#'   mode = "markers",
+#'   color = df_clustered$g
 #' )
-#'
 #' }
 cluster_groups <- function(data,
                            cols,
@@ -173,13 +180,14 @@ cluster_groups <- function(data,
   checkmate::reportAssertions(assert_collection)
 
   checkmate::assert_names(colnames(data),
-                          must.include = c(cols, group_cols),
-                          add = assert_collection)
+    must.include = c(cols, group_cols),
+    add = assert_collection
+  )
   checkmate::reportAssertions(assert_collection)
 
   # Ensure grouping
   if (!is.null(group_cols) &&
-      length(intersect(group_cols, cols)) > 0) {
+    length(intersect(group_cols, cols)) > 0) {
     assert_collection$push("'group_cols' cannot contain a column from 'cols'.")
     checkmate::reportAssertions(assert_collection)
   }
@@ -228,7 +236,8 @@ cluster_groups <- function(data,
   # Collect columns
   clustered <- dplyr::bind_cols(
     scaled,
-    expanded[, colnames(expanded) %ni% cols, drop = FALSE])
+    expanded[, colnames(expanded) %ni% cols, drop = FALSE]
+  )
 
   # Move centroids to original centroid coordinates
   if (isTRUE(keep_centroids)) {
@@ -242,18 +251,20 @@ cluster_groups <- function(data,
   }
 
   # Rename columns and select which columns to return
-  if (suffix != ""){
+  if (suffix != "") {
     colnames(clustered) <-
       purrr::map_chr(.x = colnames(clustered), .f = ~ {
         ifelse(.x %in% cols, paste0(.x, suffix), .x)
       })
-    if (isTRUE(keep_original)){
-      clustered <- dplyr::bind_cols(data[, cols, drop = FALSE],
-                                    clustered)
+    if (isTRUE(keep_original)) {
+      clustered <- dplyr::bind_cols(
+        data[, cols, drop = FALSE],
+        clustered
+      )
     }
-  } else if (!isTRUE(keep_original)){
+  } else if (!isTRUE(keep_original)) {
     exclude <- setdiff(colnames(data), colnames(clustered))
-    if (length(exclude)>0){
+    if (length(exclude) > 0) {
       clustered <- clustered[, colnames(clustered) %ni% exclude, drop = FALSE]
     }
   }

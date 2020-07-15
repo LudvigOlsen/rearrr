@@ -1,6 +1,5 @@
 
 
-
 #   __________________ #< 45425d2ee7b52e512217af9ce04ee05b ># __________________
 #   Transfer centroids                                                      ####
 
@@ -40,10 +39,12 @@
 #' df <- data.frame(
 #'   "x" = runif(20),
 #'   "y" = runif(20),
-#'   "g" = c(1, 1, 1, 1, 1,
-#'           2, 2, 2, 2, 2,
-#'           3, 3, 3, 3, 3,
-#'           4, 4, 4, 4, 4)
+#'   "g" = c(
+#'     1, 1, 1, 1, 1,
+#'     2, 2, 2, 2, 2,
+#'     3, 3, 3, 3, 3,
+#'     4, 4, 4, 4, 4
+#'   )
 #' )
 #'
 #' # Create another data frame with different x and y values
@@ -74,7 +75,6 @@
 #' df3 %>%
 #'   dplyr::group_by(g) %>%
 #'   dplyr::summarize_all(mean)
-#'
 #' }
 transfer_centroids <- function(to_data,
                                from_data,
@@ -83,17 +83,20 @@ transfer_centroids <- function(to_data,
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(to_data,
-                               min.cols = 1,
-                               min.rows = 1,
-                               add = assert_collection)
+    min.cols = 1,
+    min.rows = 1,
+    add = assert_collection
+  )
   checkmate::assert_data_frame(from_data,
-                               min.cols = 1,
-                               min.rows = 1,
-                               add = assert_collection)
+    min.cols = 1,
+    min.rows = 1,
+    add = assert_collection
+  )
   checkmate::assert_character(cols,
-                              any.missing = FALSE,
-                              min.len = 1,
-                              add = assert_collection)
+    any.missing = FALSE,
+    min.len = 1,
+    add = assert_collection
+  )
   checkmate::assert_character(
     group_cols,
     any.missing = FALSE,
@@ -105,7 +108,7 @@ transfer_centroids <- function(to_data,
   cols_intersection <-
     intersect(colnames(to_data), colnames(from_data))
   if (length(cols_intersection) != ncol(to_data) ||
-      length(cols_intersection) != ncol(from_data)) {
+    length(cols_intersection) != ncol(from_data)) {
     assert_collection$push("'to_data' and 'from_data' must have the exact same columns.")
   }
   if (length(intersect(cols, group_cols)) > 0) {
@@ -116,7 +119,7 @@ transfer_centroids <- function(to_data,
     assert_collection$push("some names in 'cols' were not columns in 'to_data'.")
   }
   if (!is.null(group_cols) &&
-      length(setdiff(group_cols, colnames(to_data))) > 0) {
+    length(setdiff(group_cols, colnames(to_data))) > 0) {
     assert_collection$push("some names in 'group_cols' were not columns in 'to_data'.")
   }
   checkmate::reportAssertions(assert_collection)
@@ -156,8 +159,8 @@ transfer_centroids <- function(to_data,
   # Make sure the group columns are the same in
   # both summaries
   if (!dplyr::all_equal(
-    as.data.frame(from_group_columns),
-    as.data.frame(to_group_columns),
+    as.data.frame(from_group_columns, stringsAsFactors = FALSE),
+    as.data.frame(to_group_columns, stringsAsFactors = FALSE),
     ignore_row_order = FALSE
   )) {
     stop("The summarized group columns from the two datasets are not equal.")
@@ -192,5 +195,4 @@ transfer_centroids <- function(to_data,
   # Convert to tibble and return
   to_data %>%
     dplyr::as_tibble()
-
 }
