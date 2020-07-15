@@ -10,6 +10,7 @@ multi_mutator_(
   check_fn,
   cols = NULL,
   suffix = "_mutated",
+  overwrite = FALSE,
   force_df = TRUE,
   allowed_types = c("numeric", "factor"),
   allow_missing = FALSE,
@@ -32,6 +33,8 @@ Should not return anything.}
 \item{suffix}{Suffix to add to the names of the generated columns.
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 
 \item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
 

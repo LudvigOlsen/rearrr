@@ -12,6 +12,7 @@ dim_values(
   origin_fn = NULL,
   dim_col = cols[[length(cols)]],
   suffix = "_dimmed",
+  overwrite = FALSE,
   keep_original = TRUE,
   origin_col_name = ".origin"
 )
@@ -68,6 +69,8 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 \item{suffix}{Suffix to add to the names of the generated columns.
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 

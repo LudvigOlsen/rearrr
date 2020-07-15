@@ -2,6 +2,7 @@
 % Please edit documentation in R/by_distance.R
 \name{closest_to}
 \alias{closest_to}
+\alias{closest_to_vec}
 \title{Orders values by shortest distance to an origin}
 \usage{
 closest_to(
@@ -9,8 +10,13 @@ closest_to(
   cols = NULL,
   origin = NULL,
   origin_fn = NULL,
-  shuffle_ties = FALSE
+  shuffle_ties = FALSE,
+  origin_col_name = ".origin",
+  distance_col_name = ".distance",
+  overwrite = FALSE
 )
+
+closest_to_vec(data, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE)
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
@@ -39,6 +45,12 @@ Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[re
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
+
+\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{distance_col_name}{Name of new column with the distances to the origin. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -55,6 +67,8 @@ In \emph{n} dimensions, the origin can be thought of as coordinates.
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and ordering the rows by
 their distance to the centroid of each group.
+
+The \code{*_vec()} version takes and returns a \code{vector}.
 
 \strong{Example}:
 
@@ -89,7 +103,10 @@ df <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Furthest from the third row
+# Closest to 3 in a vector
+closest_to_vec(1:10, origin = 3)
+
+# Closest to the third row (index of data.frame)
 closest_to(df, origin = 3)$index
 
 # By each of the columns
@@ -114,7 +131,7 @@ df \%>\%
     origin_fn = create_origin_fn(median)
   )
 
-# Plot the centered values
+# Plot the rearranged values
 plot(
   x = 1:10,
   y = closest_to(df,

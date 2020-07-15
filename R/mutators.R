@@ -30,6 +30,7 @@ multi_mutator_ <- function(data,
                            check_fn,
                            cols = NULL,
                            suffix = "_mutated",
+                           overwrite = FALSE,
                            force_df = TRUE,
                            allowed_types = c("numeric", "factor"),
                            allow_missing = FALSE,
@@ -69,6 +70,7 @@ multi_mutator_ <- function(data,
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(suffix, add = assert_collection)
+  checkmate::assert_flag(overwrite, add = assert_collection)
   checkmate::assert_flag(force_df, add = assert_collection)
   checkmate::assert_flag(keep_original, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -109,6 +111,7 @@ multi_mutator_ <- function(data,
       fn = mutate_fn,
       cols = cols,
       suffix = suffix,
+      overwrite = overwrite,
       origin_fn = origin_fn,
       ...
     )

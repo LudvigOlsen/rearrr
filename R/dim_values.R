@@ -146,6 +146,7 @@ dim_values <- function(data,
                        origin_fn = NULL,
                        dim_col = cols[[length(cols)]],
                        suffix = "_dimmed",
+                       overwrite = FALSE,
                        keep_original = TRUE,
                        origin_col_name = ".origin") {
 
@@ -166,6 +167,8 @@ dim_values <- function(data,
     assert_collection$push("'dim_col' must be in 'cols'.")
   }
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -175,6 +178,7 @@ dim_values <- function(data,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     min_dims = 2,
@@ -189,6 +193,7 @@ dim_values <- function(data,
 dim_values_mutator_method_ <- function(data,
                                        grp_id,
                                        cols,
+                                       overwrite,
                                        dimming_fn,
                                        origin,
                                        origin_fn,
@@ -243,13 +248,17 @@ dim_values_mutator_method_ <- function(data,
         list(dim_vectors[[dim_col]]),
         dim_col
       ),
-      suffix = suffix
+      suffix = suffix,
+      overwrite = overwrite
     )
 
   # Add origin coordinates
-  if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates_(origin, cols)
-  }
+  data <- add_info_col(
+    data = data,
+    nm = origin_col_name,
+    content = list_coordinates_(origin, cols),
+    overwrite = overwrite
+  )
 
   data
 }

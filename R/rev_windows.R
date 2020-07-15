@@ -10,6 +10,8 @@
 #'
 #'  The values are windowed and reversed within windows.
 #'
+#'  The \code{*_vec()} version takes and returns a \code{vector}.
+#'
 #'  \strong{Example}:
 #'
 #'  The column values:
@@ -54,11 +56,11 @@
 #' )
 #'
 #' # For vector
-#' rev_windows(1:10, window_size = 3)
+#' rev_windows_vec(1:10, window_size = 3)
 #'
 #' # For data frame
 #' rev_windows(df, window_size = 3)
-#' rev_windows(df, window_size = 3, keep_windows = TRUE)
+#' rev_windows(df, window_size = 3, factor_name = NULL)
 #'
 #' # Grouped by G
 #' df %>%
@@ -69,17 +71,25 @@
 #' # Plot the extreme pairs
 #' plot(
 #'   x = 1:10,
-#'   y = rev_windows(1:10, window_size = 3)
+#'   y = rev_windows_vec(1:10, window_size = 3)
 #' )
 #' }
 rev_windows <- function(data,
                         window_size,
-                        keep_windows = FALSE,
-                        factor_name = ".window") {
+                        factor_name = ".window",
+                        overwrite = FALSE) {
   rev_windows_rearranger_(
     data,
     window_size = window_size,
-    keep_windows = keep_windows,
-    factor_name = factor_name
+    factor_name = factor_name,
+    overwrite = overwrite
   )
+}
+
+#' @rdname rev_windows
+#' @export
+rev_windows_vec <- function(data, window_size){
+  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
+                    checkmate::check_factor(data))
+  rev_windows(data = data, window_size = window_size, factor_name = NULL)
 }

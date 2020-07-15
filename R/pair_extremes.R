@@ -16,6 +16,8 @@
 #'  When \code{`data`} has an uneven number of rows, the \code{`unequal_method`}
 #'  determines which group should have only \code{1} element.
 #'
+#'  The \code{*_vec()} version takes and returns a \code{vector}.
+#'
 #'  \strong{Example}:
 #'
 #'  The column values:
@@ -103,7 +105,6 @@ pair_extremes <- function(data,
                           # num_pairings = 1, # TODO
                           shuffle_members = FALSE,
                           shuffle_pairs = FALSE,
-                          keep_factors = FALSE,
                           factor_name = ".pair") {
   extreme_pairing_rearranger_(
     data = data,
@@ -112,7 +113,23 @@ pair_extremes <- function(data,
     num_pairings = 1,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
-    keep_factors = keep_factors,
     factor_name = factor_name
+  )
+}
+
+#' @rdname pair_extremes
+#' @export
+pair_extremes_vec <- function(data,
+                              unequal_method = "middle",
+                              shuffle_members = FALSE,
+                              shuffle_pairs = FALSE){
+  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
+                    checkmate::check_factor(data))
+  pair_extremes(
+    data = data,
+    unequal_method = unequal_method,
+    shuffle_members = shuffle_members,
+    shuffle_pairs = shuffle_pairs,
+    factor_name = NULL
   )
 }

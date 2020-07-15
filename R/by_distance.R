@@ -22,6 +22,8 @@
 #'  latter can be useful when supplying a grouped \code{data.frame} and ordering the rows by
 #'  their distance to the centroid of each group.
 #'
+#'  The \code{*_vec()} version takes and returns a \code{vector}.
+#'
 #'  \strong{Example}:
 #'
 #'  The column values:
@@ -60,7 +62,10 @@
 #'   stringsAsFactors = FALSE
 #' )
 #'
-#' # Furthest from the third row
+#' # Closest to 3 in a vector
+#' closest_to_vec(1:10, origin = 3)
+#'
+#' # Closest to the third row (index of data.frame)
 #' closest_to(df, origin = 3)$index
 #'
 #' # By each of the columns
@@ -85,7 +90,7 @@
 #'     origin_fn = create_origin_fn(median)
 #'   )
 #'
-#' # Plot the centered values
+#' # Plot the rearranged values
 #' plot(
 #'   x = 1:10,
 #'   y = closest_to(df,
@@ -115,16 +120,41 @@ closest_to <- function(data,
                        cols = NULL,
                        origin = NULL,
                        origin_fn = NULL,
-                       shuffle_ties = FALSE) {
+                       shuffle_ties = FALSE,
+                       origin_col_name = ".origin",
+                       distance_col_name = ".distance",
+                       overwrite = FALSE) {
   by_distance_rearranger_(
     data = data,
     cols = cols,
     origin = origin,
     origin_fn = origin_fn,
     shuffle_ties = shuffle_ties,
-    decreasing = FALSE
+    decreasing = FALSE,
+    origin_col_name = origin_col_name,
+    distance_col_name = distance_col_name,
+    overwrite = overwrite
   )
 }
+
+#' @rdname closest_to
+#' @export
+closest_to_vec <- function(data,
+                           origin = NULL,
+                           origin_fn = NULL,
+                           shuffle_ties = FALSE){
+  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
+                    checkmate::check_factor(data))
+  closest_to(
+    data = data,
+    origin = origin,
+    origin_fn = origin_fn,
+    shuffle_ties = shuffle_ties,
+    origin_col_name = NULL,
+    distance_col_name = NULL
+  )
+}
+
 
 
 ##  .................. #< 367167a5b5eaf6fa777a992c4f250900 ># ..................
@@ -143,6 +173,8 @@ closest_to <- function(data,
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
 #'  latter can be useful when supplying a grouped \code{data.frame} and ordering the rows by
 #'  their distance to the centroid of each group.
+#'
+#'  The \code{*_vec()} version takes and returns a \code{vector}.
 #'
 #'  \strong{Example}:
 #'
@@ -183,7 +215,10 @@ closest_to <- function(data,
 #'   stringsAsFactors = FALSE
 #' )
 #'
-#' # Furthest from the third row
+#' # Furthest from 3 in a vector
+#' furthest_from_vec(1:10, origin = 3)
+#'
+#' # Furthest from the third row (index of data.frame)
 #' furthest_from(df, origin = 3)$index
 #'
 #' # By each of the columns
@@ -208,7 +243,7 @@ closest_to <- function(data,
 #'     origin_fn = create_origin_fn(median)
 #'   )
 #'
-#' # Plot the centered values
+#' # Plot the rearranged values
 #' plot(
 #'   x = 1:10,
 #'   y = furthest_from(df,
@@ -228,23 +263,44 @@ closest_to <- function(data,
 #' )
 #'
 #' # In multiple dimensions
-#' # Start by calculating distances
-#' # so we can check the ordering (not necessary)
 #' df %>%
-#'   distance(cols = c("A", "B"), origin_fn = most_centered) %>%
 #'   furthest_from(cols = c("A", "B"), origin_fn = most_centered)
 #' }
 furthest_from <- function(data,
                           cols = NULL,
                           origin = NULL,
                           origin_fn = NULL,
-                          shuffle_ties = FALSE) {
+                          shuffle_ties = FALSE,
+                          origin_col_name = ".origin",
+                          distance_col_name = ".distance",
+                          overwrite = FALSE) {
   by_distance_rearranger_(
     data = data,
     cols = cols,
     origin = origin,
     origin_fn = origin_fn,
     shuffle_ties = shuffle_ties,
-    decreasing = TRUE
+    decreasing = TRUE,
+    origin_col_name = origin_col_name,
+    distance_col_name = distance_col_name,
+    overwrite = overwrite
+  )
+}
+
+#' @rdname furthest_from
+#' @export
+furthest_from_vec <- function(data,
+                              origin = NULL,
+                              origin_fn = NULL,
+                              shuffle_ties = FALSE) {
+  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
+                    checkmate::check_factor(data))
+  furthest_from(
+    data = data,
+    origin = origin,
+    origin_fn = origin_fn,
+    shuffle_ties = shuffle_ties,
+    origin_col_name = NULL,
+    distance_col_name = NULL
   )
 }

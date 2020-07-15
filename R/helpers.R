@@ -440,7 +440,7 @@ add_dimensions_ <- function(data,
     length(intersect(colnames(new_data), colnames(data))) > 0) {
     stop(
       paste0(
-        "Cannot add these dimensions without overwriting existing columns: ",
+        "Adding these dimensions would overwrite existing columns: ",
         intersect(colnames(new_data), colnames(data)),
         "."
       )
@@ -460,6 +460,44 @@ add_dimensions_ <- function(data,
   data
 }
 
+add_info_col <- function(data, nm, content, overwrite = FALSE){
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_string(nm, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # When name is NULL, we don't add the column
+  if (is.null(nm)){
+    return(data)
+  }
+
+  # Check if we will overwrite an existing column
+  check_overwrite(data = data, nm = nm, overwrite = overwrite)
+
+  # Add column
+  data[[nm]] <- content
+
+  data
+
+}
+
+# check_overwrite(data = data, nm = "?", overwrite = overwrite)
+check_overwrite <- function(data, nm, overwrite){
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_string(nm, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(overwrite, add = assert_collection)
+  # Check if we would overwrite an existing column
+  if (!isTRUE(overwrite) && nm %in% colnames(data)){
+    assert_collection$push(
+      paste0("The column '", nm,
+             "' already exists and 'overwrite' is disabled.")
+    )
+  }
+  checkmate::reportAssertions(assert_collection)
+}
 
 ##  .................. #< cb9942d54f8fa35406de031d066531dc ># ..................
 ##  Conversions                                                             ####

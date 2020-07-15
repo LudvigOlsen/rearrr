@@ -31,6 +31,7 @@ rearranger_ <- function(data,
                         cols = NULL,
                         allowed_types = c("numeric", "factor", "character"),
                         col = deprecated(), # Keep it so we can have the docs
+                        overwrite = FALSE,
                         origin_fn = NULL, # For docs
                         ...) {
 
@@ -58,6 +59,7 @@ rearranger_ <- function(data,
   checkmate::assert_function(rearrange_fn, add = assert_collection)
   checkmate::assert_function(check_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(overwrite, add = assert_collection)
   checkmate::assert_data_frame(data[, cols, drop = FALSE],
     types = allowed_types,
     .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col(s)' columns"),
@@ -78,6 +80,7 @@ rearranger_ <- function(data,
       data = data,
       fn = rearrange_fn,
       cols = cols,
+      overwrite = overwrite,
       origin_fn = origin_fn,
       ...
     )
@@ -187,10 +190,7 @@ centering_rearranger_ <- function(data,
 #' @inheritParams rearranger_
 #' @param shuffle_members Whether to shuffle the pair members. (Logical)
 #' @param shuffle_pairs Whether to shuffle the pairs. (Logical)
-#' @param keep_factors Whether to keep the sorting factor(s) in the \code{data.frame}. \code{Logical}.
-#' @param factor_name Name of sorting factor.
-#'
-#'  N.B. Only used when \code{`keep_factors`} is \code{TRUE}.
+#' @param factor_name Name of new column with the sorting factor. If \code{NULL}, no column is added.
 #' @param unequal_method Method for dealing with an unequal number of rows
 #'  in \code{`data`}.
 #'
@@ -264,15 +264,14 @@ extreme_pairing_rearranger_ <- function(data,
                                         shuffle_members = FALSE,
                                         shuffle_pairs = FALSE,
                                         num_pairings = 1,
-                                        keep_factors = FALSE,
-                                        factor_name = ".pair") {
+                                        factor_name = ".pair",
+                                        overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_count(num_pairings, positive = TRUE, add = assert_collection)
   checkmate::assert_string(unequal_method, min.chars = 1, add = assert_collection)
-  checkmate::assert_string(factor_name, min.chars = 1, add = assert_collection)
-  checkmate::assert_flag(keep_factors, add = assert_collection)
+  checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(shuffle_members, add = assert_collection)
   checkmate::assert_flag(shuffle_pairs, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -289,11 +288,11 @@ extreme_pairing_rearranger_ <- function(data,
     rearrange_fn = rearrange_pair_extremes,
     check_fn = NULL,
     cols = col,
+    overwrite = overwrite,
     unequal_method = unequal_method,
     num_pairings = num_pairings,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
-    keep_factors = keep_factors,
     factor_name = factor_name
   )
 }
@@ -307,9 +306,8 @@ extreme_pairing_rearranger_ <- function(data,
 #' @inheritParams rearranger_
 #' @param window_size Size of the windows. (Logical)
 #' @param keep_windows Whether to keep the factor with window identifiers. (Logical)
-#' @param factor_name Name of the factor with window identifiers. (Logical)
-#'
-#'  N.B. Only used when \code{`keep_windows`} is \code{TRUE}.
+#' @param factor_name Name of the factor with window identifiers.
+#'  If \code{NULL}, no column is added.
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -319,14 +317,13 @@ extreme_pairing_rearranger_ <- function(data,
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 rev_windows_rearranger_ <- function(data,
                                     window_size,
-                                    keep_windows = FALSE,
-                                    factor_name = ".window") {
+                                    factor_name = ".window",
+                                    overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_count(window_size, positive = TRUE, add = assert_collection)
-  checkmate::assert_flag(keep_windows, add = assert_collection)
-  checkmate::assert_string(factor_name, add = assert_collection)
+  checkmate::assert_string(factor_name, null.ok = TRUE, min.chars = 1, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
@@ -334,9 +331,9 @@ rev_windows_rearranger_ <- function(data,
   rearranger_(
     data = data,
     rearrange_fn = rearrange_rev_windows,
+    overwrite = overwrite,
     check_fn = NULL,
     window_size = window_size,
-    keep_windows = keep_windows,
     factor_name = factor_name
   )
 }
@@ -356,6 +353,8 @@ rev_windows_rearranger_ <- function(data,
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param shuffle_ties Whether to shuffle elements with the same distance to the origin. (Logical)
 #' @param decreasing Whether to order by decreasing distances to the origin. (Logical)
+#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
+#' @param distance_col_name Name of new column with the distances to the origin. If \code{NULL}, no column is added.
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -364,7 +363,10 @@ by_distance_rearranger_ <- function(data,
                                     origin = NULL,
                                     origin_fn = NULL,
                                     shuffle_ties = FALSE,
-                                    decreasing = FALSE) {
+                                    decreasing = FALSE,
+                                    origin_col_name = ".origin",
+                                    distance_col_name = ".distance",
+                                    overwrite = FALSE) {
 
   # TODO Allow target to be on length num_groups and find a way to pass
   # the groups to the split.
@@ -379,6 +381,8 @@ by_distance_rearranger_ <- function(data,
     any.missing = FALSE, min.len = 1, min.chars = 1,
     null.ok = TRUE, add = assert_collection
   )
+  checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_string(distance_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   if (sum(is.null(origin), is.null(origin_fn)) != 1) {
     assert_collection$push(
@@ -394,10 +398,13 @@ by_distance_rearranger_ <- function(data,
     cols = cols,
     rearrange_fn = rearrange_by_distance,
     allowed_types = c("numeric", "factor"),
+    overwrite = overwrite,
     check_fn = NULL,
     origin = origin,
     origin_fn = origin_fn,
     shuffle_ties = shuffle_ties,
-    decreasing = decreasing
+    decreasing = decreasing,
+    origin_col_name = origin_col_name,
+    distance_col_name = distance_col_name
   )
 }

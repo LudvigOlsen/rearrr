@@ -11,6 +11,7 @@ rearranger_(
   cols = NULL,
   allowed_types = c("numeric", "factor", "character"),
   col = deprecated(),
+  overwrite = FALSE,
   origin_fn = NULL,
   ...
 )
@@ -31,6 +32,8 @@ columns not mentioned in the \code{`col(s)`} argument.}
 
 \item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
