@@ -28,12 +28,18 @@ test_that("fuzz testing closest_to()", {
   #     "col" = list(NULL, "A", "B", "C"),
   #     "origin" = list(2, 10, NA, factor(c(1))),
   #     "origin_fn" = list(NULL),
-  #     "shuffle_ties" = list(FALSE, TRUE)
+  #     "shuffle_ties" = list(FALSE, TRUE),
+  #     "origin_col_name" = list(".origin", "hej", NA),
+  #     "distance_col_name" = list(".distance", "nej", NA),
+  #     "overwrite" = list(FALSE, TRUE, NA)
   #   ),
   #   extra_combinations = list(
   #     list("origin" = NULL, "origin_fn" = create_origin_fn(median)),
   #     list("origin" = NULL, "origin_fn" = create_origin_fn(max)),
-  #     list("origin" = NULL, "origin_fn" = create_origin_fn(identity))
+  #     list("origin" = NULL, "origin_fn" = create_origin_fn(identity)),
+  #     list("origin_col_name" = "h", "distance_col_name" = "h"),
+  #     list("origin_col_name" = "A"),
+  #     list("origin_col_name" = "A", "overwrite" = TRUE)
   #   ),
   #   indentation = 2
   # )
@@ -46,7 +52,7 @@ test_that("fuzz testing closest_to()", {
   # Testing closest_to(data = df, col = NULL, origin = 2...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_19148 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -77,25 +83,31 @@ test_that("fuzz testing closest_to()", {
     output_19148[["G_index"]],
     c(2, 1, 3, 1, 2, 3),
     tolerance = 1e-4)
+  expect_equal(
+    output_19148[[".distance"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_19148),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19148),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19148),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_19148),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19148)),
@@ -106,7 +118,7 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: data = dplyr::group_b...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19370 <- closest_to(data = dplyr::group_by(df, G), col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_19370 <- closest_to(data = dplyr::group_by(df, G), col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19370),
@@ -137,25 +149,31 @@ test_that("fuzz testing closest_to()", {
     output_19370[["G_index"]],
     c(2, 1, 3, 2, 1, 3),
     tolerance = 1e-4)
+  expect_equal(
+    output_19370[[".distance"]],
+    c(0, 1, 1, 0, 1, 1),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_19370),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19370),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19370),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_19370),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
@@ -166,74 +184,96 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: data = 1:10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12861 <- closest_to(data = 1:10, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_12861 <- closest_to(data = 1:10, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_12861),
-    "integer",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
-  # Testing type
-  expect_type(
-    output_12861,
-    type = "integer")
-  # Testing values
+  # Testing column values
   expect_equal(
-    output_12861,
+    output_12861[["Value"]],
     c(2, 1, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
-  # Testing names
+  expect_equal(
+    output_12861[[".distance"]],
+    c(0, 1, 1, 2, 3, 4, 5, 6, 7, 8),
+    tolerance = 1e-4)
+  # Testing column names
   expect_equal(
     names(output_12861),
-    NULL,
+    c("Value", ".origin", ".distance"),
     fixed = TRUE)
-  # Testing length
+  # Testing column classes
   expect_equal(
-    length(output_12861),
-    10L)
-  # Testing sum of element lengths
+    xpectr::element_classes(output_12861),
+    c("integer", "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
   expect_equal(
-    sum(xpectr::element_lengths(output_12861)),
-    10L)
+    xpectr::element_types(output_12861),
+    c("integer", "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_12861),
+    c(10L, 3L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_12861)),
+    character(0),
+    fixed = TRUE)
 
   # Testing closest_to(data = -3:3, col = NULL, origin =...
   # Changed from baseline: data = -3:3
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18304 <- closest_to(data = -3:3, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_18304 <- closest_to(data = -3:3, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_18304),
-    "integer",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
-  # Testing type
-  expect_type(
-    output_18304,
-    type = "integer")
-  # Testing values
+  # Testing column values
   expect_equal(
-    output_18304,
+    output_18304[["Value"]],
     c(2, 1, 3, 0, -1, -2, -3),
     tolerance = 1e-4)
-  # Testing names
+  expect_equal(
+    output_18304[[".distance"]],
+    c(0, 1, 1, 2, 3, 4, 5),
+    tolerance = 1e-4)
+  # Testing column names
   expect_equal(
     names(output_18304),
-    NULL,
+    c("Value", ".origin", ".distance"),
     fixed = TRUE)
-  # Testing length
+  # Testing column classes
   expect_equal(
-    length(output_18304),
-    7L)
-  # Testing sum of element lengths
+    xpectr::element_classes(output_18304),
+    c("integer", "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
   expect_equal(
-    sum(xpectr::element_lengths(output_18304)),
-    7L)
+    xpectr::element_types(output_18304),
+    c("integer", "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_18304),
+    c(7L, 3L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_18304)),
+    character(0),
+    fixed = TRUE)
 
   # Testing closest_to(data = NA, col = NULL, origin = 2...
   # Changed from baseline: data = NA
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(closest_to(data = NA, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(closest_to(data = NA, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
@@ -248,7 +288,7 @@ test_that("fuzz testing closest_to()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15190 <- xpectr::capture_side_effects(closest_to(data = NULL, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_15190 <- xpectr::capture_side_effects(closest_to(data = NULL, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -262,7 +302,7 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: col = "A"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- closest_to(data = df, col = "A", origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_17365 <- closest_to(data = df, col = "A", origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -293,25 +333,31 @@ test_that("fuzz testing closest_to()", {
     output_17365[["G_index"]],
     c(3, 3, 1, 2, 2, 1),
     tolerance = 1e-4)
+  expect_equal(
+    output_17365[[".distance"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_17365),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_17365),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_17365),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_17365),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_17365)),
@@ -322,7 +368,7 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: col = "B"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11346 <- closest_to(data = df, col = "B", origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_11346 <- closest_to(data = df, col = "B", origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_11346),
@@ -353,25 +399,31 @@ test_that("fuzz testing closest_to()", {
     output_11346[["G_index"]],
     c(1, 3, 1, 3, 2, 2),
     tolerance = 1e-4)
+  expect_equal(
+    output_11346[[".distance"]],
+    c(1.26341, 1.28089, 1.29494, 1.34301, 1.54226, 1.86533),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_11346),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_11346),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_11346),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_11346),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_11346)),
@@ -383,10 +435,10 @@ test_that("fuzz testing closest_to()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(closest_to(data = df, col = "C", origin = 2, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(closest_to(data = df, col = "C", origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''col(s)' columns': May only contain the following types: {numeric,factor}, but element 1\n * has type 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''col(s)' columns': May only contain the following types: {numeric,factor}, but\n * element 1 has type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error_class']]),
@@ -398,7 +450,7 @@ test_that("fuzz testing closest_to()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = factor(c(1)), origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = factor(c(1)), origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'number' (or 'NULL'), not 'factor'."),
@@ -412,7 +464,7 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: origin = 10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14577 <- closest_to(data = df, col = NULL, origin = 10, origin_fn = NULL, shuffle_ties = FALSE)
+  output_14577 <- closest_to(data = df, col = NULL, origin = 10, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_14577),
@@ -443,25 +495,31 @@ test_that("fuzz testing closest_to()", {
     output_14577[["G_index"]],
     c(3, 2, 1, 3, 2, 1),
     tolerance = 1e-4)
+  expect_equal(
+    output_14577[[".distance"]],
+    c(4, 5, 6, 7, 8, 9),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_14577),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_14577),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_14577),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_14577),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_14577)),
@@ -473,7 +531,7 @@ test_that("fuzz testing closest_to()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = NA, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = NA, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': May not be NA."),
@@ -488,7 +546,7 @@ test_that("fuzz testing closest_to()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * exactly one of {origin,origin_fn} should specified."),
@@ -502,7 +560,7 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: origin, origin_fn
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12554 <- closest_to(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(median), shuffle_ties = FALSE)
+  output_12554 <- closest_to(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(median), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_12554),
@@ -533,25 +591,31 @@ test_that("fuzz testing closest_to()", {
     output_12554[["G_index"]],
     c(3, 1, 2, 2, 1, 3),
     tolerance = 1e-4)
+  expect_equal(
+    output_12554[[".distance"]],
+    c(0.5, 0.5, 1.5, 1.5, 2.5, 2.5),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_12554),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_12554),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_12554),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_12554),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_12554)),
@@ -562,7 +626,7 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: origin, origin_fn
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14622 <- closest_to(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(max), shuffle_ties = FALSE)
+  output_14622 <- closest_to(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(max), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_14622),
@@ -593,25 +657,31 @@ test_that("fuzz testing closest_to()", {
     output_14622[["G_index"]],
     c(3, 2, 1, 3, 2, 1),
     tolerance = 1e-4)
+  expect_equal(
+    output_14622[[".distance"]],
+    c(0, 1, 2, 3, 4, 5),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_14622),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_14622),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_14622),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_14622),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_14622)),
@@ -623,7 +693,7 @@ test_that("fuzz testing closest_to()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(identity), shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(identity), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (1) but had length 6."),
@@ -637,7 +707,7 @@ test_that("fuzz testing closest_to()", {
   # Changed from baseline: shuffle_ties = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = TRUE)
+  output_19782 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = TRUE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19782),
@@ -668,25 +738,31 @@ test_that("fuzz testing closest_to()", {
     output_19782[["G_index"]],
     c(2, 3, 1, 1, 2, 3),
     tolerance = 1e-4)
+  expect_equal(
+    output_19782[[".distance"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_19782),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19782),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19782),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_19782),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19782)),
@@ -698,13 +774,491 @@ test_that("fuzz testing closest_to()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = NULL), reset_seed = TRUE)
+  side_effects_11174 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = NULL, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'shuffle_ties': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: origin_col_name = "hej"
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_14749 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "hej", distance_col_name = ".distance", overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_14749),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_14749[["index"]],
+    c(2, 1, 3, 4, 5, 6),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["A"]],
+    c(5, 6, 2, 3, 4, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["B"]],
+    c(0.13467, 0.73659, 0.65699, 0.70506, 0.45774, 0.71911),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["C"]],
+    c("B", "A", "C", "D", "E", "F"),
+    fixed = TRUE)
+  expect_equal(
+    output_14749[["G"]],
+    c(1, 1, 1, 2, 2, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["G_index"]],
+    c(2, 1, 3, 1, 2, 3),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[[".distance"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_14749),
+    c("index", "A", "B", "C", "G", "G_index", "hej", ".distance"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_14749),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_14749),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_14749),
+    c(6L, 8L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_14749)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: origin_col_name = NA
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15603 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = NA, distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15603[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'origin_col_name': May not be NA."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15603[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: origin_col_name = "A"
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19040 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "A", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19040[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'A' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19040[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: origin_col_name = NULL
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_11387 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = NULL, distance_col_name = ".distance", overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_11387),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_11387[["index"]],
+    c(2, 1, 3, 4, 5, 6),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["A"]],
+    c(5, 6, 2, 3, 4, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["B"]],
+    c(0.13467, 0.73659, 0.65699, 0.70506, 0.45774, 0.71911),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["C"]],
+    c("B", "A", "C", "D", "E", "F"),
+    fixed = TRUE)
+  expect_equal(
+    output_11387[["G"]],
+    c(1, 1, 1, 2, 2, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["G_index"]],
+    c(2, 1, 3, 1, 2, 3),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[[".distance"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_11387),
+    c("index", "A", "B", "C", "G", "G_index", ".distance"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_11387),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_11387),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_11387),
+    6:7)
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_11387)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: origin_col_name, dist...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19888 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "h", distance_col_name = "h", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19888[['error']]),
+    xpectr::strip("Assertion on 'specified column names (\"h\", \"h\")' failed: Contains duplicated values, position 2."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19888[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: origin_col_name, over...
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19466 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "A", distance_col_name = ".distance", overwrite = TRUE)
+  # Testing class
+  expect_equal(
+    class(output_19466),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_19466[["index"]],
+    c(2, 1, 3, 4, 5, 6),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["B"]],
+    c(0.13467, 0.73659, 0.65699, 0.70506, 0.45774, 0.71911),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["C"]],
+    c("B", "A", "C", "D", "E", "F"),
+    fixed = TRUE)
+  expect_equal(
+    output_19466[["G"]],
+    c(1, 1, 1, 2, 2, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["G_index"]],
+    c(2, 1, 3, 1, 2, 3),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[[".distance"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_19466),
+    c("index", "A", "B", "C", "G", "G_index", ".distance"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19466),
+    c("integer", "list", "numeric", "character", "numeric", "integer",
+      "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19466),
+    c("integer", "list", "double", "character", "double", "integer",
+      "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19466),
+    6:7)
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19466)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: distance_col_name = "...
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_10824 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = "nej", overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_10824),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_10824[["index"]],
+    c(2, 1, 3, 4, 5, 6),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["A"]],
+    c(5, 6, 2, 3, 4, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["B"]],
+    c(0.13467, 0.73659, 0.65699, 0.70506, 0.45774, 0.71911),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["C"]],
+    c("B", "A", "C", "D", "E", "F"),
+    fixed = TRUE)
+  expect_equal(
+    output_10824[["G"]],
+    c(1, 1, 1, 2, 2, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["G_index"]],
+    c(2, 1, 3, 1, 2, 3),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["nej"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_10824),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", "nej"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_10824),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_10824),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_10824),
+    c(6L, 8L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_10824)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: distance_col_name = NA
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15142 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = NA, overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15142[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'distance_col_name': May not be NA."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15142[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: distance_col_name = NULL
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_13902 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = NULL, overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_13902),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_13902[["index"]],
+    c(2, 1, 3, 4, 5, 6),
+    tolerance = 1e-4)
+  expect_equal(
+    output_13902[["A"]],
+    c(5, 6, 2, 3, 4, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_13902[["B"]],
+    c(0.13467, 0.73659, 0.65699, 0.70506, 0.45774, 0.71911),
+    tolerance = 1e-4)
+  expect_equal(
+    output_13902[["C"]],
+    c("B", "A", "C", "D", "E", "F"),
+    fixed = TRUE)
+  expect_equal(
+    output_13902[["G"]],
+    c(1, 1, 1, 2, 2, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_13902[["G_index"]],
+    c(2, 1, 3, 1, 2, 3),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_13902),
+    c("index", "A", "B", "C", "G", "G_index", ".origin"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_13902),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_13902),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_13902),
+    6:7)
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_13902)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: overwrite = TRUE
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19057 <- closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = TRUE)
+  # Testing class
+  expect_equal(
+    class(output_19057),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_19057[["index"]],
+    c(2, 1, 3, 4, 5, 6),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[["A"]],
+    c(5, 6, 2, 3, 4, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[["B"]],
+    c(0.13467, 0.73659, 0.65699, 0.70506, 0.45774, 0.71911),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[["C"]],
+    c("B", "A", "C", "D", "E", "F"),
+    fixed = TRUE)
+  expect_equal(
+    output_19057[["G"]],
+    c(1, 1, 1, 2, 2, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[["G_index"]],
+    c(2, 1, 3, 1, 2, 3),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[[".distance"]],
+    c(0, 1, 1, 2, 3, 4),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_19057),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19057),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19057),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19057),
+    c(6L, 8L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19057)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: overwrite = NA
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_14469 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = NA), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': May not be NA."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14469[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing closest_to(data = df, col = NULL, origin = 2...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_18360 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18360[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -739,12 +1293,16 @@ test_that("fuzz testing furthest_from()", {
   #     "col" = list(NULL, "A", "B", "C"),
   #     "origin" = list(2, 10, NA, factor(c(1))),
   #     "origin_fn" = list(NULL),
-  #     "shuffle_ties" = list(FALSE, TRUE)
+  #     "shuffle_ties" = list(FALSE, TRUE),
+  #     "origin_col_name" = list(".origin", "hej", NA),
+  #     "distance_col_name" = list(".distance", "nej", NA),
+  #     "overwrite" = list(FALSE, TRUE, NA)
   #   ),
   #   extra_combinations = list(
   #     list("origin" = NULL, "origin_fn" = create_origin_fn(median)),
   #     list("origin" = NULL, "origin_fn" = create_origin_fn(max) ),
-  #     list("origin" = NULL, "origin_fn" = create_origin_fn(identity))
+  #     list("origin" = NULL, "origin_fn" = create_origin_fn(identity)),
+  #     list("origin_col_name" = "A")
   #   ),
   #   indentation = 2
   # )
@@ -757,7 +1315,7 @@ test_that("fuzz testing furthest_from()", {
   # Testing furthest_from(data = df, col = NULL, origin ...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_19148 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -788,25 +1346,31 @@ test_that("fuzz testing furthest_from()", {
     output_19148[["G_index"]],
     c(3, 2, 1, 1, 3, 2),
     tolerance = 1e-4)
+  expect_equal(
+    output_19148[[".distance"]],
+    c(4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_19148),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19148),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19148),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_19148),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19148)),
@@ -817,7 +1381,7 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: data = dplyr::group_b...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19370 <- furthest_from(data = dplyr::group_by(df, G), col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_19370 <- furthest_from(data = dplyr::group_by(df, G), col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19370),
@@ -848,25 +1412,31 @@ test_that("fuzz testing furthest_from()", {
     output_19370[["G_index"]],
     c(1, 3, 2, 1, 3, 2),
     tolerance = 1e-4)
+  expect_equal(
+    output_19370[[".distance"]],
+    c(1, 1, 0, 1, 1, 0),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_19370),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19370),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19370),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_19370),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19370)),
@@ -877,74 +1447,96 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: data = 1:10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12861 <- furthest_from(data = 1:10, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_12861 <- furthest_from(data = 1:10, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_12861),
-    "integer",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
-  # Testing type
-  expect_type(
-    output_12861,
-    type = "integer")
-  # Testing values
+  # Testing column values
   expect_equal(
-    output_12861,
+    output_12861[["Value"]],
     c(10, 9, 8, 7, 6, 5, 4, 1, 3, 2),
     tolerance = 1e-4)
-  # Testing names
+  expect_equal(
+    output_12861[[".distance"]],
+    c(8, 7, 6, 5, 4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
+  # Testing column names
   expect_equal(
     names(output_12861),
-    NULL,
+    c("Value", ".origin", ".distance"),
     fixed = TRUE)
-  # Testing length
+  # Testing column classes
   expect_equal(
-    length(output_12861),
-    10L)
-  # Testing sum of element lengths
+    xpectr::element_classes(output_12861),
+    c("integer", "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
   expect_equal(
-    sum(xpectr::element_lengths(output_12861)),
-    10L)
+    xpectr::element_types(output_12861),
+    c("integer", "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_12861),
+    c(10L, 3L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_12861)),
+    character(0),
+    fixed = TRUE)
 
   # Testing furthest_from(data = -3:3, col = NULL, origi...
   # Changed from baseline: data = -3:3
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18304 <- furthest_from(data = -3:3, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_18304 <- furthest_from(data = -3:3, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_18304),
-    "integer",
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
-  # Testing type
-  expect_type(
-    output_18304,
-    type = "integer")
-  # Testing values
+  # Testing column values
   expect_equal(
-    output_18304,
+    output_18304[["Value"]],
     c(-3, -2, -1, 0, 1, 3, 2),
     tolerance = 1e-4)
-  # Testing names
+  expect_equal(
+    output_18304[[".distance"]],
+    c(5, 4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
+  # Testing column names
   expect_equal(
     names(output_18304),
-    NULL,
+    c("Value", ".origin", ".distance"),
     fixed = TRUE)
-  # Testing length
+  # Testing column classes
   expect_equal(
-    length(output_18304),
-    7L)
-  # Testing sum of element lengths
+    xpectr::element_classes(output_18304),
+    c("integer", "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
   expect_equal(
-    sum(xpectr::element_lengths(output_18304)),
-    7L)
+    xpectr::element_types(output_18304),
+    c("integer", "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_18304),
+    c(7L, 3L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_18304)),
+    character(0),
+    fixed = TRUE)
 
   # Testing furthest_from(data = NA, col = NULL, origin ...
   # Changed from baseline: data = NA
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(furthest_from(data = NA, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(furthest_from(data = NA, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
@@ -959,7 +1551,7 @@ test_that("fuzz testing furthest_from()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15190 <- xpectr::capture_side_effects(furthest_from(data = NULL, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_15190 <- xpectr::capture_side_effects(furthest_from(data = NULL, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -973,7 +1565,7 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: col = "A"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- furthest_from(data = df, col = "A", origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_17365 <- furthest_from(data = df, col = "A", origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -1004,25 +1596,31 @@ test_that("fuzz testing furthest_from()", {
     output_17365[["G_index"]],
     c(1, 2, 2, 3, 1, 3),
     tolerance = 1e-4)
+  expect_equal(
+    output_17365[[".distance"]],
+    c(4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_17365),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_17365),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_17365),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_17365),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_17365)),
@@ -1033,7 +1631,7 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: col = "B"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11346 <- furthest_from(data = df, col = "B", origin = 2, origin_fn = NULL, shuffle_ties = FALSE)
+  output_11346 <- furthest_from(data = df, col = "B", origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_11346),
@@ -1064,25 +1662,31 @@ test_that("fuzz testing furthest_from()", {
     output_11346[["G_index"]],
     c(2, 2, 3, 1, 3, 1),
     tolerance = 1e-4)
+  expect_equal(
+    output_11346[[".distance"]],
+    c(1.86533, 1.54226, 1.34301, 1.29494, 1.28089, 1.26341),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_11346),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_11346),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_11346),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_11346),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_11346)),
@@ -1094,10 +1698,10 @@ test_that("fuzz testing furthest_from()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(furthest_from(data = df, col = "C", origin = 2, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(furthest_from(data = df, col = "C", origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''col(s)' columns': May only contain the following types: {numeric,factor}, but element 1\n * has type 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''col(s)' columns': May only contain the following types: {numeric,factor}, but\n * element 1 has type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error_class']]),
@@ -1109,7 +1713,7 @@ test_that("fuzz testing furthest_from()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = factor(c(1)), origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = factor(c(1)), origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'number' (or 'NULL'), not 'factor'."),
@@ -1123,7 +1727,7 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: origin = 10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14577 <- furthest_from(data = df, col = NULL, origin = 10, origin_fn = NULL, shuffle_ties = FALSE)
+  output_14577 <- furthest_from(data = df, col = NULL, origin = 10, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_14577),
@@ -1154,25 +1758,31 @@ test_that("fuzz testing furthest_from()", {
     output_14577[["G_index"]],
     c(1, 2, 3, 1, 2, 3),
     tolerance = 1e-4)
+  expect_equal(
+    output_14577[[".distance"]],
+    c(9, 8, 7, 6, 5, 4),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_14577),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_14577),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_14577),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_14577),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_14577)),
@@ -1184,7 +1794,7 @@ test_that("fuzz testing furthest_from()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = NA, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = NA, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': May not be NA."),
@@ -1199,7 +1809,7 @@ test_that("fuzz testing furthest_from()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * exactly one of {origin,origin_fn} should specified."),
@@ -1213,7 +1823,7 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: origin, origin_fn
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12554 <- furthest_from(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(median), shuffle_ties = FALSE)
+  output_12554 <- furthest_from(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(median), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_12554),
@@ -1244,25 +1854,31 @@ test_that("fuzz testing furthest_from()", {
     output_12554[["G_index"]],
     c(1, 3, 2, 2, 3, 1),
     tolerance = 1e-4)
+  expect_equal(
+    output_12554[[".distance"]],
+    c(2.5, 2.5, 1.5, 1.5, 0.5, 0.5),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_12554),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_12554),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_12554),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_12554),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_12554)),
@@ -1273,7 +1889,7 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: origin, origin_fn
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14622 <- furthest_from(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(max), shuffle_ties = FALSE)
+  output_14622 <- furthest_from(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(max), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_14622),
@@ -1304,25 +1920,31 @@ test_that("fuzz testing furthest_from()", {
     output_14622[["G_index"]],
     c(1, 2, 3, 1, 2, 3),
     tolerance = 1e-4)
+  expect_equal(
+    output_14622[[".distance"]],
+    c(5, 4, 3, 2, 1, 0),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_14622),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_14622),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_14622),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_14622),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_14622)),
@@ -1334,7 +1956,7 @@ test_that("fuzz testing furthest_from()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(identity), shuffle_ties = FALSE), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(identity), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (1) but had length 6."),
@@ -1348,7 +1970,7 @@ test_that("fuzz testing furthest_from()", {
   # Changed from baseline: shuffle_ties = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = TRUE)
+  output_19782 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = TRUE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19782),
@@ -1379,25 +2001,31 @@ test_that("fuzz testing furthest_from()", {
     output_19782[["G_index"]],
     c(3, 2, 1, 3, 1, 2),
     tolerance = 1e-4)
+  expect_equal(
+    output_19782[[".distance"]],
+    c(4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
   # Testing column names
   expect_equal(
     names(output_19782),
-    c("index", "A", "B", "C", "G", "G_index"),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
     xpectr::element_classes(output_19782),
-    c("integer", "integer", "numeric", "character", "numeric", "integer"),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
     xpectr::element_types(output_19782),
-    c("integer", "integer", "double", "character", "double", "integer"),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
     dim(output_19782),
-    c(6L, 6L))
+    c(6L, 8L))
   # Testing group keys
   expect_equal(
     colnames(dplyr::group_keys(output_19782)),
@@ -1409,7 +2037,7 @@ test_that("fuzz testing furthest_from()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = NULL), reset_seed = TRUE)
+  side_effects_11174 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = NULL, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'shuffle_ties': Must be of type 'logical flag', not 'NULL'."),
@@ -1419,7 +2047,558 @@ test_that("fuzz testing furthest_from()", {
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: origin_col_name = "hej"
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_14749 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "hej", distance_col_name = ".distance", overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_14749),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_14749[["index"]],
+    c(6, 5, 4, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["A"]],
+    c(1, 4, 3, 6, 2, 5),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["B"]],
+    c(0.71911, 0.45774, 0.70506, 0.73659, 0.65699, 0.13467),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["C"]],
+    c("F", "E", "D", "A", "C", "B"),
+    fixed = TRUE)
+  expect_equal(
+    output_14749[["G"]],
+    c(2, 2, 2, 1, 1, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[["G_index"]],
+    c(3, 2, 1, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_14749[[".distance"]],
+    c(4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_14749),
+    c("index", "A", "B", "C", "G", "G_index", "hej", ".distance"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_14749),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_14749),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_14749),
+    c(6L, 8L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_14749)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: origin_col_name = NA
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15603 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = NA, distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15603[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'origin_col_name': May not be NA."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15603[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: origin_col_name = "A"
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19040 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "A", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19040[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'A' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19040[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: origin_col_name = NULL
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_11387 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = NULL, distance_col_name = ".distance", overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_11387),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_11387[["index"]],
+    c(6, 5, 4, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["A"]],
+    c(1, 4, 3, 6, 2, 5),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["B"]],
+    c(0.71911, 0.45774, 0.70506, 0.73659, 0.65699, 0.13467),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["C"]],
+    c("F", "E", "D", "A", "C", "B"),
+    fixed = TRUE)
+  expect_equal(
+    output_11387[["G"]],
+    c(2, 2, 2, 1, 1, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[["G_index"]],
+    c(3, 2, 1, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_11387[[".distance"]],
+    c(4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_11387),
+    c("index", "A", "B", "C", "G", "G_index", ".distance"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_11387),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_11387),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_11387),
+    6:7)
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_11387)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: distance_col_name = "...
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19888 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = "nej", overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_19888),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_19888[["index"]],
+    c(6, 5, 4, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19888[["A"]],
+    c(1, 4, 3, 6, 2, 5),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19888[["B"]],
+    c(0.71911, 0.45774, 0.70506, 0.73659, 0.65699, 0.13467),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19888[["C"]],
+    c("F", "E", "D", "A", "C", "B"),
+    fixed = TRUE)
+  expect_equal(
+    output_19888[["G"]],
+    c(2, 2, 2, 1, 1, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19888[["G_index"]],
+    c(3, 2, 1, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19888[["nej"]],
+    c(4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_19888),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", "nej"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19888),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19888),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19888),
+    c(6L, 8L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19888)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: distance_col_name = NA
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19466 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = NA, overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'distance_col_name': May not be NA."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: distance_col_name = NULL
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_10824 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = NULL, overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_10824),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_10824[["index"]],
+    c(6, 5, 4, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["A"]],
+    c(1, 4, 3, 6, 2, 5),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["B"]],
+    c(0.71911, 0.45774, 0.70506, 0.73659, 0.65699, 0.13467),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["C"]],
+    c("F", "E", "D", "A", "C", "B"),
+    fixed = TRUE)
+  expect_equal(
+    output_10824[["G"]],
+    c(2, 2, 2, 1, 1, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_10824[["G_index"]],
+    c(3, 2, 1, 1, 3, 2),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_10824),
+    c("index", "A", "B", "C", "G", "G_index", ".origin"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_10824),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_10824),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_10824),
+    6:7)
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_10824)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: overwrite = TRUE
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_15142 <- furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = TRUE)
+  # Testing class
+  expect_equal(
+    class(output_15142),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_15142[["index"]],
+    c(6, 5, 4, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_15142[["A"]],
+    c(1, 4, 3, 6, 2, 5),
+    tolerance = 1e-4)
+  expect_equal(
+    output_15142[["B"]],
+    c(0.71911, 0.45774, 0.70506, 0.73659, 0.65699, 0.13467),
+    tolerance = 1e-4)
+  expect_equal(
+    output_15142[["C"]],
+    c("F", "E", "D", "A", "C", "B"),
+    fixed = TRUE)
+  expect_equal(
+    output_15142[["G"]],
+    c(2, 2, 2, 1, 1, 1),
+    tolerance = 1e-4)
+  expect_equal(
+    output_15142[["G_index"]],
+    c(3, 2, 1, 1, 3, 2),
+    tolerance = 1e-4)
+  expect_equal(
+    output_15142[[".distance"]],
+    c(4, 3, 2, 1, 1, 0),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_15142),
+    c("index", "A", "B", "C", "G", "G_index", ".origin", ".distance"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_15142),
+    c("integer", "integer", "numeric", "character", "numeric", "integer",
+      "list", "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_15142),
+    c("integer", "integer", "double", "character", "double", "integer",
+      "list", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_15142),
+    c(6L, 8L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_15142)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: overwrite = NA
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_13902 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = NA), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_13902[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': May not be NA."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing furthest_from(data = df, col = NULL, origin ...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19057 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
   ## Finished testing 'furthest_from'                                         ####
   #
+})
+
+test_that("testing closest_to_vec()", {
+  xpectr::set_test_seed(42)
+
+  ## Testing 'closest_to_vec(data = runif(10), origin = NU...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19148 <- closest_to_vec(data = runif(10), origin = NULL, origin_fn = centroid, shuffle_ties = TRUE)
+  # Testing class
+  expect_equal(
+    class(output_19148),
+    "numeric",
+    fixed = TRUE)
+  # Testing type
+  expect_type(
+    output_19148,
+    type = "double")
+  # Testing values
+  expect_equal(
+    output_19148,
+    c(0.64175, 0.65699, 0.70506, 0.73659, 0.5191, 0.83045, 0.91481,
+      0.93708, 0.28614, 0.13467),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_19148),
+    NULL,
+    fixed = TRUE)
+  # Testing length
+  expect_equal(
+    length(output_19148),
+    10L)
+  # Testing sum of element lengths
+  expect_equal(
+    sum(xpectr::element_lengths(output_19148)),
+    10L)
+  ## Finished testing 'closest_to_vec(data = runif(10), origin = NU...'     ####
+
+
+  ## Testing 'closest_to_vec(data = data.frame("a" = runif...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19148 <- xpectr::capture_side_effects(closest_to_vec(data = data.frame("a" = runif(10)), origin = NULL, origin_fn = centroid, shuffle_ties = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19148[['error']]),
+    xpectr::strip("Assertion on 'data' failed: Must be of type 'numeric', not 'data.frame'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19148[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+  ## Finished testing 'closest_to_vec(data = data.frame("a" = runif...'     ####
+
+
+  ## Testing 'closest_to_vec(data = factor(c(1,1,2,2,3,3))...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19148 <- xpectr::capture_side_effects(closest_to_vec(data = factor(c(1,1,2,2,3,3)), origin = NULL, origin_fn = centroid, shuffle_ties = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19148[['error']]),
+    xpectr::strip("Assertion on 'data' failed: Must be of type 'numeric', not 'factor'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19148[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+  ## Finished testing 'closest_to_vec(data = factor(c(1,1,2,2,3,3))...'     ####
+
+
+})
+
+test_that("testing furthest_from_vec()", {
+  xpectr::set_test_seed(42)
+
+
+  ## Testing 'furthest_from_vec(data = runif(10), origin =...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19148 <- furthest_from_vec(data = runif(10), origin = NULL, origin_fn = centroid, shuffle_ties = TRUE)
+  # Testing class
+  expect_equal(
+    class(output_19148),
+    "numeric",
+    fixed = TRUE)
+  # Testing type
+  expect_type(
+    output_19148,
+    type = "double")
+  # Testing values
+  expect_equal(
+    output_19148,
+    c(0.13467, 0.28614, 0.93708, 0.91481, 0.83045, 0.5191, 0.73659,
+      0.70506, 0.65699, 0.64175),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_19148),
+    NULL,
+    fixed = TRUE)
+  # Testing length
+  expect_equal(
+    length(output_19148),
+    10L)
+  # Testing sum of element lengths
+  expect_equal(
+    sum(xpectr::element_lengths(output_19148)),
+    10L)
+  ## Finished testing 'furthest_from_vec(data = runif(10), origin =...'     ####
+
+
+  ## Testing 'furthest_from_vec(data = data.frame("a" = ru...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_14577 <- xpectr::capture_side_effects(furthest_from_vec(data = data.frame("a" = runif(10)), origin = NULL, origin_fn = centroid, shuffle_ties = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip("Assertion on 'data' failed: Must be of type 'numeric', not 'data.frame'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+  ## Finished testing 'furthest_from_vec(data = data.frame("a" = ru...'     ####
+
+
+  ## Testing 'furthest_from_vec(data = factor(c(1,1,2,2,3,...'              ####
+  ## Initially generated by xpectr
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_14577 <- xpectr::capture_side_effects(furthest_from_vec(data = factor(c(1,1,2,2,3,3)), origin = NULL, origin_fn = centroid, shuffle_ties = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip("Assertion on 'data' failed: Must be of type 'numeric', not 'factor'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+  ## Finished testing 'furthest_from_vec(data = factor(c(1,1,2,2,3,...'     ####
+
 
 })

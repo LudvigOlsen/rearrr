@@ -344,7 +344,35 @@ add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE){
 ##  .................. #< 385b0b542a569ee6b885fc0849f644a6 ># ..................
 ##  Input helpers                                                           ####
 
+check_unique_colnames <- function(...) {
+  nms <- list(...) %>%
+    purrr::compact() %>%
+    purrr::simplify()
 
+  if (is.null(nms))
+    return(invisible(NULL))
+
+  # Get names as string
+  first_nms <- deparse(head(nms, 4))
+  # Remove "list()"
+  nms_str <- paste0(substring(first_nms, first = 3, nchar(first_nms)-1))
+
+  # Add ... if more than 4 elements
+  if (length(nms) > 4){
+    nms_str <- paste0(nms_str, ", ...")
+  }
+
+
+  # Check that names are unique
+  checkmate::assert_character(
+    nms,
+    unique = TRUE,
+    .var.name = paste0(
+      "specified column names (",
+      nms_str, ")"
+    )
+  )
+}
 
 
 ##  .................. #< 4405b38854cdc7cc63ac70477e1c9953 ># ..................
@@ -485,12 +513,15 @@ add_info_col <- function(data, nm, content, overwrite = FALSE){
 
 # check_overwrite(data = data, nm = "?", overwrite = overwrite)
 check_overwrite <- function(data, nm, overwrite){
+  if (!is.data.frame(data)){
+    return(invisible(NULL))
+  }
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, add = assert_collection)
   checkmate::assert_string(nm, min.chars = 1, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(overwrite, add = assert_collection)
   # Check if we would overwrite an existing column
-  if (!isTRUE(overwrite) && nm %in% colnames(data)){
+  if (!is.null(nm) && !isTRUE(overwrite) && nm %in% colnames(data)){
     assert_collection$push(
       paste0("The column '", nm,
              "' already exists and 'overwrite' is disabled.")

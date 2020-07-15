@@ -390,6 +390,7 @@ by_distance_rearranger_ <- function(data,
     )
   }
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames(cols, origin_col_name, distance_col_name)
   # End of argument checks ####
 
   # Rearrange 'data'

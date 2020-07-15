@@ -105,7 +105,8 @@ pair_extremes <- function(data,
                           # num_pairings = 1, # TODO
                           shuffle_members = FALSE,
                           shuffle_pairs = FALSE,
-                          factor_name = ".pair") {
+                          factor_name = ".pair",
+                          overwrite = FALSE) {
   extreme_pairing_rearranger_(
     data = data,
     col = col,
@@ -113,7 +114,8 @@ pair_extremes <- function(data,
     num_pairings = 1,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
-    factor_name = factor_name
+    factor_name = factor_name,
+    overwrite = overwrite
   )
 }
 

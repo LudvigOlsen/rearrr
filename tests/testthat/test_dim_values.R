@@ -44,7 +44,8 @@ test_that("dim_values()", {
   #     "dim_col" = list(NULL, "o", "x", 1, NA),
   #     "suffix" = list("", "_dimmed", 1, NA),
   #     "keep_original" = list(FALSE),
-  #     "origin_col_name" = list(".origin")
+  #     "origin_col_name" = list(".origin"),
+  #     "overwrite" = list(TRUE, FALSE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = c(1, 2, 3, 4, 5, 6), "cols" = NULL),
@@ -64,7 +65,7 @@ test_that("dim_values()", {
   # Testing dim_values(data = df, cols = c("x", "y", "o"...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_19148 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -125,7 +126,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19370 <- xpectr::capture_side_effects(dim_values(data = c(1, 2, 3, 4, 5, 6), cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19370 <- xpectr::capture_side_effects(dim_values(data = c(1, 2, 3, 4, 5, 6), cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -140,7 +141,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(dim_values(data = matrix(1:10, nrow = 5, ncol = 2), cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(dim_values(data = matrix(1:10, nrow = 5, ncol = 2), cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'matrix'\n * checkmate::check_vector(data): Must be of type 'vector', not 'matrix'\n * checkmate::check_factor(data): Must be of type 'factor', not 'matrix'"),
@@ -155,7 +156,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(dim_values(data = NA, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(dim_values(data = NA, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
@@ -169,7 +170,7 @@ test_that("dim_values()", {
   # Changed from baseline: data = dplyr::group_b...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16417 <- dim_values(data = dplyr::group_by(df, .cluster), cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_16417 <- dim_values(data = dplyr::group_by(df, .cluster), cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_16417),
@@ -235,7 +236,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15190 <- xpectr::capture_side_effects(dim_values(data = NULL, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15190 <- xpectr::capture_side_effects(dim_values(data = NULL, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -249,7 +250,7 @@ test_that("dim_values()", {
   # Changed from baseline: data, cols
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- dim_values(data = c(1, 2, 3, 4, 5, 6), cols = NULL, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_17365 <- dim_values(data = c(1, 2, 3, 4, 5, 6), cols = NULL, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -293,7 +294,7 @@ test_that("dim_values()", {
   # Changed from baseline: cols = c("x", "y")
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11346 <- dim_values(data = df, cols = c("x", "y"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_11346 <- dim_values(data = df, cols = c("x", "y"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_11346),
@@ -346,7 +347,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(dim_values(data = df, cols = "x", dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(dim_values(data = df, cols = "x", dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * This mutator method requires at least 2 dimensions / columns."),
@@ -361,7 +362,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(dim_values(data = df, cols = 1, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(dim_values(data = df, cols = 1, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("2 assertions failed:\n * This mutator method requires at least 2 dimensions / columns.\n * Variable 'cols': Must be of type 'character', not 'double'."),
@@ -376,7 +377,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(dim_values(data = df, cols = NA, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14577 <- xpectr::capture_side_effects(dim_values(data = df, cols = NA, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
     xpectr::strip("2 assertions failed:\n * This mutator method requires at least 2 dimensions / columns.\n * Variable 'cols': Contains missing values (element 1)."),
@@ -391,7 +392,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(dim_values(data = df, cols = NULL, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(dim_values(data = df, cols = NULL, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * This mutator method requires at least 2 dimensions / columns."),
@@ -406,7 +407,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = "hej", origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = "hej", origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'dimming_fn': Must be a function, not 'character'."),
@@ -421,7 +422,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = NA, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = NA, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'dimming_fn': Must be a function, not 'logical'."),
@@ -437,7 +438,7 @@ test_that("dim_values()", {
   # Assigning output
   output_14622 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = function(x, d) {
       x * d
-  }, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  }, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14622),
@@ -500,7 +501,7 @@ test_that("dim_values()", {
   # Assigning side effects
   side_effects_19400 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = function(x, d) {
       c(1, 2)
-  }, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  }, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("the output of 'dimming_fn' must have the same length as the input."),
@@ -515,7 +516,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = NULL, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = NULL, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'dimming_fn': Must be a function, not 'NULL'."),
@@ -530,7 +531,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = c(0.5, 0.5, 0.5), origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11174 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = c(0.5, 0.5, 0.5), origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['warnings']]),
     xpectr::strip(character(0)),
@@ -540,7 +541,7 @@ test_that("dim_values()", {
     xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
     fixed = TRUE)
   # Assigning output
-  output_11174 <- xpectr::suppress_mw(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = c(0.5, 0.5, 0.5), origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"))
+  output_11174 <- xpectr::suppress_mw(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = c(0.5, 0.5, 0.5), origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE))
   # Testing class
   expect_equal(
     class(output_11174),
@@ -600,7 +601,7 @@ test_that("dim_values()", {
   # Changed from baseline: origin, origin_fn
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14749 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = c(0.5, 0.5, 0.5), origin_fn = NULL, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_14749 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = c(0.5, 0.5, 0.5), origin_fn = NULL, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14749),
@@ -660,7 +661,7 @@ test_that("dim_values()", {
   # Changed from baseline: origin_fn = most_cent...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15603 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = most_centered, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_15603 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = most_centered, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15603),
@@ -720,7 +721,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19040 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = mean, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = mean, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (3) but had length 1."),
@@ -736,7 +737,7 @@ test_that("dim_values()", {
   # Assigning output
   output_11387 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = function(...) {
       c(1, 2, 3)
-  }, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  }, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_11387),
@@ -797,7 +798,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = NULL, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19888 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = NULL, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
@@ -811,7 +812,7 @@ test_that("dim_values()", {
   # Changed from baseline: dim_col = "o"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19466 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = "o", suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_19466 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = "o", suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19466),
@@ -871,7 +872,7 @@ test_that("dim_values()", {
   # Changed from baseline: dim_col = "x"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10824 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = "x", suffix = "", keep_original = FALSE, origin_col_name = ".origin")
+  output_10824 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = "x", suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_10824),
@@ -929,7 +930,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = 1, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = 1, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'dim_col': Must be of type 'string' (or 'NULL'), not 'double'."),
@@ -944,7 +945,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NA, suffix = "", keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13902 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NA, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13902[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'dim_col': May not be NA."),
@@ -958,7 +959,7 @@ test_that("dim_values()", {
   # Changed from baseline: suffix = "_dimmed"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19057 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "_dimmed", keep_original = FALSE, origin_col_name = ".origin")
+  output_19057 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "_dimmed", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19057),
@@ -1003,7 +1004,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14469 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = 1, keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = 1, keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'double'."),
@@ -1018,7 +1019,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = NA, keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18360 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = NA, keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18360[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': May not be NA."),
@@ -1033,7 +1034,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17375 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = NULL, keep_original = FALSE, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = NULL, keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'NULL'."),
@@ -1047,7 +1048,7 @@ test_that("dim_values()", {
   # Changed from baseline: suffix, keep_original
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18110 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "_dimmed", keep_original = TRUE, origin_col_name = ".origin")
+  output_18110 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "_dimmed", keep_original = TRUE, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_18110),
@@ -1127,7 +1128,7 @@ test_that("dim_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13881 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = NULL, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13881 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = NULL, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13881[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
@@ -1141,7 +1142,7 @@ test_that("dim_values()", {
   # Changed from baseline: origin_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16851 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = NULL)
+  output_16851 <- dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_16851),
@@ -1195,6 +1196,36 @@ test_that("dim_values()", {
   expect_equal(
     colnames(dplyr::group_keys(output_16851)),
     character(0),
+    fixed = TRUE)
+
+  # Testing dim_values(data = df, cols = c("x", "y", "o"...
+  # Changed from baseline: overwrite = FALSE
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_10039 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_10039[['error']]),
+    xpectr::strip("Adding these dimensions would overwrite existing columns: o."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_10039[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing dim_values(data = df, cols = c("x", "y", "o"...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_18329 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18329[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18329[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'dim_values'                                            ####

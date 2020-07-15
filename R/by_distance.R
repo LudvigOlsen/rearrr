@@ -143,8 +143,7 @@ closest_to_vec <- function(data,
                            origin = NULL,
                            origin_fn = NULL,
                            shuffle_ties = FALSE){
-  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
-                    checkmate::check_factor(data))
+  checkmate::assert_numeric(data)
   closest_to(
     data = data,
     origin = origin,
@@ -293,8 +292,7 @@ furthest_from_vec <- function(data,
                               origin = NULL,
                               origin_fn = NULL,
                               shuffle_ties = FALSE) {
-  checkmate::assert(checkmate::check_vector(data, strict = TRUE),
-                    checkmate::check_factor(data))
+  checkmate::assert_numeric(data)
   furthest_from(
     data = data,
     origin = origin,

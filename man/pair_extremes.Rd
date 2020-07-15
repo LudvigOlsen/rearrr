@@ -11,7 +11,8 @@ pair_extremes(
   unequal_method = "middle",
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
-  factor_name = ".pair"
+  factor_name = ".pair",
+  overwrite = FALSE
 )
 
 pair_extremes_vec(
@@ -93,6 +94,8 @@ And are \strong{ordered as}:
 \item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
 
 \item{factor_name}{Name of new column with the sorting factor. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.

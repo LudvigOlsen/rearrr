@@ -16,8 +16,7 @@ test_that("rearrange() with method pair_extremes works", {
   # with unequal number of rows
   df_rearranged <- pair_extremes(
     df,
-    unequal_method = "first",
-    keep_factors = TRUE
+    unequal_method = "first"
   )
   expect_equal(df_rearranged$.pair, factor(c(1, 2, 2, 3, 3, 4, 4)))
   expect_equal(df_rearranged$participant, factor(c(6, 1, 5, 3, 8, 7, 9)))
@@ -25,8 +24,7 @@ test_that("rearrange() with method pair_extremes works", {
 
   df_rearranged <- pair_extremes(
     df,
-    unequal_method = "middle",
-    keep_factors = TRUE
+    unequal_method = "middle"
   )
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 4, 4)))
   expect_equal(df_rearranged$participant, factor(c(6, 5, 1, 8, 7, 3, 9)))
@@ -34,8 +32,7 @@ test_that("rearrange() with method pair_extremes works", {
 
   df_rearranged <- pair_extremes(
     df,
-    unequal_method = "last",
-    keep_factors = TRUE
+    unequal_method = "last"
   )
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3, 4)))
   expect_equal(df_rearranged$participant, factor(c(6, 8, 1, 9, 3, 7, 5)))
@@ -50,8 +47,7 @@ test_that("rearrange() with method pair_extremes works", {
 
   df_rearranged <- pair_extremes(
     df,
-    unequal_method = "first",
-    keep_factors = TRUE
+    unequal_method = "first"
   )
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3)))
   expect_equal(df_rearranged$participant, factor(c(6, 5, 1, 8, 3, 7)))
@@ -59,8 +55,7 @@ test_that("rearrange() with method pair_extremes works", {
 
   df_rearranged <- pair_extremes(
     df,
-    unequal_method = "middle",
-    keep_factors = TRUE
+    unequal_method = "middle"
   )
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3)))
   expect_equal(df_rearranged$participant, factor(c(6, 5, 1, 8, 3, 7)))
@@ -68,8 +63,7 @@ test_that("rearrange() with method pair_extremes works", {
 
   df_rearranged <- pair_extremes(
     df,
-    unequal_method = "last",
-    keep_factors = TRUE
+    unequal_method = "last"
   )
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3)))
   expect_equal(df_rearranged$participant, factor(c(6, 5, 1, 8, 3, 7)))
@@ -86,8 +80,7 @@ test_that("rearrange() with method pair_extremes throws expected errors", {
   # Assigning side effects
   side_effects_19148 <- xpectr::capture_side_effects(
     pair_extremes(df,
-                  unequal_method = "none",
-                  keep_factors = TRUE
+                  unequal_method = "none"
   ), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['error']]),
@@ -143,8 +136,7 @@ test_that("rearrange() with method pair_extremes works on vectors", {
   # with unequal number of rows
   df_rearranged <- pair_extremes(
     score,
-    unequal_method = "first",
-    keep_factors = TRUE
+    unequal_method = "first"
   ) %>%
     dplyr::rename(score = Value)
   expect_equal(df_rearranged$.pair, factor(c(1, 2, 2, 3, 3, 4, 4)))
@@ -152,8 +144,7 @@ test_that("rearrange() with method pair_extremes works on vectors", {
 
   df_rearranged <- pair_extremes(
     score,
-    unequal_method = "middle",
-    keep_factors = TRUE
+    unequal_method = "middle"
   ) %>%
     dplyr::rename(score = Value)
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 4, 4)))
@@ -161,8 +152,7 @@ test_that("rearrange() with method pair_extremes works on vectors", {
 
   df_rearranged <- pair_extremes(
     score,
-    unequal_method = "last",
-    keep_factors = TRUE
+    unequal_method = "last"
   ) %>%
     dplyr::rename(score = Value)
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3, 4)))
@@ -174,8 +164,7 @@ test_that("rearrange() with method pair_extremes works on vectors", {
 
   df_rearranged <- pair_extremes(
     score,
-    unequal_method = "first",
-    keep_factors = TRUE
+    unequal_method = "first"
   ) %>%
     dplyr::rename(score = Value)
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3)))
@@ -183,8 +172,7 @@ test_that("rearrange() with method pair_extremes works on vectors", {
 
   df_rearranged <- pair_extremes(
     score,
-    unequal_method = "middle",
-    keep_factors = TRUE
+    unequal_method = "middle"
   ) %>%
     dplyr::rename(score = Value)
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3)))
@@ -192,8 +180,7 @@ test_that("rearrange() with method pair_extremes works on vectors", {
 
   df_rearranged <- pair_extremes(
     score,
-    unequal_method = "last",
-    keep_factors = TRUE
+    unequal_method = "last"
   ) %>%
     dplyr::rename(score = Value)
   expect_equal(df_rearranged$.pair, factor(c(1, 1, 2, 2, 3, 3)))
@@ -225,16 +212,18 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   #     "unequal_method" = list("middle", "first", "last"),
   #     "shuffle_members" = list(FALSE, TRUE),
   #     "shuffle_pairs" = list(FALSE, TRUE),
-  #     "keep_factors" = list(FALSE, TRUE),
-  #     "factor_name" = list(".pair", 1, NA)
+  #     "factor_name" = list(NULL, ".pair", "A", 1, NA),
+  #     "overwrite" = list(TRUE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = c(1,2,3,4), "col" = "A"),
-  #     list("data" = c(1,2,3,4), "keep_factors" = TRUE, "factor_name" = "another_name"),
-  #     list("shuffle_members" = TRUE, "shuffle_pairs" = TRUE)
+  #     list("data" = c(1,2,3,4), "factor_name" = "another_name"),
+  #     list("shuffle_members" = TRUE, "shuffle_pairs" = TRUE),
+  #     list("factor_name" = "A", "overwrite" = FALSE)
   #   ),
   #   indentation = 2
   # )
+
 
   ## Testing 'pair_extremes'                                                  ####
   ## Initially generated by xpectr
@@ -243,7 +232,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing pair_extremes(data = df, col = NULL, unequal...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_19148 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -296,7 +285,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: data = head(df, 8)
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19370 <- pair_extremes(data = head(df, 8), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_19370 <- pair_extremes(data = head(df, 8), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19370),
@@ -349,7 +338,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: data = c(1, 2, 3, 4, ...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12861 <- pair_extremes(data = c(1, 2, 3, 4, 5, 6, 7), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_12861 <- pair_extremes(data = c(1, 2, 3, 4, 5, 6, 7), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_12861),
@@ -382,7 +371,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: data = c(1, 2, 3, 4)
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18304 <- pair_extremes(data = c(1, 2, 3, 4), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_18304 <- pair_extremes(data = c(1, 2, 3, 4), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_18304),
@@ -415,7 +404,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: data = factor(c(1, 2,...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16417 <- pair_extremes(data = factor(c(1, 2, 3, 4, 5, 6, 7, 1, 2, 3)), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_16417 <- pair_extremes(data = factor(c(1, 2, 3, 4, 5, 6, 7, 1, 2, 3)), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing is factor
   expect_true(
     is.factor(output_16417))
@@ -448,7 +437,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15190 <- xpectr::capture_side_effects(pair_extremes(data = list(1, 2, 3), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
+  side_effects_15190 <- xpectr::capture_side_effects(pair_extremes(data = list(1, 2, 3), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, it cannot be a list."),
@@ -463,7 +452,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17365 <- xpectr::capture_side_effects(pair_extremes(data = NA, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
+  side_effects_17365 <- xpectr::capture_side_effects(pair_extremes(data = NA, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
@@ -477,7 +466,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: data = 1
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11346 <- pair_extremes(data = 1, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_11346 <- pair_extremes(data = 1, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_11346),
@@ -511,7 +500,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(pair_extremes(data = NULL, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(pair_extremes(data = NULL, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -526,7 +515,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(pair_extremes(data = c(1, 2, 3, 4), col = "A", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(pair_extremes(data = c(1, 2, 3, 4), col = "A", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -537,10 +526,10 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
     fixed = TRUE)
 
   # Testing pair_extremes(data = c(1, 2, 3, 4), col = NU...
-  # Changed from baseline: data, keep_factors, f...
+  # Changed from baseline: data, factor_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14577 <- pair_extremes(data = c(1, 2, 3, 4), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = TRUE, factor_name = "another_name")
+  output_14577 <- pair_extremes(data = c(1, 2, 3, 4), col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = "another_name", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14577),
@@ -583,7 +572,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: col = "C"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17191 <- pair_extremes(data = df, col = "C", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_17191 <- pair_extremes(data = df, col = "C", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17191),
@@ -636,7 +625,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: col = "A"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19346 <- pair_extremes(data = df, col = "A", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_19346 <- pair_extremes(data = df, col = "A", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19346),
@@ -689,7 +678,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: col = "B"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12554 <- pair_extremes(data = df, col = "B", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_12554 <- pair_extremes(data = df, col = "B", unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_12554),
@@ -742,7 +731,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: unequal_method = "first"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14622 <- pair_extremes(data = df, col = NULL, unequal_method = "first", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_14622 <- pair_extremes(data = df, col = NULL, unequal_method = "first", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14622),
@@ -795,7 +784,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: unequal_method = "last"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19400 <- pair_extremes(data = df, col = NULL, unequal_method = "last", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_19400 <- pair_extremes(data = df, col = NULL, unequal_method = "last", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19400),
@@ -849,7 +838,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = NULL, shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = NULL, shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'unequal_method': Must be of type 'string', not 'NULL'."),
@@ -863,7 +852,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: shuffle_members = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11174 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = TRUE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair")
+  output_11174 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = TRUE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_11174),
@@ -917,7 +906,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = NULL, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
+  side_effects_14749 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = NULL, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'shuffle_members': Must be of type 'logical flag', not 'NULL'."),
@@ -931,7 +920,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: shuffle_members, shuf...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15603 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = TRUE, shuffle_pairs = TRUE, keep_factors = FALSE, factor_name = ".pair")
+  output_15603 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = TRUE, shuffle_pairs = TRUE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15603),
@@ -984,7 +973,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Changed from baseline: shuffle_pairs = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19040 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = TRUE, keep_factors = FALSE, factor_name = ".pair")
+  output_19040 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = TRUE, factor_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19040),
@@ -1038,7 +1027,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = NULL, keep_factors = FALSE, factor_name = ".pair"), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = NULL, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'shuffle_pairs': Must be of type 'logical flag', not 'NULL'."),
@@ -1049,10 +1038,10 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
     fixed = TRUE)
 
   # Testing pair_extremes(data = df, col = NULL, unequal...
-  # Changed from baseline: keep_factors = TRUE
+  # Changed from baseline: factor_name = ".pair"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19888 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = TRUE, factor_name = ".pair")
+  output_19888 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = ".pair", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19888),
@@ -1106,18 +1095,56 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
     fixed = TRUE)
 
   # Testing pair_extremes(data = df, col = NULL, unequal...
-  # Changed from baseline: keep_factors = NULL
+  # Changed from baseline: factor_name = "A"
   xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = NULL, factor_name = ".pair"), reset_seed = TRUE)
+  # Assigning output
+  output_19466 <- pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = "A", overwrite = TRUE)
+  # Testing class
   expect_equal(
-    xpectr::strip(side_effects_19466[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'keep_factors': Must be of type 'logical flag', not 'NULL'."),
+    class(output_19466),
+    c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
+  # Testing column values
   expect_equal(
-    xpectr::strip(side_effects_19466[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    output_19466[["index"]],
+    c(1, 9, 2, 8, 5, 3, 7, 4, 6),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["A"]],
+    structure(c(1L, 1L, 2L, 2L, 3L, 4L, 4L, 5L, 5L), .Label = c("1",
+      "2", "3", "4", "5"), class = "factor"))
+  expect_equal(
+    output_19466[["B"]],
+    c(0.70506, 0.11749, 0.45774, 0.97823, 0.25543, 0.71911, 0.94001,
+      0.93467, 0.46229),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19466[["C"]],
+    c("A", "I", "B", "H", "E", "C", "G", "D", "F"),
+    fixed = TRUE)
+  # Testing column names
+  expect_equal(
+    names(output_19466),
+    c("index", "A", "B", "C"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19466),
+    c("integer", "factor", "numeric", "character"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19466),
+    c("integer", "integer", "double", "character"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19466),
+    c(9L, 4L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19466)),
+    character(0),
     fixed = TRUE)
 
   # Testing pair_extremes(data = df, col = NULL, unequal...
@@ -1125,10 +1152,10 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10824 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = 1), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = 1, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10824[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'factor_name': Must be of type 'string', not 'double'."),
+    xpectr::strip("1 assertions failed:\n * Variable 'factor_name': Must be of type 'string' (or 'NULL'), not 'double'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10824[['error_class']]),
@@ -1140,7 +1167,7 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = NA), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NA, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'factor_name': May not be NA."),
@@ -1151,21 +1178,37 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
     fixed = TRUE)
 
   # Testing pair_extremes(data = df, col = NULL, unequal...
-  # Changed from baseline: factor_name = NULL
+  # Changed from baseline: factor_name, overwrite
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, keep_factors = FALSE, factor_name = NULL), reset_seed = TRUE)
+  side_effects_13902 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = "A", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13902[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'factor_name': Must be of type 'string', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * The column 'A' already exists and 'overwrite' is disabled."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13902[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
+  # Testing pair_extremes(data = df, col = NULL, unequal...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19057 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
   ## Finished testing 'pair_extremes'                                         ####
   #
+
 })
 

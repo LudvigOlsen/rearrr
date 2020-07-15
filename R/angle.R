@@ -102,6 +102,7 @@ angle <- function(data,
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # Check if we will need to overwrite columns
+  check_unique_colnames(x_col, y_col, origin_col_name, degrees_col_name)
   check_overwrite(data = data, nm = degrees_col_name, overwrite = overwrite)
   check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####

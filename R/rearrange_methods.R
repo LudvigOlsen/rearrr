@@ -321,6 +321,7 @@ rearrange_by_distance <- function(data,
 
 # TODO Add aggregate_fn for recursive pairings
 rearrange_pair_extremes <- function(data, cols,
+                                    overwrite,
                                     unequal_method,
                                     num_pairings,
                                     shuffle_members,
