@@ -70,7 +70,10 @@
 #'     overwrite = TRUE
 #'   ) %>%
 #'   dplyr::group_by(g) %>%
-#'   hexagonalize(y_col = "y")
+#'   hexagonalize(
+#'     y_col = "y",
+#'     overwrite = TRUE
+#'   )
 #'
 #' # Plot hexagons
 #' df_hex %>%

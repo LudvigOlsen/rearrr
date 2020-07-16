@@ -94,7 +94,10 @@ df_sq <- df \%>\%
     overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
-  square(y_col = "y")
+  square(
+    y_col = "y",
+    overwrite = TRUE
+  )
 
 # Plot squares
 df_sq \%>\%

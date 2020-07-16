@@ -96,7 +96,10 @@ df_circ <- df \%>\%
     overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
-  circularize(y_col = "y")
+  circularize(
+    y_col = "y",
+    overwrite = TRUE
+  )
 
 # Plot circles
 df_circ \%>\%

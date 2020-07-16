@@ -97,7 +97,10 @@ df_tri <- df \%>\%
     overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
-  triangularize(y_col = "y")
+  triangularize(
+    y_col = "y",
+    overwrite = TRUE
+  )
 
 # Plot triangles
 df_tri \%>\%
