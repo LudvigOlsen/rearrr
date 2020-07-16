@@ -1,3 +1,9 @@
+
+
+#   __________________ #< 60cfc78f594e5611a6eaaf34a2b212ae ># __________________
+#   Calculate distances                                                     ####
+
+
 #' @title Calculate the distance to an origin
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -59,7 +65,8 @@ distance <- function(data,
                      origin = NULL,
                      origin_fn = NULL,
                      distance_col_name = ".distance",
-                     origin_col_name = ".origin") {
+                     origin_col_name = ".origin",
+                     overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -73,6 +80,13 @@ distance <- function(data,
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames(cols, distance_col_name, origin_col_name)
+  check_overwrite(data = data,
+                  nm = distance_col_name,
+                  overwrite = overwrite)
+  check_overwrite(data = data,
+                  nm = origin_col_name,
+                  overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -81,6 +95,7 @@ distance <- function(data,
     mutate_fn = calculate_distances_mutator_method_,
     check_fn = NULL,
     cols = cols,
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = TRUE,
     origin = origin,
@@ -94,6 +109,7 @@ distance <- function(data,
 calculate_distances_mutator_method_ <- function(data,
                                                 grp_id,
                                                 cols,
+                                                overwrite,
                                                 origin,
                                                 origin_fn,
                                                 distance_col_name,

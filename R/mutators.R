@@ -81,6 +81,11 @@ multi_mutator_ <- function(data,
     add = assert_collection
   )
   checkmate::reportAssertions(assert_collection)
+
+  if (isTRUE(was_vector)){
+    overwrite <- TRUE
+  }
+
   # Extra checks
   # This is for checks we want to perform after preparing 'data' and 'col'
   if (!is.null(check_fn)) {

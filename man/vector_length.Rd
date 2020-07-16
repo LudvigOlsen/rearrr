@@ -8,7 +8,8 @@ vector_length(
   data,
   cols = NULL,
   by_row = is.data.frame(data),
-  len_col_name = ".vec_len"
+  len_col_name = ".vec_len",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ Note: Disable when \code{`data`} is a \code{vector}.}
 
 \item{len_col_name}{Name of new column with the row vector lengths when
 \code{`data`} is a \code{data.frame} and \code{`by_row`} is \code{TRUE}.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 Vector length(s).

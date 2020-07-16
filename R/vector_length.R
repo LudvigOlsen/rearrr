@@ -65,7 +65,8 @@
 vector_length <- function(data,
                           cols = NULL,
                           by_row = is.data.frame(data),
-                          len_col_name = ".vec_len") {
+                          len_col_name = ".vec_len",
+                          overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_flag(by_row, add = assert_collection)
@@ -75,6 +76,10 @@ vector_length <- function(data,
     assert_collection$push("when 'by_row' is 'TRUE', 'len_col_name' must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames(cols, len_col_name)
+  check_overwrite(data = data,
+                  nm = len_col_name,
+                  overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -85,6 +90,7 @@ vector_length <- function(data,
     cols = cols,
     allowed_types = "numeric",
     suffix = "",
+    overwrite = overwrite,
     force_df = FALSE,
     keep_original = TRUE,
     by_row = by_row,
@@ -96,6 +102,7 @@ vector_length <- function(data,
 vector_length_mutator_method_ <- function(data,
                                           grp_id,
                                           cols,
+                                          overwrite,
                                           by_row,
                                           len_col_name,
                                           ...) {

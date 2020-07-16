@@ -9,7 +9,8 @@ to_unit_length(
   data,
   cols = NULL,
   by_row = is.data.frame(data),
-  suffix = ifelse(isTRUE(by_row), "_row_unit", "_col_unit")
+  suffix = ifelse(isTRUE(by_row), "_row_unit", "_col_unit"),
+  overwrite = FALSE
 )
 
 to_unit_length_vec(data)
@@ -26,6 +27,8 @@ Note: Disable when \code{`data`} is a \code{vector}.}
 \item{suffix}{Suffix to add to the names of the generated columns.
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 Scaled \code{vector} or \code{data.frame} (\code{tibble}) with the scaled columns.

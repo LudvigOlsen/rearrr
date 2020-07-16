@@ -354,7 +354,7 @@ add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE, overwrite
 check_unique_colnames <- function(...) {
   nms <- list(...) %>%
     purrr::compact() %>%
-    purrr::simplify()
+    unlist(recursive = TRUE, use.names = FALSE)
 
   if (is.null(nms))
     return(invisible(NULL))
@@ -374,6 +374,7 @@ check_unique_colnames <- function(...) {
   checkmate::assert_character(
     nms,
     unique = TRUE,
+    any.missing = FALSE,
     .var.name = paste0(
       "specified column names (",
       nms_str, ")"
@@ -476,7 +477,7 @@ add_dimensions_ <- function(data,
     stop(
       paste0(
         "Adding these dimensions would overwrite existing columns: ",
-        intersect(colnames(new_data), colnames(data)),
+        paste0(intersect(colnames(new_data), colnames(data)), collapse = ", "),
         "."
       )
     )

@@ -65,6 +65,11 @@ rearranger_ <- function(data,
     .var.name = ifelse(isTRUE(was_vector), "'data' as vector", "'col(s)' columns"),
     add = assert_collection
   )
+
+  if (isTRUE(was_vector)){
+    overwrite <- TRUE
+  }
+
   checkmate::reportAssertions(assert_collection)
   # Extra checks
   # TODO We might wanna allow returning altered args
