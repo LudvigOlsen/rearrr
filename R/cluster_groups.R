@@ -18,10 +18,12 @@
 #' @param group_cols Names of grouping columns in \code{`data`}. Must be distinct from the names in \code{`cols`}.
 #'
 #'  If \code{NULL} and \code{`data`} is grouped, those groups are used instead.
-#' @param scale_min_fn Function to find the minimum value in
+#' @param scale_min_fn,scale_max_fn Function to find the minimum/maximum value in
 #'  the original data when rescaling the contracted data.
-#' @param scale_max_fn Function to find the maximum value in
-#'  the original data when rescaling the contracted data.
+#'
+#'  \strong{Input}: A \code{numeric vector}.
+#'
+#'  \strong{Output}: A \code{numeric scalar}.
 #' @param keep_centroids Whether to ensure the clusters have their original centroids. (Logical)
 #' @param multiplier Numeric constant to multiply the distance to the group centroid by. A smaller value
 #'  makes the clusters more compact and vice versa.
@@ -31,7 +33,7 @@
 #' @details
 #'  \itemize{
 #'   \item{Contracts the distance from each data point to the centroid of its group.}
-#'   \item{Performs MinMax scaling such that the scale of the data points is similar to the original data.}
+#'   \item{Performs MinMax scaling such that the scale of the data points is \emph{similar} to the original data.}
 #'   \item{If enabled (not default), the centroids are moved to the original centroids.}
 #'  }
 #' @family mutate functions
@@ -129,6 +131,8 @@
 #'   group_col = "g"
 #' )
 #'
+#' }
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = df_clustered$x_clustered,

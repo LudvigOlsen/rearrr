@@ -14,7 +14,9 @@ quantile_index(..., prob, type = 7, negate = FALSE, round_fn = round)
 
 \item{negate}{Whether to negate the result. I.e. to multiply it with \code{-1}. (Logical)}
 
-\item{round_fn}{Function for rounding output. Rounding is done \emph{prior} to negation.}
+\item{round_fn}{Function for rounding output. Rounding is done \emph{prior} to negation.
+
+E.g. \code{\link[base:Round]{round}}, \code{\link[base:Round]{floor}}, or \code{\link[base:Round]{ceiling}}.}
 
 \item{prob}{Probability in \code{[0,1]} for \code{\link[stats:quantile]{quantile()}}.}
 

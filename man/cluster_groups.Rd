@@ -28,11 +28,12 @@ Each column is considered a dimension to contract distances in.}
 
 If \code{NULL} and \code{`data`} is grouped, those groups are used instead.}
 
-\item{scale_min_fn}{Function to find the minimum value in
-the original data when rescaling the contracted data.}
+\item{scale_min_fn, scale_max_fn}{Function to find the minimum/maximum value in
+the original data when rescaling the contracted data.
 
-\item{scale_max_fn}{Function to find the maximum value in
-the original data when rescaling the contracted data.}
+\strong{Input}: A \code{numeric vector}.
+
+\strong{Output}: A \code{numeric scalar}.}
 
 \item{keep_centroids}{Whether to ensure the clusters have their original centroids. (Logical)}
 
@@ -60,7 +61,7 @@ Transform values such that the elements in each group move closer to their centr
 \details{
 \itemize{
 \item{Contracts the distance from each data point to the centroid of its group.}
-\item{Performs MinMax scaling such that the scale of the data points is similar to the original data.}
+\item{Performs MinMax scaling such that the scale of the data points is \emph{similar} to the original data.}
 \item{If enabled (not default), the centroids are moved to the original centroids.}
 }
 }
@@ -157,6 +158,8 @@ df_clustered <- cluster_groups(
   group_col = "g"
 )
 
+}
+\dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
   x = df_clustered$x_clustered,

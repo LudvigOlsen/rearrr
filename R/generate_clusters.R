@@ -73,6 +73,8 @@
 #'   num_clusters = 5, compactness = 1.6
 #' )
 #'
+#' }
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = clusters$D1,

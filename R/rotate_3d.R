@@ -93,6 +93,8 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 #'
+#' }
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = df_rotated$x_rotated,
@@ -102,6 +104,8 @@
 #'   mode = "markers",
 #'   color = df_rotated$.degrees_str
 #' )
+#' }
+#' \donttest{
 #'
 #' # Rotate randomly around all axes
 #' df_rotated <- df %>%
@@ -125,6 +129,8 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 #'
+#' }
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = df_rotated$x_rotated,
@@ -134,6 +140,8 @@
 #'   mode = "markers",
 #'   color = df_rotated$.degrees_str
 #' )
+#' }
+#' \donttest{
 #'
 #' # Rotate around group centroids
 #' df_grouped <- df %>%
@@ -154,6 +162,8 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 #'
+#' }
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = df_grouped$x_rotated,

@@ -26,11 +26,13 @@ Each column is considered a dimension.}
 
 \item{dimming_fn}{\code{Function} for calculating the dimmed values.
 
-\strong{Input}: \strong{Two} input arguments:
+\strong{Input}: Two (2) input arguments:
 \enumerate{
-\item A \code{vector} with the values in the dimming dimension.
-\item A \code{vector} with corresponding distances to the origin.
+\item A \code{numeric vector} with the values in the dimming dimension.
+\item A \code{numeric vector} with corresponding distances to the origin.
 }
+
+\strong{Output}: A \code{numeric vector} with the same length as the input vectors.
 
 E.g.:
 

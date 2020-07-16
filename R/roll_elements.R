@@ -37,8 +37,8 @@
 #'
 #'  \strong{Input}: Each \code{vector}/\code{column} in \code{`data`} is passed to the function as a separate argument.
 #'
-#'  \strong{Output}: It should return either a \code{vector} with one integer-like scalar \emph{per column}
-#'  or a single integer-like scalar to use for all columns.
+#'  \strong{Output}: It should return either a \code{vector} with one \code{integer-like scalar} \emph{per column}
+#'  or a single \code{integer-like scalar} to use for all columns.
 #'
 #'  Can be created with \code{\link[rearrr:create_n_fn]{create_n_fn()}}.
 #'  See also \code{\link[rearrr:median_index]{median_index()}} and

@@ -30,8 +30,12 @@
 #' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param scale_fn Function for scaling the distances before calculating the degrees.
-#'  Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
-#'  return a \code{numeric vector} (the scaled distances) of the same length. E.g.:
+#'
+#'  \strong{Input}: A \code{numeric vector} (the distances).
+#'
+#'  \strong{Output}: A \code{numeric vector} (the scaled distances) of the same length.
+#'
+#'  E.g.:
 #'
 #'  \code{function(d)\{}
 #'
@@ -103,6 +107,8 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 #'
+#' }
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = df_swirled$x_swirled,
@@ -112,6 +118,8 @@
 #'   mode = "markers",
 #'   color = df_swirled$.radius_str
 #' )
+#' }
+#' \donttest{
 #'
 #' # Swirl around the centroid
 #' df_swirled <- swirl_3d(
@@ -136,6 +144,8 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 #'
+#' }
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = df_swirled$x_swirled,
@@ -145,6 +155,8 @@
 #'   mode = "markers",
 #'   color = df_swirled$.radius_str
 #' )
+#' }
+#' \donttest{
 #'
 #' df_swirled <- swirl_3d(
 #'   data = df,
@@ -168,7 +180,9 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+#' }
 #'
+#' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
 #'   x = df_swirled$x_swirled,
@@ -178,6 +192,8 @@
 #'   mode = "markers",
 #'   color = df_swirled$.radius_str
 #' )
+#' }
+#' \donttest{
 #'
 #' #
 #' # Swirl random data

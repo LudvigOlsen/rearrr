@@ -37,9 +37,11 @@
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param dimming_fn \code{Function} for calculating the dimmed values.
 #'
-#'  \strong{Input}: \strong{Two} input arguments:
-#'  1) A \code{vector} with the values in the dimming dimension.
-#'  2) A \code{vector} with corresponding distances to the origin.
+#'  \strong{Input}: Two (2) input arguments:
+#'  1) A \code{numeric vector} with the values in the dimming dimension.
+#'  2) A \code{numeric vector} with corresponding distances to the origin.
+#'
+#'  \strong{Output}: A \code{numeric vector} with the same length as the input vectors.
 #'
 #'  E.g.:
 #'

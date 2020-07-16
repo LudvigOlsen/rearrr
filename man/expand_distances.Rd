@@ -31,8 +31,10 @@ Each column is considered a dimension.}
 \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multiplier becomes an \emph{exponent}.}
 
 \item{multiplier_fn}{Function for finding the multiplier.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a single constant.}
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{numeric scalar}.}
 
 \item{origin}{Coordinates of the origin to expand around.
 Must be either a single constant to use in all dimensions

@@ -42,8 +42,10 @@
 #'
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
 #' @param multipliers_fn Function for finding the multipliers.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
+#'
+#'  \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'
+#'  \strong{Output}: A \code{numeric vector} with one element per dimension.
 #'
 #'  Just as for \code{`origin_fn`}, it can be created with
 #'  \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
@@ -62,7 +64,7 @@
 #'  \code{x <- x - sign(x)}
 #'
 #'  \strong{N.B.} Ignored when \code{`exponentiate`} is \code{FALSE}.
-#' @param mult_col_name Name of new column with the multiplier. If \code{NULL}, no column is added.
+#' @param mult_col_name Name of new column with the multiplier(s). If \code{NULL}, no column is added.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the expanded columns,

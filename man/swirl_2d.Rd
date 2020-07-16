@@ -57,8 +57,12 @@ Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[re
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{scale_fn}{Function for scaling the distances before calculating the degrees.
-Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
-return a \code{numeric vector} (the scaled distances) of the same length. E.g.:
+
+\strong{Input}: A \code{numeric vector} (the distances).
+
+\strong{Output}: A \code{numeric vector} (the scaled distances) of the same length.
+
+E.g.:
 
 \code{function(d)\{}
 
