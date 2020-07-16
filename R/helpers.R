@@ -523,15 +523,16 @@ add_info_col <- function(data, nm, content, overwrite = FALSE, check_overwrite =
 
 # check_overwrite(data = data, nm = "?", overwrite = overwrite)
 check_overwrite <- function(data, nm, overwrite){
-  if (!is.data.frame(data)){
+  checkmate::assert_flag(overwrite)
+  if (!is.data.frame(data) || isTRUE(overwrite)){
     return(invisible(NULL))
   }
+
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, add = assert_collection)
   checkmate::assert_string(nm, min.chars = 1, null.ok = TRUE, add = assert_collection)
-  checkmate::assert_flag(overwrite, add = assert_collection)
   # Check if we would overwrite an existing column
-  if (!is.null(nm) && !isTRUE(overwrite) && nm %in% colnames(data)){
+  if (!is.null(nm) && nm %in% colnames(data)){
     assert_collection$push(
       paste0("The column '", nm,
              "' already exists and 'overwrite' is disabled.")
@@ -539,6 +540,7 @@ check_overwrite <- function(data, nm, overwrite){
   }
   checkmate::reportAssertions(assert_collection)
 }
+
 
 ##  .................. #< cb9942d54f8fa35406de031d066531dc ># ..................
 ##  Conversions                                                             ####

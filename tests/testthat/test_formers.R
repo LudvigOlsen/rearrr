@@ -935,7 +935,7 @@ test_that("hexagonalize()", {
   side_effects_16851 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = NULL), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error_class']]),
@@ -1989,7 +1989,7 @@ test_that("circularize()", {
   side_effects_12076 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12076[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12076[['error_class']]),
@@ -2924,7 +2924,7 @@ test_that("triangularize()", {
   side_effects_16851 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = NULL), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error_class']]),
@@ -3867,7 +3867,7 @@ test_that("square()", {
   side_effects_16851 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = NULL), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error_class']]),

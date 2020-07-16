@@ -380,7 +380,7 @@ test_that("dim_values()", {
   side_effects_14577 <- xpectr::capture_side_effects(dim_values(data = df, cols = NA, dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
-    xpectr::strip("2 assertions failed:\n * This mutator method requires at least 2 dimensions / columns.\n * Variable 'cols': Contains missing values (element 1)."),
+    xpectr::strip("Assertion on 'specified column names (NA, \".origin\")' failed: Contains missing values (element 1)."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error_class']]),
@@ -1221,7 +1221,7 @@ test_that("dim_values()", {
   side_effects_18329 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18329[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18329[['error_class']]),

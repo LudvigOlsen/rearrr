@@ -132,6 +132,7 @@ pair_extremes_vec <- function(data,
     unequal_method = unequal_method,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
-    factor_name = NULL
+    factor_name = NULL,
+    overwrite = TRUE
   )
 }

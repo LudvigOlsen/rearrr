@@ -144,11 +144,11 @@ dim_values <- function(data,
                        ),
                        origin = NULL,
                        origin_fn = NULL,
-                       dim_col = cols[[length(cols)]],
+                       dim_col = tail(cols, 1),
                        suffix = "_dimmed",
-                       overwrite = FALSE,
                        keep_original = TRUE,
-                       origin_col_name = ".origin") {
+                       origin_col_name = ".origin",
+                       overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -168,6 +168,7 @@ dim_values <- function(data,
   }
   checkmate::reportAssertions(assert_collection)
   # Check if we will need to overwrite columns
+  check_unique_colnames(cols, origin_col_name)
   check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
@@ -257,7 +258,7 @@ dim_values_mutator_method_ <- function(data,
     data = data,
     nm = origin_col_name,
     content = list_coordinates_(origin, cols),
-    overwrite = overwrite
+    check_overwrite = FALSE # Already checked
   )
 
   data

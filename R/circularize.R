@@ -262,7 +262,8 @@ circularize_mutator_method_ <- function(data,
       .min = 0,
       .max = 360,
       suffix = "",
-      range_col_name = NULL
+      range_col_name = NULL,
+      overwrite = TRUE
     )
 
     # Add NA degrees column to outliers subset

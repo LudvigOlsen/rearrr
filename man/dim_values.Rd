@@ -10,11 +10,11 @@ dim_values(
   dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1),
   origin = NULL,
   origin_fn = NULL,
-  dim_col = cols[[length(cols)]],
+  dim_col = tail(cols, 1),
   suffix = "_dimmed",
-  overwrite = FALSE,
   keep_original = TRUE,
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -70,13 +70,13 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
-
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the dimmed column,

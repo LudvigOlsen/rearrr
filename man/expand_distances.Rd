@@ -16,7 +16,8 @@ expand_distances(
   suffix = "_expanded",
   keep_original = TRUE,
   mult_col_name = ifelse(isTRUE(exponentiate), ".exponent", ".multiplier"),
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -80,6 +81,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{mult_col_name}{Name of new column with the multiplier. If \code{NULL}, no column is added.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the expanded columns,

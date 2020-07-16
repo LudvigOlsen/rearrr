@@ -6,7 +6,8 @@ sine_up_ <- function(data,
                      fs = NULL,
                      periods = NULL,
                      phase = 0,
-                     suffix = "_sined") {
+                     suffix = "_sined",
+                     overwrite = FALSE) {
 
   # Number of dimensions
   # Each column is a dimension
@@ -53,7 +54,8 @@ sine_up_ <- function(data,
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(sined_dim_vectors, cols),
-    suffix = suffix
+    suffix = suffix,
+    overwrite = overwrite
   )
 
   data

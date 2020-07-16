@@ -149,7 +149,8 @@ roll_values <- function(data,
                         na.rm = FALSE,
                         suffix = "_rolled",
                         keep_original = TRUE,
-                        range_col_name = ".range") {
+                        range_col_name = ".range",
+                        overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_number(add, finite = TRUE, add = assert_collection)
@@ -174,6 +175,11 @@ roll_values <- function(data,
     assert_collection$push("when 'data' is a data.frame, 'cols' must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames(cols, range_col_name)
+  check_overwrite(data = data,
+                  nm = range_col_name,
+                  overwrite = overwrite)
   # End of argument checks ####
 
   multi_mutator_(
@@ -182,6 +188,7 @@ roll_values <- function(data,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
+    overwrite = overwrite,
     force_df = FALSE,
     allowed_types = c("numeric"),
     allow_missing = na.rm,
@@ -206,7 +213,8 @@ wrap_to_range <- function(data,
                           na.rm = FALSE,
                           suffix = "_wrapped",
                           keep_original = TRUE,
-                          range_col_name = ".range") {
+                          range_col_name = ".range",
+                          overwrite = FALSE) {
   roll_values(
     data = data,
     cols = cols,
@@ -217,7 +225,8 @@ wrap_to_range <- function(data,
     na.rm = na.rm,
     suffix = suffix,
     keep_original = keep_original,
-    range_col_name = range_col_name
+    range_col_name = range_col_name,
+    overwrite = overwrite
   )
 }
 
@@ -239,7 +248,8 @@ roll_values_vec <- function(data,
     between = between,
     na.rm = na.rm,
     suffix = "",
-    range_col_name = NULL
+    range_col_name = NULL,
+    overwrite = TRUE
   )
 }
 
@@ -260,7 +270,8 @@ wrap_to_range_vec <- function(data,
     between = between,
     na.rm = na.rm,
     suffix = "",
-    range_col_name = NULL
+    range_col_name = NULL,
+    overwrite = TRUE
   )
 }
 
@@ -268,6 +279,7 @@ wrap_to_range_vec <- function(data,
 roll_values_mutator_method_ <- function(data,
                                         grp_id,
                                         cols,
+                                        overwrite,
                                         add,
                                         .min,
                                         .max,
@@ -346,7 +358,8 @@ roll_values_mutator_method_ <- function(data,
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(dim_vectors, cols),
-    suffix = suffix
+    suffix = suffix,
+    overwrite = overwrite
   )
 
   # Add info columns

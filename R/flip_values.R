@@ -107,7 +107,8 @@ flip_values <- function(data,
                         origin_fn = create_origin_fn(median),
                         suffix = "_flipped",
                         keep_original = TRUE,
-                        origin_col_name = ".origin") {
+                        origin_col_name = ".origin",
+                        overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -120,6 +121,9 @@ flip_values <- function(data,
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_string(origin_col_name, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames(cols, origin_col_name)
+  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   multi_mutator_(
@@ -127,6 +131,7 @@ flip_values <- function(data,
     mutate_fn = flip_mutator_method_,
     check_fn = NULL,
     suffix = suffix,
+    overwrite = overwrite,
     keep_original = keep_original,
     cols = cols,
     origin = origin,
@@ -146,7 +151,8 @@ flip_values_vec <- function(data, origin = NULL, origin_fn = create_origin_fn(me
     origin_fn = origin_fn,
     suffix = "",
     keep_original = FALSE,
-    origin_col_name = NULL
+    origin_col_name = NULL,
+    overwrite = TRUE
   )[[1]]
 }
 
@@ -155,6 +161,7 @@ flip_mutator_method_ <- function(data,
                                  grp_id,
                                  cols,
                                  suffix,
+                                 overwrite,
                                  origin,
                                  origin_fn,
                                  origin_col_name,
@@ -191,7 +198,8 @@ flip_mutator_method_ <- function(data,
     add_dimensions_(
       data = data,
       new_vectors = dim_vectors,
-      suffix = suffix
+      suffix = suffix,
+      overwrite = overwrite
     )
 
   # Add info columns

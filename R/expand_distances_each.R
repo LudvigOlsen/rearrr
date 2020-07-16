@@ -258,7 +258,8 @@ expand_distances_each <- function(data,
                                   suffix = "_expanded",
                                   keep_original = TRUE,
                                   mult_col_name = ifelse(isTRUE(exponentiate), ".exponents", ".multipliers"),
-                                  origin_col_name = ".origin") {
+                                  origin_col_name = ".origin",
+                                  overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -282,6 +283,10 @@ expand_distances_each <- function(data,
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(multipliers_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames(cols, origin_col_name, mult_col_name)
+  check_overwrite(data = data, nm = mult_col_name, overwrite = overwrite)
+  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -291,6 +296,7 @@ expand_distances_each <- function(data,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     multipliers = multipliers,
@@ -309,6 +315,7 @@ expand_each_mutator_method_ <- function(data,
                                         grp_id,
                                         cols,
                                         suffix,
+                                        overwrite,
                                         multipliers,
                                         multipliers_fn,
                                         origin,
@@ -400,7 +407,8 @@ expand_each_mutator_method_ <- function(data,
     add_dimensions_(
       data = data,
       new_vectors = dim_vectors,
-      suffix = suffix
+      suffix = suffix,
+      overwrite = overwrite
     )
 
   # Add info columns

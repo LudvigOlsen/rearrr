@@ -119,7 +119,8 @@ generate_clusters <- function(num_rows,
     keep_centroids = FALSE,
     multiplier = .1 / compactness,
     suffix = "",
-    keep_original = FALSE
+    keep_original = FALSE,
+    overwrite = TRUE
   )
 
   data

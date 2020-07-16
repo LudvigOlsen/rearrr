@@ -13,7 +13,8 @@ cluster_groups(
   keep_centroids = FALSE,
   multiplier = 0.05,
   suffix = "_clustered",
-  keep_original = TRUE
+  keep_original = TRUE,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the clustered columns.

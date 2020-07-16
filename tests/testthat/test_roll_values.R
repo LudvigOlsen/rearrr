@@ -564,12 +564,14 @@ test_that("fuzz testing roll_values()", {
   #     "na.rm" = list(FALSE, TRUE, NA),
   #     "suffix" = list("","_rolled", 1, NA),
   #     "keep_original" = list(FALSE, TRUE, 1, NA),
-  #     "range_col_name" = list(".range", ".r", 1, NA)
+  #     "range_col_name" = list(".range", ".r", 1, NA),
+  #     "overwrite" = list(TRUE, FALSE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = c(1:5), "cols" = NULL, "add" = 1, ".min" = 2),
   #     list("data" = c(1:5, NA), "cols" = NULL, "add" = 1, na.rm = FALSE),
-  #     list("data" = c(1:5, NA), "cols" = NULL, "add" = 1, na.rm = TRUE)
+  #     list("data" = c(1:5, NA), "cols" = NULL, "add" = 1, na.rm = TRUE),
+  #     list("overwrite" = FALSE, "range_col_name" = "g")
   #   ),
   #   indentation = 2,
   #   copy_env = FALSE
@@ -583,7 +585,7 @@ test_that("fuzz testing roll_values()", {
   # Testing roll_values(data = df, cols = c("w", "d"), a...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_19148 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -633,7 +635,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: data = dplyr::group_b...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19370 <- roll_values(data = dplyr::group_by(df, g), cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_19370 <- roll_values(data = dplyr::group_by(df, g), cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19370),
@@ -688,7 +690,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(roll_values(data = c(1:5), cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(roll_values(data = c(1:5), cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'cols' should be NULL."),
@@ -703,7 +705,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(roll_values(data = c("h", "e", "j"), cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(roll_values(data = c("h", "e", "j"), cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'cols' should be NULL."),
@@ -718,7 +720,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(roll_values(data = NA, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(roll_values(data = NA, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'cols' should be NULL."),
@@ -733,7 +735,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15190 <- xpectr::capture_side_effects(roll_values(data = NULL, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_15190 <- xpectr::capture_side_effects(roll_values(data = NULL, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'cols' should be NULL."),
@@ -747,7 +749,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: data, cols, add, .min
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- roll_values(data = c(1:5), cols = NULL, add = 1, .min = 2, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_17365 <- roll_values(data = c(1:5), cols = NULL, add = 1, .min = 2, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -792,7 +794,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(roll_values(data = c(1:5, NA), cols = NULL, add = 1, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_11346 <- xpectr::capture_side_effects(roll_values(data = c(1:5, NA), cols = NULL, add = 1, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'integer'\n * checkmate::check_vector(data): Contains missing values (element 6)\n * checkmate::check_factor(data): Must be of type 'factor', not 'integer'"),
@@ -806,7 +808,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: data, cols, add, na.rm
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16569 <- roll_values(data = c(1:5, NA), cols = NULL, add = 1, .min = NULL, .max = NULL, between = 0, na.rm = TRUE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_16569 <- roll_values(data = c(1:5, NA), cols = NULL, add = 1, .min = NULL, .max = NULL, between = 0, na.rm = TRUE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_16569),
@@ -852,10 +854,10 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(roll_values(data = df, cols = NA, add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(roll_values(data = df, cols = NA, add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'cols': Contains missing values (element 1)."),
+    xpectr::strip("Assertion on 'specified column names (NA, \".range\")' failed: Contains missing values (element 1)."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error_class']]),
@@ -866,7 +868,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: cols = "w"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14577 <- roll_values(data = df, cols = "w", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_14577 <- roll_values(data = df, cols = "w", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14577),
@@ -911,7 +913,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: cols = "d"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17191 <- roll_values(data = df, cols = "d", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_17191 <- roll_values(data = df, cols = "d", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17191),
@@ -957,7 +959,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(roll_values(data = df, cols = "ch", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(roll_values(data = df, cols = "ch", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable ''cols' columns': May only contain the following types: {numeric}, but element 1 has type\n * 'character'."),
@@ -972,7 +974,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(roll_values(data = df, cols = "hej", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(roll_values(data = df, cols = "hej", add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * These names in the 'col(s)' argument were not found in 'data': hej."),
@@ -987,7 +989,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(roll_values(data = df, cols = 1, add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_14622 <- xpectr::capture_side_effects(roll_values(data = df, cols = 1, add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': Must be of type 'character', not 'double'."),
@@ -1002,7 +1004,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(roll_values(data = df, cols = NULL, add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(roll_values(data = df, cols = NULL, add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is a data.frame, 'cols' must be specified."),
@@ -1016,7 +1018,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: add = -2
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- roll_values(data = df, cols = c("w", "d"), add = -2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_19782 <- roll_values(data = df, cols = c("w", "d"), add = -2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19782),
@@ -1067,7 +1069,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = c(-2, 2), .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_11174 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = c(-2, 2), .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'add': Must have length 1."),
@@ -1081,7 +1083,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: add = 0
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14749 <- roll_values(data = df, cols = c("w", "d"), add = 0, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_14749 <- roll_values(data = df, cols = c("w", "d"), add = 0, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14749),
@@ -1132,7 +1134,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = "hej", .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = "hej", .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'add': Must be of type 'number', not 'character'."),
@@ -1147,7 +1149,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19040 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = NA, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = NA, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'add': May not be NA."),
@@ -1162,7 +1164,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = NULL, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = NULL, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'add': Must be of type 'number', not 'NULL'."),
@@ -1177,7 +1179,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = 20, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_19888 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = 20, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("'.min' was greater than '.max'."),
@@ -1191,7 +1193,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: .min = -10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19466 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = -10, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_19466 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = -10, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19466),
@@ -1242,7 +1244,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10824 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = "h", .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = "h", .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': Must be of type 'number' (or 'NULL'), not 'character'."),
@@ -1257,7 +1259,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NA, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NA, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': May not be NA."),
@@ -1271,7 +1273,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: .max = 30
   xpectr::set_test_seed(42)
   # Assigning output
-  output_13902 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = 30, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_13902 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = 30, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_13902),
@@ -1322,7 +1324,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = -10, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_19057 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = -10, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("'.min' was greater than '.max'."),
@@ -1337,7 +1339,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14469 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NA, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NA, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': May not be NA."),
@@ -1351,7 +1353,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: between = 1
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18360 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 1, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_18360 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 1, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_18360),
@@ -1402,7 +1404,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17375 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = -1, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = -1, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'between': Element 1 is not >= 0."),
@@ -1417,7 +1419,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18110 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = "h", na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_18110 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = "h", na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'between': Must be of type 'number', not 'character'."),
@@ -1432,7 +1434,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13881 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = NA, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_13881 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = NA, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13881[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'between': May not be NA."),
@@ -1447,7 +1449,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16851 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = NULL, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_16851 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = NULL, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'between': Must be of type 'number', not 'NULL'."),
@@ -1461,7 +1463,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: na.rm = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10039 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = TRUE, suffix = "", keep_original = FALSE, range_col_name = ".range")
+  output_10039 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = TRUE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_10039),
@@ -1512,7 +1514,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18329 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = NA, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_18329 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = NA, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18329[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'na.rm': May not be NA."),
@@ -1527,7 +1529,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10073 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = NULL, suffix = "", keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_10073 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = NULL, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10073[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'na.rm': Must be of type 'logical flag', not 'NULL'."),
@@ -1541,7 +1543,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: suffix = "_rolled"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12076 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "_rolled", keep_original = FALSE, range_col_name = ".range")
+  output_12076 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "_rolled", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_12076),
@@ -1592,7 +1594,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19066 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = 1, keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_19066 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = 1, keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19066[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'double'."),
@@ -1607,7 +1609,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16117 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = NA, keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_16117 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = NA, keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16117[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': May not be NA."),
@@ -1622,7 +1624,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13795 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = NULL, keep_original = FALSE, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_13795 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = NULL, keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13795[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'NULL'."),
@@ -1636,7 +1638,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: keep_original = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14357 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = TRUE, range_col_name = ".range")
+  output_14357 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = TRUE, range_col_name = ".range", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14357),
@@ -1645,7 +1647,8 @@ test_that("fuzz testing roll_values()", {
   # Testing column values
   expect_equal(
     output_14357[["ch"]],
-    c("A", "B", "C", "D", "E", "F", "G"))
+    c("A", "B", "C", "D", "E", "F", "G"),
+    fixed = TRUE)
   expect_equal(
     output_14357[["g"]],
     c(1, 1, 2, 2, 3, 3, 3),
@@ -1694,7 +1697,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10374 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = 1, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_10374 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = 1, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10374[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'double'."),
@@ -1709,7 +1712,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19735 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = NA, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_19735 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = NA, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19735[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': May not be NA."),
@@ -1724,7 +1727,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14317 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = NULL, range_col_name = ".range"), reset_seed = TRUE)
+  side_effects_14317 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = NULL, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14317[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
@@ -1738,7 +1741,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: range_col_name = ".r"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19575 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".r")
+  output_19575 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".r", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19575),
@@ -1789,7 +1792,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18877 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = 1), reset_seed = TRUE)
+  side_effects_18877 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = 1, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18877[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'range_col_name': Must be of type 'string' (or 'NULL'), not 'double'."),
@@ -1804,7 +1807,7 @@ test_that("fuzz testing roll_values()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16399 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = NA), reset_seed = TRUE)
+  side_effects_16399 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = NA, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16399[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'range_col_name': May not be NA."),
@@ -1818,7 +1821,7 @@ test_that("fuzz testing roll_values()", {
   # Changed from baseline: range_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19709 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = NULL)
+  output_19709 <- roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19709),
@@ -1856,6 +1859,51 @@ test_that("fuzz testing roll_values()", {
   expect_equal(
     colnames(dplyr::group_keys(output_19709)),
     character(0),
+    fixed = TRUE)
+
+  # Testing roll_values(data = df, cols = c("w", "d"), a...
+  # Changed from baseline: range_col_name, overw...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16188 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = "g", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16188[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'g' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16188[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing roll_values(data = df, cols = c("w", "d"), a...
+  # Changed from baseline: overwrite = FALSE
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_13334 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_13334[['error']]),
+    xpectr::strip("Adding these dimensions would overwrite existing columns: w, d."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_13334[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing roll_values(data = df, cols = c("w", "d"), a...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_13467 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_13467[['error']]),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_13467[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'roll_values'                                           ####

@@ -1052,7 +1052,7 @@ test_that("fuzz testing angle()", {
   side_effects_18110 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18110[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18110[['error_class']]),

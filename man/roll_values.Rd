@@ -17,7 +17,8 @@ roll_values(
   na.rm = FALSE,
   suffix = "_rolled",
   keep_original = TRUE,
-  range_col_name = ".range"
+  range_col_name = ".range",
+  overwrite = FALSE
 )
 
 wrap_to_range(
@@ -29,7 +30,8 @@ wrap_to_range(
   na.rm = FALSE,
   suffix = "_wrapped",
   keep_original = TRUE,
-  range_col_name = ".range"
+  range_col_name = ".range",
+  overwrite = FALSE
 )
 
 roll_values_vec(
@@ -82,6 +84,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{range_col_name}{Name of new column with the min-max range. If \code{NULL}, no column is added.
 
 \strong{N.B.} Ignored when \code{`data`} is a \code{vector}.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{`data`} with new columns with values in the specified min-max range(s)

@@ -151,7 +151,8 @@ cluster_groups <- function(data,
                            keep_centroids = FALSE,
                            multiplier = 0.05,
                            suffix = "_clustered",
-                           keep_original = TRUE) {
+                           keep_original = TRUE,
+                           overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -201,6 +202,13 @@ cluster_groups <- function(data,
   }
 
   checkmate::reportAssertions(assert_collection)
+  if (!isTRUE(overwrite)) {
+    purrr::map(.x = cols, .f = ~ {
+      check_overwrite(data = data,
+                      nm = paste0(.x, suffix),
+                      overwrite = overwrite)
+    })
+  }
   # End of argument checks ####
 
   # Grouping
@@ -217,6 +225,7 @@ cluster_groups <- function(data,
     multiplier = multiplier,
     origin_fn = centroid,
     suffix = "",
+    overwrite = TRUE,
     keep_original = keep_original,
     mult_col_name = NULL,
     origin_col_name = NULL

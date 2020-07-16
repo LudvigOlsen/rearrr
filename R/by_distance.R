@@ -147,7 +147,8 @@ closest_to_vec <- function(data,
     origin_fn = origin_fn,
     shuffle_ties = shuffle_ties,
     origin_col_name = NULL,
-    distance_col_name = NULL
+    distance_col_name = NULL,
+    overwrite = TRUE
   )
 }
 
@@ -296,6 +297,7 @@ furthest_from_vec <- function(data,
     origin_fn = origin_fn,
     shuffle_ties = shuffle_ties,
     origin_col_name = NULL,
-    distance_col_name = NULL
+    distance_col_name = NULL,
+    overwrite = TRUE
   )
 }

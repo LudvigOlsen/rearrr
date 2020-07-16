@@ -1589,7 +1589,7 @@ test_that("fuzz testing swirl_2d()", {
   side_effects_14317 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14317[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14317[['error_class']]),

@@ -12,7 +12,8 @@ flip_values(
   origin_fn = create_origin_fn(median),
   suffix = "_flipped",
   keep_original = TRUE,
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 
 flip_values_vec(data, origin = NULL, origin_fn = create_origin_fn(median))
@@ -51,6 +52,8 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

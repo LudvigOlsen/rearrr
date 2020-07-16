@@ -91,5 +91,10 @@ rev_windows <- function(data,
 rev_windows_vec <- function(data, window_size){
   checkmate::assert(checkmate::check_vector(data, strict = TRUE),
                     checkmate::check_factor(data))
-  rev_windows(data = data, window_size = window_size, factor_name = NULL)
+  rev_windows(
+    data = data,
+    window_size = window_size,
+    factor_name = NULL,
+    overwrite = TRUE
+  )
 }
