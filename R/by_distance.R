@@ -110,10 +110,7 @@
 #' )
 #'
 #' # In multiple dimensions
-#' # Start by calculating distances
-#' # so we can check the ordering (not necessary)
 #' df %>%
-#'   distance(cols = c("A", "B"), origin_fn = most_centered) %>%
 #'   closest_to(cols = c("A", "B"), origin_fn = most_centered)
 #' }
 closest_to <- function(data,

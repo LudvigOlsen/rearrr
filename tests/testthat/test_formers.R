@@ -24,11 +24,14 @@ test_that("hexagonalize()", {
   #     "offset_x" = list(0, 4, "hej", NA),
   #     "keep_original" = list(FALSE, TRUE, NA, "hej"),
   #     "x_col_name" = list("x", ".hexagon_x", "", NA, 1),
-  #     "edge_col_name" = list(".edge", NA, NULL)
+  #     "edge_col_name" = list(".edge", NA, NULL),
+  #     "overwrite" = list(TRUE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = df, "y_col" = "y", "x_col_name" = ".hexa_x"),
-  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".hexa_x")
+  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".hexa_x"),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "g", "overwrite" = FALSE),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "tjep", "edge_col_name" = "tjep")
   #   ),
   #   indentation = 2,
   #   copy_env = FALSE
@@ -42,7 +45,7 @@ test_that("hexagonalize()", {
   # Testing hexagonalize(data = c(1:10), y_col = NULL, ....
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_19148 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -92,7 +95,7 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19370 <- xpectr::capture_side_effects(hexagonalize(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19370 <- xpectr::capture_side_effects(hexagonalize(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'double'\n * checkmate::check_vector(data): Contains missing values (element 3)\n * checkmate::check_factor(data): Must be of type 'factor', not 'double'"),
@@ -107,7 +110,7 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(hexagonalize(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(hexagonalize(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
@@ -122,10 +125,10 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(hexagonalize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(hexagonalize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but\n * element 1 has type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -137,7 +140,7 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(hexagonalize(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(hexagonalize(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -151,7 +154,7 @@ test_that("hexagonalize()", {
   # Changed from baseline: data, y_col, x_col_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15190 <- hexagonalize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".hexa_x", edge_col_name = ".edge")
+  output_15190 <- hexagonalize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".hexa_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15190),
@@ -208,7 +211,7 @@ test_that("hexagonalize()", {
   # Changed from baseline: data, y_col, x_col_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- hexagonalize(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".hexa_x", edge_col_name = ".edge")
+  output_17365 <- hexagonalize(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".hexa_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -266,18 +269,48 @@ test_that("hexagonalize()", {
     character(0),
     fixed = TRUE)
 
+  # Testing hexagonalize(data = df, y_col = "y", .min = ...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_11346 <- xpectr::capture_side_effects(hexagonalize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "g", edge_col_name = ".edge", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'g' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing hexagonalize(data = df, y_col = "y", .min = ...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16569 <- xpectr::capture_side_effects(hexagonalize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "tjep", edge_col_name = "tjep", overwrite = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error']]),
+    xpectr::strip("Assertion on 'specified column names (\"y\", \"tjep\", \"tjep\")' failed: Contains duplicated values, position 3."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
   # Testing hexagonalize(data = c(1:10), y_col = "y", .m...
   # Changed from baseline: y_col = "y"
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(side_effects_17050[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -285,48 +318,48 @@ test_that("hexagonalize()", {
   # Changed from baseline: .min = -2
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16569 <- hexagonalize(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14577 <- hexagonalize(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_16569),
+    class(output_14577),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_16569[["Value"]],
+    output_14577[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[["x"]],
+    output_14577[["x"]],
     c(-5.19615, 5.19615, -5.19615, 5.19615, -5.19615, 5.19615, -5.19615,
       3.4641, -1.73205, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[[".edge"]],
+    output_14577[[".edge"]],
     structure(c(3L, 2L, 4L, 2L, 4L, 2L, 5L, 1L, 5L, 1L), .Label = c("1",
       "2", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_16569),
+    names(output_14577),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_16569),
+    xpectr::element_classes(output_14577),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_16569),
+    xpectr::element_types(output_14577),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_16569),
+    dim(output_14577),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_16569)),
+    colnames(dplyr::group_keys(output_14577)),
     character(0),
     fixed = TRUE)
 
@@ -334,48 +367,48 @@ test_that("hexagonalize()", {
   # Changed from baseline: .min = 3
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17050 <- hexagonalize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_17191 <- hexagonalize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_17050),
+    class(output_17191),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17050[["Value"]],
+    output_17191[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[["x"]],
+    output_17191[["x"]],
     c(NA, NA, 0, 1.73205, -3.03109, 3.03109, -3.03109, 3.03109, -1.73205,
       0),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[[".edge"]],
+    output_17191[[".edge"]],
     structure(c(NA, NA, 4L, 3L, 5L, 2L, 5L, 2L, 6L, 1L), .Label = c("1",
       "2", "3", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_17050),
+    names(output_17191),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17050),
+    xpectr::element_classes(output_17191),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17050),
+    xpectr::element_types(output_17191),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17050),
+    dim(output_17191),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17050)),
+    colnames(dplyr::group_keys(output_17191)),
     character(0),
     fixed = TRUE)
 
@@ -384,13 +417,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(side_effects_19346[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -399,13 +432,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error']]),
+    xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error_class']]),
+    xpectr::strip(side_effects_12554[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -413,48 +446,48 @@ test_that("hexagonalize()", {
   # Changed from baseline: .max = 8
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19346 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14622 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19346),
+    class(output_14622),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19346[["Value"]],
+    output_14622[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[["x"]],
+    output_14622[["x"]],
     c(0, 1.73205, -3.03109, 3.03109, -3.03109, 3.03109, -1.73205, 0,
       NA, NA),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[[".edge"]],
+    output_14622[[".edge"]],
     structure(c(4L, 3L, 5L, 2L, 5L, 2L, 6L, 1L, NA, NA), .Label = c("1",
       "2", "3", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19346),
+    names(output_14622),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19346),
+    xpectr::element_classes(output_14622),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19346),
+    xpectr::element_types(output_14622),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19346),
+    dim(output_14622),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19346)),
+    colnames(dplyr::group_keys(output_14622)),
     character(0),
     fixed = TRUE)
 
@@ -463,13 +496,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error']]),
+    xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error_class']]),
+    xpectr::strip(side_effects_19400[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -478,13 +511,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error']]),
+    xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error_class']]),
+    xpectr::strip(side_effects_19782[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -492,48 +525,48 @@ test_that("hexagonalize()", {
   # Changed from baseline: .max = 12
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19400 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_11174 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19400),
+    class(output_11174),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19400[["Value"]],
+    output_11174[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[["x"]],
+    output_11174[["x"]],
     c(0, 1.73205, -3.4641, 4.76314, -4.76314, 4.76314, -4.76314, 4.76314,
       -4.76314, 3.4641),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[[".edge"]],
+    output_11174[[".edge"]],
     structure(c(4L, 3L, 4L, 2L, 5L, 2L, 5L, 2L, 5L, 1L), .Label = c("1",
       "2", "3", "4", "5"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19400),
+    names(output_11174),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19400),
+    xpectr::element_classes(output_11174),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19400),
+    xpectr::element_types(output_11174),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19400),
+    dim(output_11174),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19400)),
+    colnames(dplyr::group_keys(output_11174)),
     character(0),
     fixed = TRUE)
 
@@ -541,48 +574,48 @@ test_that("hexagonalize()", {
   # Changed from baseline: offset_x = 4
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14749 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19782),
+    class(output_14749),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19782[["Value"]],
+    output_14749[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[["x"]],
+    output_14749[["x"]],
     c(4, 5.73205, 0.5359, 7.89711, 0.10289, 7.89711, 0.10289, 7.4641,
       2.26795, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[[".edge"]],
+    output_14749[[".edge"]],
     structure(c(4L, 3L, 4L, 2L, 5L, 2L, 5L, 1L, 6L, 1L), .Label = c("1",
       "2", "3", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19782),
+    names(output_14749),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19782),
+    xpectr::element_classes(output_14749),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19782),
+    xpectr::element_types(output_14749),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19782),
+    dim(output_14749),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19782)),
+    colnames(dplyr::group_keys(output_14749)),
     character(0),
     fixed = TRUE)
 
@@ -591,13 +624,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error']]),
+    xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(side_effects_15603[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -606,13 +639,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error']]),
+    xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error_class']]),
+    xpectr::strip(side_effects_19040[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -621,13 +654,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error']]),
+    xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error_class']]),
+    xpectr::strip(side_effects_11387[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -635,48 +668,48 @@ test_that("hexagonalize()", {
   # Changed from baseline: keep_original = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19040 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", edge_col_name = ".edge")
+  output_19888 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19040),
+    class(output_19888),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19040[["Value"]],
+    output_19888[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[["x"]],
+    output_19888[["x"]],
     c(0, 1.73205, -3.4641, 3.89711, -3.89711, 3.89711, -3.89711, 3.4641,
       -1.73205, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[[".edge"]],
+    output_19888[[".edge"]],
     structure(c(4L, 3L, 4L, 2L, 5L, 2L, 5L, 1L, 6L, 1L), .Label = c("1",
       "2", "3", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19040),
+    names(output_19888),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19040),
+    xpectr::element_classes(output_19888),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19040),
+    xpectr::element_types(output_19888),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19040),
+    dim(output_19888),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19040)),
+    colnames(dplyr::group_keys(output_19888)),
     character(0),
     fixed = TRUE)
 
@@ -685,13 +718,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19466 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error']]),
+    xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error_class']]),
+    xpectr::strip(side_effects_19466[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -700,13 +733,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error']]),
+    xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error_class']]),
+    xpectr::strip(side_effects_10824[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -715,13 +748,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(side_effects_15142[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -729,48 +762,48 @@ test_that("hexagonalize()", {
   # Changed from baseline: x_col_name = ".hexago...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10824 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".hexagon_x", edge_col_name = ".edge")
+  output_13902 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".hexagon_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_10824),
+    class(output_13902),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_10824[["Value"]],
+    output_13902[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".hexagon_x"]],
+    output_13902[[".hexagon_x"]],
     c(0, 1.73205, -3.4641, 3.89711, -3.89711, 3.89711, -3.89711, 3.4641,
       -1.73205, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".edge"]],
+    output_13902[[".edge"]],
     structure(c(4L, 3L, 4L, 2L, 5L, 2L, 5L, 1L, 6L, 1L), .Label = c("1",
       "2", "3", "4", "5", "6"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_10824),
+    names(output_13902),
     c("Value", ".hexagon_x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_10824),
+    xpectr::element_classes(output_13902),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_10824),
+    xpectr::element_types(output_13902),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_10824),
+    dim(output_13902),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_10824)),
+    colnames(dplyr::group_keys(output_13902)),
     character(0),
     fixed = TRUE)
 
@@ -779,13 +812,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19057 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error']]),
+    xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must have at least 1 characters."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error_class']]),
+    xpectr::strip(side_effects_19057[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -794,13 +827,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error']]),
+    xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(side_effects_14469[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -809,13 +842,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_18360 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip(side_effects_18360[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(side_effects_18360[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -824,13 +857,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14469 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error_class']]),
+    xpectr::strip(side_effects_17375[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -839,13 +872,13 @@ test_that("hexagonalize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NA), reset_seed = TRUE)
+  side_effects_18110 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NA, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'edge_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error_class']]),
+    xpectr::strip(side_effects_18110[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -853,45 +886,60 @@ test_that("hexagonalize()", {
   # Changed from baseline: edge_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17375 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NULL)
+  output_13881 <- hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_17375),
+    class(output_13881),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17375[["Value"]],
+    output_13881[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["x"]],
+    output_13881[["x"]],
     c(0, 1.73205, -3.4641, 3.89711, -3.89711, 3.89711, -3.89711, 3.4641,
       -1.73205, 0),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_17375),
+    names(output_13881),
     c("Value", "x"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17375),
+    xpectr::element_classes(output_13881),
     c("integer", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17375),
+    xpectr::element_types(output_13881),
     c("integer", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17375),
+    dim(output_13881),
     c(10L, 2L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17375)),
+    colnames(dplyr::group_keys(output_13881)),
     character(0),
+    fixed = TRUE)
+
+  # Testing hexagonalize(data = c(1:10), y_col = NULL, ....
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16851 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16851[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16851[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'hexagonalize'                                          ####
@@ -923,11 +971,14 @@ test_that("circularize()", {
   #     "keep_original" = list(FALSE, TRUE, NA, "hej"),
   #     "x_col_name" = list("x", ".circle_x", "", NA, 1),
   #     "degrees_col_name" = list(".degrees", 1, NA),
-  #     "origin_col_name" = list(".origin", NA, 1)
+  #     "origin_col_name" = list(".origin", NA, 1),
+  #     "overwrite" = list(TRUE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = df, "y_col" = "y", "x_col_name" = ".circ_x"),
-  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".circ_x")
+  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".circ_x"),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "g", "overwrite" = FALSE),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "tjep", "degrees_col_name" = "tjep")
   #   ),
   #   indentation = 2,
   #   copy_env = FALSE
@@ -941,7 +992,7 @@ test_that("circularize()", {
   # Testing circularize(data = c(1:10), y_col = NULL, .m...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19148 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -992,7 +1043,7 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19370 <- xpectr::capture_side_effects(circularize(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19370 <- xpectr::capture_side_effects(circularize(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'double'\n * checkmate::check_vector(data): Contains missing values (element 3)\n * checkmate::check_factor(data): Must be of type 'factor', not 'double'"),
@@ -1007,7 +1058,7 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(circularize(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(circularize(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
@@ -1022,10 +1073,10 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(circularize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(circularize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but\n * element 1 has type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -1037,7 +1088,7 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(circularize(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(circularize(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -1051,7 +1102,7 @@ test_that("circularize()", {
   # Changed from baseline: data, y_col, x_col_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15190 <- circularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_15190 <- circularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15190),
@@ -1111,7 +1162,7 @@ test_that("circularize()", {
   # Changed from baseline: data, y_col, x_col_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- circularize(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_17365 <- circularize(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -1170,18 +1221,48 @@ test_that("circularize()", {
     character(0),
     fixed = TRUE)
 
+  # Testing circularize(data = df, y_col = "y", .min = N...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_11346 <- xpectr::capture_side_effects(circularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "g", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'g' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing circularize(data = df, y_col = "y", .min = N...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16569 <- xpectr::capture_side_effects(circularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "tjep", degrees_col_name = "tjep", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error']]),
+    xpectr::strip("Assertion on 'specified column names (\"y\", \"tjep\", \"tjep\", \".origin\")' failed: Contains duplicated values, position 3."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
   # Testing circularize(data = c(1:10), y_col = "y", .mi...
   # Changed from baseline: y_col = "y"
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(side_effects_17050[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1189,49 +1270,49 @@ test_that("circularize()", {
   # Changed from baseline: .min = -2
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16569 <- circularize(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_14577 <- circularize(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_16569),
+    class(output_14577),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_16569[["Value"]],
+    output_14577[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[["x"]],
+    output_14577[["x"]],
     c(-5.19615, 5.65685, -5.91608, 6, -5.91608, 5.65685, -5.19615, 4.47214,
       -3.31662, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[[".degrees"]],
+    output_14577[[".degrees"]],
     c(210, 340.52878, 189.59407, 0, 170.40593, 19.47122, 150, 41.81031,
       123.55731, 90),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_16569),
+    names(output_14577),
     c("Value", "x", ".degrees", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_16569),
+    xpectr::element_classes(output_14577),
     c("integer", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_16569),
+    xpectr::element_types(output_14577),
     c("integer", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_16569),
+    dim(output_14577),
     c(10L, 4L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_16569)),
+    colnames(dplyr::group_keys(output_14577)),
     character(0),
     fixed = TRUE)
 
@@ -1239,49 +1320,49 @@ test_that("circularize()", {
   # Changed from baseline: .min = 3
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17050 <- circularize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_17191 <- circularize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_17050),
+    class(output_17191),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17050[["Value"]],
+    output_17191[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[["x"]],
+    output_17191[["x"]],
     c(NA, NA, 0, 2.44949, -3.16228, 3.4641, -3.4641, 3.16228, -2.44949,
       0),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[[".degrees"]],
+    output_17191[[".degrees"]],
     c(NA, NA, 270, 314.41531, 205.37693, 351.78679, 171.78679, 25.37693,
       134.41531, 90),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_17050),
+    names(output_17191),
     c("Value", "x", ".degrees", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17050),
+    xpectr::element_classes(output_17191),
     c("integer", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17050),
+    xpectr::element_types(output_17191),
     c("integer", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17050),
+    dim(output_17191),
     c(10L, 4L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17050)),
+    colnames(dplyr::group_keys(output_17191)),
     character(0),
     fixed = TRUE)
 
@@ -1290,13 +1371,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(side_effects_19346[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1305,13 +1386,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error']]),
+    xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error_class']]),
+    xpectr::strip(side_effects_12554[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1319,49 +1400,49 @@ test_that("circularize()", {
   # Changed from baseline: .max = 8
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19346 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_14622 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19346),
+    class(output_14622),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19346[["Value"]],
+    output_14622[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[["x"]],
+    output_14622[["x"]],
     c(0, 2.44949, -3.16228, 3.4641, -3.4641, 3.16228, -2.44949, 0, NA,
       NA),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[[".degrees"]],
+    output_14622[[".degrees"]],
     c(270, 314.41531, 205.37693, 351.78679, 171.78679, 25.37693, 134.41531,
       90, NA, NA),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_19346),
+    names(output_14622),
     c("Value", "x", ".degrees", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19346),
+    xpectr::element_classes(output_14622),
     c("integer", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19346),
+    xpectr::element_types(output_14622),
     c("integer", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19346),
+    dim(output_14622),
     c(10L, 4L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19346)),
+    colnames(dplyr::group_keys(output_14622)),
     character(0),
     fixed = TRUE)
 
@@ -1370,13 +1451,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error']]),
+    xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error_class']]),
+    xpectr::strip(side_effects_19400[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1385,13 +1466,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error']]),
+    xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error_class']]),
+    xpectr::strip(side_effects_19782[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1399,49 +1480,49 @@ test_that("circularize()", {
   # Changed from baseline: .max = 12
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19400 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_11174 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19400),
+    class(output_11174),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19400[["Value"]],
+    output_11174[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[["x"]],
+    output_11174[["x"]],
     c(0, 3.16228, -4.24264, 4.89898, -5.2915, 5.47723, -5.47723, 5.2915,
       -4.89898, 4.24264),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[[".degrees"]],
+    output_11174[[".degrees"]],
     c(270, 305.0968, 219.5212, 332.96431, 195.82662, 354.78409, 174.78409,
       15.82662, 152.96431, 39.5212),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_19400),
+    names(output_11174),
     c("Value", "x", ".degrees", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19400),
+    xpectr::element_classes(output_11174),
     c("integer", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19400),
+    xpectr::element_types(output_11174),
     c("integer", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19400),
+    dim(output_11174),
     c(10L, 4L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19400)),
+    colnames(dplyr::group_keys(output_11174)),
     character(0),
     fixed = TRUE)
 
@@ -1449,49 +1530,49 @@ test_that("circularize()", {
   # Changed from baseline: offset_x = 4
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_14749 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19782),
+    class(output_14749),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19782[["Value"]],
+    output_14749[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[["x"]],
+    output_14749[["x"]],
     c(4, 6.82843, 0.25834, 8.24264, -0.47214, 8.47214, -0.24264, 7.74166,
       1.17157, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[[".degrees"]],
+    output_14749[[".degrees"]],
     c(270, 308.94244, 213.74899, 340.52878, 186.37937, 6.37937, 160.52878,
       33.74899, 128.94244, 90),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_19782),
+    names(output_14749),
     c("Value", "x", ".degrees", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19782),
+    xpectr::element_classes(output_14749),
     c("integer", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19782),
+    xpectr::element_types(output_14749),
     c("integer", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19782),
+    dim(output_14749),
     c(10L, 4L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19782)),
+    colnames(dplyr::group_keys(output_14749)),
     character(0),
     fixed = TRUE)
 
@@ -1500,13 +1581,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error']]),
+    xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(side_effects_15603[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1515,13 +1596,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error']]),
+    xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error_class']]),
+    xpectr::strip(side_effects_19040[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1530,13 +1611,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error']]),
+    xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error_class']]),
+    xpectr::strip(side_effects_11387[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1544,49 +1625,49 @@ test_that("circularize()", {
   # Changed from baseline: keep_original = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19040 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19888 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19040),
+    class(output_19888),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19040[["Value"]],
+    output_19888[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[["x"]],
+    output_19888[["x"]],
     c(0, 2.82843, -3.74166, 4.24264, -4.47214, 4.47214, -4.24264, 3.74166,
       -2.82843, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[[".degrees"]],
+    output_19888[[".degrees"]],
     c(270, 308.94244, 213.74899, 340.52878, 186.37937, 6.37937, 160.52878,
       33.74899, 128.94244, 90),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_19040),
+    names(output_19888),
     c("Value", "x", ".degrees", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19040),
+    xpectr::element_classes(output_19888),
     c("integer", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19040),
+    xpectr::element_types(output_19888),
     c("integer", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19040),
+    dim(output_19888),
     c(10L, 4L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19040)),
+    colnames(dplyr::group_keys(output_19888)),
     character(0),
     fixed = TRUE)
 
@@ -1595,13 +1676,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19466 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error']]),
+    xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error_class']]),
+    xpectr::strip(side_effects_19466[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1610,13 +1691,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error']]),
+    xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error_class']]),
+    xpectr::strip(side_effects_10824[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1625,13 +1706,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(side_effects_15142[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1639,49 +1720,49 @@ test_that("circularize()", {
   # Changed from baseline: x_col_name = ".circle_x"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10824 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circle_x", degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_13902 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circle_x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_10824),
+    class(output_13902),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_10824[["Value"]],
+    output_13902[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".circle_x"]],
+    output_13902[[".circle_x"]],
     c(0, 2.82843, -3.74166, 4.24264, -4.47214, 4.47214, -4.24264, 3.74166,
       -2.82843, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".degrees"]],
+    output_13902[[".degrees"]],
     c(270, 308.94244, 213.74899, 340.52878, 186.37937, 6.37937, 160.52878,
       33.74899, 128.94244, 90),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_10824),
+    names(output_13902),
     c("Value", ".circle_x", ".degrees", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_10824),
+    xpectr::element_classes(output_13902),
     c("integer", "numeric", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_10824),
+    xpectr::element_types(output_13902),
     c("integer", "double", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_10824),
+    dim(output_13902),
     c(10L, 4L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_10824)),
+    colnames(dplyr::group_keys(output_13902)),
     character(0),
     fixed = TRUE)
 
@@ -1690,13 +1771,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19057 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error']]),
+    xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must have at least 1 characters."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error_class']]),
+    xpectr::strip(side_effects_19057[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1705,13 +1786,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error']]),
+    xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(side_effects_14469[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1720,13 +1801,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18360 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip(side_effects_18360[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(side_effects_18360[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1735,13 +1816,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14469 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error_class']]),
+    xpectr::strip(side_effects_17375[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1750,13 +1831,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = 1, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18110 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = 1, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'degrees_col_name': Must be of type 'string' (or 'NULL'), not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error_class']]),
+    xpectr::strip(side_effects_18110[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1765,13 +1846,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17375 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = NA, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13881 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = NA, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17375[['error']]),
+    xpectr::strip(side_effects_13881[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'degrees_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17375[['error_class']]),
+    xpectr::strip(side_effects_13881[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1779,44 +1860,44 @@ test_that("circularize()", {
   # Changed from baseline: degrees_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18110 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = NULL, origin_col_name = ".origin")
+  output_16851 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = NULL, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_18110),
+    class(output_16851),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_18110[["Value"]],
+    output_16851[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_18110[["x"]],
+    output_16851[["x"]],
     c(0, 2.82843, -3.74166, 4.24264, -4.47214, 4.47214, -4.24264, 3.74166,
       -2.82843, 0),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_18110),
+    names(output_16851),
     c("Value", "x", ".origin"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_18110),
+    xpectr::element_classes(output_16851),
     c("integer", "numeric", "list"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_18110),
+    xpectr::element_types(output_16851),
     c("integer", "double", "list"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_18110),
+    dim(output_16851),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_18110)),
+    colnames(dplyr::group_keys(output_16851)),
     character(0),
     fixed = TRUE)
 
@@ -1825,13 +1906,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13881 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = NA), reset_seed = TRUE)
+  side_effects_10039 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = NA, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13881[['error']]),
+    xpectr::strip(side_effects_10039[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13881[['error_class']]),
+    xpectr::strip(side_effects_10039[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1840,13 +1921,13 @@ test_that("circularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16851 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = 1), reset_seed = TRUE)
+  side_effects_18329 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = 1, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_16851[['error']]),
+    xpectr::strip(side_effects_18329[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin_col_name': Must be of type 'string' (or 'NULL'), not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_16851[['error_class']]),
+    xpectr::strip(side_effects_18329[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1854,50 +1935,65 @@ test_that("circularize()", {
   # Changed from baseline: origin_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10039 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = NULL)
+  output_10073 <- circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_10039),
+    class(output_10073),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_10039[["Value"]],
+    output_10073[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_10039[["x"]],
+    output_10073[["x"]],
     c(0, 2.82843, -3.74166, 4.24264, -4.47214, 4.47214, -4.24264, 3.74166,
       -2.82843, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_10039[[".degrees"]],
+    output_10073[[".degrees"]],
     c(270, 308.94244, 213.74899, 340.52878, 186.37937, 6.37937, 160.52878,
       33.74899, 128.94244, 90),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_10039),
+    names(output_10073),
     c("Value", "x", ".degrees"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_10039),
+    xpectr::element_classes(output_10073),
     c("integer", "numeric", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_10039),
+    xpectr::element_types(output_10073),
     c("integer", "double", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_10039),
+    dim(output_10073),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_10039)),
+    colnames(dplyr::group_keys(output_10073)),
     character(0),
+    fixed = TRUE)
+
+  # Testing circularize(data = c(1:10), y_col = NULL, .m...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_12076 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_12076[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_12076[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'circularize'                                           ####
@@ -1930,11 +2026,14 @@ test_that("triangularize()", {
   #     "offset_x" = list(0, 4, "hej", NA),
   #     "keep_original" = list(FALSE, TRUE, NA, "hej"),
   #     "x_col_name" = list("x", ".circle_x", "", NA, 1),
-  #     "edge_col_name" = list(".edge", NA)
+  #     "edge_col_name" = list(".edge", NA),
+  #     "overwrite" = list(TRUE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = df, "y_col" = "y", "x_col_name" = ".circ_x"),
-  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".circ_x")
+  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".circ_x"),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "g", "overwrite" = FALSE),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "tjep", "edge_col_name" = "tjep")
   #   ),
   #   indentation = 2,
   #   copy_env = FALSE
@@ -1948,7 +2047,7 @@ test_that("triangularize()", {
   # Testing triangularize(data = c(1:10), y_col = NULL, ...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_19148 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -1997,7 +2096,7 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19370 <- xpectr::capture_side_effects(triangularize(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19370 <- xpectr::capture_side_effects(triangularize(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'double'\n * checkmate::check_vector(data): Contains missing values (element 3)\n * checkmate::check_factor(data): Must be of type 'factor', not 'double'"),
@@ -2012,7 +2111,7 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(triangularize(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(triangularize(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
@@ -2027,10 +2126,10 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(triangularize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(triangularize(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but\n * element 1 has type 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -2042,7 +2141,7 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(triangularize(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(triangularize(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -2056,7 +2155,7 @@ test_that("triangularize()", {
   # Changed from baseline: data, y_col, x_col_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15190 <- triangularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", edge_col_name = ".edge")
+  output_15190 <- triangularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15190),
@@ -2111,7 +2210,7 @@ test_that("triangularize()", {
   # Changed from baseline: data, y_col, x_col_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- triangularize(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", edge_col_name = ".edge")
+  output_17365 <- triangularize(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circ_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -2167,18 +2266,48 @@ test_that("triangularize()", {
     character(0),
     fixed = TRUE)
 
+  # Testing triangularize(data = df, y_col = "y", .min =...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_11346 <- xpectr::capture_side_effects(triangularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "g", edge_col_name = ".edge", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'g' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing triangularize(data = df, y_col = "y", .min =...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16569 <- xpectr::capture_side_effects(triangularize(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "tjep", edge_col_name = "tjep", overwrite = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error']]),
+    xpectr::strip("Assertion on 'specified column names (\"y\", \"tjep\", \"tjep\")' failed: Contains duplicated values, position 3."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
   # Testing triangularize(data = c(1:10), y_col = "y", ....
   # Changed from baseline: y_col = "y"
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(side_effects_17050[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2186,47 +2315,47 @@ test_that("triangularize()", {
   # Changed from baseline: .min = -2
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16569 <- triangularize(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14577 <- triangularize(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_16569),
+    class(output_14577),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_16569[["Value"]],
+    output_14577[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[["x"]],
+    output_14577[["x"]],
     c(0, 0, 5, 6, 5, 0, 3, 0, 1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[[".edge"]],
+    output_14577[[".edge"]],
     structure(c(3L, 3L, 2L, 1L, 1L, 3L, 1L, 3L, 1L, 3L), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_16569),
+    names(output_14577),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_16569),
+    xpectr::element_classes(output_14577),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_16569),
+    xpectr::element_types(output_14577),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_16569),
+    dim(output_14577),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_16569)),
+    colnames(dplyr::group_keys(output_14577)),
     character(0),
     fixed = TRUE)
 
@@ -2234,47 +2363,47 @@ test_that("triangularize()", {
   # Changed from baseline: .min = 3
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17050 <- triangularize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_17191 <- triangularize(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_17050),
+    class(output_17191),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17050[["Value"]],
+    output_17191[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[["x"]],
+    output_17191[["x"]],
     c(NA, NA, 0, 0, 2, 3, 3, 0, 1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[[".edge"]],
+    output_17191[[".edge"]],
     structure(c(NA, NA, 3L, 3L, 2L, 2L, 1L, 3L, 1L, 3L), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_17050),
+    names(output_17191),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17050),
+    xpectr::element_classes(output_17191),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17050),
+    xpectr::element_types(output_17191),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17050),
+    dim(output_17191),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17050)),
+    colnames(dplyr::group_keys(output_17191)),
     character(0),
     fixed = TRUE)
 
@@ -2283,13 +2412,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(side_effects_19346[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2298,13 +2427,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error']]),
+    xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error_class']]),
+    xpectr::strip(side_effects_12554[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2312,47 +2441,47 @@ test_that("triangularize()", {
   # Changed from baseline: .max = 8
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19346 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14622 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19346),
+    class(output_14622),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19346[["Value"]],
+    output_14622[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[["x"]],
+    output_14622[["x"]],
     c(0, 0, 2, 3, 3, 0, 1, 0, NA, NA),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[[".edge"]],
+    output_14622[[".edge"]],
     structure(c(3L, 3L, 2L, 2L, 1L, 3L, 1L, 3L, NA, NA), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19346),
+    names(output_14622),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19346),
+    xpectr::element_classes(output_14622),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19346),
+    xpectr::element_types(output_14622),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19346),
+    dim(output_14622),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19346)),
+    colnames(dplyr::group_keys(output_14622)),
     character(0),
     fixed = TRUE)
 
@@ -2361,13 +2490,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error']]),
+    xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error_class']]),
+    xpectr::strip(side_effects_19400[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2376,13 +2505,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error']]),
+    xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error_class']]),
+    xpectr::strip(side_effects_19782[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2390,47 +2519,47 @@ test_that("triangularize()", {
   # Changed from baseline: .max = 12
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19400 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_11174 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19400),
+    class(output_11174),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19400[["Value"]],
+    output_11174[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[["x"]],
+    output_11174[["x"]],
     c(0, 0, 2, 3, 4, 0, 5, 0, 3, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[[".edge"]],
+    output_11174[[".edge"]],
     structure(c(3L, 3L, 2L, 2L, 2L, 3L, 1L, 3L, 1L, 3L), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19400),
+    names(output_11174),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19400),
+    xpectr::element_classes(output_11174),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19400),
+    xpectr::element_types(output_11174),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19400),
+    dim(output_11174),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19400)),
+    colnames(dplyr::group_keys(output_11174)),
     character(0),
     fixed = TRUE)
 
@@ -2438,47 +2567,47 @@ test_that("triangularize()", {
   # Changed from baseline: offset_x = 4
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14749 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19782),
+    class(output_14749),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19782[["Value"]],
+    output_14749[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[["x"]],
+    output_14749[["x"]],
     c(4, 4, 6, 7, 8, 4, 7, 4, 5, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[[".edge"]],
+    output_14749[[".edge"]],
     structure(c(3L, 3L, 2L, 2L, 2L, 3L, 1L, 3L, 1L, 3L), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19782),
+    names(output_14749),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19782),
+    xpectr::element_classes(output_14749),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19782),
+    xpectr::element_types(output_14749),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19782),
+    dim(output_14749),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19782)),
+    colnames(dplyr::group_keys(output_14749)),
     character(0),
     fixed = TRUE)
 
@@ -2487,13 +2616,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error']]),
+    xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(side_effects_15603[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2502,13 +2631,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error']]),
+    xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error_class']]),
+    xpectr::strip(side_effects_19040[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2517,13 +2646,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error']]),
+    xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error_class']]),
+    xpectr::strip(side_effects_11387[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2531,47 +2660,47 @@ test_that("triangularize()", {
   # Changed from baseline: keep_original = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19040 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", edge_col_name = ".edge")
+  output_19888 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19040),
+    class(output_19888),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19040[["Value"]],
+    output_19888[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[["x"]],
+    output_19888[["x"]],
     c(0, 0, 2, 3, 4, 0, 3, 0, 1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[[".edge"]],
+    output_19888[[".edge"]],
     structure(c(3L, 3L, 2L, 2L, 2L, 3L, 1L, 3L, 1L, 3L), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19040),
+    names(output_19888),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19040),
+    xpectr::element_classes(output_19888),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19040),
+    xpectr::element_types(output_19888),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19040),
+    dim(output_19888),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19040)),
+    colnames(dplyr::group_keys(output_19888)),
     character(0),
     fixed = TRUE)
 
@@ -2580,13 +2709,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19466 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error']]),
+    xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error_class']]),
+    xpectr::strip(side_effects_19466[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2595,13 +2724,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error']]),
+    xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error_class']]),
+    xpectr::strip(side_effects_10824[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2610,13 +2739,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(side_effects_15142[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2624,47 +2753,47 @@ test_that("triangularize()", {
   # Changed from baseline: x_col_name = ".circle_x"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10824 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circle_x", edge_col_name = ".edge")
+  output_13902 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".circle_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_10824),
+    class(output_13902),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_10824[["Value"]],
+    output_13902[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".circle_x"]],
+    output_13902[[".circle_x"]],
     c(0, 0, 2, 3, 4, 0, 3, 0, 1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".edge"]],
+    output_13902[[".edge"]],
     structure(c(3L, 3L, 2L, 2L, 2L, 3L, 1L, 3L, 1L, 3L), .Label = c("1",
       "2", "3"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_10824),
+    names(output_13902),
     c("Value", ".circle_x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_10824),
+    xpectr::element_classes(output_13902),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_10824),
+    xpectr::element_types(output_13902),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_10824),
+    dim(output_13902),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_10824)),
+    colnames(dplyr::group_keys(output_13902)),
     character(0),
     fixed = TRUE)
 
@@ -2673,13 +2802,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19057 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error']]),
+    xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must have at least 1 characters."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error_class']]),
+    xpectr::strip(side_effects_19057[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2688,13 +2817,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error']]),
+    xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(side_effects_14469[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2703,13 +2832,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_18360 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip(side_effects_18360[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(side_effects_18360[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2718,13 +2847,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14469 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error_class']]),
+    xpectr::strip(side_effects_17375[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2733,13 +2862,13 @@ test_that("triangularize()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NA), reset_seed = TRUE)
+  side_effects_18110 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NA, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'edge_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error_class']]),
+    xpectr::strip(side_effects_18110[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -2747,44 +2876,59 @@ test_that("triangularize()", {
   # Changed from baseline: edge_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17375 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NULL)
+  output_13881 <- triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_17375),
+    class(output_13881),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17375[["Value"]],
+    output_13881[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["x"]],
+    output_13881[["x"]],
     c(0, 0, 2, 3, 4, 0, 3, 0, 1, 0),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_17375),
+    names(output_13881),
     c("Value", "x"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17375),
+    xpectr::element_classes(output_13881),
     c("integer", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17375),
+    xpectr::element_types(output_13881),
     c("integer", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17375),
+    dim(output_13881),
     c(10L, 2L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17375)),
+    colnames(dplyr::group_keys(output_13881)),
     character(0),
+    fixed = TRUE)
+
+  # Testing triangularize(data = c(1:10), y_col = NULL, ...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16851 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16851[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16851[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'triangularize'                                         ####
@@ -2817,11 +2961,14 @@ test_that("square()", {
   #     "offset_x" = list(0, 4, "hej", NA),
   #     "keep_original" = list(FALSE, TRUE, NA, "hej"),
   #     "x_col_name" = list("x", ".square_x", "", NA, 1),
-  #     "edge_col_name" = list(".edge", NA)
+  #     "edge_col_name" = list(".edge", NA),
+  #     "overwrite" = list(TRUE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = df, "y_col" = "y", "x_col_name" = ".squarsquar_x"),
-  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".square_x", "keep_original" = TRUE)
+  #     list("data" = dplyr::group_by(df, g), "y_col" = "y", "x_col_name" = ".square_x", "keep_original" = TRUE),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "g", "overwrite" = FALSE),
+  #     list("data" = df, "y_col" = "y", "x_col_name" = "tjep", "edge_col_name" = "tjep")
   #   ),
   #   indentation = 2,
   #   copy_env = FALSE
@@ -2835,7 +2982,7 @@ test_that("square()", {
   # Testing square(data = c(1:10), y_col = NULL, .min = ...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_19148 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -2884,7 +3031,7 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19370 <- xpectr::capture_side_effects(square(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19370 <- xpectr::capture_side_effects(square(data = c(1, 2, NA, 4), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'double'\n * checkmate::check_vector(data): Contains missing values (element 3)\n * checkmate::check_factor(data): Must be of type 'factor', not 'double'"),
@@ -2899,7 +3046,7 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(square(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(square(data = df, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("When 'data' is a data.frame, 'cols' must be specified."),
@@ -2914,10 +3061,10 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(square(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(square(data = "hej", y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has\n * type 'character'."),
+    xpectr::strip("1 assertions failed:\n * Variable ''data' as vector': May only contain the following types: {numeric,factor}, but element 1 has type\n * 'character'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
@@ -2929,7 +3076,7 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(square(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(square(data = NULL, y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -2943,7 +3090,7 @@ test_that("square()", {
   # Changed from baseline: data, y_col, x_col_name
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15190 <- square(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".squarsquar_x", edge_col_name = ".edge")
+  output_15190 <- square(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".squarsquar_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15190),
@@ -3000,7 +3147,7 @@ test_that("square()", {
   # Changed from baseline: data, y_col, keep_ori...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17365 <- square(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = ".square_x", edge_col_name = ".edge")
+  output_17365 <- square(data = dplyr::group_by(df, g), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = ".square_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -3062,18 +3209,48 @@ test_that("square()", {
     character(0),
     fixed = TRUE)
 
+  # Testing square(data = df, y_col = "y", .min = NULL, ...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_11346 <- xpectr::capture_side_effects(square(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "g", edge_col_name = ".edge", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'g' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing square(data = df, y_col = "y", .min = NULL, ...
+  # Changed from baseline: data, y_col, x_col_na...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16569 <- xpectr::capture_side_effects(square(data = df, y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "tjep", edge_col_name = "tjep", overwrite = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error']]),
+    xpectr::strip("Assertion on 'specified column names (\"y\", \"tjep\", \"tjep\")' failed: Contains duplicated values, position 3."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16569[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
   # Testing square(data = c(1:10), y_col = "y", .min = N...
   # Changed from baseline: y_col = "y"
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = "y", .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(side_effects_17050[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3081,47 +3258,47 @@ test_that("square()", {
   # Changed from baseline: .min = -2
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16569 <- square(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14577 <- square(data = c(1:10), y_col = NULL, .min = -2, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_16569),
+    class(output_14577),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_16569[["Value"]],
+    output_14577[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[["x"]],
+    output_14577[["x"]],
     c(-3, 4, -5, 6, -5, 4, -3, 2, -1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_16569[[".edge"]],
+    output_14577[[".edge"]],
     structure(c(3L, 2L, 3L, 1L, 4L, 1L, 4L, 1L, 4L, 1L), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_16569),
+    names(output_14577),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_16569),
+    xpectr::element_classes(output_14577),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_16569),
+    xpectr::element_types(output_14577),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_16569),
+    dim(output_14577),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_16569)),
+    colnames(dplyr::group_keys(output_14577)),
     character(0),
     fixed = TRUE)
 
@@ -3129,47 +3306,47 @@ test_that("square()", {
   # Changed from baseline: .min = 3
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17050 <- square(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_17191 <- square(data = c(1:10), y_col = NULL, .min = 3, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_17050),
+    class(output_17191),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17050[["Value"]],
+    output_17191[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[["x"]],
+    output_17191[["x"]],
     c(NA, NA, 0, 1, -2, 3, -3, 2, -1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_17050[[".edge"]],
+    output_17191[[".edge"]],
     structure(c(NA, NA, 3L, 2L, 3L, 2L, 4L, 1L, 4L, 1L), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_17050),
+    names(output_17191),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17050),
+    xpectr::element_classes(output_17191),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17050),
+    xpectr::element_types(output_17191),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17050),
+    dim(output_17191),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17050)),
+    colnames(dplyr::group_keys(output_17191)),
     character(0),
     fixed = TRUE)
 
@@ -3178,13 +3355,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = "hej", .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(side_effects_19346[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3193,13 +3370,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NA, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error']]),
+    xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.min': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17191[['error_class']]),
+    xpectr::strip(side_effects_12554[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3207,47 +3384,47 @@ test_that("square()", {
   # Changed from baseline: .max = 8
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19346 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14622 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = 8, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19346),
+    class(output_14622),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19346[["Value"]],
+    output_14622[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[["x"]],
+    output_14622[["x"]],
     c(0, 1, -2, 3, -3, 2, -1, 0, NA, NA),
     tolerance = 1e-4)
   expect_equal(
-    output_19346[[".edge"]],
+    output_14622[[".edge"]],
     structure(c(3L, 2L, 3L, 2L, 4L, 1L, 4L, 1L, NA, NA), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19346),
+    names(output_14622),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19346),
+    xpectr::element_classes(output_14622),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19346),
+    xpectr::element_types(output_14622),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19346),
+    dim(output_14622),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19346)),
+    colnames(dplyr::group_keys(output_14622)),
     character(0),
     fixed = TRUE)
 
@@ -3256,13 +3433,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = "hej", offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error']]),
+    xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': Must be of type 'number' (or 'NULL'), not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_12554[['error_class']]),
+    xpectr::strip(side_effects_19400[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3271,13 +3448,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NA, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error']]),
+    xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable '.max': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14622[['error_class']]),
+    xpectr::strip(side_effects_19782[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3285,47 +3462,47 @@ test_that("square()", {
   # Changed from baseline: .max = 12
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19400 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_11174 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = 12, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19400),
+    class(output_11174),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19400[["Value"]],
+    output_11174[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[["x"]],
+    output_11174[["x"]],
     c(0, 1, -2, 3, -4, 5, -5, 4, -3, 2),
     tolerance = 1e-4)
   expect_equal(
-    output_19400[[".edge"]],
+    output_11174[[".edge"]],
     structure(c(3L, 2L, 3L, 2L, 3L, 2L, 4L, 1L, 4L, 1L), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19400),
+    names(output_11174),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19400),
+    xpectr::element_classes(output_11174),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19400),
+    xpectr::element_types(output_11174),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19400),
+    dim(output_11174),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19400)),
+    colnames(dplyr::group_keys(output_11174)),
     character(0),
     fixed = TRUE)
 
@@ -3333,47 +3510,47 @@ test_that("square()", {
   # Changed from baseline: offset_x = 4
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19782 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge")
+  output_14749 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 4, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19782),
+    class(output_14749),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19782[["Value"]],
+    output_14749[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[["x"]],
+    output_14749[["x"]],
     c(4, 5, 2, 7, 0, 8, 1, 6, 3, 4),
     tolerance = 1e-4)
   expect_equal(
-    output_19782[[".edge"]],
+    output_14749[[".edge"]],
     structure(c(3L, 2L, 3L, 2L, 3L, 1L, 4L, 1L, 4L, 1L), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19782),
+    names(output_14749),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19782),
+    xpectr::element_classes(output_14749),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19782),
+    xpectr::element_types(output_14749),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19782),
+    dim(output_14749),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19782)),
+    colnames(dplyr::group_keys(output_14749)),
     character(0),
     fixed = TRUE)
 
@@ -3382,13 +3559,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = "hej", keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error']]),
+    xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11174[['error_class']]),
+    xpectr::strip(side_effects_15603[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3397,13 +3574,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19040 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NA, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error']]),
+    xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14749[['error_class']]),
+    xpectr::strip(side_effects_19040[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3412,13 +3589,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = NULL, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error']]),
+    xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'offset_x': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15603[['error_class']]),
+    xpectr::strip(side_effects_11387[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3426,47 +3603,47 @@ test_that("square()", {
   # Changed from baseline: keep_original = TRUE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19040 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", edge_col_name = ".edge")
+  output_19888 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = TRUE, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19040),
+    class(output_19888),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19040[["Value"]],
+    output_19888[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[["x"]],
+    output_19888[["x"]],
     c(0, 1, -2, 3, -4, 4, -3, 2, -1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_19040[[".edge"]],
+    output_19888[[".edge"]],
     structure(c(3L, 2L, 3L, 2L, 3L, 1L, 4L, 1L, 4L, 1L), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_19040),
+    names(output_19888),
     c("Value", "x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19040),
+    xpectr::element_classes(output_19888),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19040),
+    xpectr::element_types(output_19888),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19040),
+    dim(output_19888),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19040)),
+    colnames(dplyr::group_keys(output_19888)),
     character(0),
     fixed = TRUE)
 
@@ -3475,13 +3652,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19466 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NA, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error']]),
+    xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11387[['error_class']]),
+    xpectr::strip(side_effects_19466[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3490,13 +3667,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = "hej", x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error']]),
+    xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19888[['error_class']]),
+    xpectr::strip(side_effects_10824[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3505,13 +3682,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = NULL, x_col_name = "x", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error']]),
+    xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19466[['error_class']]),
+    xpectr::strip(side_effects_15142[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3519,47 +3696,47 @@ test_that("square()", {
   # Changed from baseline: x_col_name = ".square_x"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10824 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".square_x", edge_col_name = ".edge")
+  output_13902 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = ".square_x", edge_col_name = ".edge", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_10824),
+    class(output_13902),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_10824[["Value"]],
+    output_13902[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".square_x"]],
+    output_13902[[".square_x"]],
     c(0, 1, -2, 3, -4, 4, -3, 2, -1, 0),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[[".edge"]],
+    output_13902[[".edge"]],
     structure(c(3L, 2L, 3L, 2L, 3L, 1L, 4L, 1L, 4L, 1L), .Label = c("1",
       "2", "3", "4"), class = "factor"))
   # Testing column names
   expect_equal(
-    names(output_10824),
+    names(output_13902),
     c("Value", ".square_x", ".edge"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_10824),
+    xpectr::element_classes(output_13902),
     c("integer", "numeric", "factor"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_10824),
+    xpectr::element_types(output_13902),
     c("integer", "double", "integer"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_10824),
+    dim(output_13902),
     c(10L, 3L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_10824)),
+    colnames(dplyr::group_keys(output_13902)),
     character(0),
     fixed = TRUE)
 
@@ -3568,13 +3745,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_19057 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error']]),
+    xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must have at least 1 characters."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error_class']]),
+    xpectr::strip(side_effects_19057[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3583,13 +3760,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_14469 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NA, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error']]),
+    xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(side_effects_14469[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3598,13 +3775,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19057 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_18360 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = 1, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error']]),
+    xpectr::strip(side_effects_18360[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'double'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19057[['error_class']]),
+    xpectr::strip(side_effects_18360[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3613,13 +3790,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14469 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, edge_col_name = ".edge"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = NULL, edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col_name': Must be of type 'string', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14469[['error_class']]),
+    xpectr::strip(side_effects_17375[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3628,13 +3805,13 @@ test_that("square()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NA), reset_seed = TRUE)
+  side_effects_18110 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NA, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'edge_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18360[['error_class']]),
+    xpectr::strip(side_effects_18110[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -3642,44 +3819,59 @@ test_that("square()", {
   # Changed from baseline: edge_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17375 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NULL)
+  output_13881 <- square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_17375),
+    class(output_13881),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_17375[["Value"]],
+    output_13881[["Value"]],
     c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     tolerance = 1e-4)
   expect_equal(
-    output_17375[["x"]],
+    output_13881[["x"]],
     c(0, 1, -2, 3, -4, 4, -3, 2, -1, 0),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_17375),
+    names(output_13881),
     c("Value", "x"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_17375),
+    xpectr::element_classes(output_13881),
     c("integer", "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_17375),
+    xpectr::element_types(output_13881),
     c("integer", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_17375),
+    dim(output_13881),
     c(10L, 2L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_17375)),
+    colnames(dplyr::group_keys(output_13881)),
     character(0),
+    fixed = TRUE)
+
+  # Testing square(data = c(1:10), y_col = NULL, .min = ...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16851 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "x", edge_col_name = ".edge", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16851[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'overwrite': Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16851[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'square'                                                ####

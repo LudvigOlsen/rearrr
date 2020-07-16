@@ -332,12 +332,19 @@ split_range_outliers_ <- function(data,
        "outliers" = outliers)
 }
 
-add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE){
+add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE, overwrite = FALSE){
   if (isTRUE(as_list))
-    data[[col]] <- rep(list(val), nrow(data))
+    to_add <- rep(list(val), nrow(data))
   else
-    data[[col]] <- rep(val, nrow(data))
-  data
+    to_add <- rep(val, nrow(data))
+
+  # Add column
+  add_info_col(
+    data = data,
+    nm = col,
+    content = to_add,
+    overwrite = overwrite
+  )
 }
 
 

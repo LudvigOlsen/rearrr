@@ -128,7 +128,8 @@ hexagonalize <- function(data,
                          offset_x = 0,
                          keep_original = TRUE,
                          x_col_name = ".hexagon_x",
-                         edge_col_name = ".edge") {
+                         edge_col_name = ".edge",
+                         overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x_col_name, min.chars = 1, add = assert_collection)
@@ -137,6 +138,13 @@ hexagonalize <- function(data,
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames(y_col, x_col_name, edge_col_name)
+  check_overwrite(data = data,
+                  nm = x_col_name,
+                  overwrite = overwrite)
+  check_overwrite(data = data,
+                  nm = edge_col_name,
+                  overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -146,6 +154,7 @@ hexagonalize <- function(data,
     check_fn = NULL,
     cols = y_col,
     suffix = "",
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -160,14 +169,15 @@ hexagonalize <- function(data,
 hexagonalize_mutator_method_ <- function(data,
                                          grp_id,
                                          cols,
+                                         overwrite,
                                          .min,
                                          .max,
                                          offset_x,
                                          x_col_name,
                                          edge_col_name,
-                                         suffix = NULL,
                                          ...) {
 
+  # Is a single column
   col <- cols
 
   # Create tmp var names

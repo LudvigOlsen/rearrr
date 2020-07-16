@@ -13,7 +13,8 @@ circularize(
   keep_original = TRUE,
   x_col_name = ".circle_x",
   degrees_col_name = ".degrees",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 Angling is counterclockwise around \code{(0, 0)} and starts at \code{(max(x), 0)}.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates (center of circle). If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the added x-coordinates and the angle in degrees.

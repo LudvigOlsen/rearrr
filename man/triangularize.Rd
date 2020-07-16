@@ -12,7 +12,8 @@ triangularize(
   offset_x = 0,
   keep_original = TRUE,
   x_col_name = ".triangle_x",
-  edge_col_name = ".edge"
+  edge_col_name = ".edge",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{edge_col_name}{Name of new column with the edge identifiers. If \code{NULL}, no column is added.
 
 Numbering is clockwise and starts at the upper-right edge.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the added x-coordinates and an identifier
