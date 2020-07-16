@@ -11,8 +11,8 @@ extreme_pairing_rearranger_(
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
   num_pairings = 1,
-  keep_factors = FALSE,
-  factor_name = ".pair"
+  factor_name = ".pair",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -86,11 +86,9 @@ And are \strong{ordered as}:
 
 \item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
 
-\item{keep_factors}{Whether to keep the sorting factor(s) in the \code{data.frame}. \code{Logical}.}
+\item{factor_name}{Name of new column with the sorting factor. If \code{NULL}, no column is added.}
 
-\item{factor_name}{Name of sorting factor.
-
-N.B. Only used when \code{`keep_factors`} is \code{TRUE}.}
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.

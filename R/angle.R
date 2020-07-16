@@ -82,10 +82,11 @@
 angle <- function(data,
                   x_col = NULL,
                   y_col = NULL,
-                  origin = c(0, 0),
+                  origin = NULL,
                   origin_fn = NULL,
                   degrees_col_name = ".degrees",
-                  origin_col_name = ".origin") {
+                  origin_col_name = ".origin",
+                  overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(degrees_col_name, add = assert_collection)
@@ -95,10 +96,15 @@ angle <- function(data,
   checkmate::assert_numeric(origin,
     min.len = 1,
     any.missing = FALSE,
+    null.ok = TRUE,
     add = assert_collection
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames_(x_col, y_col, origin_col_name, degrees_col_name)
+  check_overwrite_(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -109,6 +115,7 @@ angle <- function(data,
     min_dims = 2,
     cols = c(x_col, y_col),
     force_df = TRUE,
+    overwrite = overwrite,
     keep_original = TRUE,
     origin = origin,
     origin_fn = origin_fn,
@@ -121,6 +128,7 @@ angle <- function(data,
 angle_mutator_method_ <- function(data,
                                   grp_id,
                                   cols,
+                                  overwrite,
                                   origin,
                                   origin_fn,
                                   degrees_col_name,
@@ -155,10 +163,13 @@ angle_mutator_method_ <- function(data,
       data[[degrees_col_name]]
     )
 
-  # Info columns
-  if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates_(origin, cols)
-  }
+  # Add origin coordinates
+  data <- add_info_col_(
+    data = data,
+    nm = origin_col_name,
+    content = list_coordinates_(origin, cols),
+    overwrite = overwrite
+  )
 
   data
 }

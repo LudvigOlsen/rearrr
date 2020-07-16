@@ -104,11 +104,15 @@ test_that("fuzz testing angle()", {
   #     "origin" = list(c(0, 0), c(0, 0, 0), c(NA, NA), c(1, 1), NA),
   #     "origin_fn" = list(NULL, centroid, most_centered),
   #     "degrees_col_name" = list(".degrees", ".gredees", NA),
-  #     "origin_col_name" = list(".origin", ".oruguay",  NA)
+  #     "origin_col_name" = list(".origin", ".oruguay",  NA),
+  #     "overwrite" = list(FALSE)
   #   ),
   #   extra_combinations = list(
   #     list("data" = dplyr::group_by(df, g), "origin_fn" = centroid),
-  #     list("data" = c(1,2,3,4,5), "x_col" = NULL, "y_col" = NULL, "origin_fn" = centroid)
+  #     list("data" = c(1,2,3,4,5), "x_col" = NULL, "y_col" = NULL, "origin_fn" = centroid, "origin" = NULL),
+  #     list("overwrite" = FALSE, "origin_col_name" = "x"),
+  #     list("overwrite" = FALSE, "origin_col_name" = "g"),
+  #     list("overwrite" = TRUE, "origin_col_name" = "x")
   #   ),
   #   indentation = 2,
   #   copy_env = FALSE
@@ -122,7 +126,7 @@ test_that("fuzz testing angle()", {
   # Testing angle(data = df, x_col = "x", y_col = "y", o...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19148 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -180,7 +184,7 @@ test_that("fuzz testing angle()", {
   # Changed from baseline: data = dplyr::group_b...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19370 <- angle(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19370 <- angle(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19370),
@@ -239,7 +243,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(angle(data = c(1, 2, 3, 4, 5, 6), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(angle(data = c(1, 2, 3, 4, 5, 6), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
@@ -254,7 +258,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(angle(data = NULL, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(angle(data = NULL, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
@@ -267,8 +271,19 @@ test_that("fuzz testing angle()", {
   # Testing angle(data = dplyr::group_by(df, g), x_col =...
   # Changed from baseline: data, origin_fn
   xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_16417 <- xpectr::capture_side_effects(angle(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16417[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_16417[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
   # Assigning output
-  output_16417 <- angle(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_16417 <- xpectr::suppress_mw(angle(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE))
   # Testing class
   expect_equal(
     class(output_16417),
@@ -327,7 +342,7 @@ test_that("fuzz testing angle()", {
   # Changed from baseline: data, x_col, y_col, o...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15190 <- angle(data = c(1, 2, 3, 4, 5), x_col = NULL, y_col = NULL, origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_15190 <- angle(data = c(1, 2, 3, 4, 5), x_col = NULL, y_col = NULL, origin = NULL, origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_15190),
@@ -376,7 +391,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17365 <- xpectr::capture_side_effects(angle(data = df, x_col = "hej", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17365 <- xpectr::capture_side_effects(angle(data = df, x_col = "hej", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error']]),
     xpectr::strip("1 assertions failed:\n * These names in the 'col(s)' argument were not found in 'data': hej."),
@@ -391,7 +406,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(angle(data = df, x_col = 1, y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11346 <- xpectr::capture_side_effects(angle(data = df, x_col = 1, y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col': Must be of type 'string' (or 'NULL'), not 'double'."),
@@ -406,7 +421,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(angle(data = df, x_col = NA, y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(angle(data = df, x_col = NA, y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col': May not be NA."),
@@ -421,7 +436,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(angle(data = df, x_col = NULL, y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(angle(data = df, x_col = NULL, y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * This mutator method requires at least 2 dimensions / columns."),
@@ -436,10 +451,10 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "x", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14577 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "x", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'cols': Contains duplicated values, position 2."),
+    xpectr::strip("Assertion on 'specified column names (\"x\", \"x\", \".origin\", \".degrees\")' failed: Contains duplicated values, position 2."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error_class']]),
@@ -451,7 +466,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "hej", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "hej", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * These names in the 'col(s)' argument were not found in 'data': hej."),
@@ -466,7 +481,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = 1, origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = 1, origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_col': Must be of type 'string' (or 'NULL'), not 'double'."),
@@ -481,7 +496,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = NA, origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = NA, origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_col': May not be NA."),
@@ -496,7 +511,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = NULL, origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14622 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = NULL, origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error']]),
     xpectr::strip("1 assertions failed:\n * This mutator method requires at least 2 dimensions / columns."),
@@ -511,7 +526,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("'origin' must have either length 1 or same length as 'c(x_col, y_col)' (2) but had length 3."),
@@ -526,7 +541,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(NA, NA), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(NA, NA), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
@@ -540,7 +555,7 @@ test_that("fuzz testing angle()", {
   # Changed from baseline: origin = c(1, 1)
   xpectr::set_test_seed(42)
   # Assigning output
-  output_11174 <- angle(data = df, x_col = "x", y_col = "y", origin = c(1, 1), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_11174 <- angle(data = df, x_col = "x", y_col = "y", origin = c(1, 1), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_11174),
@@ -600,7 +615,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = NA, origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14749 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = NA, origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
@@ -615,10 +630,10 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15603 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = NULL, origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15603 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = NULL, origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'numeric', not 'NULL'."),
+    xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error_class']]),
@@ -628,8 +643,19 @@ test_that("fuzz testing angle()", {
   # Testing angle(data = df, x_col = "x", y_col = "y", o...
   # Changed from baseline: origin_fn = centroid
   xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19040 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19040[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19040[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
   # Assigning output
-  output_19040 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19040 <- xpectr::suppress_mw(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE))
   # Testing class
   expect_equal(
     class(output_19040),
@@ -687,8 +713,19 @@ test_that("fuzz testing angle()", {
   # Testing angle(data = df, x_col = "x", y_col = "y", o...
   # Changed from baseline: origin_fn = most_cent...
   xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_11387 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = most_centered, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11387[['warnings']]),
+    xpectr::strip(character(0)),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_11387[['messages']]),
+    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    fixed = TRUE)
   # Assigning output
-  output_11387 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = most_centered, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_11387 <- xpectr::suppress_mw(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = most_centered, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE))
   # Testing class
   expect_equal(
     class(output_11387),
@@ -747,7 +784,7 @@ test_that("fuzz testing angle()", {
   # Changed from baseline: degrees_col_name = "....
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19888 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".gredees", origin_col_name = ".origin")
+  output_19888 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".gredees", origin_col_name = ".origin", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19888),
@@ -806,7 +843,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = NA, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19466 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = NA, origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'degrees_col_name': May not be NA."),
@@ -821,7 +858,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10824 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = NULL, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = NULL, origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'degrees_col_name': Must be of type 'string', not 'NULL'."),
@@ -835,7 +872,7 @@ test_that("fuzz testing angle()", {
   # Changed from baseline: origin_col_name = ".o...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15142 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".oruguay")
+  output_15142 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".oruguay", overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_15142),
@@ -894,7 +931,7 @@ test_that("fuzz testing angle()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = NA), reset_seed = TRUE)
+  side_effects_13902 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = NA, overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13902[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin_col_name': May not be NA."),
@@ -908,7 +945,7 @@ test_that("fuzz testing angle()", {
   # Changed from baseline: origin_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19057 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = NULL)
+  output_19057 <- angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = NULL, overwrite = FALSE)
   # Testing class
   expect_equal(
     class(output_19057),
@@ -962,7 +999,66 @@ test_that("fuzz testing angle()", {
     character(0),
     fixed = TRUE)
 
+  # Testing angle(data = df, x_col = "x", y_col = "y", o...
+  # Changed from baseline: origin_col_name, over...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_14469 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = "x", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip("Assertion on 'specified column names (\"x\", \"y\", \"x\", \".degrees\")' failed: Contains duplicated values, position 3."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14469[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing angle(data = df, x_col = "x", y_col = "y", o...
+  # Changed from baseline: origin_col_name, over...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_18360 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = "g", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18360[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'g' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18360[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing angle(data = df, x_col = "x", y_col = "y", o...
+  # Changed from baseline: origin_col_name, over...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_17375 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = "x", overwrite = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_17375[['error']]),
+    xpectr::strip("Assertion on 'specified column names (\"x\", \"y\", \"x\", \".degrees\")' failed: Contains duplicated values, position 3."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_17375[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing angle(data = df, x_col = "x", y_col = "y", o...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_18110 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18110[['error']]),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18110[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
   ## Finished testing 'angle'                                                 ####
   #
-
 })

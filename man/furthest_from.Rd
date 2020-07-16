@@ -3,6 +3,7 @@
 \name{furthest_from}
 \alias{furthest_from}
 \alias{farthest_from}
+\alias{furthest_from_vec}
 \title{Orders values by longest distance to an origin}
 \usage{
 furthest_from(
@@ -10,8 +11,13 @@ furthest_from(
   cols = NULL,
   origin = NULL,
   origin_fn = NULL,
-  shuffle_ties = FALSE
+  shuffle_ties = FALSE,
+  origin_col_name = ".origin",
+  distance_col_name = ".distance",
+  overwrite = FALSE
 )
+
+furthest_from_vec(data, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE)
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
@@ -40,6 +46,12 @@ Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[re
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
+
+\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{distance_col_name}{Name of new column with the distances to the origin. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -56,6 +68,8 @@ In \emph{n} dimensions, the origin can be thought of as coordinates.
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and ordering the rows by
 their distance to the centroid of each group.
+
+The \code{*_vec()} version takes and returns a \code{vector}.
 
 \strong{Example}:
 
@@ -90,7 +104,10 @@ df <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Furthest from the third row
+# Furthest from 3 in a vector
+furthest_from_vec(1:10, origin = 3)
+
+# Furthest from the third row (index of data.frame)
 furthest_from(df, origin = 3)$index
 
 # By each of the columns
@@ -115,7 +132,7 @@ df \%>\%
     origin_fn = create_origin_fn(median)
   )
 
-# Plot the centered values
+# Plot the rearranged values
 plot(
   x = 1:10,
   y = furthest_from(df,
@@ -135,10 +152,7 @@ plot(
 )
 
 # In multiple dimensions
-# Start by calculating distances
-# so we can check the ordering (not necessary)
 df \%>\%
-  distance(cols = c("A", "B"), origin_fn = most_centered) \%>\%
   furthest_from(cols = c("A", "B"), origin_fn = most_centered)
 }
 }

@@ -2,20 +2,22 @@
 % Please edit documentation in R/rev_windows.R
 \name{rev_windows}
 \alias{rev_windows}
+\alias{rev_windows_vec}
 \title{Reverse order window-wise}
 \usage{
-rev_windows(data, window_size, keep_windows = FALSE, factor_name = ".window")
+rev_windows(data, window_size, factor_name = ".window", overwrite = FALSE)
+
+rev_windows_vec(data, window_size)
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
 \item{window_size}{Size of the windows. (Logical)}
 
-\item{keep_windows}{Whether to keep the factor with window identifiers. (Logical)}
+\item{factor_name}{Name of the factor with window identifiers.
+If \code{NULL}, no column is added.}
 
-\item{factor_name}{Name of the factor with window identifiers. (Logical)
-
-N.B. Only used when \code{`keep_windows`} is \code{TRUE}.}
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -28,6 +30,8 @@ the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
 The values are windowed and reversed within windows.
+
+The \code{*_vec()} version takes and returns a \code{vector}.
 
 \strong{Example}:
 
@@ -64,11 +68,11 @@ df <- data.frame(
 )
 
 # For vector
-rev_windows(1:10, window_size = 3)
+rev_windows_vec(1:10, window_size = 3)
 
 # For data frame
 rev_windows(df, window_size = 3)
-rev_windows(df, window_size = 3, keep_windows = TRUE)
+rev_windows(df, window_size = 3, factor_name = NULL)
 
 # Grouped by G
 df \%>\%
@@ -79,7 +83,7 @@ df \%>\%
 # Plot the extreme pairs
 plot(
   x = 1:10,
-  y = rev_windows(1:10, window_size = 3)
+  y = rev_windows_vec(1:10, window_size = 3)
 )
 }
 }

@@ -10,7 +10,8 @@ distance(
   origin = NULL,
   origin_fn = NULL,
   distance_col_name = ".distance",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -42,6 +43,8 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 \item{distance_col_name}{Name of new column with the distances.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the additional columns (distances and origin coordinates).

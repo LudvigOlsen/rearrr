@@ -730,7 +730,7 @@ test_that("testing add_dimensions_()", {
   side_effects_19400 <- xpectr::capture_side_effects(add_dimensions_(data = df, new_vectors = setNames(list(1:10, 21:30), c("a", "e")), suffix = "", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
-    xpectr::strip("Cannot add these dimensions without overwriting existing columns: a."),
+    xpectr::strip("Adding these dimensions would overwrite existing columns: a."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error_class']]),

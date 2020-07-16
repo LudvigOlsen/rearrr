@@ -19,7 +19,8 @@ swirl_3d(
   keep_original = TRUE,
   degrees_col_name = ".degrees",
   radius_col_name = ".radius",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -59,8 +60,12 @@ Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[re
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{scale_fn}{Function for scaling the distances before calculating the degrees.
-Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
-return a \code{numeric vector} (the scaled distances) of the same length. E.g.:
+
+\strong{Input}: A \code{numeric vector} (the distances).
+
+\strong{Output}: A \code{numeric vector} (the scaled distances) of the same length.
+
+E.g.:
 
 \code{function(d)\{}
 
@@ -80,6 +85,8 @@ when plotting multiple rotations.}
 \item{radius_col_name}{Name of new column with the radiuses. If \code{NULL}, no column is added.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
@@ -150,6 +157,8 @@ ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha 
   theme_minimal() +
   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 
+}
+\dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
   x = df_swirled$x_swirled,
@@ -159,6 +168,8 @@ plotly::plot_ly(
   mode = "markers",
   color = df_swirled$.radius_str
 )
+}
+\donttest{
 
 # Swirl around the centroid
 df_swirled <- swirl_3d(
@@ -183,6 +194,8 @@ ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha 
   theme_minimal() +
   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 
+}
+\dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
   x = df_swirled$x_swirled,
@@ -192,6 +205,8 @@ plotly::plot_ly(
   mode = "markers",
   color = df_swirled$.radius_str
 )
+}
+\donttest{
 
 df_swirled <- swirl_3d(
   data = df,
@@ -215,7 +230,9 @@ ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha 
   geom_point() +
   theme_minimal() +
   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+}
 
+\dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
   x = df_swirled$x_swirled,
@@ -225,6 +242,8 @@ plotly::plot_ly(
   mode = "markers",
   color = df_swirled$.radius_str
 )
+}
+\donttest{
 
 #
 # Swirl random data
@@ -253,7 +272,8 @@ df_rotated <- df_swirled \%>\%
     y_deg = rep(0, 36),
     z_deg = (1:36) * 10,
     suffix = "",
-    origin = df_swirled$.origin[[1]]
+    origin = df_swirled$.origin[[1]],
+    overwrite = TRUE
   )
 
 # Plot rotated swirls

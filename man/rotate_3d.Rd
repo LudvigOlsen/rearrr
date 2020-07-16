@@ -17,7 +17,8 @@ rotate_3d(
   origin_fn = NULL,
   keep_original = TRUE,
   degrees_col_name = ".degrees",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -61,6 +62,8 @@ Also adds a string version with the same name + \code{"_str"}, making it easier 
 when plotting multiple rotations.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with six new columns containing
@@ -136,6 +139,8 @@ ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha
   theme_minimal() +
   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
+}
+\dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
   x = df_rotated$x_rotated,
@@ -145,6 +150,8 @@ plotly::plot_ly(
   mode = "markers",
   color = df_rotated$.degrees_str
 )
+}
+\donttest{
 
 # Rotate randomly around all axes
 df_rotated <- df \%>\%
@@ -168,6 +175,8 @@ ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha
   theme_minimal() +
   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
+}
+\dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
   x = df_rotated$x_rotated,
@@ -177,6 +186,8 @@ plotly::plot_ly(
   mode = "markers",
   color = df_rotated$.degrees_str
 )
+}
+\donttest{
 
 # Rotate around group centroids
 df_grouped <- df \%>\%
@@ -197,6 +208,8 @@ ggplot(df_grouped, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha
   theme_minimal() +
   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
+}
+\dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
   x = df_grouped$x_rotated,

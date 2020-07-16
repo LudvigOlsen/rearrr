@@ -16,7 +16,8 @@ expand_distances(
   suffix = "_expanded",
   keep_original = TRUE,
   mult_col_name = ifelse(isTRUE(exponentiate), ".exponent", ".multiplier"),
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -30,8 +31,10 @@ Each column is considered a dimension.}
 \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multiplier becomes an \emph{exponent}.}
 
 \item{multiplier_fn}{Function for finding the multiplier.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a single constant.}
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{numeric scalar}.}
 
 \item{origin}{Coordinates of the origin to expand around.
 Must be either a single constant to use in all dimensions
@@ -80,6 +83,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{mult_col_name}{Name of new column with the multiplier. If \code{NULL}, no column is added.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the expanded columns,

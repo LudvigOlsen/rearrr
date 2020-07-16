@@ -424,7 +424,7 @@ test_that("distance()", {
   side_effects_14577 <- xpectr::capture_side_effects(distance(data = df, cols = NA, origin = NULL, origin_fn = centroid, distance_col_name = ".distance", origin_col_name = ".origin"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'cols': Contains missing values (element 1)."),
+    xpectr::strip("Assertion on 'specified column names (NA, \".distance\", \".origin\")' failed: Contains missing values (element 1)."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error_class']]),

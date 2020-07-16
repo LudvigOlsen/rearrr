@@ -5,7 +5,15 @@
 \alias{roll_elements_vec}
 \title{Roll elements}
 \usage{
-roll_elements(data, cols = NULL, n = NULL, n_fn = NULL, n_col_name = ".n", ...)
+roll_elements(
+  data,
+  cols = NULL,
+  n = NULL,
+  n_fn = NULL,
+  n_col_name = ".n",
+  overwrite = FALSE,
+  ...
+)
 
 roll_elements_vec(data, n = NULL, n_fn = NULL, ...)
 }
@@ -26,14 +34,16 @@ grouped \code{data.frame} and \code{`n`} should depend on the rows in the group.
 
 \strong{Input}: Each \code{vector}/\code{column} in \code{`data`} is passed to the function as a separate argument.
 
-\strong{Output}: It should return either a \code{vector} with one integer-like scalar \emph{per column}
-or a single integer-like scalar to use for all columns.
+\strong{Output}: It should return either a \code{vector} with one \code{integer-like scalar} \emph{per column}
+or a single \code{integer-like scalar} to use for all columns.
 
 Can be created with \code{\link[rearrr:create_n_fn]{create_n_fn()}}.
 See also \code{\link[rearrr:median_index]{median_index()}} and
 \code{\link[rearrr:median_index]{quantile_index()}}.}
 
 \item{n_col_name}{Name of new column with the applied \code{`n`} values. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of columns with the same name as \code{`n_col_name`}. (Logical)}
 
 \item{...}{Extra arguments for \code{`n_fn`}.}
 }

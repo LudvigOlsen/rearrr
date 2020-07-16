@@ -64,11 +64,16 @@
 #' # hexagons away from each other
 #' df_hex <- df %>%
 #'   cluster_groups(
-#'     cols = "y", group_cols = "g",
-#'     suffix = ""
+#'     cols = "y",
+#'     group_cols = "g",
+#'     suffix = "",
+#'     overwrite = TRUE
 #'   ) %>%
 #'   dplyr::group_by(g) %>%
-#'   hexagonalize(y_col = "y")
+#'   hexagonalize(
+#'     y_col = "y",
+#'     overwrite = TRUE
+#'   )
 #'
 #' # Plot hexagons
 #' df_hex %>%
@@ -107,7 +112,8 @@
 #'       data = df_hex,
 #'       cols = c(".hexagon_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid
+#'       origin_fn = centroid,
+#'       overwrite = TRUE
 #'     )
 #'   }
 #' )
@@ -128,7 +134,8 @@ hexagonalize <- function(data,
                          offset_x = 0,
                          keep_original = TRUE,
                          x_col_name = ".hexagon_x",
-                         edge_col_name = ".edge") {
+                         edge_col_name = ".edge",
+                         overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(x_col_name, min.chars = 1, add = assert_collection)
@@ -137,6 +144,13 @@ hexagonalize <- function(data,
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames_(y_col, x_col_name, edge_col_name)
+  check_overwrite_(data = data,
+                   nm = x_col_name,
+                   overwrite = overwrite)
+  check_overwrite_(data = data,
+                   nm = edge_col_name,
+                   overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -146,6 +160,7 @@ hexagonalize <- function(data,
     check_fn = NULL,
     cols = y_col,
     suffix = "",
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -160,14 +175,15 @@ hexagonalize <- function(data,
 hexagonalize_mutator_method_ <- function(data,
                                          grp_id,
                                          cols,
+                                         overwrite,
                                          .min,
                                          .max,
                                          offset_x,
                                          x_col_name,
                                          edge_col_name,
-                                         suffix = NULL,
                                          ...) {
 
+  # Is a single column
   col <- cols
 
   # Create tmp var names

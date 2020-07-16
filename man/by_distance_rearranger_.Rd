@@ -10,7 +10,10 @@ by_distance_rearranger_(
   origin = NULL,
   origin_fn = NULL,
   shuffle_ties = FALSE,
-  decreasing = FALSE
+  decreasing = FALSE,
+  origin_col_name = ".origin",
+  distance_col_name = ".distance",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -42,6 +45,12 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 \item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
 
 \item{decreasing}{Whether to order by decreasing distances to the origin. (Logical)}
+
+\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{distance_col_name}{Name of new column with the distances to the origin. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.

@@ -59,11 +59,16 @@
 #' # triangles away from each other
 #' df_tri <- df %>%
 #'   cluster_groups(
-#'     cols = "y", group_cols = "g",
-#'     suffix = ""
+#'     cols = "y",
+#'     group_cols = "g",
+#'     suffix = "",
+#'     overwrite = TRUE
 #'   ) %>%
 #'   dplyr::group_by(g) %>%
-#'   triangularize(y_col = "y")
+#'   triangularize(
+#'     y_col = "y",
+#'     overwrite = TRUE
+#'   )
 #'
 #' # Plot triangles
 #' df_tri %>%
@@ -102,7 +107,8 @@
 #'       data = df_tri,
 #'       cols = c(".triangle_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid
+#'       origin_fn = centroid,
+#'       overwrite = TRUE
 #'     )
 #'   }
 #' )
@@ -123,7 +129,8 @@ triangularize <- function(data,
                           offset_x = 0,
                           keep_original = TRUE,
                           x_col_name = ".triangle_x",
-                          edge_col_name = ".edge") {
+                          edge_col_name = ".edge",
+                          overwrite = FALSE) {
 
 
   # Check arguments ####
@@ -134,6 +141,13 @@ triangularize <- function(data,
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames_(y_col, x_col_name, edge_col_name)
+  check_overwrite_(data = data,
+                   nm = x_col_name,
+                   overwrite = overwrite)
+  check_overwrite_(data = data,
+                   nm = edge_col_name,
+                   overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -143,6 +157,7 @@ triangularize <- function(data,
     check_fn = NULL,
     cols = y_col,
     suffix = "",
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -156,6 +171,7 @@ triangularize <- function(data,
 triangularize_mutator_method_ <- function(data,
                                           grp_id,
                                           cols,
+                                          overwrite,
                                           .min,
                                           .max,
                                           offset_x,
@@ -264,7 +280,7 @@ triangularize_mutator_method_ <- function(data,
       old_max = midline
     )
 
-  outliers <- add_na_column_(data = outliers, col = x_col_name)
+  outliers <- add_na_column_(data = outliers, col = x_col_name, overwrite = overwrite)
 
   # Edge numbers
   if (!is.null(edge_col_name)){

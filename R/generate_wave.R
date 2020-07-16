@@ -22,7 +22,7 @@
 #' @param phase Offset in radians.
 #'
 #'  Can be a vector with one phase offset per time point.
-#' @param trig_fn Trigonometric function like \code{sin()} and \code{cos()}
+#' @param trig_fn Trigonometric function like \code{sin} and \code{cos}.
 #' @keywords internal
 #' @return y-values for the wave signal.
 #' @examples

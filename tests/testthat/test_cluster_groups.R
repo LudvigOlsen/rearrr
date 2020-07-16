@@ -89,10 +89,12 @@ test_that("fuzz testing cluster_groups()", {
   #     "keep_centroids" = list(FALSE, TRUE),
   #     "multiplier" = list(0.05, -0.05, 0.2, "hej", NA),
   #     "suffix" = list("_clustered", "", NA),
-  #     "keep_original" = list(FALSE, TRUE)
+  #     "keep_original" = list(FALSE, TRUE),
+  #     "overwrite" = list(TRUE, FALSE)
   #   ),
   #   extra_combinations = list(
-  #     list("data" = dplyr::group_by(df, g), "group_cols" = NULL)
+  #     list("data" = dplyr::group_by(df, g), "group_cols" = NULL),
+  #     list("overwrite" = FALSE, "suffix" = "")
   #   ),
   #   indentation = 2
   # )
@@ -109,7 +111,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -172,7 +174,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19370[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'integer'."),
@@ -191,7 +193,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'logical'."),
@@ -210,7 +212,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'NULL'."),
@@ -228,7 +230,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_16417),
@@ -290,7 +292,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15190),
@@ -346,7 +348,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_17365),
@@ -397,7 +399,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'colnames(data)': Must include the elements {hej,g}."),
@@ -416,7 +418,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': Must be of type 'character', not 'double'."),
@@ -435,7 +437,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("Assertion on 'must.include' failed. May not contain missing values, first at position 1."),
@@ -454,7 +456,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'cols': Must be of type 'character', not 'NULL'."),
@@ -473,7 +475,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'group_cols' is 'NULL', 'data' should be grouped."),
@@ -490,7 +492,7 @@ test_that("fuzz testing cluster_groups()", {
   # Assigning side effects
   side_effects_19346 <- xpectr::capture_side_effects(cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = NULL, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'scale_min_fn': Must be a function, not 'NULL'."),
@@ -507,7 +509,7 @@ test_that("fuzz testing cluster_groups()", {
   # Assigning side effects
   side_effects_12554 <- xpectr::capture_side_effects(cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
       quantile(x, 0.025)
-  }, scale_max_fn = NULL, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, scale_max_fn = NULL, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'scale_max_fn': Must be a function, not 'NULL'."),
@@ -525,7 +527,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = TRUE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE)
+  }, keep_centroids = TRUE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14622),
@@ -588,7 +590,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = NULL, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = NULL, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_centroids': Must be of type 'logical flag', not 'NULL'."),
@@ -606,7 +608,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = -0.05, suffix = "_clustered", keep_original = FALSE)
+  }, keep_centroids = FALSE, multiplier = -0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19782),
@@ -668,7 +670,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.2, suffix = "_clustered", keep_original = FALSE)
+  }, keep_centroids = FALSE, multiplier = 0.2, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_11174),
@@ -730,7 +732,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = "hej", suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = "hej", suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Must be of type 'number', not 'character'."),
@@ -749,7 +751,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = NA, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = NA, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'multiplier': May not be NA."),
@@ -768,7 +770,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = NULL, suffix = "_clustered", keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = NULL, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'multiplier': Must be of type 'number', not 'NULL'."),
@@ -786,7 +788,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "", keep_original = FALSE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "", keep_original = FALSE, overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_11387),
@@ -849,7 +851,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = NA, keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = NA, keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': May not be NA."),
@@ -868,7 +870,7 @@ test_that("fuzz testing cluster_groups()", {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = NULL, keep_original = FALSE), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = NULL, keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'NULL'."),
@@ -879,82 +881,101 @@ test_that("fuzz testing cluster_groups()", {
     fixed = TRUE)
 
   # Testing cluster_groups(data = df, cols = c("x", "y",...
-  # Changed from baseline: keep_original = TRUE
+  # Changed from baseline: suffix, overwrite
   xpectr::set_test_seed(42)
-  # Assigning output
-  output_10824 <- cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
+  # Testing side effects
+  # Assigning side effects
+  side_effects_10824 <- xpectr::capture_side_effects(cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "", keep_original = FALSE, overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_10824[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'x' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_10824[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing cluster_groups(data = df, cols = c("x", "y",...
+  # Changed from baseline: keep_original = TRUE
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_15142 <- cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
+      quantile(x, 0.025)
+  }, scale_max_fn = function(x) {
+      quantile(x, 0.975)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = TRUE, overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_10824),
+    class(output_15142),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_10824[["x"]],
+    output_15142[["x"]],
     c(0.18488, 0.70237, 0.57333, 0.16805, 0.94384, 0.94347, 0.12916,
       0.83345, 0.46802, 0.54998, 0.55267, 0.23889, 0.76051, 0.18082,
       0.40528),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[["y"]],
+    output_15142[["y"]],
     c(0.85355, 0.9764, 0.22583, 0.44481, 0.07498, 0.6619, 0.38755, 0.83689,
       0.1505, 0.34727, 0.48877, 0.14925, 0.35706, 0.96264, 0.13237),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[["z"]],
+    output_15142[["z"]],
     c(0.01041, 0.16464, 0.81019, 0.86886, 0.51428, 0.6272, 0.84443,
       0.28487, 0.66723, 0.15047, 0.98173, 0.29701, 0.11508, 0.1632,
       0.94404),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[["x_clustered"]],
+    output_15142[["x_clustered"]],
     c(0.25347, 0.33239, 0.31271, 0.8254, 0.94371, 0.94366, 0.21604,
       0.32345, 0.26772, 0.19418, 0.19459, 0.14674, 0.23118, 0.14277,
       0.177),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[["y_clustered"]],
+    output_15142[["y_clustered"]],
     c(0.95743, 0.97158, 0.8851, 0.27245, 0.22983, 0.29746, 0.40688,
       0.45866, 0.37957, 0.11788, 0.13419, 0.09507, 0.45966, 0.52944,
       0.43377),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[["z_clustered"]],
+    output_15142[["z_clustered"]],
     c(0.04705, 0.06638, 0.14731, 0.96854, 0.92409, 0.93824, 0.79572,
       0.72557, 0.7735, 0.41709, 0.5213, 0.43546, 0.2484, 0.25443,
       0.35232),
     tolerance = 1e-4)
   expect_equal(
-    output_10824[["g"]],
+    output_15142[["g"]],
     c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
-    names(output_10824),
+    names(output_15142),
     c("x", "y", "z", "x_clustered", "y_clustered", "z_clustered", "g"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_10824),
+    xpectr::element_classes(output_15142),
     c("numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
       "numeric"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_10824),
+    xpectr::element_types(output_15142),
     c("double", "double", "double", "double", "double", "double", "double"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_10824),
+    dim(output_15142),
     c(15L, 7L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_10824)),
+    colnames(dplyr::group_keys(output_15142)),
     character(0),
     fixed = TRUE)
 
@@ -963,17 +984,98 @@ test_that("fuzz testing cluster_groups()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
+  side_effects_13902 <- xpectr::capture_side_effects(cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
       quantile(x, 0.025)
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
-  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = NULL), reset_seed = TRUE)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error']]),
+    xpectr::strip(side_effects_13902[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_15142[['error_class']]),
+    xpectr::strip(side_effects_13902[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing cluster_groups(data = df, cols = c("x", "y",...
+  # Changed from baseline: overwrite = FALSE
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19057 <- cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
+      quantile(x, 0.025)
+  }, scale_max_fn = function(x) {
+      quantile(x, 0.975)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = FALSE)
+  # Testing class
+  expect_equal(
+    class(output_19057),
+    c("tbl_df", "tbl", "data.frame"),
+    fixed = TRUE)
+  # Testing column values
+  expect_equal(
+    output_19057[["x_clustered"]],
+    c(0.25347, 0.33239, 0.31271, 0.8254, 0.94371, 0.94366, 0.21604,
+      0.32345, 0.26772, 0.19418, 0.19459, 0.14674, 0.23118, 0.14277,
+      0.177),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[["y_clustered"]],
+    c(0.95743, 0.97158, 0.8851, 0.27245, 0.22983, 0.29746, 0.40688,
+      0.45866, 0.37957, 0.11788, 0.13419, 0.09507, 0.45966, 0.52944,
+      0.43377),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[["z_clustered"]],
+    c(0.04705, 0.06638, 0.14731, 0.96854, 0.92409, 0.93824, 0.79572,
+      0.72557, 0.7735, 0.41709, 0.5213, 0.43546, 0.2484, 0.25443,
+      0.35232),
+    tolerance = 1e-4)
+  expect_equal(
+    output_19057[["g"]],
+    c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5),
+    tolerance = 1e-4)
+  # Testing column names
+  expect_equal(
+    names(output_19057),
+    c("x_clustered", "y_clustered", "z_clustered", "g"),
+    fixed = TRUE)
+  # Testing column classes
+  expect_equal(
+    xpectr::element_classes(output_19057),
+    c("numeric", "numeric", "numeric", "numeric"),
+    fixed = TRUE)
+  # Testing column types
+  expect_equal(
+    xpectr::element_types(output_19057),
+    c("double", "double", "double", "double"),
+    fixed = TRUE)
+  # Testing dimensions
+  expect_equal(
+    dim(output_19057),
+    c(15L, 4L))
+  # Testing group keys
+  expect_equal(
+    colnames(dplyr::group_keys(output_19057)),
+    character(0),
+    fixed = TRUE)
+
+  # Testing cluster_groups(data = df, cols = c("x", "y",...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_14469 <- xpectr::capture_side_effects(cluster_groups(data = df, cols = c("x", "y", "z"), group_cols = "g", scale_min_fn = function(x) {
+      quantile(x, 0.025)
+  }, scale_max_fn = function(x) {
+      quantile(x, 0.975)
+  }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14469[['error']]),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_14469[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 

@@ -27,16 +27,6 @@
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 2 elements (i.e. origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param scale_fn Function for scaling the distances before calculating the degrees.
-#'  Should take a \code{numeric vector} (the distances) as its only \emph{required} input and
-#'  return a \code{numeric vector} (the scaled distances) of the same length. E.g.:
-#'
-#'  \code{function(d)\{}
-#'
-#'  \verb{  }\code{d ^ 1.5}
-#'
-#'  \code{\}}
-#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #' @param radius_col_name Name of new column with the radius. If \code{NULL}, no column is added.
 #' @export
@@ -44,6 +34,7 @@
 #' @family mutate functions
 #' @family rotation functions
 #' @inheritParams multi_mutator_
+#' @inheritParams swirl_3d
 #' @examples
 #' \donttest{
 #' # Attach packages
@@ -125,7 +116,8 @@ swirl_2d <- function(data,
                      keep_original = TRUE,
                      degrees_col_name = ".degrees",
                      radius_col_name = ".radius",
-                     origin_col_name = ".origin") {
+                     origin_col_name = ".origin",
+                     overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -160,6 +152,11 @@ swirl_2d <- function(data,
     assert_collection$push("'x_col' and 'y_col' cannot be the same column.")
   }
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames_(x_col, y_col, degrees_col_name, origin_col_name, radius_col_name)
+  check_overwrite_(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = radius_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate for each degree
@@ -171,6 +168,7 @@ swirl_2d <- function(data,
         mutate_fn = swirl_2d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
+        overwrite = overwrite,
         min_dims = 2,
         keep_original = keep_original,
         cols = c(x_col, y_col),
@@ -194,6 +192,7 @@ swirl_2d <- function(data,
 swirl_2d_mutator_method_ <- function(data,
                                      grp_id,
                                      cols,
+                                     overwrite,
                                      radius,
                                      scale_fn,
                                      suffix,
@@ -253,7 +252,8 @@ swirl_2d_mutator_method_ <- function(data,
       origin = origin,
       suffix = suffix,
       origin_col_name = NULL,
-      degrees_col_name = NULL
+      degrees_col_name = NULL,
+      overwrite = overwrite
     )
   })
 

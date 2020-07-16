@@ -27,7 +27,7 @@ Can be a vector with one amplitude per time point.}
 
 Can be a vector with one phase offset per time point.}
 
-\item{trig_fn}{Trigonometric function like \code{sin()} and \code{cos()}}
+\item{trig_fn}{Trigonometric function like \code{sin} and \code{cos}.}
 }
 \value{
 y-values for the wave signal.

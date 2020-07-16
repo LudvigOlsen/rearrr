@@ -60,11 +60,16 @@
 #' # circles away from each other
 #' df_circ <- df %>%
 #'   cluster_groups(
-#'     cols = "y", group_cols = "g",
-#'     suffix = ""
+#'     cols = "y",
+#'     group_cols = "g",
+#'     suffix = "",
+#'     overwrite = TRUE
 #'   ) %>%
 #'   dplyr::group_by(g) %>%
-#'   circularize(y_col = "y")
+#'   circularize(
+#'     y_col = "y",
+#'     overwrite = TRUE
+#'   )
 #'
 #' # Plot circles
 #' df_circ %>%
@@ -103,7 +108,8 @@
 #'       data = df_circ,
 #'       cols = c(".circle_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid
+#'       origin_fn = centroid,
+#'       overwrite = TRUE
 #'     )
 #'   }
 #' )
@@ -125,7 +131,8 @@ circularize <- function(data,
                         keep_original = TRUE,
                         x_col_name = ".circle_x",
                         degrees_col_name = ".degrees",
-                        origin_col_name = ".origin") {
+                        origin_col_name = ".origin",
+                        overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -136,6 +143,16 @@ circularize <- function(data,
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames_(y_col, x_col_name, degrees_col_name, origin_col_name)
+  check_overwrite_(data = data,
+                  nm = x_col_name,
+                  overwrite = overwrite)
+  check_overwrite_(data = data,
+                  nm = degrees_col_name,
+                  overwrite = overwrite)
+  check_overwrite_(data = data,
+                  nm = origin_col_name,
+                  overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -145,6 +162,7 @@ circularize <- function(data,
     check_fn = NULL,
     cols = y_col,
     suffix = "",
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -160,13 +178,13 @@ circularize <- function(data,
 circularize_mutator_method_ <- function(data,
                                         grp_id,
                                         cols,
+                                        overwrite,
                                         .min,
                                         .max,
                                         offset_x,
                                         x_col_name,
                                         degrees_col_name,
                                         origin_col_name,
-                                        suffix = NULL,
                                         ...) {
 
   col <- cols
@@ -218,14 +236,21 @@ circularize_mutator_method_ <- function(data,
   y_r <- ifelse(is_between_(y_r, -(1 + 1e-10), -1), -1, y_r)
   # Calculate angles in radians
   angle <- asin(y_r)
+
+  # Add x coordinate column
   data[[x_col_name]] <- radius * cos(angle)
+
+  # Negate x coordinates for left side
   data[[x_col_name]] <- ifelse(data[[tmp_side_col]] == 1,
     -data[[x_col_name]],
     data[[x_col_name]]
   )
-  outliers <- add_na_column_(data = outliers, col = x_col_name)
+
+  # Make range outliers NA
+  outliers <- add_na_column_(data = outliers, col = x_col_name, overwrite = overwrite)
 
   if (!is.null(degrees_col_name)) {
+    # Add degrees column
     data[[degrees_col_name]] <- radians_to_degrees(angle) - 90
     # Make it counterclockwise
     data[[degrees_col_name]] <- -1 * data[[degrees_col_name]]
@@ -234,6 +259,7 @@ circularize_mutator_method_ <- function(data,
       360 - data[[degrees_col_name]],
       data[[degrees_col_name]]
     )
+
     # Shift values such that (max(x), 0) is 0/360 degrees
     data <- roll_values(
       data = data,
@@ -242,14 +268,28 @@ circularize_mutator_method_ <- function(data,
       .min = 0,
       .max = 360,
       suffix = "",
-      range_col_name = NULL
+      range_col_name = NULL,
+      overwrite = TRUE
     )
-    outliers <- add_na_column_(data = outliers, col = degrees_col_name)
+
+    # Add NA degrees column to outliers subset
+    outliers <- add_na_column_(
+      data = outliers,
+      col = degrees_col_name,
+      overwrite = overwrite)
   }
 
   if (!is.null(origin_col_name)) {
+    # Add origin coordinates column
     data[[origin_col_name]] <- list_coordinates_(c(0, origin), c(x_col_name, col))
-    outliers <- add_na_column_(data = outliers, col = origin_col_name, as_list = TRUE)
+
+    # Add NA origin column to outliers subset
+    outliers <- add_na_column_(
+      data = outliers,
+      col = origin_col_name,
+      as_list = TRUE,
+      overwrite = overwrite
+    )
   }
 
   data <- dplyr::bind_rows(

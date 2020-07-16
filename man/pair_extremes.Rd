@@ -2,6 +2,7 @@
 % Please edit documentation in R/pair_extremes.R
 \name{pair_extremes}
 \alias{pair_extremes}
+\alias{pair_extremes_vec}
 \title{Pair extreme values and sort by the pairs}
 \usage{
 pair_extremes(
@@ -10,8 +11,15 @@ pair_extremes(
   unequal_method = "middle",
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
-  keep_factors = FALSE,
-  factor_name = ".pair"
+  factor_name = ".pair",
+  overwrite = FALSE
+)
+
+pair_extremes_vec(
+  data,
+  unequal_method = "middle",
+  shuffle_members = FALSE,
+  shuffle_pairs = FALSE
 )
 }
 \arguments{
@@ -85,11 +93,9 @@ And are \strong{ordered as}:
 
 \item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
 
-\item{keep_factors}{Whether to keep the sorting factor(s) in the \code{data.frame}. \code{Logical}.}
+\item{factor_name}{Name of new column with the sorting factor. If \code{NULL}, no column is added.}
 
-\item{factor_name}{Name of sorting factor.
-
-N.B. Only used when \code{`keep_factors`} is \code{TRUE}.}
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -108,6 +114,8 @@ The values are then sorted by these groups/pairs.
 
 When \code{`data`} has an uneven number of rows, the \code{`unequal_method`}
 determines which group should have only \code{1} element.
+
+The \code{*_vec()} version takes and returns a \code{vector}.
 
 \strong{Example}:
 

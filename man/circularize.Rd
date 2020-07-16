@@ -13,7 +13,8 @@ circularize(
   keep_original = TRUE,
   x_col_name = ".circle_x",
   degrees_col_name = ".degrees",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 Angling is counterclockwise around \code{(0, 0)} and starts at \code{(max(x), 0)}.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates (center of circle). If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the added x-coordinates and the angle in degrees.
@@ -87,11 +90,16 @@ df_circ \%>\%
 # circles away from each other
 df_circ <- df \%>\%
   cluster_groups(
-    cols = "y", group_cols = "g",
-    suffix = ""
+    cols = "y",
+    group_cols = "g",
+    suffix = "",
+    overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
-  circularize(y_col = "y")
+  circularize(
+    y_col = "y",
+    overwrite = TRUE
+  )
 
 # Plot circles
 df_circ \%>\%
@@ -130,7 +138,8 @@ df_expanded <- purrr::map_dfr(
       data = df_circ,
       cols = c(".circle_x", "y"),
       multiplier = mult,
-      origin_fn = centroid
+      origin_fn = centroid,
+      overwrite = TRUE
     )
   }
 )

@@ -332,19 +332,75 @@ split_range_outliers_ <- function(data,
        "outliers" = outliers)
 }
 
-add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE){
+add_na_column_ <- function(data, col, val = NA_real_, as_list = FALSE, overwrite = FALSE){
   if (isTRUE(as_list))
-    data[[col]] <- rep(list(val), nrow(data))
+    to_add <- rep(list(val), nrow(data))
   else
-    data[[col]] <- rep(val, nrow(data))
-  data
+    to_add <- rep(val, nrow(data))
+
+  # Add column
+  add_info_col_(
+    data = data,
+    nm = col,
+    content = to_add,
+    overwrite = overwrite
+  )
 }
 
 
 ##  .................. #< 385b0b542a569ee6b885fc0849f644a6 ># ..................
 ##  Input helpers                                                           ####
 
+check_unique_colnames_ <- function(...) {
+  nms <- list(...) %>%
+    purrr::compact() %>%
+    unlist(recursive = TRUE, use.names = FALSE)
 
+  if (is.null(nms))
+    return(invisible(NULL))
+
+  # Get names as string
+  first_nms <- deparse(head(nms, 4))
+  # Remove "list()"
+  nms_str <- paste0(substring(first_nms, first = 3, nchar(first_nms)-1))
+
+  # Add ... if more than 4 elements
+  if (length(nms) > 4){
+    nms_str <- paste0(nms_str, ", ...")
+  }
+
+
+  # Check that names are unique
+  checkmate::assert_character(
+    nms,
+    unique = TRUE,
+    any.missing = FALSE,
+    .var.name = paste0(
+      "specified column names (",
+      nms_str, ")"
+    )
+  )
+}
+
+
+# check_overwrite(data = data, nm = "?", overwrite = overwrite)
+check_overwrite_ <- function(data, nm, overwrite){
+  checkmate::assert_flag(overwrite)
+  if (!is.data.frame(data) || isTRUE(overwrite)){
+    return(invisible(NULL))
+  }
+
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_string(nm, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  # Check if we would overwrite an existing column
+  if (!is.null(nm) && nm %in% colnames(data)){
+    assert_collection$push(
+      paste0("The column '", nm,
+             "' already exists and 'overwrite' is disabled.")
+    )
+  }
+  checkmate::reportAssertions(assert_collection)
+}
 
 
 ##  .................. #< 4405b38854cdc7cc63ac70477e1c9953 ># ..................
@@ -440,8 +496,8 @@ add_dimensions_ <- function(data,
     length(intersect(colnames(new_data), colnames(data))) > 0) {
     stop(
       paste0(
-        "Cannot add these dimensions without overwriting existing columns: ",
-        intersect(colnames(new_data), colnames(data)),
+        "Adding these dimensions would overwrite existing columns: ",
+        paste0(intersect(colnames(new_data), colnames(data)), collapse = ", "),
         "."
       )
     )
@@ -458,6 +514,31 @@ add_dimensions_ <- function(data,
   data <- dplyr::bind_cols(data, new_data)
 
   data
+}
+
+add_info_col_ <- function(data, nm, content, overwrite = FALSE, check_overwrite = TRUE){
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_data_frame(data, add = assert_collection)
+  checkmate::assert_string(nm, null.ok = TRUE, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # When name is NULL, we don't add the column
+  if (is.null(nm)){
+    return(data)
+  }
+
+  if (isTRUE(check_overwrite)){
+    # Check if we will overwrite an existing column
+    check_overwrite_(data = data, nm = nm, overwrite = overwrite)
+  }
+
+  # Add column
+  data[[nm]] <- content
+
+  data
+
 }
 
 

@@ -21,6 +21,8 @@
 #'
 #'  Rounding is done \emph{prior} to negation.
 #'
+#'  E.g. \code{\link[base:Round]{round}}, \code{\link[base:Round]{floor}}, or \code{\link[base:Round]{ceiling}}.
+#'
 #'  To avoid rounding, supply \code{\link[base:identity]{identity}}.
 #' @param ... Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.
 #' @export
@@ -129,6 +131,8 @@ create_n_fn <- function(fn,
 #' @param ... Numeric \code{vector}s.
 #' @param negate Whether to negate the result. I.e. to multiply it with \code{-1}. (Logical)
 #' @param round_fn Function for rounding output. Rounding is done \emph{prior} to negation.
+#'
+#'  E.g. \code{\link[base:Round]{round}}, \code{\link[base:Round]{floor}}, or \code{\link[base:Round]{ceiling}}.
 #' @export
 #' @return \code{numeric vector} with one element per supplied vector.
 #' @examples

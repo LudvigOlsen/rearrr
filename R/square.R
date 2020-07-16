@@ -56,11 +56,16 @@
 #' # squares away from each other
 #' df_sq <- df %>%
 #'   cluster_groups(
-#'     cols = "y", group_cols = "g",
-#'     suffix = ""
+#'     cols = "y",
+#'     group_cols = "g",
+#'     suffix = "",
+#'     overwrite = TRUE
 #'   ) %>%
 #'   dplyr::group_by(g) %>%
-#'   square(y_col = "y")
+#'   square(
+#'     y_col = "y",
+#'     overwrite = TRUE
+#'   )
 #'
 #' # Plot squares
 #' df_sq %>%
@@ -99,7 +104,8 @@
 #'       data = df_sq,
 #'       cols = c(".square_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid
+#'       origin_fn = centroid,
+#'       overwrite = TRUE
 #'     )
 #'   }
 #' )
@@ -120,7 +126,8 @@ square <- function(data,
                    offset_x = 0,
                    keep_original = TRUE,
                    x_col_name = ".square_x",
-                   edge_col_name = ".edge") {
+                   edge_col_name = ".edge",
+                   overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -130,6 +137,13 @@ square <- function(data,
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames_(y_col, x_col_name, edge_col_name)
+  check_overwrite_(data = data,
+                   nm = x_col_name,
+                   overwrite = overwrite)
+  check_overwrite_(data = data,
+                   nm = edge_col_name,
+                   overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -139,6 +153,7 @@ square <- function(data,
     check_fn = NULL,
     cols = y_col,
     suffix = "",
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     .min = .min,
@@ -154,6 +169,7 @@ square <- function(data,
 square_mutator_method_ <- function(data,
                                    grp_id,
                                    cols,
+                                   overwrite,
                                    .min,
                                    .max,
                                    offset_x,
@@ -238,7 +254,7 @@ square_mutator_method_ <- function(data,
       na.rm = TRUE
     )
 
-  outliers <- add_na_column_(data = outliers, col = x_col_name)
+  outliers <- add_na_column_(data = outliers, col = x_col_name, overwrite = overwrite)
 
   # Edge numbers
   if (!is.null(edge_col_name)){

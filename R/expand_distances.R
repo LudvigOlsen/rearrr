@@ -38,8 +38,10 @@
 #'
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multiplier becomes an \emph{exponent}.
 #' @param multiplier_fn Function for finding the multiplier.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a single constant.
+#'
+#'  \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'
+#'  \strong{Output}: A \code{numeric scalar}.
 #' @param exponentiate Whether to exponentiate instead of multiplying. (Logical)
 #' @param add_one_exp Whether to add \code{1} to the distances
 #'  before exponentiating to ensure they don't contract when between \code{0} and \code{1}.
@@ -224,7 +226,8 @@ expand_distances <- function(data,
                              suffix = "_expanded",
                              keep_original = TRUE,
                              mult_col_name = ifelse(isTRUE(exponentiate), ".exponent", ".multiplier"),
-                             origin_col_name = ".origin") {
+                             origin_col_name = ".origin",
+                             overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_string(mult_col_name, null.ok = TRUE, add = assert_collection)
@@ -241,6 +244,10 @@ expand_distances <- function(data,
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(multiplier_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames_(cols, origin_col_name, mult_col_name)
+  check_overwrite_(data = data, nm = mult_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -250,6 +257,7 @@ expand_distances <- function(data,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     multiplier = multiplier,
@@ -268,6 +276,7 @@ expand_mutator_method_ <- function(data,
                                    grp_id,
                                    cols,
                                    suffix,
+                                   overwrite,
                                    multiplier,
                                    multiplier_fn,
                                    origin,
@@ -361,7 +370,8 @@ expand_mutator_method_ <- function(data,
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(expanded_dim_vectors, cols),
-    suffix = suffix
+    suffix = suffix,
+    overwrite = overwrite
   )
 
   # Add info columns

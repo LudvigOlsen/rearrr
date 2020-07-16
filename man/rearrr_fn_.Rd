@@ -33,6 +33,8 @@ columns not mentioned in the \code{`col(s)`} argument.}
 
 \item{min_dims}{Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \description{
 Do not call. Only used to avoid repetition of documentation.

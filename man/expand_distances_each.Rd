@@ -16,7 +16,8 @@ expand_distances_each(
   suffix = "_expanded",
   keep_original = TRUE,
   mult_col_name = ifelse(isTRUE(exponentiate), ".exponents", ".multipliers"),
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -32,8 +33,10 @@ a \code{vector} with one constant per dimension.
 \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.}
 
 \item{multipliers_fn}{Function for finding the multipliers.
-Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-It should return a \code{vector} with one constant per dimension.
+
+\strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+
+\strong{Output}: A \code{numeric vector} with one element per dimension.
 
 Just as for \code{`origin_fn`}, it can be created with
 \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
@@ -83,9 +86,11 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
-\item{mult_col_name}{Name of new column with the multiplier. If \code{NULL}, no column is added.}
+\item{mult_col_name}{Name of new column with the multiplier(s). If \code{NULL}, no column is added.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the expanded columns,

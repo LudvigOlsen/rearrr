@@ -93,16 +93,19 @@ test_that("fuzz testing rotate_3d()", {
   #     "origin_fn" = list(NULL, centroid),
   #     "keep_original" = list(FALSE),
   #     "degrees_col_name" = list(".degrees", ".nooot", NA),
-  #     "origin_col_name" = list(".origin", ".centroid", NA)
+  #     "origin_col_name" = list(".origin", ".centroid", NA),
+  #     "overwrite" = list(TRUE, FALSE)
   #   ),
   #   extra_combinations = list(
   #       list("data" = c(1, 2, 3, 4, 5), "x_col" = NULL, "y_col" = NULL, "origin_fn" = centroid, "origin" = NULL),
   #       list("data" = c(1, 2, 3, 4, 5), "x_col" = "x", "y_col" = NULL, "origin_fn" = centroid, "origin" = NULL),
   #       list("data" = dplyr::group_by(df, g), "x_deg" = 10, "origin_fn" = centroid),
-  #       list("keep_original" = TRUE, "suffix" = "_rotated")
+  #       list("keep_original" = TRUE, "suffix" = "_rotated"),
+  #       list("overwrite" = FALSE, "degrees_col_name" = "g")
   #   ),
   #   indentation = 2
   # )
+
 
 
   ## Testing 'rotate_3d'                                                      ####
@@ -112,7 +115,7 @@ test_that("fuzz testing rotate_3d()", {
   # Testing rotate_3d(data = df, x_col = "x", y_col = "y...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19148 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19148 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19148),
@@ -172,13 +175,17 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: data = dplyr::group_b...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19370 <- rotate_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19370 <- rotate_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19370),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
+  expect_equal(
+    output_19370[["g"]],
+    c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5),
+    tolerance = 1e-4)
   expect_equal(
     output_19370[["x"]],
     c(0.91481, 0.93708, 0.28614, 0.83045, 0.64175, 0.5191, 0.73659,
@@ -197,10 +204,6 @@ test_that("fuzz testing rotate_3d()", {
       0.43175),
     tolerance = 1e-4)
   expect_equal(
-    output_19370[["g"]],
-    c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5),
-    tolerance = 1e-4)
-  expect_equal(
     output_19370[[".degrees_str"]],
     c("x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
       "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
@@ -210,7 +213,7 @@ test_that("fuzz testing rotate_3d()", {
   # Testing column names
   expect_equal(
     names(output_19370),
-    c("x", "y", "z", "g", ".origin", ".degrees", ".degrees_str"),
+    c("g", "x", "y", "z", ".origin", ".degrees", ".degrees_str"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -237,7 +240,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12861 <- xpectr::capture_side_effects(rotate_3d(data = c(1, 2, 3, 4, 5), x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(rotate_3d(data = c(1, 2, 3, 4, 5), x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'double'."),
@@ -252,7 +255,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(rotate_3d(data = "hej", x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18304 <- xpectr::capture_side_effects(rotate_3d(data = "hej", x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'character'."),
@@ -267,7 +270,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16417 <- xpectr::capture_side_effects(rotate_3d(data = NA, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(rotate_3d(data = NA, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'logical'."),
@@ -282,7 +285,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15190 <- xpectr::capture_side_effects(rotate_3d(data = NULL, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15190 <- xpectr::capture_side_effects(rotate_3d(data = NULL, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'NULL'."),
@@ -297,7 +300,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17365 <- xpectr::capture_side_effects(rotate_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_deg = 10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17365 <- xpectr::capture_side_effects(rotate_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_deg = 10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['warnings']]),
     xpectr::strip(character(0)),
@@ -307,13 +310,17 @@ test_that("fuzz testing rotate_3d()", {
     xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
     fixed = TRUE)
   # Assigning output
-  output_17365 <- xpectr::suppress_mw(rotate_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_deg = 10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"))
+  output_17365 <- xpectr::suppress_mw(rotate_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_deg = 10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE))
   # Testing class
   expect_equal(
     class(output_17365),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
+  expect_equal(
+    output_17365[["g"]],
+    c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5),
+    tolerance = 1e-4)
   expect_equal(
     output_17365[["x"]],
     c(0.91481, 0.93708, 0.28614, 0.83045, 0.64175, 0.5191, 0.73659,
@@ -333,10 +340,6 @@ test_that("fuzz testing rotate_3d()", {
       0.45098),
     tolerance = 1e-4)
   expect_equal(
-    output_17365[["g"]],
-    c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5),
-    tolerance = 1e-4)
-  expect_equal(
     output_17365[[".degrees_str"]],
     c("x=10,y=0,z=0", "x=10,y=0,z=0", "x=10,y=0,z=0", "x=10,y=0,z=0",
       "x=10,y=0,z=0", "x=10,y=0,z=0", "x=10,y=0,z=0", "x=10,y=0,z=0",
@@ -346,7 +349,7 @@ test_that("fuzz testing rotate_3d()", {
   # Testing column names
   expect_equal(
     names(output_17365),
-    c("x", "y", "z", "g", ".origin", ".degrees", ".degrees_str"),
+    c("g", "x", "y", "z", ".origin", ".degrees", ".degrees_str"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -373,7 +376,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(rotate_3d(data = c(1, 2, 3, 4, 5), x_col = NULL, y_col = NULL, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NULL, origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11346 <- xpectr::capture_side_effects(rotate_3d(data = c(1, 2, 3, 4, 5), x_col = NULL, y_col = NULL, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NULL, origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error']]),
     xpectr::strip("3 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'double'.\n * Variable 'x_col': Must be of type 'string', not 'NULL'.\n * Variable 'y_col': Must be of type 'string', not 'NULL'."),
@@ -388,7 +391,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16569 <- xpectr::capture_side_effects(rotate_3d(data = c(1, 2, 3, 4, 5), x_col = "x", y_col = NULL, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NULL, origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(rotate_3d(data = c(1, 2, 3, 4, 5), x_col = "x", y_col = NULL, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NULL, origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("2 assertions failed:\n * Variable 'data': Must be of type 'data.frame', not 'double'.\n * Variable 'y_col': Must be of type 'string', not 'NULL'."),
@@ -403,7 +406,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "y", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17050 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "y", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17050[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'c(x_col, y_col, z_col)': Contains duplicated values, position 2."),
@@ -418,7 +421,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = NA, y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14577 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = NA, y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col': May not be NA."),
@@ -433,7 +436,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17191 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = NULL, y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = NULL, y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_col': Must be of type 'string', not 'NULL'."),
@@ -448,7 +451,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "x", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19346 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "x", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'c(x_col, y_col, z_col)': Contains duplicated values, position 2."),
@@ -463,7 +466,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = NA, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = NA, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_col': May not be NA."),
@@ -478,7 +481,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14622 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = NULL, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14622 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = NULL, z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_col': Must be of type 'string', not 'NULL'."),
@@ -493,7 +496,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19400 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "uhh", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19400 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "uhh", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * These names in the 'col(s)' argument were not found in 'data': uhh."),
@@ -508,7 +511,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = NA, x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19782 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = NA, x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'z_col': May not be NA."),
@@ -523,7 +526,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11174 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "x", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11174 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "x", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'c(x_col, y_col, z_col)': Contains duplicated values, position 3."),
@@ -538,7 +541,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14749 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = NULL, x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14749 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = NULL, x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'z_col': Must be of type 'string', not 'NULL'."),
@@ -552,7 +555,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: x_deg = 10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15603 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_15603 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_15603),
@@ -613,7 +616,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: x_deg = -10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19040 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = -10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19040 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = -10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19040),
@@ -674,7 +677,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11387 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 400, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11387 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 400, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_deg': Element 1 is not <= 360."),
@@ -689,7 +692,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19888 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = -400, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19888 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = -400, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_deg': Element 1 is not >= -360."),
@@ -704,7 +707,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19466 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = c(45, -45), y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19466 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = c(45, -45), y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19466[['error']]),
     xpectr::strip("1 assertions failed:\n * 'x_deg', 'y_deg', and 'z_deg' must all have the same length but had lengths: 2, 1, 1."),
@@ -719,7 +722,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10824 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = "hej", y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10824 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = "hej", y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_deg': Must be of type 'numeric', not 'character'."),
@@ -734,7 +737,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_15142 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = NA, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_15142 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = NA, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15142[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_deg': Contains missing values (element 1)."),
@@ -749,7 +752,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13902 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = NULL, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13902 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = NULL, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13902[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x_deg': Must be of type 'numeric', not 'NULL'."),
@@ -763,7 +766,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: y_deg = 10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19057 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 10, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19057 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 10, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19057),
@@ -823,7 +826,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: y_deg = -10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_14469 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = -10, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_14469 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = -10, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_14469),
@@ -882,7 +885,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18360 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 400, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18360 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 400, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18360[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_deg': Element 1 is not <= 360."),
@@ -897,7 +900,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17375 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = -400, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17375 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = -400, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_deg': Element 1 is not >= -360."),
@@ -912,7 +915,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18110 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = c(45, -45), z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_18110 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = c(45, -45), z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * 'x_deg', 'y_deg', and 'z_deg' must all have the same length but had lengths: 1, 2, 1."),
@@ -927,7 +930,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13881 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = "hej", z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13881 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = "hej", z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13881[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_deg': Must be of type 'numeric', not 'character'."),
@@ -942,7 +945,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16851 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = NA, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16851 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = NA, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16851[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_deg': Contains missing values (element 1)."),
@@ -957,7 +960,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10039 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = NULL, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10039 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = NULL, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10039[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'y_deg': Must be of type 'numeric', not 'NULL'."),
@@ -971,7 +974,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: z_deg = 10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18329 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 10, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_18329 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 10, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_18329),
@@ -1032,7 +1035,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: z_deg = -10
   xpectr::set_test_seed(42)
   # Assigning output
-  output_10073 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = -10, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_10073 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = -10, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_10073),
@@ -1094,7 +1097,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_12076 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 400, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_12076 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 400, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12076[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'z_deg': Element 1 is not <= 360."),
@@ -1109,7 +1112,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19066 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = -400, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19066 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = -400, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19066[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'z_deg': Element 1 is not >= -360."),
@@ -1124,7 +1127,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16117 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = c(45, -45), suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16117 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = c(45, -45), suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16117[['error']]),
     xpectr::strip("1 assertions failed:\n * 'x_deg', 'y_deg', and 'z_deg' must all have the same length but had lengths: 1, 1, 2."),
@@ -1139,7 +1142,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13795 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = "hej", suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13795 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = "hej", suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13795[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'z_deg': Must be of type 'numeric', not 'character'."),
@@ -1154,7 +1157,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14357 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = NA, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14357 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = NA, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14357[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'z_deg': Contains missing values (element 1)."),
@@ -1169,7 +1172,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10374 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = NULL, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10374 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = NULL, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10374[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'z_deg': Must be of type 'numeric', not 'NULL'."),
@@ -1183,7 +1186,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: suffix = "_rotated"
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19735 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "_rotated", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_19735 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "_rotated", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_19735),
@@ -1245,7 +1248,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14317 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = NA, origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_14317 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = NA, origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14317[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': May not be NA."),
@@ -1260,7 +1263,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19575 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = NULL, origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19575 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = NULL, origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19575[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'suffix': Must be of type 'string', not 'NULL'."),
@@ -1274,7 +1277,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: suffix, keep_original
   xpectr::set_test_seed(42)
   # Assigning output
-  output_18877 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "_rotated", origin = c(0, 0, 0), origin_fn = NULL, keep_original = TRUE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_18877 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "_rotated", origin = c(0, 0, 0), origin_fn = NULL, keep_original = TRUE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_18877),
@@ -1358,7 +1361,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: origin = c(0.3, -0.3,...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16399 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0.3, -0.3, 0.5), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin")
+  output_16399 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0.3, -0.3, 0.5), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_16399),
@@ -1419,7 +1422,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19709 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = 0, origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_19709 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = 0, origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19709[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Must have length 3, but has length 1."),
@@ -1434,7 +1437,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16188 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = "h", origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_16188 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = "h", origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16188[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Must be of type 'numeric' (or 'NULL'), not 'character'."),
@@ -1449,7 +1452,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13334 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(NA, 1, 0.4), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13334 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(NA, 1, 0.4), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13334[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
@@ -1464,7 +1467,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13467 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(NA, NA, NA), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13467 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(NA, NA, NA), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13467[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Contains missing values (element 1)."),
@@ -1479,7 +1482,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_13984 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NA, origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_13984 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NA, origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13984[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin': Must have length 3, but has length 1."),
@@ -1494,7 +1497,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17846 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NULL, origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17846 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = NULL, origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17846[['error']]),
     xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
@@ -1509,7 +1512,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_10389 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_10389 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10389[['warnings']]),
     xpectr::strip(character(0)),
@@ -1519,7 +1522,7 @@ test_that("fuzz testing rotate_3d()", {
     xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
     fixed = TRUE)
   # Assigning output
-  output_10389 <- xpectr::suppress_mw(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin"))
+  output_10389 <- xpectr::suppress_mw(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE))
   # Testing class
   expect_equal(
     class(output_10389),
@@ -1580,7 +1583,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17487 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_17487 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17487[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
@@ -1594,7 +1597,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: degrees_col_name = "....
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16772 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".nooot", origin_col_name = ".origin")
+  output_16772 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".nooot", origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_16772),
@@ -1655,7 +1658,7 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11712 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = NA, origin_col_name = ".origin"), reset_seed = TRUE)
+  side_effects_11712 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = NA, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11712[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'degrees_col_name': May not be NA."),
@@ -1669,7 +1672,7 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: degrees_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12610 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = NULL, origin_col_name = ".origin")
+  output_12610 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = NULL, origin_col_name = ".origin", overwrite = TRUE)
   # Testing class
   expect_equal(
     class(output_12610),
@@ -1719,35 +1722,50 @@ test_that("fuzz testing rotate_3d()", {
     fixed = TRUE)
 
   # Testing rotate_3d(data = df, x_col = "x", y_col = "y...
+  # Changed from baseline: degrees_col_name, ove...
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15144 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = "g", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15144[['error']]),
+    xpectr::strip("1 assertions failed:\n * The column 'g' already exists and 'overwrite' is disabled."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15144[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing rotate_3d(data = df, x_col = "x", y_col = "y...
   # Changed from baseline: origin_col_name = ".c...
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15144 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".centroid")
+  output_16756 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".centroid", overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_15144),
+    class(output_16756),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_15144[["x"]],
+    output_16756[["x"]],
     c(0.91481, 0.93708, 0.28614, 0.83045, 0.64175, 0.5191, 0.73659,
       0.13467, 0.65699, 0.70506, 0.45774, 0.71911, 0.93467, 0.25543,
       0.46229),
     tolerance = 1e-4)
   expect_equal(
-    output_15144[["y"]],
+    output_16756[["y"]],
     c(0.94001, 0.97823, 0.11749, 0.475, 0.56033, 0.90403, 0.13871, 0.98889,
       0.94667, 0.08244, 0.51421, 0.3902, 0.90574, 0.44697, 0.836),
     tolerance = 1e-4)
   expect_equal(
-    output_15144[["z"]],
+    output_16756[["z"]],
     c(0.7376, 0.81106, 0.38811, 0.68517, 0.00395, 0.83292, 0.00733,
       0.20766, 0.9066, 0.61178, 0.37956, 0.43577, 0.03743, 0.97354,
       0.43175),
     tolerance = 1e-4)
   expect_equal(
-    output_15144[[".degrees_str"]],
+    output_16756[[".degrees_str"]],
     c("x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
       "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
       "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
@@ -1755,26 +1773,26 @@ test_that("fuzz testing rotate_3d()", {
     fixed = TRUE)
   # Testing column names
   expect_equal(
-    names(output_15144),
+    names(output_16756),
     c("x", "y", "z", ".centroid", ".degrees", ".degrees_str"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_15144),
+    xpectr::element_classes(output_16756),
     c("numeric", "numeric", "numeric", "list", "list", "character"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_15144),
+    xpectr::element_types(output_16756),
     c("double", "double", "double", "list", "list", "character"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_15144),
+    dim(output_16756),
     c(15L, 6L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_15144)),
+    colnames(dplyr::group_keys(output_16756)),
     character(0),
     fixed = TRUE)
 
@@ -1783,13 +1801,13 @@ test_that("fuzz testing rotate_3d()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_16756 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = NA), reset_seed = TRUE)
+  side_effects_19828 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = NA, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_16756[['error']]),
+    xpectr::strip(side_effects_19828[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'origin_col_name': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_16756[['error_class']]),
+    xpectr::strip(side_effects_19828[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -1797,32 +1815,32 @@ test_that("fuzz testing rotate_3d()", {
   # Changed from baseline: origin_col_name = NULL
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19828 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = NULL)
+  output_17595 <- rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = NULL, overwrite = TRUE)
   # Testing class
   expect_equal(
-    class(output_19828),
+    class(output_17595),
     c("tbl_df", "tbl", "data.frame"),
     fixed = TRUE)
   # Testing column values
   expect_equal(
-    output_19828[["x"]],
+    output_17595[["x"]],
     c(0.91481, 0.93708, 0.28614, 0.83045, 0.64175, 0.5191, 0.73659,
       0.13467, 0.65699, 0.70506, 0.45774, 0.71911, 0.93467, 0.25543,
       0.46229),
     tolerance = 1e-4)
   expect_equal(
-    output_19828[["y"]],
+    output_17595[["y"]],
     c(0.94001, 0.97823, 0.11749, 0.475, 0.56033, 0.90403, 0.13871, 0.98889,
       0.94667, 0.08244, 0.51421, 0.3902, 0.90574, 0.44697, 0.836),
     tolerance = 1e-4)
   expect_equal(
-    output_19828[["z"]],
+    output_17595[["z"]],
     c(0.7376, 0.81106, 0.38811, 0.68517, 0.00395, 0.83292, 0.00733,
       0.20766, 0.9066, 0.61178, 0.37956, 0.43577, 0.03743, 0.97354,
       0.43175),
     tolerance = 1e-4)
   expect_equal(
-    output_19828[[".degrees_str"]],
+    output_17595[[".degrees_str"]],
     c("x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
       "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
       "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0", "x=0,y=0,z=0",
@@ -1830,27 +1848,57 @@ test_that("fuzz testing rotate_3d()", {
     fixed = TRUE)
   # Testing column names
   expect_equal(
-    names(output_19828),
+    names(output_17595),
     c("x", "y", "z", ".degrees", ".degrees_str"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
-    xpectr::element_classes(output_19828),
+    xpectr::element_classes(output_17595),
     c("numeric", "numeric", "numeric", "list", "character"),
     fixed = TRUE)
   # Testing column types
   expect_equal(
-    xpectr::element_types(output_19828),
+    xpectr::element_types(output_17595),
     c("double", "double", "double", "list", "character"),
     fixed = TRUE)
   # Testing dimensions
   expect_equal(
-    dim(output_19828),
+    dim(output_17595),
     c(15L, 5L))
   # Testing group keys
   expect_equal(
-    colnames(dplyr::group_keys(output_19828)),
+    colnames(dplyr::group_keys(output_17595)),
     character(0),
+    fixed = TRUE)
+
+  # Testing rotate_3d(data = df, x_col = "x", y_col = "y...
+  # Changed from baseline: overwrite = FALSE
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15664 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15664[['error']]),
+    xpectr::strip("Adding these dimensions would overwrite existing columns: x, y, z."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_15664[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing rotate_3d(data = df, x_col = "x", y_col = "y...
+  # Changed from baseline: overwrite = NULL
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_18496 <- xpectr::capture_side_effects(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = NULL), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18496[['error']]),
+    xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_18496[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'rotate_3d'                                             ####

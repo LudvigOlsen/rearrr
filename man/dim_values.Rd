@@ -10,10 +10,11 @@ dim_values(
   dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1),
   origin = NULL,
   origin_fn = NULL,
-  dim_col = cols[[length(cols)]],
+  dim_col = tail(cols, 1),
   suffix = "_dimmed",
   keep_original = TRUE,
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -25,11 +26,13 @@ Each column is considered a dimension.}
 
 \item{dimming_fn}{\code{Function} for calculating the dimmed values.
 
-\strong{Input}: \strong{Two} input arguments:
+\strong{Input}: Two (2) input arguments:
 \enumerate{
-\item A \code{vector} with the values in the dimming dimension.
-\item A \code{vector} with corresponding distances to the origin.
+\item A \code{numeric vector} with the values in the dimming dimension.
+\item A \code{numeric vector} with corresponding distances to the origin.
 }
+
+\strong{Output}: A \code{numeric vector} with the same length as the input vectors.
 
 E.g.:
 
@@ -74,6 +77,8 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the dimmed column,

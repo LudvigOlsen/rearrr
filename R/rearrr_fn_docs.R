@@ -25,6 +25,7 @@
 #' @param force_df Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.
 #' @param min_dims Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 #'  setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.
+#' @param overwrite Whether to allow overwriting of existing columns. (Logical)
 #' @keywords internal
 rearrr_fn_ <- function(data, origin_fn, check_fn, allowed_types, force_df, min_dims){
   stop("'rearrr_fn' should not be called. Is used for documentation only.")

@@ -42,8 +42,10 @@
 #'
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
 #' @param multipliers_fn Function for finding the multipliers.
-#'  Each column will be passed as a \code{vector} in the order of \code{`cols`}.
-#'  It should return a \code{vector} with one constant per dimension.
+#'
+#'  \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
+#'
+#'  \strong{Output}: A \code{numeric vector} with one element per dimension.
 #'
 #'  Just as for \code{`origin_fn`}, it can be created with
 #'  \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
@@ -62,7 +64,7 @@
 #'  \code{x <- x - sign(x)}
 #'
 #'  \strong{N.B.} Ignored when \code{`exponentiate`} is \code{FALSE}.
-#' @param mult_col_name Name of new column with the multiplier. If \code{NULL}, no column is added.
+#' @param mult_col_name Name of new column with the multiplier(s). If \code{NULL}, no column is added.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the expanded columns,
@@ -258,7 +260,8 @@ expand_distances_each <- function(data,
                                   suffix = "_expanded",
                                   keep_original = TRUE,
                                   mult_col_name = ifelse(isTRUE(exponentiate), ".exponents", ".multipliers"),
-                                  origin_col_name = ".origin") {
+                                  origin_col_name = ".origin",
+                                  overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -282,6 +285,10 @@ expand_distances_each <- function(data,
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_function(multipliers_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames_(cols, origin_col_name, mult_col_name)
+  check_overwrite_(data = data, nm = mult_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier
@@ -291,6 +298,7 @@ expand_distances_each <- function(data,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
+    overwrite = overwrite,
     force_df = TRUE,
     keep_original = keep_original,
     multipliers = multipliers,
@@ -309,6 +317,7 @@ expand_each_mutator_method_ <- function(data,
                                         grp_id,
                                         cols,
                                         suffix,
+                                        overwrite,
                                         multipliers,
                                         multipliers_fn,
                                         origin,
@@ -400,7 +409,8 @@ expand_each_mutator_method_ <- function(data,
     add_dimensions_(
       data = data,
       new_vectors = dim_vectors,
-      suffix = suffix
+      suffix = suffix,
+      overwrite = overwrite
     )
 
   # Add info columns

@@ -8,10 +8,11 @@ angle(
   data,
   x_col = NULL,
   y_col = NULL,
-  origin = c(0, 0),
+  origin = NULL,
   origin_fn = NULL,
   degrees_col_name = ".degrees",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 \item{degrees_col_name}{Name of new column with the degrees.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the additional columns (degrees and origin coordinates).

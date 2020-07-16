@@ -50,8 +50,6 @@ We distinguish between **rearrangers** and **mutators**, where the first *reorde
 
 When performing an operation relative to a point in an n-dimensional vector space, we refer to the point as the **origin**. If we, for instance, wish to rotate our data points around the point at `x = 3` and `y = 7`, those are the coordinates of our origin.
 
-Note: `rearrr` is still quite new and not all functions are properly tested yet.
-
 </br>
 <div style="width: 100%; text-align: center; display: block;">
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/rearrange_example_optimized.gif' width="338" style="padding-bottom:28px !important; padding-right:28px !important;" />
@@ -129,6 +127,7 @@ Development version:
 |:----------------------|:----------------------------------------------------------------------|
 |`generate_clusters()`  |Generate n-dimensional clusters.                                       |
 
+Additionally, some functions have `*_vec()` versions, that take and return a `vector`.
 
 **Note**: The available utility functions (like scalers, converters and measuring functions) are
 listed at the bottom of the readme.
@@ -165,12 +164,12 @@ orderings <- data.frame(
   "center_min" = center_min(vec),
   "position_max" = position_max(vec, position = 3),
   "position_min" = position_min(vec, position = 3),
-  "pair_extremes" = pair_extremes(vec),
-  "rev_windows" = rev_windows(vec, window_size = 3),
-  "closest_to" = closest_to(vec, origin_fn = create_origin_fn(median)),
-  "furthest_from" = furthest_from(vec, origin = 5),
+  "pair_extremes" = pair_extremes_vec(vec),
+  "rev_windows" = rev_windows_vec(vec, window_size = 3),
+  "closest_to" = closest_to_vec(vec, origin_fn = create_origin_fn(median)),
+  "furthest_from" = furthest_from_vec(vec, origin = 5),
   "random_sample" = random_sample,
-  "flipped_median" = flip_values(random_sample, origin_fn=create_origin_fn(median))$Value_flipped,
+  "flipped_median" = flip_values_vec(random_sample, origin_fn=create_origin_fn(median)),
   stringsAsFactors = FALSE
 ) 
 
@@ -186,8 +185,10 @@ gg_base_line_size <- .3
 
 <!-- Note: The `kable()` function simply **formats** the output and is not required. -->
 
-While we can use the functions with data frames, we showcase many of them with a vector for simplicity.
-The functions work with grouped data frames and in `magrittr` pipelines (`%>%`).
+While we can use the functions with `data.frames`, we showcase many of them with a `vector` for simplicity.
+At times, we use the `*_vec()` version of a function in order to get the output as a `vector` instead of a `data.frame`.
+
+The functions work with grouped `data.frames` and in `magrittr` pipelines (`%>%`). 
 
 ## Rearranger examples
 
@@ -242,7 +243,7 @@ orderings %>%
 ### Pair extremes
 
 ```{r}
-pair_extremes(data = 1:10, keep_factor = TRUE)
+pair_extremes(data = 1:10)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -260,14 +261,16 @@ orderings %>%
 
 ### Closest to / furthest from
 
+We use the `_vec()` versions to get the reordered vectors. For `data.frames`, use `closest_to()`/`furthest_from()` instead.
+
 The origin can be passed as either a specific coordinate (here, a value in `data`) or a function.
 
 ```{r}
-closest_to(data = 1:10, origin_fn = create_origin_fn(median))
+closest_to_vec(data = 1:10, origin_fn = create_origin_fn(median))
 ```
 
 ```{r}
-furthest_from(data = 1:10, origin = 5)
+furthest_from_vec(data = 1:10, origin = 5)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -285,8 +288,10 @@ orderings %>%
 
 ### Reverse windows
 
+We use the `_vec()` version to get the reordered vector. For `data.frames`, use `rev_windows()` instead.
+
 ```{r}
-rev_windows(data = 1:10, window_size = 3)
+rev_windows_vec(data = 1:10, window_size = 3)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
@@ -757,7 +762,7 @@ df_clustered <- df_clustered %>%
 # Add a column with 1s
 df_clustered$o <- 1
 
-# Dim the "o" column (uses last column in `cols` by default)
+# Dim the "o" column (dims last column in `cols` by default)
 # based on the data point's distance to the most central point in the cluster
 df_clustered %>% 
   dplyr::group_by(g) %>% 

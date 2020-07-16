@@ -213,7 +213,7 @@ rearrange_position_at <- function(data,
 ##  Reverse windows                                                         ####
 
 # 'col' is a required arg in the function but is ignored
-rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, cols = NULL, ...) {
+rearrange_rev_windows <- function(data, window_size, factor_name, cols = NULL, overwrite, ...) {
   size <- nrow(data)
   if (size < 2) {
     return(data)
@@ -223,9 +223,14 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, 
   rev_indices <- rep(rev(seq_len(window_size)), times = num_windows)
   new_order <- windows + (rev_indices * (0.5 / window_size))
   new_order <- head(new_order, size)
-  if (isTRUE(keep_windows)) {
-    data[[factor_name]] <- head(windows, size)
-  }
+
+  # Add windows factor
+  data <- add_info_col_(
+    data = data,
+    nm = factor_name,
+    content = head(windows, size),
+    overwrite = overwrite
+  )
 
   data[order(new_order), , drop = FALSE]
 }
@@ -238,10 +243,13 @@ rearrange_rev_windows <- function(data, window_size, keep_windows, factor_name, 
 rearrange_by_distance <- function(data,
                                   grp_id,
                                   cols,
+                                  overwrite,
                                   origin,
                                   origin_fn,
                                   shuffle_ties,
                                   decreasing,
+                                  origin_col_name,
+                                  distance_col_name,
                                   ...) {
 
   if (nrow(data) < 2) {
@@ -280,8 +288,28 @@ rearrange_by_distance <- function(data,
       dplyr::arrange(!!!rlang::syms(cols))
   }
 
+  # Order by distances
   data <- data[order(data[[tmp_distances_col]], decreasing = decreasing), , drop = FALSE]
+
+  # Extract distances
+  distances <- data[[tmp_distances_col]]
   data[[tmp_distances_col]] <- NULL
+
+  # Add origin coordinates column
+  data <- add_info_col_(
+    data = data,
+    nm = origin_col_name,
+    content = list_coordinates_(origin, cols),
+    overwrite = overwrite
+  )
+
+  # Add distances column
+  data <- add_info_col_(
+    data = data,
+    nm = distance_col_name,
+    content = distances,
+    overwrite = overwrite
+  )
 
   data
 }
@@ -293,11 +321,11 @@ rearrange_by_distance <- function(data,
 
 # TODO Add aggregate_fn for recursive pairings
 rearrange_pair_extremes <- function(data, cols,
+                                    overwrite,
                                     unequal_method,
                                     num_pairings,
                                     shuffle_members,
                                     shuffle_pairs,
-                                    keep_factors,
                                     factor_name,
                                     ...) {
   stopifnot(length(cols) == 1)
@@ -336,17 +364,14 @@ rearrange_pair_extremes <- function(data, cols,
   # }
 
   # TODO Make this work for num_pairings factors
-  # Remove rearrange factor if it shouldn't be returned
-  if (!isTRUE(keep_factors)) {
-    data <- data %>%
-      base_deselect_(cols = local_tmp_rearrange_var)
-  } else if (local_tmp_rearrange_var != factor_name) {
-    data <- base_rename_(data,
-      before = local_tmp_rearrange_var,
-      after = factor_name
-    )
-    data[[factor_name]] <- as.factor(data[[factor_name]])
-  }
+
+  # Add rearrange factor
+  data <- add_info_col_(
+    data = base_deselect_(data, cols = local_tmp_rearrange_var),
+    nm = factor_name,
+    content = as.factor(data[[local_tmp_rearrange_var]]),
+    overwrite = overwrite
+  )
 
   data
 }

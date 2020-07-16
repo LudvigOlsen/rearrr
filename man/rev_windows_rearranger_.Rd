@@ -7,8 +7,8 @@
 rev_windows_rearranger_(
   data,
   window_size,
-  keep_windows = FALSE,
-  factor_name = ".window"
+  factor_name = ".window",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -16,11 +16,12 @@ rev_windows_rearranger_(
 
 \item{window_size}{Size of the windows. (Logical)}
 
+\item{factor_name}{Name of the factor with window identifiers.
+If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
+
 \item{keep_windows}{Whether to keep the factor with window identifiers. (Logical)}
-
-\item{factor_name}{Name of the factor with window identifiers. (Logical)
-
-N.B. Only used when \code{`keep_windows`} is \code{TRUE}.}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.

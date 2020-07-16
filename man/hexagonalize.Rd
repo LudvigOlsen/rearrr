@@ -12,7 +12,8 @@ hexagonalize(
   offset_x = 0,
   keep_original = TRUE,
   x_col_name = ".hexagon_x",
-  edge_col_name = ".edge"
+  edge_col_name = ".edge",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{edge_col_name}{Name of new column with the edge identifiers. If \code{NULL}, no column is added.
 
 Numbering is clockwise and starts at the upper-right edge.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with the added x-coordinates and an identifier
@@ -85,11 +88,16 @@ df_hex \%>\%
 # hexagons away from each other
 df_hex <- df \%>\%
   cluster_groups(
-    cols = "y", group_cols = "g",
-    suffix = ""
+    cols = "y",
+    group_cols = "g",
+    suffix = "",
+    overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
-  hexagonalize(y_col = "y")
+  hexagonalize(
+    y_col = "y",
+    overwrite = TRUE
+  )
 
 # Plot hexagons
 df_hex \%>\%
@@ -128,7 +136,8 @@ df_expanded <- purrr::map_dfr(
       data = df_hex,
       cols = c(".hexagon_x", "y"),
       multiplier = mult,
-      origin_fn = centroid
+      origin_fn = centroid,
+      overwrite = TRUE
     )
   }
 )

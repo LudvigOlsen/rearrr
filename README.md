@@ -37,11 +37,8 @@ data points.
 When performing an operation relative to a point in an n-dimensional
 vector space, we refer to the point as the **origin**. If we, for
 instance, wish to rotate our data points around the point at `x = 3` and
-`y = 7`, those are the coordinates of our origin.
-
-Note: `rearrr` is still quite new and not all functions are properly
-tested
-yet.
+`y = 7`, those are the coordinates of our
+origin.
 
 </br>
 
@@ -126,6 +123,9 @@ version:
 | :-------------------- | :------------------------------- |
 | `generate_clusters()` | Generate n-dimensional clusters. |
 
+Additionally, some functions have `*_vec()` versions, that take and
+return a `vector`.
+
 **Note**: The available utility functions (like scalers, converters and
 measuring functions) are listed at the bottom of the readme.
 
@@ -179,9 +179,13 @@ xpectr::set_test_seed(1)
 
 <!-- Note: The `kable()` function simply **formats** the output and is not required. -->
 
-While we can use the functions with data frames, we showcase many of
-them with a vector for simplicity. The functions work with grouped data
-frames and in `magrittr` pipelines (`%>%`).
+While we can use the functions with `data.frames`, we showcase many of
+them with a `vector` for simplicity. At times, we use the `*_vec()`
+version of a function in order to get the output as a `vector` instead
+of a `data.frame`.
+
+The functions work with grouped `data.frames` and in `magrittr`
+pipelines (`%>%`).
 
 ## Rearranger examples
 
@@ -218,7 +222,7 @@ position_min(data = 1:10, position = 3)
 ### Pair extremes
 
 ``` r
-pair_extremes(data = 1:10, keep_factor = TRUE)
+pair_extremes(data = 1:10)
 #> # A tibble: 10 x 2
 #>    Value .pair
 #>    <int> <fct>
@@ -238,16 +242,19 @@ pair_extremes(data = 1:10, keep_factor = TRUE)
 
 ### Closest to / furthest from
 
+We use the `_vec()` versions to get the reordered vectors. For
+`data.frames`, use `closest_to()`/`furthest_from()` instead.
+
 The origin can be passed as either a specific coordinate (here, a value
 in `data`) or a function.
 
 ``` r
-closest_to(data = 1:10, origin_fn = create_origin_fn(median))
+closest_to_vec(data = 1:10, origin_fn = create_origin_fn(median))
 #>  [1]  5  6  4  7  3  8  2  9  1 10
 ```
 
 ``` r
-furthest_from(data = 1:10, origin = 5)
+furthest_from_vec(data = 1:10, origin = 5)
 #>  [1] 10  1  9  2  8  3  7  4  6  5
 ```
 
@@ -255,8 +262,11 @@ furthest_from(data = 1:10, origin = 5)
 
 ### Reverse windows
 
+We use the `_vec()` version to get the reordered vector. For
+`data.frames`, use `rev_windows()` instead.
+
 ``` r
-rev_windows(data = 1:10, window_size = 3)
+rev_windows_vec(data = 1:10, window_size = 3)
 #>  [1]  3  2  1  6  5  4  9  8  7 10
 ```
 
@@ -523,7 +533,7 @@ cluster_groups(
 # Add a column with 1s
 df_clustered$o <- 1
 
-# Dim the "o" column (uses last column in `cols` by default)
+# Dim the "o" column (dims last column in `cols` by default)
 # based on the data point's distance to the most central point in the cluster
 df_clustered %>% 
   dplyr::group_by(g) %>% 

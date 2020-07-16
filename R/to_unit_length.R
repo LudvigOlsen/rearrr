@@ -43,7 +43,7 @@
 #' to_unit_length(df, cols = c("x", "y"), by_row = FALSE)
 #'
 #' # Overwrite columns
-#' to_unit_length(df, cols = c("x", "y"), suffix = "")
+#' to_unit_length(df, cols = c("x", "y"), suffix = "", overwrite = TRUE)
 #'
 #' # By groups in 'g'
 #' df %>%
@@ -52,13 +52,14 @@
 #'
 #' # Scale a vector
 #' to_unit_length_vec(c(1:10))
-#' to_unit_length(c(1:10), suffix = "")
-#' vector_length(to_unit_length(c(1:10), suffix = ""))
+#' to_unit_length(c(1:10), suffix = "", overwrite = TRUE)
+#' vector_length(to_unit_length_vec(c(1:10)))
 #' }
 to_unit_length <- function(data,
                            cols = NULL,
                            by_row = is.data.frame(data),
-                           suffix = ifelse(isTRUE(by_row), "_row_unit", "_col_unit")) {
+                           suffix = ifelse(isTRUE(by_row), "_row_unit", "_col_unit"),
+                           overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_flag(by_row, add = assert_collection)
@@ -72,6 +73,7 @@ to_unit_length <- function(data,
     check_fn = NULL,
     cols = cols,
     suffix = suffix,
+    overwrite = overwrite,
     force_df = FALSE,
     keep_original = TRUE,
     by_row = by_row
@@ -84,13 +86,15 @@ to_unit_length_vec <- function(data){
   checkmate::assert_numeric(data)
   to_unit_length(
     data = data,
-    suffix = ""
+    suffix = "",
+    overwrite = TRUE
   )
 }
 
 to_unit_length_mutator_method_ <- function(data,
                                            grp_id,
                                            cols,
+                                           overwrite,
                                            by_row,
                                            suffix,
                                            ...) {
@@ -107,7 +111,8 @@ to_unit_length_mutator_method_ <- function(data,
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(unit_dim_vectors, cols),
-    suffix = suffix
+    suffix = suffix,
+    overwrite = overwrite
   )
 
   data

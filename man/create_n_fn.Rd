@@ -19,6 +19,8 @@ The indices are created with \code{seq_along(x)}.}
 
 Rounding is done \emph{prior} to negation.
 
+E.g. \code{\link[base:Round]{round}}, \code{\link[base:Round]{floor}}, or \code{\link[base:Round]{ceiling}}.
+
 To avoid rounding, supply \code{\link[base:identity]{identity}}.}
 
 \item{...}{Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.}
