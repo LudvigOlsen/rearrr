@@ -107,7 +107,8 @@
 #'       data = df_tri,
 #'       cols = c(".triangle_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid
+#'       origin_fn = centroid,
+#'       overwrite = TRUE
 #'     )
 #'   }
 #' )

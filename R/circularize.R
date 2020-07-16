@@ -108,7 +108,8 @@
 #'       data = df_circ,
 #'       cols = c(".circle_x", "y"),
 #'       multiplier = mult,
-#'       origin_fn = centroid
+#'       origin_fn = centroid,
+#'       overwrite = TRUE
 #'     )
 #'   }
 #' )
