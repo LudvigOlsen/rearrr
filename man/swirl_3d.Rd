@@ -272,7 +272,8 @@ df_rotated <- df_swirled \%>\%
     y_deg = rep(0, 36),
     z_deg = (1:36) * 10,
     suffix = "",
-    origin = df_swirled$.origin[[1]]
+    origin = df_swirled$.origin[[1]],
+    overwrite = TRUE
   )
 
 # Plot rotated swirls

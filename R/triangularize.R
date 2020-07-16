@@ -59,8 +59,10 @@
 #' # triangles away from each other
 #' df_tri <- df %>%
 #'   cluster_groups(
-#'     cols = "y", group_cols = "g",
-#'     suffix = ""
+#'     cols = "y",
+#'     group_cols = "g",
+#'     suffix = "",
+#'     overwrite = TRUE
 #'   ) %>%
 #'   dplyr::group_by(g) %>%
 #'   triangularize(y_col = "y")

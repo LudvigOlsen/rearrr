@@ -88,8 +88,10 @@ df_sq \%>\%
 # squares away from each other
 df_sq <- df \%>\%
   cluster_groups(
-    cols = "y", group_cols = "g",
-    suffix = ""
+    cols = "y",
+    group_cols = "g",
+    suffix = "",
+    overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
   square(y_col = "y")

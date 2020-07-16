@@ -106,8 +106,11 @@ flip_values(df$A)
 flip_values(df, cols = "A")
 flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
 flip_values(df,
-  cols = c("A", "B"), origin = c(3, 0.3),
-  suffix = "", keep_original = FALSE
+  cols = c("A", "B"),
+  origin = c(3, 0.3),
+  suffix = "",
+  keep_original = FALSE,
+  overwrite = TRUE
 )
 flip_values(df, cols = c("A", "B"), origin_fn = create_origin_fn(max))
 

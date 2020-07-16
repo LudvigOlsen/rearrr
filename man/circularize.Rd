@@ -90,8 +90,10 @@ df_circ \%>\%
 # circles away from each other
 df_circ <- df \%>\%
   cluster_groups(
-    cols = "y", group_cols = "g",
-    suffix = ""
+    cols = "y",
+    group_cols = "g",
+    suffix = "",
+    overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
   circularize(y_col = "y")

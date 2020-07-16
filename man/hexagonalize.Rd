@@ -88,8 +88,10 @@ df_hex \%>\%
 # hexagons away from each other
 df_hex <- df \%>\%
   cluster_groups(
-    cols = "y", group_cols = "g",
-    suffix = ""
+    cols = "y",
+    group_cols = "g",
+    suffix = "",
+    overwrite = TRUE
   ) \%>\%
   dplyr::group_by(g) \%>\%
   hexagonalize(y_col = "y")
