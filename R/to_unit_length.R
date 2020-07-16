@@ -43,7 +43,7 @@
 #' to_unit_length(df, cols = c("x", "y"), by_row = FALSE)
 #'
 #' # Overwrite columns
-#' to_unit_length(df, cols = c("x", "y"), suffix = "")
+#' to_unit_length(df, cols = c("x", "y"), suffix = "", overwrite = TRUE)
 #'
 #' # By groups in 'g'
 #' df %>%
@@ -52,8 +52,8 @@
 #'
 #' # Scale a vector
 #' to_unit_length_vec(c(1:10))
-#' to_unit_length(c(1:10), suffix = "")
-#' vector_length(to_unit_length(c(1:10), suffix = ""))
+#' to_unit_length(c(1:10), suffix = "", overwrite = TRUE)
+#' vector_length(to_unit_length_vec(c(1:10)))
 #' }
 to_unit_length <- function(data,
                            cols = NULL,
