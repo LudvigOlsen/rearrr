@@ -176,7 +176,8 @@ rotate_3d <- function(data,
                       origin_fn = NULL,
                       keep_original = TRUE,
                       degrees_col_name = ".degrees",
-                      origin_col_name = ".origin") {
+                      origin_col_name = ".origin",
+                      overwrite = FALSE) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, min.cols = 3, add = assert_collection)
@@ -239,6 +240,10 @@ rotate_3d <- function(data,
   }
 
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames(x_col, y_col, z_col, degrees_col_name, origin_col_name)
+  check_overwrite(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate for each degree
@@ -251,6 +256,7 @@ rotate_3d <- function(data,
         mutate_fn = rotate_3d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
+        overwrite = overwrite,
         min_dims = 3,
         keep_original = keep_original,
         cols = c(x_col, y_col, z_col),
@@ -283,6 +289,7 @@ rotate_3d <- function(data,
 rotate_3d_mutator_method_ <- function(data,
                                       grp_id,
                                       cols,
+                                      overwrite,
                                       x_deg,
                                       y_deg,
                                       z_deg,
@@ -343,9 +350,14 @@ rotate_3d_mutator_method_ <- function(data,
   z <- z + origin[[3]]
 
   # Add rotated columns to data
-  data[[paste0(x_col, suffix)]] <- x
-  data[[paste0(y_col, suffix)]] <- y
-  data[[paste0(z_col, suffix)]] <- z
+  data <- add_dimensions_(
+    data = data,
+    new_vectors = setNames(
+      list(x, y, z),
+      c(x_col, y_col, z_col)),
+    suffix = suffix,
+    overwrite = overwrite
+  )
 
   # Add info columns
   if (!is.null(origin_col_name)) {

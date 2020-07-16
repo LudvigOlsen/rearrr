@@ -496,7 +496,7 @@ add_dimensions_ <- function(data,
   data
 }
 
-add_info_col <- function(data, nm, content, overwrite = FALSE){
+add_info_col <- function(data, nm, content, overwrite = FALSE, check_overwrite = TRUE){
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_data_frame(data, add = assert_collection)
@@ -509,8 +509,10 @@ add_info_col <- function(data, nm, content, overwrite = FALSE){
     return(data)
   }
 
-  # Check if we will overwrite an existing column
-  check_overwrite(data = data, nm = nm, overwrite = overwrite)
+  if (isTRUE(check_overwrite)){
+    # Check if we will overwrite an existing column
+    check_overwrite(data = data, nm = nm, overwrite = overwrite)
+  }
 
   # Add column
   data[[nm]] <- content

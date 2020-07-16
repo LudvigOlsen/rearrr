@@ -16,7 +16,8 @@ swirl_2d(
   keep_original = TRUE,
   degrees_col_name = ".degrees",
   radius_col_name = ".radius",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -74,6 +75,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{radius_col_name}{Name of new column with the radius. If \code{NULL}, no column is added.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.

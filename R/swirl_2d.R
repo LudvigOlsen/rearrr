@@ -125,7 +125,8 @@ swirl_2d <- function(data,
                      keep_original = TRUE,
                      degrees_col_name = ".degrees",
                      radius_col_name = ".radius",
-                     origin_col_name = ".origin") {
+                     origin_col_name = ".origin",
+                     overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -160,6 +161,11 @@ swirl_2d <- function(data,
     assert_collection$push("'x_col' and 'y_col' cannot be the same column.")
   }
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames(x_col, y_col, degrees_col_name, origin_col_name, radius_col_name)
+  check_overwrite(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
+  check_overwrite(data = data, nm = radius_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate for each degree
@@ -171,6 +177,7 @@ swirl_2d <- function(data,
         mutate_fn = swirl_2d_mutator_method_,
         check_fn = NULL,
         force_df = TRUE,
+        overwrite = overwrite,
         min_dims = 2,
         keep_original = keep_original,
         cols = c(x_col, y_col),
@@ -194,6 +201,7 @@ swirl_2d <- function(data,
 swirl_2d_mutator_method_ <- function(data,
                                      grp_id,
                                      cols,
+                                     overwrite,
                                      radius,
                                      scale_fn,
                                      suffix,
@@ -253,7 +261,8 @@ swirl_2d_mutator_method_ <- function(data,
       origin = origin,
       suffix = suffix,
       origin_col_name = NULL,
-      degrees_col_name = NULL
+      degrees_col_name = NULL,
+      overwrite = overwrite
     )
   })
 

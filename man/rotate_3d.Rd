@@ -17,7 +17,8 @@ rotate_3d(
   origin_fn = NULL,
   keep_original = TRUE,
   degrees_col_name = ".degrees",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -61,6 +62,8 @@ Also adds a string version with the same name + \code{"_str"}, making it easier 
 when plotting multiple rotations.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with six new columns containing

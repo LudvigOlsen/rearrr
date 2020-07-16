@@ -5,7 +5,15 @@
 \alias{roll_elements_vec}
 \title{Roll elements}
 \usage{
-roll_elements(data, cols = NULL, n = NULL, n_fn = NULL, n_col_name = ".n", ...)
+roll_elements(
+  data,
+  cols = NULL,
+  n = NULL,
+  n_fn = NULL,
+  n_col_name = ".n",
+  overwrite = FALSE,
+  ...
+)
 
 roll_elements_vec(data, n = NULL, n_fn = NULL, ...)
 }
@@ -34,6 +42,8 @@ See also \code{\link[rearrr:median_index]{median_index()}} and
 \code{\link[rearrr:median_index]{quantile_index()}}.}
 
 \item{n_col_name}{Name of new column with the applied \code{`n`} values. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of columns with the same name as \code{`n_col_name`}. (Logical)}
 
 \item{...}{Extra arguments for \code{`n_fn`}.}
 }

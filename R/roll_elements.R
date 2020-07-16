@@ -44,6 +44,7 @@
 #'  See also \code{\link[rearrr:median_index]{median_index()}} and
 #'  \code{\link[rearrr:median_index]{quantile_index()}}.
 #' @param n_col_name Name of new column with the applied \code{`n`} values. If \code{NULL}, no column is added.
+#' @param overwrite Whether to allow overwriting of columns with the same name as \code{`n_col_name`}. (Logical)
 #' @param ... Extra arguments for \code{`n_fn`}.
 #' @export
 #' @return Rolled \code{`data`}.
@@ -110,6 +111,7 @@ roll_elements <- function(data,
                           n = NULL,
                           n_fn = NULL,
                           n_col_name = ".n",
+                          overwrite = FALSE,
                           ...) {
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -127,6 +129,8 @@ roll_elements <- function(data,
     assert_collection$push("exactly one of {'n', 'n_fn'} must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
+  check_unique_colnames(cols, n_col_name)
+  check_overwrite(data = data, nm = n_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # If no rolling, just return data
@@ -153,6 +157,7 @@ roll_elements <- function(data,
     rearrange_fn = roll_elements_rearranger_method_,
     check_fn = NULL,
     cols = cols,
+    overwrite = overwrite,
     n = n,
     n_fn = n_fn,
     n_fn_args = rlang::exprs(...),
@@ -189,6 +194,7 @@ roll_elements_vec <- function(data,
     n = n,
     n_fn = n_fn,
     n_col_name = NULL,
+    overwrite = TRUE,
     ...
   )
 }
@@ -196,6 +202,7 @@ roll_elements_vec <- function(data,
 roll_elements_rearranger_method_ <- function(data,
                                              grp_id,
                                              cols,
+                                             overwrite,
                                              n,
                                              n_fn,
                                              n_fn_args,
@@ -243,18 +250,25 @@ roll_elements_rearranger_method_ <- function(data,
       c(tail(x = .x, n = -.y), head(x = .x, n = .y))
     })
 
-  # Add dim_vectors as columns with the suffix
+  # Add dim_vectors as columns with no suffix
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(dim_vectors, cols),
-    suffix = ""
+    suffix = "",
+    overwrite = TRUE
   )
 
   if (!is.null(n_col_name)) {
     if (isTRUE(inverse_direction)) {
       n <- -1 * n
     }
-    data[[n_col_name]] <- list_coordinates_(n, cols)
+    # Add 'n' column
+    data <- add_info_col(
+      data = data,
+      nm = n_col_name,
+      content = list_coordinates_(n, cols),
+      overwrite = overwrite
+    )
   }
 
   data

@@ -972,7 +972,7 @@ test_that("fuzz testing roll_elements()", {
   side_effects_17191 <- xpectr::capture_side_effects(roll_elements(data = df, cols = c("x", NA), n = 2, n_fn = NULL, n_col_name = ".n"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'cols': Contains missing values (element 2)."),
+    xpectr::strip("Assertion on 'specified column names (\"x\", NA, \".n\")' failed: Contains missing values (element 2)."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17191[['error_class']]),

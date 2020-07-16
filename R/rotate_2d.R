@@ -116,7 +116,9 @@ rotate_2d <- function(data,
                       origin_fn = NULL,
                       keep_original = TRUE,
                       degrees_col_name = ".degrees",
-                      origin_col_name = ".origin") {
+                      origin_col_name = ".origin",
+                      overwrite = FALSE) {
+
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_numeric(
@@ -150,6 +152,10 @@ rotate_2d <- function(data,
     assert_collection$push("'x_col' and 'y_col' cannot be the same column.")
   }
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames(x_col, y_col, degrees_col_name, origin_col_name)
+  check_overwrite(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate for each degree
@@ -166,6 +172,7 @@ rotate_2d <- function(data,
         cols = c(x_col, y_col),
         degrees = degree,
         suffix = suffix,
+        overwrite = overwrite,
         origin = origin,
         origin_fn = origin_fn,
         origin_col_name = origin_col_name
@@ -183,6 +190,7 @@ rotate_2d <- function(data,
 rotate_2d_mutator_method_ <- function(data,
                                       grp_id,
                                       cols,
+                                      overwrite,
                                       degrees,
                                       suffix,
                                       origin,
@@ -237,13 +245,26 @@ rotate_2d_mutator_method_ <- function(data,
   y <- y + origin[[2]]
 
   # Add rotated columns to data
-  data[[paste0(x_col, suffix)]] <- x
-  data[[paste0(y_col, suffix)]] <- y
+  data <- add_info_col(
+    data = data,
+    nm = paste0(x_col, suffix),
+    content = x,
+    overwrite = overwrite
+  )
+  data <- add_info_col(
+    data = data,
+    nm = paste0(y_col, suffix),
+    content = y,
+    overwrite = overwrite
+  )
 
   # Add info columns
-  if (!is.null(origin_col_name)) {
-    data[[origin_col_name]] <- list_coordinates_(origin, names = cols)
-  }
+  data <- add_info_col(
+    data = data,
+    nm = origin_col_name,
+    content = list_coordinates_(origin, names = cols),
+    check_overwrite = FALSE # Already checked
+  )
 
   data
 }

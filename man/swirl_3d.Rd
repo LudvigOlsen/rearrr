@@ -19,7 +19,8 @@ swirl_3d(
   keep_original = TRUE,
   degrees_col_name = ".degrees",
   radius_col_name = ".radius",
-  origin_col_name = ".origin"
+  origin_col_name = ".origin",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -80,6 +81,8 @@ when plotting multiple rotations.}
 \item{radius_col_name}{Name of new column with the radiuses. If \code{NULL}, no column is added.}
 
 \item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+
+\item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.

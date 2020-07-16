@@ -239,7 +239,8 @@ swirl_3d <- function(data,
                      keep_original = TRUE,
                      degrees_col_name = ".degrees",
                      radius_col_name = ".radius",
-                     origin_col_name = ".origin") {
+                     origin_col_name = ".origin",
+                     overwrite = FALSE) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -298,6 +299,11 @@ swirl_3d <- function(data,
     )
   }
   checkmate::reportAssertions(assert_collection)
+  # Check if we will need to overwrite columns
+  check_unique_colnames(x_col, y_col, z_col, degrees_col_name, origin_col_name, radius_col_name)
+  check_overwrite(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
+  check_overwrite(data = data, nm = radius_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate for each degree
@@ -313,6 +319,7 @@ swirl_3d <- function(data,
         min_dims = 3,
         keep_original = keep_original,
         cols = c(x_col, y_col, z_col),
+        overwrite = overwrite,
         x_radius = radiuses[[1]],
         y_radius = radiuses[[2]],
         z_radius = radiuses[[3]],
@@ -346,6 +353,7 @@ swirl_3d <- function(data,
 swirl_3d_mutator_method_ <- function(data,
                                      grp_id,
                                      cols,
+                                     overwrite,
                                      x_radius,
                                      y_radius,
                                      z_radius,
@@ -416,7 +424,8 @@ swirl_3d_mutator_method_ <- function(data,
       origin = origin,
       suffix = suffix,
       origin_col_name = NULL,
-      degrees_col_name = NULL
+      degrees_col_name = NULL,
+      overwrite = overwrite
     )
   })
 
