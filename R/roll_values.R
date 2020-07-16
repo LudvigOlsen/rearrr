@@ -176,10 +176,10 @@ roll_values <- function(data,
   }
   checkmate::reportAssertions(assert_collection)
   # Check if we will need to overwrite columns
-  check_unique_colnames(cols, range_col_name)
-  check_overwrite(data = data,
-                  nm = range_col_name,
-                  overwrite = overwrite)
+  check_unique_colnames_(cols, range_col_name)
+  check_overwrite_(data = data,
+                   nm = range_col_name,
+                   overwrite = overwrite)
   # End of argument checks ####
 
   multi_mutator_(

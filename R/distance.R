@@ -80,13 +80,13 @@ distance <- function(data,
   )
   checkmate::assert_function(origin_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  check_unique_colnames(cols, distance_col_name, origin_col_name)
-  check_overwrite(data = data,
-                  nm = distance_col_name,
-                  overwrite = overwrite)
-  check_overwrite(data = data,
-                  nm = origin_col_name,
-                  overwrite = overwrite)
+  check_unique_colnames_(cols, distance_col_name, origin_col_name)
+  check_overwrite_(data = data,
+                   nm = distance_col_name,
+                   overwrite = overwrite)
+  check_overwrite_(data = data,
+                   nm = origin_col_name,
+                   overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier

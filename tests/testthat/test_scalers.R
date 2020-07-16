@@ -1,5 +1,5 @@
 library(rearrr)
-context("min_max_scale()")
+context("scalers")
 
 
 test_that("min_max_scale()", {

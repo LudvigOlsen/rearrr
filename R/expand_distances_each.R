@@ -284,9 +284,9 @@ expand_distances_each <- function(data,
   checkmate::assert_function(multipliers_fn, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # Check if we will need to overwrite columns
-  check_unique_colnames(cols, origin_col_name, mult_col_name)
-  check_overwrite(data = data, nm = mult_col_name, overwrite = overwrite)
-  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
+  check_unique_colnames_(cols, origin_col_name, mult_col_name)
+  check_overwrite_(data = data, nm = mult_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier

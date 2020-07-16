@@ -76,10 +76,10 @@ vector_length <- function(data,
     assert_collection$push("when 'by_row' is 'TRUE', 'len_col_name' must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
-  check_unique_colnames(cols, len_col_name)
-  check_overwrite(data = data,
-                  nm = len_col_name,
-                  overwrite = overwrite)
+  check_unique_colnames_(cols, len_col_name)
+  check_overwrite_(data = data,
+                   nm = len_col_name,
+                   overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier

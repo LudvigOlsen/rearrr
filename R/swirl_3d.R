@@ -300,10 +300,10 @@ swirl_3d <- function(data,
   }
   checkmate::reportAssertions(assert_collection)
   # Check if we will need to overwrite columns
-  check_unique_colnames(x_col, y_col, z_col, degrees_col_name, origin_col_name, radius_col_name)
-  check_overwrite(data = data, nm = degrees_col_name, overwrite = overwrite)
-  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
-  check_overwrite(data = data, nm = radius_col_name, overwrite = overwrite)
+  check_unique_colnames_(x_col, y_col, z_col, degrees_col_name, origin_col_name, radius_col_name)
+  check_overwrite_(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = radius_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate for each degree

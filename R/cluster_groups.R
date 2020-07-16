@@ -204,9 +204,9 @@ cluster_groups <- function(data,
   checkmate::reportAssertions(assert_collection)
   if (!isTRUE(overwrite)) {
     purrr::map(.x = cols, .f = ~ {
-      check_overwrite(data = data,
-                      nm = paste0(.x, suffix),
-                      overwrite = overwrite)
+      check_overwrite_(data = data,
+                       nm = paste0(.x, suffix),
+                       overwrite = overwrite)
     })
   }
   # End of argument checks ####

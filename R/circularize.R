@@ -137,14 +137,14 @@ circularize <- function(data,
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  check_unique_colnames(y_col, x_col_name, degrees_col_name, origin_col_name)
-  check_overwrite(data = data,
+  check_unique_colnames_(y_col, x_col_name, degrees_col_name, origin_col_name)
+  check_overwrite_(data = data,
                   nm = x_col_name,
                   overwrite = overwrite)
-  check_overwrite(data = data,
+  check_overwrite_(data = data,
                   nm = degrees_col_name,
                   overwrite = overwrite)
-  check_overwrite(data = data,
+  check_overwrite_(data = data,
                   nm = origin_col_name,
                   overwrite = overwrite)
   # End of argument checks ####

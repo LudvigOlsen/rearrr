@@ -135,13 +135,13 @@ triangularize <- function(data,
   checkmate::assert_number(.max, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(offset_x, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  check_unique_colnames(y_col, x_col_name, edge_col_name)
-  check_overwrite(data = data,
-                  nm = x_col_name,
-                  overwrite = overwrite)
-  check_overwrite(data = data,
-                  nm = edge_col_name,
-                  overwrite = overwrite)
+  check_unique_colnames_(y_col, x_col_name, edge_col_name)
+  check_overwrite_(data = data,
+                   nm = x_col_name,
+                   overwrite = overwrite)
+  check_overwrite_(data = data,
+                   nm = edge_col_name,
+                   overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate with each multiplier

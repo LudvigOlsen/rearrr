@@ -225,7 +225,7 @@ rearrange_rev_windows <- function(data, window_size, factor_name, cols = NULL, o
   new_order <- head(new_order, size)
 
   # Add windows factor
-  data <- add_info_col(
+  data <- add_info_col_(
     data = data,
     nm = factor_name,
     content = head(windows, size),
@@ -296,7 +296,7 @@ rearrange_by_distance <- function(data,
   data[[tmp_distances_col]] <- NULL
 
   # Add origin coordinates column
-  data <- add_info_col(
+  data <- add_info_col_(
     data = data,
     nm = origin_col_name,
     content = list_coordinates_(origin, cols),
@@ -304,7 +304,7 @@ rearrange_by_distance <- function(data,
   )
 
   # Add distances column
-  data <- add_info_col(
+  data <- add_info_col_(
     data = data,
     nm = distance_col_name,
     content = distances,
@@ -366,7 +366,7 @@ rearrange_pair_extremes <- function(data, cols,
   # TODO Make this work for num_pairings factors
 
   # Add rearrange factor
-  data <- add_info_col(
+  data <- add_info_col_(
     data = base_deselect_(data, cols = local_tmp_rearrange_var),
     nm = factor_name,
     content = as.factor(data[[local_tmp_rearrange_var]]),

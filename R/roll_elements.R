@@ -129,8 +129,8 @@ roll_elements <- function(data,
     assert_collection$push("exactly one of {'n', 'n_fn'} must be specified.")
   }
   checkmate::reportAssertions(assert_collection)
-  check_unique_colnames(cols, n_col_name)
-  check_overwrite(data = data, nm = n_col_name, overwrite = overwrite)
+  check_unique_colnames_(cols, n_col_name)
+  check_overwrite_(data = data, nm = n_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # If no rolling, just return data
@@ -263,7 +263,7 @@ roll_elements_rearranger_method_ <- function(data,
       n <- -1 * n
     }
     # Add 'n' column
-    data <- add_info_col(
+    data <- add_info_col_(
       data = data,
       nm = n_col_name,
       content = list_coordinates_(n, cols),

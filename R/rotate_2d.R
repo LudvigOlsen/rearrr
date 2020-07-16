@@ -153,9 +153,9 @@ rotate_2d <- function(data,
   }
   checkmate::reportAssertions(assert_collection)
   # Check if we will need to overwrite columns
-  check_unique_colnames(x_col, y_col, degrees_col_name, origin_col_name)
-  check_overwrite(data = data, nm = degrees_col_name, overwrite = overwrite)
-  check_overwrite(data = data, nm = origin_col_name, overwrite = overwrite)
+  check_unique_colnames_(x_col, y_col, degrees_col_name, origin_col_name)
+  check_overwrite_(data = data, nm = degrees_col_name, overwrite = overwrite)
+  check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
   # Mutate for each degree
@@ -245,13 +245,13 @@ rotate_2d_mutator_method_ <- function(data,
   y <- y + origin[[2]]
 
   # Add rotated columns to data
-  data <- add_info_col(
+  data <- add_info_col_(
     data = data,
     nm = paste0(x_col, suffix),
     content = x,
     overwrite = overwrite
   )
-  data <- add_info_col(
+  data <- add_info_col_(
     data = data,
     nm = paste0(y_col, suffix),
     content = y,
@@ -259,7 +259,7 @@ rotate_2d_mutator_method_ <- function(data,
   )
 
   # Add info columns
-  data <- add_info_col(
+  data <- add_info_col_(
     data = data,
     nm = origin_col_name,
     content = list_coordinates_(origin, names = cols),
