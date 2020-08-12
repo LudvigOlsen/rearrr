@@ -3,45 +3,34 @@
 #   __________________ #< cbb313c6f0b4b461ad626879ebe2ac6a ># __________________
 #   Shear 3d                                                                ####
 
+# TODO Add:
+# @family mutate functions
+# @family shearing functions
 
 #' @title Shear values around an origin in 3 dimensions
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The values are rotated counterclockwise around a specified origin.
+#'  TODO
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
-#'  latter can be useful when supplying a grouped \code{data.frame} and rotating around e.g. the centroid
+#'  latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param x_deg,y_deg,z_deg Degrees to rotate values around the x/y/z-axis counterclockwise. In \code{[-360, 360]}.
-#'  Can be \code{vector}s with multiple degrees.
-#'
-#'  \code{`x_deg`} is \emph{roll}. \code{`y_deg`} is \emph{pitch}. \code{`z_deg`} is \emph{yaw}.
+#' @param x_shear,y_shear,z_shear TODO
 #' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
 #' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
+#' @param shear_col_name Name of new column with the shearing amounts. If \code{NULL}, no column is added.
 #'
-#'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the degrees
-#'  when plotting multiple rotations.
+#'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing amounts
+#'  when plotting multiple shears.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
-#' @export
-#' @return \code{data.frame} (\code{tibble}) with six new columns containing
-#'  the rotated x-,y- and z-values and the degrees and origin coordinates.
+#' @keywords internal
+#' @return \code{data.frame} (\code{tibble}) with five new columns containing
+#'  the sheared x-, y- and z-values and the shearing amounts and origin coordinates.
 #' @details
-#'  Applies the following rotation matrix:
-#'
-#'  | [ \eqn{cos \alpha cos \beta} |, \eqn{cos \alpha sin \beta sin \gamma - sin \alpha cos \gamma} |, \eqn{cos \alpha sin \beta cos \gamma + sin \alpha sin \gamma} | ] |
-#'  | :--- | :--- | :--- | :--- |
-#'  | [ \eqn{sin \alpha cos \beta} |, \eqn{sin \alpha sin \beta sin \gamma + cos \alpha cos \gamma} |, \eqn{sin \alpha sin \beta cos \gamma - cos \alpha sin \gamma} | ] |
-#'  | [ \eqn{-sin \beta} |, \eqn{cos \beta sin \gamma } |, \eqn{cos \beta cos \gamma} | ]|
-#'
-#'  Where \eqn{\alpha =} \code{`z_deg`} in radians, \eqn{\beta =} \code{`y_deg`} in radians, \eqn{\gamma =} \code{`x_deg`} in radians.
-#'
-#'  As specified at [Wikipedia/Rotation_matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
-#' @family mutate functions
-#' @family rotation functions
+#'  TODO
 #' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
@@ -67,111 +56,7 @@
 #'   )
 #' )
 #'
-#' # Rotate values 45 degrees around x-axis at (0, 0, 0)
-#' rotate_3d(df, x_col = "x", y_col = "y", z_col = "z", x_deg = 45, origin = c(0, 0, 0))
-#'
-#' # Rotate all axes around the centroid
-#' df_rotated <- df %>%
-#'   rotate_3d(
-#'     x_col = "x",
-#'     y_col = "y",
-#'     z_col = "z",
-#'     x_deg = c(0, 72, 144, 216, 288),
-#'     y_deg = c(0, 72, 144, 216, 288),
-#'     z_deg = c(0, 72, 144, 216, 288),
-#'     origin_fn = centroid
-#'   )
-#' df_rotated
-#'
-#' # Plot rotations
-#' ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_line(alpha = .4) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
-#'
-#' }
-#' \dontrun{
-#' # Plot 3d with plotly
-#' plotly::plot_ly(
-#'   x = df_rotated$x_rotated,
-#'   y = df_rotated$y_rotated,
-#'   z = df_rotated$z_rotated,
-#'   type = "scatter3d",
-#'   mode = "markers",
-#'   color = df_rotated$.degrees_str
-#' )
-#' }
-#' \donttest{
-#'
-#' # Rotate randomly around all axes
-#' df_rotated <- df %>%
-#'   rotate_3d(
-#'     x_col = "x",
-#'     y_col = "y",
-#'     z_col = "z",
-#'     x_deg = round(runif(10, min = 0, max = 360)),
-#'     y_deg = round(runif(10, min = 0, max = 360)),
-#'     z_deg = round(runif(10, min = 0, max = 360)),
-#'     origin_fn = centroid
-#'   )
-#' df_rotated
-#'
-#' # Plot rotations
-#' ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_line(alpha = .4) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
-#'
-#' }
-#' \dontrun{
-#' # Plot 3d with plotly
-#' plotly::plot_ly(
-#'   x = df_rotated$x_rotated,
-#'   y = df_rotated$y_rotated,
-#'   z = df_rotated$z_rotated,
-#'   type = "scatter3d",
-#'   mode = "markers",
-#'   color = df_rotated$.degrees_str
-#' )
-#' }
-#' \donttest{
-#'
-#' # Rotate around group centroids
-#' df_grouped <- df %>%
-#'   dplyr::group_by(g) %>%
-#'   rotate_3d(
-#'     x_col = "x",
-#'     y_col = "y",
-#'     z_col = "z",
-#'     x_deg = c(0, 72, 144, 216, 288),
-#'     y_deg = c(0, 72, 144, 216, 288),
-#'     z_deg = c(0, 72, 144, 216, 288),
-#'     origin_fn = centroid
-#'   )
-#'
-#' # Plot A and A rotated around group centroids
-#' ggplot(df_grouped, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
-#'
-#' }
-#' \dontrun{
-#' # Plot 3d with plotly
-#' plotly::plot_ly(
-#'   x = df_grouped$x_rotated,
-#'   y = df_grouped$y_rotated,
-#'   z = df_grouped$z_rotated,
-#'   type = "scatter3d",
-#'   mode = "markers",
-#'   color = df_grouped$.degrees_str
-#' )
+#' # TODO Add examples ;)
 #' }
 shear_3d <- function(data,
                      x_col,
@@ -332,7 +217,7 @@ shear_3d_mutator_method_ <- function(data,
   y <- y + origin[[2]]
   z <- z + origin[[3]]
 
-  # Add rotated columns to data
+  # Add sheared columns to data
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(
@@ -347,6 +232,7 @@ shear_3d_mutator_method_ <- function(data,
     shear_amounts <- list(x_shear, y_shear, z_shear)
     shear_amounts <- replace(shear_amounts, shear_amounts == "NULL", NA_real_)
     data[[shear_col_name]] <- list_coordinates_(shear_amounts, names = cols)
+    data <- paste_coordinates_column_(data, shear_col_name)
   }
   if (!is.null(origin_col_name)) {
     data[[origin_col_name]] <- list_coordinates_(origin, names = cols)

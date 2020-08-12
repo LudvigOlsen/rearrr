@@ -3,47 +3,35 @@
 #   __________________ #< 7e8f15723958ac192ae9187ae855656b ># __________________
 #   shear 2d                                                                ####
 
+# TODO Add:
+# @family mutate functions
+# @family shearing functions
 
 #' @title Shear the values around an origin in 2 dimensions
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The values are rotated counterclockwise around a specified origin.
+#'  TODO
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
-#'  latter can be useful when supplying a grouped \code{data.frame} and rotating around e.g. the centroid
+#'  latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param degrees Degrees to rotate values counterclockwise. In \code{[-360, 360]}.
-#'  Can be a \code{vector} with multiple degrees.
-#' @param x_col Name of x column in \code{`data`}. If \code{NULL} and \code{`data`} is a \code{vector},
-#'  the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.
-#' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
-#' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
+#' @param x_shear TODO (Also, can this work with data == vector?
+#'  Or do we need to specify that it HAS to be a data.frame?)
+#' @param x_col Name of x column in \code{`data`}.
+#' @param y_col Name of y column in \code{`data`}.
+#' @param origin Coordinates of the origin to shear around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
+#' @param shear_col_name Name of new column with the shearing amounts. If \code{NULL}, no column is added.
+#'
+#'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing amounts
+#'  when plotting multiple shears.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
-#' @export
-#' @return \code{data.frame} (\code{tibble}) with seven new columns containing
-#'  the rotated x-,y- and z-values and the degrees, radiuses and origin coordinates.
+#' @keywords internal
+#' @return \code{data.frame} (\code{tibble}) TODO
 #' @details
-#'  Applies the following rotation matrix:
-#'
-#'  | [ \eqn{cos \theta} |, \eqn{ -sin \theta} | ] |
-#'  | :--- | :--- | :--- |
-#'  | [ \eqn{sin \theta} |, \eqn{ cos \theta}  | ] |
-#'
-#'  That is:
-#'
-#'  \eqn{x' = x cos \theta - y sin \theta}
-#'
-#'  \eqn{y' = x sin \theta + y cos \theta}
-#'
-#'  Where \eqn{\theta} is the angle in radians.
-#'
-#'  As specified at [Wikipedia/Rotation_matrix](https://en.wikipedia.org/wiki/Rotation_matrix).
-#' @family mutate functions
-#' @family rotation functions
+#'  TODO
 #' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
@@ -68,60 +56,7 @@
 #'   )
 #' )
 #'
-#' # Rotate values around (0, 0)
-#' rotate_2d(df, degrees = 45, x_col = "Index", y_col = "A", origin = c(0, 0))
-#'
-#' # Rotate A around the centroid
-#' df_rotated <- df %>%
-#'   rotate_2d(
-#'     x_col = "Index",
-#'     y_col = "A",
-#'     degrees = c(0, 120, 240),
-#'     origin_fn = centroid
-#'   )
-#' df_rotated
-#'
-#' # Plot A and A rotated around overall centroid
-#' ggplot(df_rotated, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
-#'   geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_line(alpha = .4) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "Index", y = "Value", color = "Degrees")
-#'
-#' # Rotate around group centroids
-#' df_grouped <- df %>%
-#'   dplyr::group_by(G) %>%
-#'   rotate_2d(
-#'     x_col = "Index",
-#'     y_col = "A",
-#'     degrees = c(0, 120, 240),
-#'     origin_fn = centroid
-#'   )
-#' df_grouped
-#'
-#' # Plot A and A rotated around group centroids
-#' ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "Index", y = "Value", color = "Degrees")
-#'
-#' df_square <- square(runif(100), x_col_name = "x") %>%
-#'   rotate_2d(
-#'     degrees = 45,
-#'     x_col="x",
-#'     y_col = "Value",
-#'     origin = c(0, 0.5),
-#'     suffix = "",
-#'     overwrite = T) %>%
-#'   shear_2d(
-#'     x_shear = 0.5,
-#'     x_col = "x",
-#'     y_col="Value",
-#'     origin = c(0,0.5),
-#'     overwrite = T)
-#'
+#' # TODO Add examples ;)
 #' }
 shear_2d <- function(data,
                      x_shear,
@@ -134,7 +69,6 @@ shear_2d <- function(data,
                      shear_col_name = ".x_shear",
                      origin_col_name = ".origin",
                      overwrite = FALSE) {
-
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
@@ -193,7 +127,8 @@ shear_2d <- function(data,
         origin_col_name = origin_col_name
       )
       if (!is.null(shear_col_name)) {
-        out[[shear_col_name]] <- setNames(x_shear, "x") # TODO works?
+        out[[shear_col_name]] <- setNames(x_shear, x_col) # TODO works?
+        out <- paste_coordinates_column_(out, shear_col_name)
       }
 
       out
@@ -243,7 +178,7 @@ shear_2d_mutator_method_ <- function(data,
   # Move origin
   x <- x + origin[[1]]
 
-  # Add rotated columns to data
+  # Add sheared columns to data
   data <- add_info_col_(
     data = data,
     nm = paste0(x_col, suffix),
