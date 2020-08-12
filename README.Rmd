@@ -1096,7 +1096,7 @@ df_clusters %>%
 |`angle()`              |Calculates angle between points and an origin.                         |
 |`vector_length()`      |Calculates vector length/magnitude *row-wise* or *column-wise*.        |
 
-### Helpers functions
+### Helper functions
 
 | Function              | Description                                                           |
 |:----------------------|:----------------------------------------------------------------------|

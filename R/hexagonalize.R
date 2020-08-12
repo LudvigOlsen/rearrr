@@ -269,14 +269,14 @@ hexagonalize_mutator_method_ <- function(data,
       old_max = middle_lower
     )
 
-  outliers <- add_na_column_(data = outliers, col = x_col_name)
+  outliers <- add_na_column_(data = outliers, col = x_col_name, overwrite = overwrite)
 
   # Edge numbers
   if (!is.null(edge_col_name)){
     top[[edge_col_name]] <- ifelse(top[[tmp_side_col]] == 1, 6, 1)
     middle[[edge_col_name]] <- ifelse(middle[[tmp_side_col]] == 1, 5, 2)
     bottom[[edge_col_name]] <- ifelse(bottom[[tmp_side_col]] == 1, 4, 3)
-    outliers <- add_na_column_(data = outliers, col = edge_col_name)
+    outliers <- add_na_column_(data = outliers, col = edge_col_name, overwrite = overwrite)
   }
 
 

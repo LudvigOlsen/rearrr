@@ -561,7 +561,7 @@ calculate_swirl_degrees_ <- function(distances, radius) {
 #' @importFrom dplyr %>%
 #' @importFrom rlang .data :=
 #' @importFrom utils head tail
-#' @importFrom stats quantile runif median setNames
+#' @importFrom stats quantile runif rnorm median setNames
 #' @importFrom lifecycle deprecated deprecate_stop
 NULL
 
