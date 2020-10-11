@@ -3,6 +3,10 @@
 #   __________________ #< 7e8f15723958ac192ae9187ae855656b ># __________________
 #   shear 2d                                                                ####
 
+# TODO Add
+# @family mutate functions
+# @family shearing functions
+
 
 #' @title Shear the values around an origin in 2 dimensions
 #' @description
@@ -34,9 +38,7 @@
 #'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing factors
 #'  when plotting multiple shearings.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
-#' @export
-#' @family mutate functions
-#' @family shearing functions
+#' @keywords internal
 #' @return \code{data.frame} (\code{tibble}) with sheared columns, the shearing factors and the origin coordinates.
 #' @inheritParams multi_mutator_
 #' @examples
@@ -48,8 +50,8 @@
 #'
 #' # Create a data frame
 #' df <- data.frame(
-#'   "x" = rep(1:6, each=2),
-#'   "y" = rep(c(1,4), 6),
+#'   "x" = rep(1:6, each = 2),
+#'   "y" = rep(c(1, 4), 6),
 #'   "g" = c(
 #'     1, 1, 1, 1, 1, 1,
 #'     2, 2, 2, 2, 2, 2
@@ -129,7 +131,7 @@ shear_2d <- function(data,
                      origin = NULL,
                      origin_fn = NULL,
                      keep_original = TRUE,
-                     shear_col_name = ".shearing",
+                     shear_col_name = ".shear",
                      origin_col_name = ".origin",
                      overwrite = FALSE) {
 

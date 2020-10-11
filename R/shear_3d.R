@@ -40,23 +40,48 @@
 #' library(ggplot2)
 #'
 #' # Set seed
-#' set.seed(3)
+#' set.seed(1)
 #'
-#' # Create a data frame
-#' df <- data.frame(
-#'   "x" = 1:12,
-#'   "y" = c(
-#'     1, 2, 3, 4, 9, 10, 11,
-#'     12, 15, 16, 17, 18
-#'   ),
-#'   "z" = runif(12),
-#'   "g" = c(
-#'     1, 1, 1, 1, 2, 2,
-#'     2, 2, 3, 3, 3, 3
-#'   )
+#' df_square <- square(runif(100)) %>%
+#'   rename(x = .square_x,
+#'          y = Value) %>%
+#'   mutate(z = 1)
+#'
+#' # Shear the x variable with regards to y
+#' # around the centroid
+#' df_sheared <- shear_3d(
+#'   data = df_square,
+#'   x_col = "x",
+#'   y_col = "y",
+#'   z_col = "z",
+#'   x_shear = 2,
+#'   z_shear = 4,
+#'   origin_fn = centroid
 #' )
 #'
-#' # TODO Add examples ;)
+#' # Plot sheared data
+#' # Black: original points
+#' # Red: sheared points
+#' # Size: sheared z value
+#' df_sheared %>%
+#'   ggplot(aes(x = x, y = y)) +
+#'   geom_point() +
+#'   geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+#'   theme_minimal()
+#'
+#' \dontrun{
+#' # Plot 3d with plotly
+#' plotly::plot_ly(
+#'   x = df_sheared$x_sheared,
+#'   y = df_sheared$y_sheared,
+#'   z = df_sheared$z_sheared,
+#'   type = "scatter3d",
+#'   mode = "markers",
+#'   color = df_sheared$.shear_str
+#' )
+#' }
+#'
+#'
 #' }
 shear_3d <- function(data,
                      x_col,
@@ -213,7 +238,7 @@ shear_3d_mutator_method_ <- function(data,
     shear_amounts <- list(x_shear, y_shear, z_shear)
     shear_amounts <- replace(shear_amounts, shear_amounts == "NULL", NA_real_)
     data[[shear_col_name]] <- list_coordinates_(shear_amounts, names = cols)
-    data <- paste_coordinates_column_(data, shear_col_name)
+    data <- paste_coordinates_column_(data, shear_col_name, na.rm = TRUE)
   }
   if (!is.null(origin_col_name)) {
     data[[origin_col_name]] <- list_coordinates_(origin, names = cols)

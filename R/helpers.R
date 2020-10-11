@@ -440,14 +440,28 @@ list_coordinates_ <- function(coordinates, names) {
 }
 
 # Paste a list column where each element is c(x = 1, y = d)
-paste_coordinates_column_ <- function(data, col) {
+paste_coordinates_column_ <- function(data, col, na.rm=FALSE) {
   str_name <- paste0(col, "_str")
-  # data[[col]] <- purrr::map(.x = data[[col]], .f = ~{purrr::map(.f = round(.x, digits = digits))})
+
+  # Remove NAs
+  if (isTRUE(na.rm)){
+    data[[col]] <- purrr::map(.x = data[[col]], .f = ~{
+      #purrr::map(.f = round(.x, digits = digits))
+      .x[!is.na(.x)]
+      })
+  }
+
+  # Paste coordinates
   data[[str_name]] <- paste0(data[[col]])
+
+  # Whether to cut away "list(" or "c("
+  start_char <- ifelse(is.list(data[[col]][[1]]), 6, 3)
   data[[str_name]] <- substr(data[[str_name]],
-    start = 3,
+    start = start_char,
     stop = nchar(data[[str_name]]) - 1
   )
+
+  # Remove whitespace
   data[[str_name]] <- gsub("[[:blank:]]+", "", data[[str_name]])
 
   data

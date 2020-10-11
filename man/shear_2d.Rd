@@ -14,7 +14,7 @@ shear_2d(
   origin = NULL,
   origin_fn = NULL,
   keep_original = TRUE,
-  shear_col_name = ".shearing",
+  shear_col_name = ".shear",
   origin_col_name = ".origin",
   overwrite = FALSE
 )
@@ -94,8 +94,8 @@ library(ggplot2)
 
 # Create a data frame
 df <- data.frame(
-  "x" = rep(1:6, each=2),
-  "y" = rep(c(1,4), 6),
+  "x" = rep(1:6, each = 2),
+  "y" = rep(c(1, 4), 6),
   "g" = c(
     1, 1, 1, 1, 1, 1,
     2, 2, 2, 2, 2, 2
@@ -167,22 +167,7 @@ shear_2d(
 )
 }
 }
-\seealso{
-Other mutate functions: 
-\code{\link{apply_transformation_matrix}()},
-\code{\link{cluster_groups}()},
-\code{\link{dim_values}()},
-\code{\link{expand_distances_each}()},
-\code{\link{expand_distances}()},
-\code{\link{flip_values}()},
-\code{\link{roll_values}()},
-\code{\link{rotate_2d}()},
-\code{\link{rotate_3d}()},
-\code{\link{swirl_2d}()},
-\code{\link{swirl_3d}()}
-}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
-\concept{mutate functions}
-\concept{shearing functions}
+\keyword{internal}
