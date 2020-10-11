@@ -223,6 +223,7 @@ plotly::plot_ly(
 }
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},

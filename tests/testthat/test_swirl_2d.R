@@ -149,7 +149,7 @@ test_that("fuzz testing swirl_2d()", {
   # Testing column names
   expect_equal(
     names(output_19370),
-    c("x", "y", "g", ".origin", ".degrees", ".radius"),
+    c("g", "x", "y", ".origin", ".degrees", ".radius"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -281,7 +281,7 @@ test_that("fuzz testing swirl_2d()", {
   # Testing column names
   expect_equal(
     names(output_17365),
-    c("x", "y", "g", ".origin", ".degrees", ".radius"),
+    c("g", "x", "y", ".origin", ".degrees", ".radius"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -1574,7 +1574,7 @@ test_that("fuzz testing swirl_2d()", {
   side_effects_19735 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19735[['error']]),
-    xpectr::strip("1 assertions failed:\n * The column 'x' already exists and 'overwrite' is disabled."),
+    xpectr::strip("Adding these dimensions would overwrite existing columns: x, y."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19735[['error_class']]),

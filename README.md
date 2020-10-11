@@ -93,20 +93,21 @@ version:
 
 ### Mutators
 
-| Function                  | Description                                                           | Dimensions   |
-| :------------------------ | :-------------------------------------------------------------------- | :----------- |
-| `rotate_2d()`             | Rotate values around an origin in 2 dimensions.                       | 2            |
-| `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
-| `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
-| `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
-| `expand_distances()`      | Expand distances to an origin.                                        | n            |
-| `expand_distances_each()` | Expand distances to an origin separately for each dimension.          | n            |
-| `cluster_groups()`        | Move data points into clusters around group centroids.                | n            |
-| `dim_values()`            | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
-| `flip_values()`           | Flip the values around an origin.                                     | n            |
-| `roll_values()`           | Shifts values and wraps to a range.                                   | n            |
-| `wrap_to_range()`         | Wraps values to a range.                                              | n            |
-| `transfer_centroids()`    | Transfer centroids from one `data.frame` to another.                  | n            |
+| Function                        | Description                                                           | Dimensions   |
+| :------------------------------ | :-------------------------------------------------------------------- | :----------- |
+| `rotate_2d()`                   | Rotate values around an origin in 2 dimensions.                       | 2            |
+| `rotate_3d()`                   | Rotate values around an origin in 3 dimensions.                       | 3            |
+| `swirl_2d()`                    | Swirl values around an origin in 2 dimensions.                        | 2            |
+| `swirl_3d()`                    | Swirl values around an origin in 3 dimensions.                        | 3            |
+| `expand_distances()`            | Expand distances to an origin.                                        | n            |
+| `expand_distances_each()`       | Expand distances to an origin separately for each dimension.          | n            |
+| `cluster_groups()`              | Move data points into clusters around group centroids.                | n            |
+| `dim_values()`                  | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
+| `flip_values()`                 | Flip the values around an origin.                                     | n            |
+| `roll_values()`                 | Shifts values and wraps to a range.                                   | n            |
+| `wrap_to_range()`               | Wraps values to a range.                                              | n            |
+| `transfer_centroids()`          | Transfer centroids from one `data.frame` to another.                  | n            |
+| `apply_transformation_matrix()` | Apply transformation `matrix` to `data.frame` columns.                | n            |
 
 ### Formers
 
@@ -163,7 +164,7 @@ measuring functions) are listed at the bottom of the readme.
           - [Converters](#converters)
           - [Scalers](#scalers)
           - [Measuring functions](#measuring-functions)
-          - [Helpers functions](#helpers-functions)
+          - [Helper functions](#helper-functions)
 
 ## Attach packages
 
@@ -747,7 +748,7 @@ generate_clusters(
 | `angle()`         | Calculates angle between points and an origin.                  |
 | `vector_length()` | Calculates vector length/magnitude *row-wise* or *column-wise*. |
 
-### Helpers functions
+### Helper functions
 
 | Function             | Description                                                          |
 | :------------------- | :------------------------------------------------------------------- |

@@ -362,10 +362,12 @@ expand_each_mutator_method_ <- function(data,
 
   # Move origin
   # x <- x - origin_coordinate
-  dim_vectors <-
-    purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      .x - .y
-    })
+  if (!is_zero_vector_(origin)){
+    dim_vectors <-
+      purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
+        .x - .y
+      })
+  }
 
   # Apply expansion
   if (isTRUE(exponentiate)) {
@@ -397,10 +399,12 @@ expand_each_mutator_method_ <- function(data,
   }
 
   # Move origin
-  dim_vectors <-
-    purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      .x + .y
-    })
+  if (!is_zero_vector_(origin)){
+    dim_vectors <-
+      purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
+        .x + .y
+      })
+  }
 
   # Add expanded columns to data
 

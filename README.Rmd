@@ -111,6 +111,7 @@ Development version:
 |`roll_values()`        |Shifts values and wraps to a range.                                    |n           |
 |`wrap_to_range()`      |Wraps values to a range.                                               |n           |
 |`transfer_centroids()` |Transfer centroids from one `data.frame` to another.                   |n           |
+|`apply_transformation_matrix()` |Apply transformation `matrix` to `data.frame` columns.        |n           |
 
 ### Formers
 

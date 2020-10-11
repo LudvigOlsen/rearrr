@@ -170,13 +170,17 @@ shear_2d_mutator_method_ <- function(data,
   )
 
   # Move origin
-  x <- x - origin[[1]]
+  if (!is_zero_vector_(origin)){
+    x <- x - origin[[1]]
+  }
 
   # Shear in x-axis
   x <- x + x_shear * (y - origin[[2]])
 
   # Move origin
-  x <- x + origin[[1]]
+  if (!is_zero_vector_(origin)){
+    x <- x + origin[[1]]
+  }
 
   # Add sheared columns to data
   data <- add_info_col_(

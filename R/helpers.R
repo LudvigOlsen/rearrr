@@ -177,6 +177,15 @@ is_between_ <- function(x, a, b) {
 }
 
 
+##  .................. #< 56db9e9358659a166e5bb2c662733e42 ># ..................
+##  Is zero vector                                                          ####
+
+
+is_zero_vector_ <- function(v){
+  is.numeric(v) && all(v == 0)
+}
+
+
 ##  .................. #< 76a9352ccecc01349336a01b9a870511 ># ..................
 ##  Greedy windows                                                          ####
 

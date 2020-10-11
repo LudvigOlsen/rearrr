@@ -208,10 +208,12 @@ rotate_2d_mutator_method_ <- function(data,
   if (is.null(x_col)) {
     x_col <- "Index"
     x <- seq_len(nrow(data))
+    cols <- c(x_col, y_col)
   } else {
     x <- data[[x_col]]
   }
   y <- data[[y_col]]
+  dim_vectors <- list(x, y)
 
   # Find origin if specified
   origin <- apply_coordinate_fn_(
@@ -226,35 +228,21 @@ rotate_2d_mutator_method_ <- function(data,
     allow_len_one = FALSE
   )
 
-  # Move origin
-  x <- x - origin[[1]]
-  y <- y - origin[[2]]
-
-  # Convert to matrix
-  xy_matrix <- rbind(x, y)
-
   # Apply rotation matrix
-  xy_matrix <- rotation_matrix %*% xy_matrix
-
-  # Extract x and y
-  x <- xy_matrix[1, ]
-  y <- xy_matrix[2, ]
-
-  # Move origin
-  x <- x + origin[[1]]
-  y <- y + origin[[2]]
+  # Handles moving of the origin
+  dim_vectors <- apply_transformation_matrix_dim_vectors_(
+    dim_vectors = dim_vectors,
+    mat = rotation_matrix,
+    cols = cols,
+    origin = origin
+  )
 
   # Add rotated columns to data
-  data <- add_info_col_(
+  # Add dim_vectors as columns with the suffix
+  data <- add_dimensions_(
     data = data,
-    nm = paste0(x_col, suffix),
-    content = x,
-    overwrite = overwrite
-  )
-  data <- add_info_col_(
-    data = data,
-    nm = paste0(y_col, suffix),
-    content = y,
+    new_vectors = setNames(dim_vectors, cols),
+    suffix = suffix,
     overwrite = overwrite
   )
 

@@ -40,6 +40,8 @@ Note: Multiple of the new functions also have `*_vec()` versions that take and r
 
 * Adds `transfer_centroids()` for transferring centroids from one `data.frame` to another. (Mutator)
 
+* Adds `apply_transformation_matrix()` for performing matrix multiplication with a given transformation matrix
+and a set of `data.frame` columns. Allows moving the origin before and after the transformation.
 
 ## Formers
 

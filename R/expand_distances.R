@@ -321,10 +321,12 @@ expand_mutator_method_ <- function(data,
 
   # Move origin
   # x <- x - origin_coordinate
-  dim_vectors <-
-    purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      .x - .y
-    })
+  if (!is_zero_vector_(origin)){
+    dim_vectors <-
+      purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
+        .x - .y
+      })
+  }
 
   # Calculate distances
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
@@ -359,10 +361,12 @@ expand_mutator_method_ <- function(data,
   }
 
   # Move origin
-  expanded_dim_vectors <-
-    purrr::map2(.x = expanded_dim_vectors, .y = origin, .f = ~ {
-      .x + .y
-    })
+  if (!is_zero_vector_(origin)){
+    expanded_dim_vectors <-
+      purrr::map2(.x = expanded_dim_vectors, .y = origin, .f = ~ {
+        .x + .y
+      })
+  }
 
   # Add expanded columns to data
 

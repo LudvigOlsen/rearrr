@@ -1,6 +1,5 @@
 
 
-
 #   __________________ #< e3dcc976d88c1f44e868b048aaf7d875 ># __________________
 #   Rotate 3d                                                               ####
 
@@ -308,10 +307,6 @@ rotate_3d_mutator_method_ <- function(data,
                                       origin_fn,
                                       origin_col_name,
                                       ...) {
-  # Extract columns
-  x_col <- cols[[1]]
-  y_col <- cols[[2]]
-  z_col <- cols[[3]]
 
   # Create rotation matrix
   rotation_matrix <- create_rotation_matrix_3d_(
@@ -320,14 +315,12 @@ rotate_3d_mutator_method_ <- function(data,
     z_deg = z_deg
   )
 
-  # Extract x and y values
-  x <- data[[x_col]]
-  y <- data[[y_col]]
-  z <- data[[z_col]]
+  # Convert columns to list of vectors
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
   origin <- apply_coordinate_fn_(
-    dim_vectors = list(x, y, z),
+    dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
     num_dims = length(cols),
@@ -338,33 +331,21 @@ rotate_3d_mutator_method_ <- function(data,
     allow_len_one = FALSE
   )
 
-  # Move origin
-  x <- x - origin[[1]]
-  y <- y - origin[[2]]
-  z <- z - origin[[3]]
-
-  # Convert to matrix
-  xyz_matrix <- rbind(x, y, z)
-
   # Apply rotation matrix
-  xyz_matrix <- rotation_matrix %*% xyz_matrix
-
-  # Extract x and y
-  x <- xyz_matrix[1, ]
-  y <- xyz_matrix[2, ]
-  z <- xyz_matrix[3, ]
-
-  # Move origin
-  x <- x + origin[[1]]
-  y <- y + origin[[2]]
-  z <- z + origin[[3]]
+  # Handles moving of the origin
+  dim_vectors <- apply_transformation_matrix_dim_vectors_(
+    dim_vectors = dim_vectors,
+    mat = rotation_matrix,
+    cols = cols,
+    origin = origin
+  )
 
   # Add rotated columns to data
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(
-      list(x, y, z),
-      c(x_col, y_col, z_col)),
+      dim_vectors,
+      cols),
     suffix = suffix,
     overwrite = overwrite
   )
