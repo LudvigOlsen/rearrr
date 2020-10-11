@@ -10,9 +10,9 @@
 #'
 #'  Perform \link[matmult]{matrix multiplication} with a transformation matrix and a set of \code{data.frame} columns.
 #'
-#'  The values in \code{`data`} are moved prior to the transformation, to bring
+#'  The data points in \code{`data`} are moved prior to the transformation, to bring
 #'  the origin to \code{0} in all dimensions. After the transformation, the
-#'  inverse move is applied to bring the origin back to its original position.
+#'  inverse move is applied to bring the origin back to its original position. See \code{`Details`} section.
 #'
 #'  The columns in \code{`data`} are transposed, making the operation (without the origin movement):
 #'  \deqn{mat · data[, cols]^T}

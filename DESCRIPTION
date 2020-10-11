@@ -18,7 +18,7 @@ Imports:
     lifecycle,
     plyr,
     purrr (>= 0.3.4),
-    rlang (>= 0.4.0),
+    rlang (>= 0.4.7),
     stats,
     utils
 Suggests: 

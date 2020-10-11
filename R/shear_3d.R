@@ -189,7 +189,7 @@ shear_3d_mutator_method_ <- function(data,
     allow_len_one = FALSE
   )
 
-  # Apply rotation matrix
+  # Apply shearing matrix
   # Handles moving of the origin
   dim_vectors <- apply_transformation_matrix_dim_vectors_(
     dim_vectors = dim_vectors,
