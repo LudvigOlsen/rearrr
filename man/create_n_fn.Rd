@@ -39,6 +39,9 @@ argument in \code{create_n_fn()}).
 
 Creates a function that applies a supplied function to all
 input vectors, or their indices, and rounds the results.
+
+As used with \code{\link[rearrr::roll_elements]{roll_elements()}}. E.g. to
+find the the median index in a subset of a grouped \code{data.frame}.
 }
 \examples{
 \donttest{
@@ -87,6 +90,16 @@ round(c(
 ))
 }
 }
+\seealso{
+Other n functions: 
+\code{\link{median_index}()}
+
+Other function creators: 
+\code{\link{create_dimming_fn}()},
+\code{\link{create_origin_fn}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{function creators}
+\concept{n functions}

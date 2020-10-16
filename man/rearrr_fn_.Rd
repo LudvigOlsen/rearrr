@@ -13,7 +13,7 @@ rearrr_fn_(data, origin_fn, check_fn, allowed_types, force_df, min_dims)
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.

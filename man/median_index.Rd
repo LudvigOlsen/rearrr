@@ -52,6 +52,11 @@ quantile_index(x, y, z, prob = 0.2)
 median_index(x, y, z, negate = TRUE)
 }
 }
+\seealso{
+Other n functions: 
+\code{\link{create_n_fn}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{n functions}

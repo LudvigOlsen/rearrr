@@ -11,6 +11,9 @@
 #'  Creates a function that applies a supplied function to all
 #'  input vectors, or their indices, and rounds the results.
 #'
+#'  As used with \code{\link[rearrr::roll_elements]{roll_elements()}}. E.g. to
+#'  find the the median index in a subset of a grouped \code{data.frame}.
+#'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param fn Function to apply to each dimension. Should return a numeric scalar.
 #' @param use_index Whether to apply \code{`fn`} to the \emph{indices} of the vectors. (Logical)
@@ -26,6 +29,8 @@
 #'  To avoid rounding, supply \code{\link[base:identity]{identity}}.
 #' @param ... Arguments for \code{`fn`}. E.g. \code{`na.rm = TRUE`}.
 #' @export
+#' @family n functions
+#' @family function creators
 #' @return Function with the dots (\code{`...`}) argument
 #'  that applies the \code{`fn`} function to
 #'  each element in \code{`...`} (or indices thereof) (usually one vector per dimension).
@@ -134,6 +139,7 @@ create_n_fn <- function(fn,
 #'
 #'  E.g. \code{\link[base:Round]{round}}, \code{\link[base:Round]{floor}}, or \code{\link[base:Round]{ceiling}}.
 #' @export
+#' @family n functions
 #' @return \code{numeric vector} with one element per supplied vector.
 #' @examples
 #' \donttest{

@@ -80,6 +80,12 @@ ggplot(df, aes(x=d, y=x_dimmed)) +
   theme_minimal()
 }
 }
+\seealso{
+Other function creators: 
+\code{\link{create_n_fn}()},
+\code{\link{create_origin_fn}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{function creators}

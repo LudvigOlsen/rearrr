@@ -28,6 +28,7 @@
 #' @param add_to_distance Constant to add to the distance before exponentiation.
 #'  Ensures dimming even when the distance (\code{d}) is below \code{1}. Defaults to \code{1}.
 #' @export
+#' @family function creators
 #' @return Function with the arguments \code{x} and \code{d},
 #'  with both expected to be \code{numeric vector}s. More specifically:
 #'
