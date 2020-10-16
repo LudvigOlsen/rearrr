@@ -49,12 +49,13 @@ min_max_scale <- function(x,
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_numeric(x, add = assert_collection)
   checkmate::assert_number(new_min, finite = TRUE, add = assert_collection)
   checkmate::assert_number(new_max, finite = TRUE, add = assert_collection)
   checkmate::assert_number(old_min, finite = TRUE, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(old_max, finite = TRUE, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(na.rm, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  checkmate::assert_numeric(x, any.missing = na.rm, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
@@ -64,6 +65,11 @@ min_max_scale <- function(x,
   if (is.null(old_max)) {
     old_max <- max(x, na.rm = na.rm)
   }
-  x <- (x - old_min) / (old_max - old_min)
+  diff <- (old_max - old_min)
+  # Avoiding zero-division
+  if (diff == 0){
+    diff <- 1
+  }
+  x <- (x - old_min) / diff
   x * (new_max - new_min) + new_min
 }

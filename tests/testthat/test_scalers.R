@@ -14,7 +14,7 @@ test_that("min_max_scale()", {
   # xpectr::gxs_function(
   #   fn = min_max_scale,
   #   args_values = list(
-  #     "x" = list(vec, "hej", c(vec, NA)),
+  #     "x" = list(vec, c(0, 0, 0), "hej", c(vec, NA)),
   #     "new_min" = list(0, 5, NA),
   #     "new_max" = list(1, 6, NA),
   #     "old_min" = list(NULL, -5, NA),
@@ -64,18 +64,51 @@ test_that("min_max_scale()", {
     sum(xpectr::element_lengths(output_19148)),
     10L)
 
+  # Testing min_max_scale(x = c(0, 0, 0), new_min = 0, n...
+  # Changed from baseline: x = c(0, 0, 0)
+  xpectr::set_test_seed(42)
+  # Assigning output
+  output_19370 <- min_max_scale(x = c(0, 0, 0), new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE)
+  # Testing class
+  expect_equal(
+    class(output_19370),
+    "numeric",
+    fixed = TRUE)
+  # Testing type
+  expect_type(
+    output_19370,
+    type = "double")
+  # Testing values
+  expect_equal(
+    output_19370,
+    c(0, 0, 0),
+    tolerance = 1e-4)
+  # Testing names
+  expect_equal(
+    names(output_19370),
+    NULL,
+    fixed = TRUE)
+  # Testing length
+  expect_equal(
+    length(output_19370),
+    3L)
+  # Testing sum of element lengths
+  expect_equal(
+    sum(xpectr::element_lengths(output_19370)),
+    3L)
+
   # Testing min_max_scale(x = "hej", new_min = 0, new_ma...
   # Changed from baseline: x = "hej"
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19370 <- xpectr::capture_side_effects(min_max_scale(x = "hej", new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
+  side_effects_12861 <- xpectr::capture_side_effects(min_max_scale(x = "hej", new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19370[['error']]),
+    xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x': Must be of type 'numeric', not 'character'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19370[['error_class']]),
+    xpectr::strip(side_effects_12861[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -83,34 +116,34 @@ test_that("min_max_scale()", {
   # Changed from baseline: x = c(vec, NA)
   xpectr::set_test_seed(42)
   # Assigning output
-  output_12861 <- min_max_scale(x = c(vec, NA), new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE)
+  output_18304 <- min_max_scale(x = c(vec, NA), new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE)
   # Testing class
   expect_equal(
-    class(output_12861),
+    class(output_18304),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_12861,
+    output_18304,
     type = "double")
   # Testing values
   expect_equal(
-    output_12861,
+    output_18304,
     c(0.97225, 1, 0.18877, 0.86712, 0.63195, 0.47909, 0.75014, 0, 0.65095,
       0.71086, NA),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_12861),
+    names(output_18304),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_12861),
+    length(output_18304),
     11L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_12861)),
+    sum(xpectr::element_lengths(output_18304)),
     11L)
 
   # Testing min_max_scale(x = NULL, new_min = 0, new_max...
@@ -118,82 +151,63 @@ test_that("min_max_scale()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_18304 <- xpectr::capture_side_effects(min_max_scale(x = NULL, new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
+  side_effects_16417 <- xpectr::capture_side_effects(min_max_scale(x = NULL, new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18304[['error']]),
+    xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'x': Must be of type 'numeric', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_18304[['error_class']]),
+    xpectr::strip(side_effects_16417[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
   # Testing min_max_scale(x = c(vec, NA), new_min = 0, n...
   # Changed from baseline: x, na.rm
   xpectr::set_test_seed(42)
-  # Assigning output
-  output_16417 <- min_max_scale(x = c(vec, NA), new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = FALSE)
-  # Testing class
+  # Testing side effects
+  # Assigning side effects
+  side_effects_15190 <- xpectr::capture_side_effects(min_max_scale(x = c(vec, NA), new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = FALSE), reset_seed = TRUE)
   expect_equal(
-    class(output_16417),
-    "numeric",
+    xpectr::strip(side_effects_15190[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'x': Contains missing values (element 11)."),
     fixed = TRUE)
-  # Testing type
-  expect_type(
-    output_16417,
-    type = "double")
-  # Testing values
   expect_equal(
-    output_16417,
-    c(NA_real_, NA_real_, NA_real_, NA_real_, NA_real_, NA_real_, NA_real_,
-      NA_real_, NA_real_, NA_real_, NA_real_),
-    tolerance = 1e-4)
-  # Testing names
-  expect_equal(
-    names(output_16417),
-    NULL,
+    xpectr::strip(side_effects_15190[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
-  # Testing length
-  expect_equal(
-    length(output_16417),
-    11L)
-  # Testing sum of element lengths
-  expect_equal(
-    sum(xpectr::element_lengths(output_16417)),
-    11L)
 
   # Testing min_max_scale(x = vec, new_min = 5, new_max ...
   # Changed from baseline: new_min = 5
   xpectr::set_test_seed(42)
   # Assigning output
-  output_15190 <- min_max_scale(x = vec, new_min = 5, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE)
+  output_17365 <- min_max_scale(x = vec, new_min = 5, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE)
   # Testing class
   expect_equal(
-    class(output_15190),
+    class(output_17365),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_15190,
+    output_17365,
     type = "double")
   # Testing values
   expect_equal(
-    output_15190,
+    output_17365,
     c(1.11101, 1, 4.24491, 1.53154, 2.47222, 3.08362, 1.99943, 5, 2.39621,
       2.15657),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_15190),
+    names(output_17365),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_15190),
+    length(output_17365),
     10L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_15190)),
+    sum(xpectr::element_lengths(output_17365)),
     10L)
 
   # Testing min_max_scale(x = vec, new_min = NA, new_max...
@@ -201,13 +215,13 @@ test_that("min_max_scale()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17365 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = NA, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
+  side_effects_11346 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = NA, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17365[['error']]),
+    xpectr::strip(side_effects_11346[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'new_min': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17365[['error_class']]),
+    xpectr::strip(side_effects_11346[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -216,13 +230,13 @@ test_that("min_max_scale()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_11346 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = NULL, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
+  side_effects_16569 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = NULL, new_max = 1, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error']]),
+    xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'new_min': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_11346[['error_class']]),
+    xpectr::strip(side_effects_16569[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -230,34 +244,34 @@ test_that("min_max_scale()", {
   # Changed from baseline: new_max = 6
   xpectr::set_test_seed(42)
   # Assigning output
-  output_16569 <- min_max_scale(x = vec, new_min = 0, new_max = 6, old_min = NULL, old_max = NULL, na.rm = TRUE)
+  output_17050 <- min_max_scale(x = vec, new_min = 0, new_max = 6, old_min = NULL, old_max = NULL, na.rm = TRUE)
   # Testing class
   expect_equal(
-    class(output_16569),
+    class(output_17050),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_16569,
+    output_17050,
     type = "double")
   # Testing values
   expect_equal(
-    output_16569,
+    output_17050,
     c(5.83348, 6, 1.13264, 5.20269, 3.79168, 2.87456, 4.50086, 0, 3.90568,
       4.26514),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_16569),
+    names(output_17050),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_16569),
+    length(output_17050),
     10L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_16569)),
+    sum(xpectr::element_lengths(output_17050)),
     10L)
 
   # Testing min_max_scale(x = vec, new_min = 0, new_max ...
@@ -265,13 +279,13 @@ test_that("min_max_scale()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_17050 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = NA, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
+  side_effects_14577 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = NA, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17050[['error']]),
+    xpectr::strip(side_effects_14577[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'new_max': May not be NA."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_17050[['error_class']]),
+    xpectr::strip(side_effects_14577[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -280,13 +294,13 @@ test_that("min_max_scale()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_14577 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = NULL, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
+  side_effects_17191 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = NULL, old_min = NULL, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error']]),
+    xpectr::strip(side_effects_17191[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'new_max': Must be of type 'number', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_14577[['error_class']]),
+    xpectr::strip(side_effects_17191[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
@@ -294,34 +308,34 @@ test_that("min_max_scale()", {
   # Changed from baseline: old_min = -5
   xpectr::set_test_seed(42)
   # Assigning output
-  output_17191 <- min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = -5, old_max = NULL, na.rm = TRUE)
+  output_19346 <- min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = -5, old_max = NULL, na.rm = TRUE)
   # Testing class
   expect_equal(
-    class(output_17191),
+    class(output_19346),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_17191,
+    output_19346,
     type = "double")
   # Testing values
   expect_equal(
-    output_17191,
+    output_19346,
     c(0.97938, 1, 0.39724, 0.90126, 0.72653, 0.61296, 0.81435, 0.25698,
       0.74065, 0.78516),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_17191),
+    names(output_19346),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_17191),
+    length(output_19346),
     10L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_17191)),
+    sum(xpectr::element_lengths(output_19346)),
     10L)
 
   # Testing min_max_scale(x = vec, new_min = 0, new_max ...
@@ -329,25 +343,10 @@ test_that("min_max_scale()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19346 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NA, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19346[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'old_min': May not be NA."),
-    fixed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19346[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
-    fixed = TRUE)
-
-  # Testing min_max_scale(x = vec, new_min = 0, new_max ...
-  # Changed from baseline: old_max = NA
-  xpectr::set_test_seed(42)
-  # Testing side effects
-  # Assigning side effects
-  side_effects_12554 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NULL, old_max = NA, na.rm = TRUE), reset_seed = TRUE)
+  side_effects_12554 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NA, old_max = NULL, na.rm = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'old_max': May not be NA."),
+    xpectr::strip("1 assertions failed:\n * Variable 'old_min': May not be NA."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['error_class']]),
@@ -389,37 +388,52 @@ test_that("min_max_scale()", {
     10L)
 
   # Testing min_max_scale(x = vec, new_min = 0, new_max ...
+  # Changed from baseline: old_max = NA
+  xpectr::set_test_seed(42)
+  # Testing side effects
+  # Assigning side effects
+  side_effects_19400 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NULL, old_max = NA, na.rm = TRUE), reset_seed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19400[['error']]),
+    xpectr::strip("1 assertions failed:\n * Variable 'old_max': May not be NA."),
+    fixed = TRUE)
+  expect_equal(
+    xpectr::strip(side_effects_19400[['error_class']]),
+    xpectr::strip(c("simpleError", "error", "condition")),
+    fixed = TRUE)
+
+  # Testing min_max_scale(x = vec, new_min = 0, new_max ...
   # Changed from baseline: na.rm = FALSE
   xpectr::set_test_seed(42)
   # Assigning output
-  output_19400 <- min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = FALSE)
+  output_19782 <- min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = FALSE)
   # Testing class
   expect_equal(
-    class(output_19400),
+    class(output_19782),
     "numeric",
     fixed = TRUE)
   # Testing type
   expect_type(
-    output_19400,
+    output_19782,
     type = "double")
   # Testing values
   expect_equal(
-    output_19400,
+    output_19782,
     c(0.97225, 1, 0.18877, 0.86712, 0.63195, 0.47909, 0.75014, 0, 0.65095,
       0.71086),
     tolerance = 1e-4)
   # Testing names
   expect_equal(
-    names(output_19400),
+    names(output_19782),
     NULL,
     fixed = TRUE)
   # Testing length
   expect_equal(
-    length(output_19400),
+    length(output_19782),
     10L)
   # Testing sum of element lengths
   expect_equal(
-    sum(xpectr::element_lengths(output_19400)),
+    sum(xpectr::element_lengths(output_19782)),
     10L)
 
   # Testing min_max_scale(x = vec, new_min = 0, new_max ...
@@ -427,13 +441,13 @@ test_that("min_max_scale()", {
   xpectr::set_test_seed(42)
   # Testing side effects
   # Assigning side effects
-  side_effects_19782 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = NULL), reset_seed = TRUE)
+  side_effects_11174 <- xpectr::capture_side_effects(min_max_scale(x = vec, new_min = 0, new_max = 1, old_min = NULL, old_max = NULL, na.rm = NULL), reset_seed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19782[['error']]),
+    xpectr::strip(side_effects_11174[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'na.rm': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
-    xpectr::strip(side_effects_19782[['error_class']]),
+    xpectr::strip(side_effects_11174[['error_class']]),
     xpectr::strip(c("simpleError", "error", "condition")),
     fixed = TRUE)
 
