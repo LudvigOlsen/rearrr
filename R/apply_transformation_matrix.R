@@ -8,7 +8,7 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Perform \link[matmult]{matrix multiplication} with a transformation matrix and a set of \code{data.frame} columns.
+#'  Perform \link[base:matmult]{matrix multiplication} with a transformation matrix and a set of \code{data.frame} columns.
 #'
 #'  The data points in \code{`data`} are moved prior to the transformation, to bring
 #'  the origin to \code{0} in all dimensions. After the transformation, the
@@ -22,6 +22,9 @@
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param mat Transformation \code{matrix}. Must have the same number of columns as \code{`cols`}.
+#' @param origin Coordinates of the origin. \code{Vector} with the same number
+#'  of elements as \code{`cols`} (i.e. origin_x, origin_y, ...).
+#'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the new, transformed columns and the origin coordinates.

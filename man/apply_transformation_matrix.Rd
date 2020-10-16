@@ -23,6 +23,10 @@ apply_transformation_matrix(
 
 \item{cols}{Columns to mutate values of. Must be specified when \code{`data`} is a \code{data.frame}.}
 
+\item{origin}{Coordinates of the origin. \code{Vector} with the same number
+of elements as \code{`cols`} (i.e. origin_x, origin_y, ...).
+Ignored when \code{`origin_fn`} is not \code{NULL}.}
+
 \item{origin_fn}{Function for finding the origin coordinates.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
@@ -56,7 +60,7 @@ Some columns may have been overwritten, in which case only the newest versions a
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Perform \link[matmult]{matrix multiplication} with a transformation matrix and a set of \code{data.frame} columns.
+Perform \link[base:matmult]{matrix multiplication} with a transformation matrix and a set of \code{data.frame} columns.
 
 The data points in \code{`data`} are moved prior to the transformation, to bring
 the origin to \code{0} in all dimensions. After the transformation, the

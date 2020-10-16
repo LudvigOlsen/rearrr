@@ -6,7 +6,10 @@ Authors@R:
              family = "Olsen",
              role = c("aut", "cre"),
              email = "r-pkgs@ludvigolsen.dk"))
-Description: Arrange data by a set of methods.
+Description: Rearrrange data by a set of methods. Use rearrangers to reorder 
+    data points and mutators to change their values. From centering the greatest 
+    value to swirling in 3-dimensional space, rearrr enables creativity when 
+    plotting and experimenting with your data.
 License: MIT + file LICENSE
 URL: https://github.com/ludvigolsen/rearrr
 BugReports: https://github.com/ludvigolsen/rearrr/issues
