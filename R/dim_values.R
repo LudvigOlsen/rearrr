@@ -31,8 +31,8 @@
 #'  The dimming column (\code{`dim_col`}) is dimmed based on all the columns.
 #'  Each column is considered a dimension.
 #' @param origin Coordinates of the origin to dim around.
-#'  Must be either a single constant to use in all dimensions
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions
+#'  or a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param dimming_fn \code{Function} for calculating the dimmed values.

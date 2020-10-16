@@ -22,11 +22,11 @@ shear_2d(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{x_shear}{Shear factor for the x dimension (numeric scalar(s)). Decides the amount of shearing.
-Can be \code{vector}s with multiple shear factors.}
+\item{x_shear}{Shear factor for the x dimension (\code{numeric}). Decides the amount of shearing.
+Can be a \code{vector} with multiple shear factors.}
 
-\item{y_shear}{Shear factor for the y dimension (numeric scalar(s)). Decides the amount of shearing.
-Can be \code{vector}s with multiple shear factors.}
+\item{y_shear}{Shear factor for the y dimension (\code{numeric}). Decides the amount of shearing.
+Can be a \code{vector} with multiple shear factors.}
 
 \item{x_col}{Name of x column in \code{`data`}.}
 
@@ -36,7 +36,8 @@ Can be \code{vector}s with multiple shear factors.}
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to shear around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
+\item{origin}{Coordinates of the origin to shear around.
+\code{Vector} with 2 elements (origin_x, origin_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.

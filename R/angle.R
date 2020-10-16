@@ -25,8 +25,8 @@
 #'  the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param origin Coordinates of the origin to calculate angle to.
-#'  Must be either a single constant to use in all dimensions
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions
+#'  or a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param degrees_col_name Name of new column with the degrees.

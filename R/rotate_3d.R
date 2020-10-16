@@ -19,7 +19,8 @@
 #'
 #'  \code{`x_deg`} is \emph{roll}. \code{`y_deg`} is \emph{pitch}. \code{`z_deg`} is \emph{yaw}.
 #' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
-#' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+#' @param origin Coordinates of the origin to rotate around.
+#'  \code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #'

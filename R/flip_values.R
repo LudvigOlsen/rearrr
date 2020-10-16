@@ -31,8 +31,8 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param cols Names of columns in \code{`data`} to flip values of.
 #' @param origin Coordinates of the origin to flip around.
-#'  Must be either a single constant to use in all dimensions (columns)
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions (columns)
+#'  or a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.

@@ -24,8 +24,8 @@ flip_values_vec(data, origin = NULL, origin_fn = create_origin_fn(median))
 \item{cols}{Names of columns in \code{`data`} to flip values of.}
 
 \item{origin}{Coordinates of the origin to flip around.
-Must be either a single constant to use in all dimensions (columns)
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions (columns)
+or a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 

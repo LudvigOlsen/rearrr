@@ -35,7 +35,8 @@ Can be \code{vector}s with multiple degrees.
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+\item{origin}{Coordinates of the origin to rotate around.
+\code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.

@@ -27,8 +27,8 @@ expand_distances_each(
 Each column is considered a dimension to expand in.}
 
 \item{multipliers}{Constant(s) to multiply/exponentiate the distance to the origin by.
-Must be either a single constant to use in all dimensions or
-a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions or
+a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.}
 
@@ -43,8 +43,8 @@ Just as for \code{`origin_fn`}, it can be created with
 the same function to each dimension. See \code{`origin_fn`}.}
 
 \item{origin}{Coordinates of the origin to expand around.
-Must be either a single constant to use in all dimensions
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions
+or a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 

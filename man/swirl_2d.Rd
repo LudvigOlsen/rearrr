@@ -39,7 +39,8 @@ the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it 
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to swirl around. Must be a \code{vector} with 2 elements (i.e. origin_x, origin_y).
+\item{origin}{Coordinates of the origin to swirl around.
+\code{Vector} with 2 elements (i.e. origin_x, origin_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.

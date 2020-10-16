@@ -25,13 +25,14 @@
 #'  latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
 #'  of each group.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param x_shear Shear factor for the x dimension (numeric scalar(s)). Decides the amount of shearing.
-#'  Can be \code{vector}s with multiple shear factors.
-#' @param y_shear Shear factor for the y dimension (numeric scalar(s)). Decides the amount of shearing.
-#'  Can be \code{vector}s with multiple shear factors.
+#' @param x_shear Shear factor for the x dimension (\code{numeric}). Decides the amount of shearing.
+#'  Can be a \code{vector} with multiple shear factors.
+#' @param y_shear Shear factor for the y dimension (\code{numeric}). Decides the amount of shearing.
+#'  Can be a \code{vector} with multiple shear factors.
 #' @param x_col Name of x column in \code{`data`}.
 #' @param y_col Name of y column in \code{`data`}.
-#' @param origin Coordinates of the origin to shear around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
+#' @param origin Coordinates of the origin to shear around.
+#'  \code{Vector} with 2 elements (origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param shear_col_name Name of new column with the shearing factors. If \code{NULL}, no column is added.
 #'

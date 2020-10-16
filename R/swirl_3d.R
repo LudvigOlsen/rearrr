@@ -27,7 +27,8 @@
 #'  Note: With a custom \code{`scaling_fn`}, these might not be the actual swirl radiuses anymore. Think of
 #'  them more as width settings where a larger number leads to fewer full rotations.
 #' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
-#' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+#' @param origin Coordinates of the origin to swirl around.
+#'  \code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param scale_fn Function for scaling the distances before calculating the degrees.
 #'

@@ -19,8 +19,8 @@
 #' @param cols Names of columns in \code{`data`} to measure distance in.
 #'  Each column is considered a dimension.
 #' @param origin Coordinates of the origin to calculate distances to.
-#'  Must be either a single constant to use in all dimensions
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions
+#'  or a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param distance_col_name Name of new column with the distances.

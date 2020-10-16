@@ -19,7 +19,8 @@
 #' @param x_col Name of x column in \code{`data`}. If \code{NULL} and \code{`data`} is a \code{vector},
 #'  the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
-#' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
+#' @param origin Coordinates of the origin to rotate around.
+#'  A \code{vector} with 2 elements (i.e. origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.

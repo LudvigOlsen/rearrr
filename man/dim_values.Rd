@@ -47,8 +47,8 @@ This kind of dimming function can be created with
 which for instance makes it easy to change the exponent (the \code{2} above).}
 
 \item{origin}{Coordinates of the origin to dim around.
-Must be either a single constant to use in all dimensions
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions
+or a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 

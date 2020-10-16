@@ -32,13 +32,13 @@
 #' @param cols Names of columns in \code{`data`} to expand.
 #'  Each column is considered a dimension to expand in.
 #' @param origin Coordinates of the origin to expand around.
-#'  Must be either a single constant to use in all dimensions
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions
+#'  or a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param multipliers Constant(s) to multiply/exponentiate the distance to the origin by.
-#'  Must be either a single constant to use in all dimensions or
-#'  a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions or
+#'  a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
 #' @param multipliers_fn Function for finding the multipliers.
