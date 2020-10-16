@@ -34,6 +34,8 @@ Note: Multiple of the new functions also have `*_vec()` versions that take and r
 
 * Adds `swirl_2d()` and `swirl_3d()` for rotating values around an origin. (Mutator)
 
+* Adds `shear_2d()` and `shear_3d()` for shearing values around an origin. (Mutator)
+
 * Adds `flip_values()` for flipping values around a center value. (Mutator)
 
 * Adds `roll_values()` and `wrap_to_range()` for rolling/shifting values and wrapping to a range. (Mutator)

@@ -16,7 +16,8 @@
 #'
 #'  E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 #'
-#'  \strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+#'  \strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+#'  \code{\link[rearrr:most_centered]{most_centered()}},
 #'  and \code{\link[rearrr:midrange]{midrange()}}
 #' @param check_fn Function with checks post-preparation of \code{`data`} and \code{`col(s)`}.
 #'  Should not return anything.

@@ -3,10 +3,6 @@
 #   __________________ #< 7e8f15723958ac192ae9187ae855656b ># __________________
 #   shear 2d                                                                ####
 
-# TODO Add
-# @family mutate functions
-# @family shearing functions
-
 
 #' @title Shear the values around an origin in 2 dimensions
 #' @description
@@ -39,7 +35,9 @@
 #'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing factors
 #'  when plotting multiple shearings.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
-#' @keywords internal
+#' @family mutate functions
+#' @family shearing functions
+#' @export
 #' @return \code{data.frame} (\code{tibble}) with sheared columns, the shearing factors and the origin coordinates.
 #' @inheritParams multi_mutator_
 #' @examples

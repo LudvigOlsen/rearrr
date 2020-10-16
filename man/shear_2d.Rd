@@ -51,7 +51,8 @@ the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
@@ -168,7 +169,26 @@ shear_2d(
 )
 }
 }
+\seealso{
+Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
+\code{\link{cluster_groups}()},
+\code{\link{dim_values}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{flip_values}()},
+\code{\link{roll_values}()},
+\code{\link{rotate_2d}()},
+\code{\link{rotate_3d}()},
+\code{\link{shear_3d}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
+
+Other shearing functions: 
+\code{\link{shear_3d}()}
+}
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
-\keyword{internal}
+\concept{mutate functions}
+\concept{shearing functions}

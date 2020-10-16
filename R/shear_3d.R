@@ -3,9 +3,6 @@
 #   __________________ #< cbb313c6f0b4b461ad626879ebe2ac6a ># __________________
 #   Shear 3d                                                                ####
 
-# TODO Add:
-# @family mutate functions
-# @family shearing functions
 
 #' @title Shear values around an origin in 3 dimensions
 #' @description
@@ -26,7 +23,7 @@
 #' @param x_shear,y_shear,z_shear Shear factor for the x/y/z dimension (\code{numeric}). Decides the amount of shearing.
 #'  Can be \code{vector}s with multiple shear factors.
 #'
-#'  \strong{N.B.} Exactly 2 shear factors must be specified.
+#'  \strong{N.B.} Exactly \strong{2} of the dimensions must have shear factors specified.
 #' @param origin Coordinates of the origin to shear around.
 #'  \code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
@@ -35,7 +32,9 @@
 #'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing amounts
 #'  when plotting multiple shears.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
-#' @keywords internal
+#' @family mutate functions
+#' @family shearing functions
+#' @export
 #' @details Applies one of the following transformation matrices, depending on which
 #'  two shearing amounts are specified:
 #'

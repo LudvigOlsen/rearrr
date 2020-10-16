@@ -99,10 +99,9 @@ Development version:
 
 | Function              | Description                                                           | Dimensions |
 |:----------------------|:----------------------------------------------------------------------|:-----------|
-|`rotate_2d()`          |Rotate values around an origin in 2 dimensions.                        |2           |
-|`rotate_3d()`          |Rotate values around an origin in 3 dimensions.                        |3           |
-|`swirl_2d()`           |Swirl values around an origin in 2 dimensions.                         |2           |
-|`swirl_3d()`           |Swirl values around an origin in 3 dimensions.                         |3           |
+|`rotate_2d()`, `rotate_3d()` |Rotate values around an origin in 2 or 3 dimensions.             |2 or 3      |
+|`swirl_2d()`, `swirl_3d()`   |Swirl values around an origin in 2 or 3 dimensions.              |2 or 3      |
+|`shear_2d()`, `shear_3d()`   |Shear values around an origin in 2 or 3 dimensions.              |2 or 3      |
 |`expand_distances()`   |Expand distances to an origin.                                         |n           |
 |`expand_distances_each()`|Expand distances to an origin separately for each dimension.         |n           |
 |`cluster_groups()`     |Move data points into clusters around group centroids.                 |n           |
