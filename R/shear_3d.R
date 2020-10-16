@@ -250,10 +250,8 @@ shear_3d <- function(data,
   check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
   # End of argument checks ####
 
-  if (!is.null(x_shear))
-    num_shears <- length(x_shear)
-  else
-    num_shears <- length(y_shear)
+  # Number of shearings to perform
+  num_shears <- max(lengths(list(x_shear, y_shear, z_shear)))
 
   # Define function for getting shearing factor
   # when it is specified

@@ -186,7 +186,7 @@ shear_2d <- function(data,
     .x = x_shear,
     .y = y_shear,
     .f = function(shear_x, shear_y) {
-      out <- multi_mutator_(
+      multi_mutator_(
         data = data,
         mutate_fn = shear_2d_mutator_method_,
         check_fn = NULL,
@@ -200,14 +200,9 @@ shear_2d <- function(data,
         overwrite = overwrite,
         origin = origin,
         origin_fn = origin_fn,
-        origin_col_name = origin_col_name
+        origin_col_name = origin_col_name,
+        shear_col_name = shear_col_name
       )
-      if (!is.null(shear_col_name)) {
-        out[[shear_col_name]] <- list_coordinates_(c(shear_x, shear_y), c(x_col, y_col))
-        out <- paste_coordinates_column_(out, shear_col_name)
-      }
-
-      out
     }
   )
 }
@@ -223,6 +218,7 @@ shear_2d_mutator_method_ <- function(data,
                                      origin,
                                      origin_fn,
                                      origin_col_name,
+                                     shear_col_name,
                                      ...) {
 
   # Creating shearing matrix
@@ -270,6 +266,12 @@ shear_2d_mutator_method_ <- function(data,
     content = list_coordinates_(origin, names = cols),
     check_overwrite = FALSE # Already checked
   )
+
+  if (!is.null(shear_col_name)){
+    data[[shear_col_name]] <- list_coordinates_(c(x_shear, y_shear), cols)
+    data <- paste_coordinates_column_(data, shear_col_name)
+  }
+
 
   data
 }
