@@ -11,9 +11,32 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Shear a set of 3d points around an origin.
+#'  Shears points around an origin in 3-dimensional space.
+#'  See applied shearing matrices under \strong{Details}.
 #'
-#'  Applies one of the following transformation matrices, depending on which
+#'  The data points in \code{`data`} are moved prior to the shearing, to bring
+#'  the origin to \code{0} in all dimensions. After the shearing, the
+#'  inverse move is applied to bring the origin back to its original position.
+#'
+#'  The origin can be supplied as coordinates or as a function that returns coordinates. The
+#'  latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
+#'  of each group.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
+#' @param x_shear,y_shear,z_shear Shear factor for the x/y/z dimension (\code{numeric}). Decides the amount of shearing.
+#'  Can be \code{vector}s with multiple shear factors.
+#'
+#'  \strong{N.B.} Exactly 2 shear factors must be specified.
+#' @param origin Coordinates of the origin to shear around.
+#'  \code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+#'  Ignored when \code{`origin_fn`} is not \code{NULL}.
+#' @param shear_col_name Name of new column with the shearing amounts. If \code{NULL}, no column is added.
+#'
+#'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing amounts
+#'  when plotting multiple shears.
+#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
+#' @keywords internal
+#' @details Applies one of the following transformation matrices, depending on which
 #'  two shearing amounts are specified:
 #'
 #'  Given \code{`x_shear`} and \code{`y_shear`}:
@@ -36,31 +59,8 @@
 #'  | :--- | :--- | :--- | :--- |
 #'  | [ \code{y_shear} |, \eqn{1} |, \eqn{0} | ] |
 #'  | [ \code{z_shear} |, \eqn{0} |, \eqn{1} | ] |
-#'
-#'  The data points in \code{`data`} are moved prior to the shearing, to bring
-#'  the origin to \code{0} in all dimensions. After the shearing, the
-#'  inverse move is applied to bring the origin back to its original position.
-#'
-#'  The origin can be supplied as coordinates or as a function that returns coordinates. The
-#'  latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
-#'  of each group.
-#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
-#' @param x_shear,y_shear,z_shear Shear factor for the x/y/z dimension (\code{numeric}). Decides the amount of shearing.
-#'  Can be \code{vector}s with multiple shear factors.
-#' @param origin Coordinates of the origin to shear around.
-#'  \code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
-#'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param shear_col_name Name of new column with the shearing amounts. If \code{NULL}, no column is added.
-#'
-#'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing amounts
-#'  when plotting multiple shears.
-#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
-#' @keywords internal
 #' @return \code{data.frame} (\code{tibble}) with six new columns containing
 #'  the sheared x-, y- and z-values and the shearing amounts and origin coordinates.
-#' @details
-#'  TODO
 #' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{

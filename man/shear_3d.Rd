@@ -27,7 +27,9 @@ shear_3d(
 \item{x_col, y_col, z_col}{Name of x/y/z column in \code{`data`}. All must be specified.}
 
 \item{x_shear, y_shear, z_shear}{Shear factor for the x/y/z dimension (\code{numeric}). Decides the amount of shearing.
-Can be \code{vector}s with multiple shear factors.}
+Can be \code{vector}s with multiple shear factors.
+
+\strong{N.B.} Exactly 2 shear factors must be specified.}
 
 \item{suffix}{Suffix to add to the names of the generated columns.
 
@@ -48,7 +50,7 @@ the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
@@ -71,8 +73,18 @@ the sheared x-, y- and z-values and the shearing amounts and origin coordinates.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Shear a set of 3d points around an origin.
+Shears points around an origin in 3-dimensional space.
+See applied shearing matrices under \strong{Details}.
 
+The data points in \code{`data`} are moved prior to the shearing, to bring
+the origin to \code{0} in all dimensions. After the shearing, the
+inverse move is applied to bring the origin back to its original position.
+
+The origin can be supplied as coordinates or as a function that returns coordinates. The
+latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
+of each group.
+}
+\details{
 Applies one of the following transformation matrices, depending on which
 two shearing amounts are specified:
 
@@ -95,18 +107,6 @@ Given \code{`y_shear`} and \code{`z_shear`}:\tabular{llll}{
    [ \code{y_shear} \tab , \eqn{1} \tab , \eqn{0} \tab ] \cr
    [ \code{z_shear} \tab , \eqn{0} \tab , \eqn{1} \tab ] \cr
 }
-
-
-The data points in \code{`data`} are moved prior to the shearing, to bring
-the origin to \code{0} in all dimensions. After the shearing, the
-inverse move is applied to bring the origin back to its original position.
-
-The origin can be supplied as coordinates or as a function that returns coordinates. The
-latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
-of each group.
-}
-\details{
-TODO
 }
 \examples{
 \donttest{
