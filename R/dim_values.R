@@ -8,7 +8,8 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Dims the values in the dimming dimension (last by default) based on the data point's distance to the origin.
+#'  Dims the values in the dimming dimension (last by default)
+#'  based on the data point's distance to the origin.
 #'
 #'  Distance is calculated as:
 #'  \deqn{d(P1, P2) = sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 + ... )}
@@ -27,9 +28,15 @@
 #'  of each group.
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
-#' @param cols Names of columns in \code{`data`}.
+#' @param cols Names of columns in \code{`data`} to calculate distances from.
 #'  The dimming column (\code{`dim_col`}) is dimmed based on all the columns.
 #'  Each column is considered a dimension.
+#'
+#'  \strong{N.B.} when the dimming dimension is included in \code{`cols`},
+#'  it is used in the distance calculation as well.
+#' @param dim_col Name of column to dim. Default is the last column in \code{`cols`}.
+#'
+#'  When the \code{`dim_col`} is not present in \code{`cols`}, it is not used in the distance calculation.
 #' @param origin Coordinates of the origin to dim around.
 #'  A scalar to use in all dimensions
 #'  or a \code{vector} with one scalar per dimension.
@@ -54,8 +61,6 @@
 #'  This kind of dimming function can be created with
 #'  \code{\link[rearrr:create_dimming_fn]{create_dimming_fn()}},
 #'  which for instance makes it easy to change the exponent (the \code{2} above).
-#'
-#' @param dim_col Name of column to dim. Default is the last column in \code{`cols`}. This column must also be in \code{`cols`}.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the dimmed column,
@@ -95,11 +100,12 @@
 #'   origin = c(0.5, 0.5, 0.5)
 #' )
 #'
-#' # Dim the values in the `o` column
+#' # Dim the values in the `o` column (all 1s)
 #' # around the centroid
 #' dim_values(
 #'   data = df,
-#'   cols = c("x", "y", "o"),
+#'   cols = c("x", "y"),
+#'   dim_col = "o",
 #'   origin_fn = centroid
 #' )
 #'
@@ -107,7 +113,8 @@
 #' # around the centroid
 #' dim_values(
 #'   data = df,
-#'   cols = c("x", "y", "o"),
+#'   cols = c("x", "y"),
+#'   dim_col = "o",
 #'   origin_fn = centroid,
 #'   dimming_fn = function(x, d) {
 #'     x * 1 / (2^(1 + d))
@@ -122,7 +129,8 @@
 #' df_dimmed <- df %>%
 #'   dplyr::group_by(.cluster) %>%
 #'   dim_values(
-#'     cols = c("x", "y", "o"),
+#'     cols = c("x", "y"),
+#'     dim_col = "o",
 #'     origin_fn = centroid
 #'   )
 #'
@@ -165,10 +173,6 @@ dim_values <- function(data,
   checkmate::assert_function(dimming_fn, nargs = 2, add = assert_collection)
   checkmate::assert_string(dim_col, min.chars = 1, null.ok = TRUE, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
-  if (!is.null(dim_col) && !is.null(cols) && dim_col %ni% cols) {
-    assert_collection$push("'dim_col' must be in 'cols'.")
-  }
-  checkmate::reportAssertions(assert_collection)
   # Check if we will need to overwrite columns
   check_unique_colnames_(cols, origin_col_name)
   check_overwrite_(data = data, nm = origin_col_name, overwrite = overwrite)
@@ -185,6 +189,7 @@ dim_values <- function(data,
     force_df = TRUE,
     keep_original = keep_original,
     min_dims = 2,
+    altered_col = dim_col,
     dimming_fn = dimming_fn,
     origin = origin,
     origin_fn = origin_fn,
@@ -211,7 +216,7 @@ dim_values_mutator_method_ <- function(data,
 
   # If cols was originally NULL, dim_col will also be NULL
   if (is.null(dim_col)) {
-    dim_col <- cols[[length(cols)]]
+    dim_col <- tail(cols, 1)
   }
 
   # Convert columns to list of vectors
@@ -234,13 +239,14 @@ dim_values_mutator_method_ <- function(data,
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
   distances <- calculate_distances_(dim_vectors = dim_vectors, to = origin)
 
-  # Apply dimmer
-  dimmed_dimension <- dimming_fn(dim_vectors[[dim_col]], distances)
+  # Apply dimming
+  dimmed_dimension <- dimming_fn(as.numeric(data[[dim_col]]), distances)
 
   if (length(dimmed_dimension) != length(distances)) {
     stop("the output of 'dimming_fn' must have the same length as the input.")
   }
 
+  # Add or overwrite dimming dimension
   dim_vectors[[dim_col]] <- dimmed_dimension
 
   # Add dim_vectors as columns with the suffix

@@ -23,8 +23,7 @@
 #' @param ... Named arguments for the \code{`mutate_fn`}.
 #' @inheritParams rearrr_fn_
 #' @keywords internal
-#' @return
-#'  The mutated \code{data.frame} (\code{tibble}).
+#' @return The mutated \code{data.frame} (\code{tibble}).
 multi_mutator_ <- function(data,
                            mutate_fn,
                            check_fn,
@@ -35,6 +34,7 @@ multi_mutator_ <- function(data,
                            allowed_types = c("numeric", "factor"),
                            allow_missing = FALSE,
                            min_dims = 1,
+                           altered_col = NULL,
                            keep_original = TRUE,
                            origin_fn = NULL, # For docs inheritance
                            ...) {
@@ -105,7 +105,9 @@ multi_mutator_ <- function(data,
     if (suffix == "" || isTRUE(was_vector)) {
       # The cols will be overwritten
       # so we shouldn't exclude them
-      exclude_cols <- setdiff(exclude_cols, cols)
+      # If we changed a column not in 'cols' (e.g. 'dim_col' in 'dim_values()')
+      # we make sure it is kept as well
+      exclude_cols <- setdiff(exclude_cols, c(cols, altered_col))
     }
   }
 

@@ -20,9 +20,12 @@ dim_values(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{cols}{Names of columns in \code{`data`}.
+\item{cols}{Names of columns in \code{`data`} to calculate distances from.
 The dimming column (\code{`dim_col`}) is dimmed based on all the columns.
-Each column is considered a dimension.}
+Each column is considered a dimension.
+
+\strong{N.B.} when the dimming dimension is included in \code{`cols`},
+it is used in the distance calculation as well.}
 
 \item{dimming_fn}{\code{Function} for calculating the dimmed values.
 
@@ -56,7 +59,7 @@ or a \code{vector} with one scalar per dimension.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
@@ -67,7 +70,9 @@ E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 \code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
-\item{dim_col}{Name of column to dim. Default is the last column in \code{`cols`}. This column must also be in \code{`cols`}.}
+\item{dim_col}{Name of column to dim. Default is the last column in \code{`cols`}.
+
+When the \code{`dim_col`} is not present in \code{`cols`}, it is not used in the distance calculation.}
 
 \item{suffix}{Suffix to add to the names of the generated columns.
 
@@ -88,7 +93,8 @@ along with the origin coordinates.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Dims the values in the dimming dimension (last by default) based on the data point's distance to the origin.
+Dims the values in the dimming dimension (last by default)
+based on the data point's distance to the origin.
 
 Distance is calculated as:
 \deqn{d(P1, P2) = sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 + ... )}
@@ -140,11 +146,12 @@ dim_values(
   origin = c(0.5, 0.5, 0.5)
 )
 
-# Dim the values in the `o` column
+# Dim the values in the `o` column (all 1s)
 # around the centroid
 dim_values(
   data = df,
-  cols = c("x", "y", "o"),
+  cols = c("x", "y"),
+  dim_col = "o",
   origin_fn = centroid
 )
 
@@ -152,7 +159,8 @@ dim_values(
 # around the centroid
 dim_values(
   data = df,
-  cols = c("x", "y", "o"),
+  cols = c("x", "y"),
+  dim_col = "o",
   origin_fn = centroid,
   dimming_fn = function(x, d) {
     x * 1 / (2^(1 + d))
@@ -167,7 +175,8 @@ dim_values(
 df_dimmed <- df \%>\%
   dplyr::group_by(.cluster) \%>\%
   dim_values(
-    cols = c("x", "y", "o"),
+    cols = c("x", "y"),
+    dim_col = "o",
     origin_fn = centroid
   )
 
