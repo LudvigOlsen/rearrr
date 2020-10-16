@@ -26,13 +26,15 @@ shear_3d(
 
 \item{x_col, y_col, z_col}{Name of x/y/z column in \code{`data`}. All must be specified.}
 
-\item{x_shear, y_shear, z_shear}{TODO}
+\item{x_shear, y_shear, z_shear}{Shear factor for the x/y/z dimension (\code{numeric}). Decides the amount of shearing.
+Can be \code{vector}s with multiple shear factors.}
 
 \item{suffix}{Suffix to add to the names of the generated columns.
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+\item{origin}{Coordinates of the origin to shear around.
+\code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
@@ -63,13 +65,41 @@ when plotting multiple shears.}
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
-\code{data.frame} (\code{tibble}) with five new columns containing
+\code{data.frame} (\code{tibble}) with six new columns containing
 the sheared x-, y- and z-values and the shearing amounts and origin coordinates.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-TODO
+Shear a set of 3d points around an origin.
+
+Applies one of the following transformation matrices, depending on which
+two shearing amounts are specified:
+
+Given \code{`x_shear`} and \code{`y_shear`}:\tabular{llll}{
+   [ \eqn{1} \tab , \eqn{0} \tab , \code{x_shear} \tab ] \cr
+   [ \eqn{0} \tab , \eqn{1} \tab , \code{y_shear} \tab ] \cr
+   [ \eqn{0} \tab , \eqn{0} \tab , \eqn{1} \tab ] \cr
+}
+
+
+Given \code{`x_shear`} and \code{`z_shear`}:\tabular{llll}{
+   [ \eqn{1} \tab , \code{x_shear} \tab , \eqn{0} \tab ] \cr
+   [ \eqn{0} \tab , \eqn{1} \tab , \eqn{0} \tab ] \cr
+   [ \eqn{0} \tab , \code{z_shear} \tab , \eqn{1} \tab ] \cr
+}
+
+
+Given \code{`y_shear`} and \code{`z_shear`}:\tabular{llll}{
+   [ \eqn{1} \tab , \eqn{0} \tab , \eqn{0} \tab ] \cr
+   [ \code{y_shear} \tab , \eqn{1} \tab , \eqn{0} \tab ] \cr
+   [ \code{z_shear} \tab , \eqn{0} \tab , \eqn{1} \tab ] \cr
+}
+
+
+The data points in \code{`data`} are moved prior to the shearing, to bring
+the origin to \code{0} in all dimensions. After the shearing, the
+inverse move is applied to bring the origin back to its original position.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
@@ -93,7 +123,7 @@ df_square <- square(runif(100)) \%>\%
          y = Value) \%>\%
   mutate(z = 1)
 
-# Shear the x variable with regards to y
+# Shear the x and z axes
 # around the centroid
 df_sheared <- shear_3d(
   data = df_square,
@@ -108,7 +138,6 @@ df_sheared <- shear_3d(
 # Plot sheared data
 # Black: original points
 # Red: sheared points
-# Size: sheared z value
 df_sheared \%>\%
   ggplot(aes(x = x, y = y)) +
   geom_point() +
@@ -127,7 +156,68 @@ plotly::plot_ly(
 )
 }
 
+# Shear the y and z axes
+# around the centroid
+df_sheared <- shear_3d(
+  data = df_square,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  y_shear = 2,
+  z_shear = 4,
+  origin_fn = centroid
+)
 
+# Plot sheared data
+# Black: original points
+# Red: sheared points
+df_sheared \%>\%
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+  theme_minimal()
+
+\dontrun{
+# Plot 3d with plotly
+plotly::plot_ly(
+  x = df_sheared$x_sheared,
+  y = df_sheared$y_sheared,
+  z = df_sheared$z_sheared,
+  type = "scatter3d",
+  mode = "markers",
+  color = df_sheared$.shear_str
+)
+}
+
+# Shear the y and z axes with multiple amounts at once
+# around the centroid
+df_sheared <- shear_3d(
+  data = df_square,
+  x_col = "x",
+  y_col = "y",
+  z_col = "z",
+  y_shear = c(0, 2, 4),
+  z_shear = c(0, 4, 6),
+  origin_fn = centroid
+)
+
+# Plot sheared data
+df_sheared \%>\%
+  ggplot(aes(x = x_sheared, y = y_sheared, color = .shear_str)) +
+  geom_point() +
+  theme_minimal()
+
+\dontrun{
+# Plot 3d with plotly
+plotly::plot_ly(
+  x = df_sheared$x_sheared,
+  y = df_sheared$y_sheared,
+  z = df_sheared$z_sheared,
+  type = "scatter3d",
+  mode = "markers",
+  color = df_sheared$.shear_str
+)
+}
 }
 }
 \author{
