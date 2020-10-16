@@ -19,6 +19,8 @@
 #'
 #'  Some columns may have been overwritten, in which case only the newest versions are returned.
 #' @param allow_missing Whether to allow missing values (\code{NA}s). (Logical)
+#' @param altered_col Additional column that is mutated but is not
+#'  mentioned in \code{`cols`}.
 #' @param mutate_fn Mutator to apply.
 #' @param ... Named arguments for the \code{`mutate_fn`}.
 #' @inheritParams rearrr_fn_

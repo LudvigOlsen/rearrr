@@ -47,6 +47,9 @@ columns not mentioned in the \code{`col(s)`} argument.}
 \item{min_dims}{Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.}
 
+\item{altered_col}{Additional column that is mutated but is not
+mentioned in \code{`cols`}.}
+
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
