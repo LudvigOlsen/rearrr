@@ -1,15 +1,15 @@
 Package: rearrr
 Title: Rearranging Data
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
              role = c("aut", "cre"),
              email = "r-pkgs@ludvigolsen.dk"))
-Description: Rearrrange data by a set of methods. Use rearrangers to reorder 
-    data points and mutators to change their values. From centering the greatest 
-    value to swirling in 3-dimensional space, rearrr enables creativity when 
-    plotting and experimenting with your data.
+Description: Arrange data by a set of methods. Use rearrangers to reorder 
+    data points and mutators to change their values. From basic utilities, 
+    to centering the greatest value, to swirling in 3-dimensional space, 
+    rearrr enables creativity when plotting and experimenting with data.
 License: MIT + file LICENSE
 URL: https://github.com/ludvigolsen/rearrr
 BugReports: https://github.com/ludvigolsen/rearrr/issues
