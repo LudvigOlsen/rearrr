@@ -24,7 +24,7 @@ generate_clusters(
 \item{compactness}{How compact the clusters should be. A larger value leads to more compact clusters (on average).
 
 Technically, it is passed to the \code{`multiplier`} argument in
-\code{\link[rearrr:cluster_groups]{cluster_groups()}} as \code{0.1 / compactness}.}
+\code{\link[rearrr:cluster_groups]{cluster_groups()}} as \eqn{`0.1 / compactness`}.}
 
 \item{generator}{Function to generate the numeric values.
 
@@ -41,7 +41,7 @@ as that is the only argument we pass to it.}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Generates \code{data.frame} with clustered groups.
+Generates \code{data.frame} (\code{tibble}) with clustered groups.
 }
 \details{
 \itemize{

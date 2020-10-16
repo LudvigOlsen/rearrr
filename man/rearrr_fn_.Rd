@@ -27,7 +27,7 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 \item{check_fn}{Function with checks post-preparation of \code{`data`} and \code{`col(s)`}.
 Should not return anything.}
 
-\item{allowed_types}{Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
+\item{allowed_types}{Allowed types of the \code{`col(s)`} columns. The type restrictions do not apply to
 columns not mentioned in the \code{`col(s)`} argument.}
 
 \item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}

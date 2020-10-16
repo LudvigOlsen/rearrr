@@ -29,6 +29,7 @@
 #' @return \code{data.frame} (\code{tibble}) with the additional columns (distances and origin coordinates).
 #' @inheritParams multi_mutator_
 #' @family measuring functions
+#' @family distance functions
 #' @examples
 #' \donttest{
 #' # Attach packages

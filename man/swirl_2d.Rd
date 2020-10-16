@@ -85,7 +85,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
-\code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
+\code{data.frame} (\code{tibble}) with three new columns containing
+the swirled x- and y-values, the degrees, the radius, and the origin coordinates.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -127,14 +128,16 @@ swirl_2d(
 )
 
 # Swirl around the centroid
+# with 6 different radius settings
+# Scale the distances with custom function
 df_swirled <- swirl_2d(
   data = df,
   radius = c(95, 96, 97, 98, 99, 100),
   x_col = "x",
   y_col = "y",
   origin_fn = centroid,
-  scale_fn = function(x) {
-    x^1.6
+  scale_fn = function(d) {
+    d^1.6
   }
 )
 
@@ -188,9 +191,19 @@ Other rotation functions:
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
 \code{\link{swirl_3d}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{mutate functions}
 \concept{rotation functions}

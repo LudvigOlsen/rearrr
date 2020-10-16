@@ -59,17 +59,21 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
-\item{shear_col_name}{Name of new column with the shearing factors. If \code{NULL}, no column is added.
+\item{shear_col_name}{Name of new column with the shearing factors.
+If \code{NULL}, no column is added.
 
-Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing factors
+Also adds a string version with the same name + \code{"_str"},
+making it easier to group by the shearing factors
 when plotting multiple shearings.}
 
-\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+\item{origin_col_name}{Name of new column with the origin coordinates.
+If \code{NULL}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
-\code{data.frame} (\code{tibble}) with sheared columns, the shearing factors and the origin coordinates.
+\code{data.frame} (\code{tibble}) with sheared columns,
+the shearing factors and the origin coordinates.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -98,10 +102,7 @@ library(ggplot2)
 df <- data.frame(
   "x" = rep(1:6, each = 2),
   "y" = rep(c(1, 4), 6),
-  "g" = c(
-    1, 1, 1, 1, 1, 1,
-    2, 2, 2, 2, 2, 2
-  )
+  "g" = rep(1:2, each = 6)
 )
 
 # Shear the x variable with regards to y

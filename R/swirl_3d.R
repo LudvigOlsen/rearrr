@@ -50,9 +50,11 @@
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @param radius_col_name Name of new column with the radiuses. If \code{NULL}, no column is added.
 #' @export
-#' @return \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
+#' @return \code{data.frame} (\code{tibble}) with new columns containing
+#'  the swirled x- and y-values, the degrees, the radiuses, and the origin coordinates.
 #' @family mutate functions
 #' @family rotation functions
+#' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{

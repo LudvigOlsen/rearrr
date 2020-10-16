@@ -28,9 +28,9 @@ Each column is considered a dimension.}
 
 \item{multiplier}{Constant to multiply/exponentiate the distances to the origin by.
 
-\strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multiplier becomes an \emph{exponent}.}
+\strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the \code{`multiplier`} becomes an \emph{exponent}.}
 
-\item{multiplier_fn}{Function for finding the multiplier.
+\item{multiplier_fn}{Function for finding the \code{`multiplier`}.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
@@ -81,9 +81,11 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
-\item{mult_col_name}{Name of new column with the multiplier. If \code{NULL}, no column is added.}
+\item{mult_col_name}{Name of new column with the \code{`multiplier`}.
+If \code{NULL}, no column is added.}
 
-\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+\item{origin_col_name}{Name of new column with the origin coordinates.
+If \code{NULL}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
@@ -94,8 +96,10 @@ along with the applied multiplier/exponent and origin coordinates.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-The distance to the specified origin is increased/decreased.
-A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
+Moves the data points in n-dimensional space such that their distance
+to a specified origin is increased/decreased.
+A \code{`multiplier`} greater than 1 leads to expansion,
+while a positive \code{`multiplier`} lower than 1 leads to contraction.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and expanding around e.g. the centroid
@@ -113,10 +117,11 @@ If you need the purely exponentiated distances,
 disable \code{`add_one_exp`}.
 }
 \details{
-Increases the distance to the origin in n-dimensional space by multiplying or exponentiating it by the multiplier.
+Increases the distance to the origin in n-dimensional space by
+multiplying or exponentiating it by the multiplier.
 
 We first move the origin to the zero-coordinates (e.g. \code{c(0, 0, 0)})
-and normalize each vector to unit length. We then multiply by this unit vector by the
+and normalize each vector to unit length. We then multiply this unit vector by the
 multiplied/exponentiated distance and moves the origin back to its original coordinates.
 
 The distance to the specified origin is calculated with:
@@ -282,9 +287,19 @@ Other mutate functions:
 
 Other expander functions: 
 \code{\link{expand_distances_each}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{expander functions}
 \concept{mutate functions}

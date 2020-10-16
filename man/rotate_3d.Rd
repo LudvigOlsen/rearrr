@@ -105,15 +105,9 @@ set.seed(3)
 # Create a data frame
 df <- data.frame(
   "x" = 1:12,
-  "y" = c(
-    1, 2, 3, 4, 9, 10, 11,
-    12, 15, 16, 17, 18
-  ),
+  "y" = c(1:4, 9:12, 15:18),
   "z" = runif(12),
-  "g" = c(
-    1, 1, 1, 1, 2, 2,
-    2, 2, 3, 3, 3, 3
-  )
+  "g" = rep(1:3, each = 4)
 )
 
 # Rotate values 45 degrees around x-axis at (0, 0, 0)

@@ -11,11 +11,12 @@ midrange(..., cols = NULL, na.rm = FALSE)
 
 \item{cols}{Names of columns to use when \code{`...`} is a single \code{data.frame}.}
 
-\item{na.rm}{Whether to ignore missing values when calculating \code{min} and \code{max} values. (Logical)}
+\item{na.rm}{Whether to ignore missing values when calculating
+\code{min} and \code{max} values. (Logical)}
 }
 \value{
-Either a \code{vector} with the midrange of each supplied vector or a \code{data.frame} with the
-midrange of each supplied column along with any grouping variables.
+Either a \code{vector} with the midrange of each supplied \code{vector}
+or a \code{data.frame} with the midrange of each supplied column along with any grouping variables.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

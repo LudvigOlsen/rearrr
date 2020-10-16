@@ -48,10 +48,7 @@
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
 #'   "C" = LETTERS[1:10],
-#'   "G" = c(
-#'     1, 1, 1, 1, 1,
-#'     2, 2, 2, 2, 2
-#'   ),
+#'   "G" = rep(1:2, each = 5),
 #'   stringsAsFactors = FALSE
 #' )
 #'

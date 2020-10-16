@@ -40,7 +40,7 @@ argument in \code{create_n_fn()}).
 Creates a function that applies a supplied function to all
 input vectors, or their indices, and rounds the results.
 
-As used with \code{\link[rearrr::roll_elements]{roll_elements()}}. E.g. to
+As used with \code{\link[rearrr:roll_elements]{roll_elements()}}. E.g. to
 find the the median index in a subset of a grouped \code{data.frame}.
 }
 \examples{

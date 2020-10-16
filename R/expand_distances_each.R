@@ -8,8 +8,10 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The distance to the specified origin is increased/decreased in each dimension separately.
-#'  A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
+#'  Moves the data points in n-dimensional space such that their distance
+#'  to the specified origin is increased/decreased \emph{in each dimension separately}.
+#'  A \code{`multiplier`} greater than 1 leads to expansion,
+#'  while a positive \code{`multiplier`} lower than 1 leads to contraction.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
 #'  latter can be useful when supplying a grouped \code{data.frame} and expanding around e.g. the centroid
@@ -20,7 +22,7 @@
 #'  on the data in the groups.
 #'  If supplying multiple constants, there must be one per dimension (length of \code{`cols`}).
 #'
-#'  For expansion of the multidimensional distance, use \code{\link[rearrr:expand_distances_each]{expand_distances()}}.
+#'  For expansion of the \emph{multidimensional} distance, use \code{\link[rearrr:expand_distances_each]{expand_distances()}}.
 #'
 #'  \strong{NOTE}: When exponentiating, the default is to first add \code{1} or \code{-1}
 #'  (depending on the sign of the distance) to the distances,
@@ -40,8 +42,8 @@
 #'  A scalar to use in all dimensions or
 #'  a \code{vector} with one scalar per dimension.
 #'
-#'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.
-#' @param multipliers_fn Function for finding the multipliers.
+#'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the \code{`multipliers`} become \emph{exponents}.
+#' @param multipliers_fn Function for finding the \code{`multipliers`}.
 #'
 #'  \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 #'
@@ -85,6 +87,7 @@
 #'  and subtract it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @family expander functions
+#' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{

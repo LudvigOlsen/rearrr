@@ -30,15 +30,19 @@
 #' @param origin Coordinates of the origin to shear around.
 #'  \code{Vector} with 2 elements (origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
-#' @param shear_col_name Name of new column with the shearing factors. If \code{NULL}, no column is added.
+#' @param shear_col_name Name of new column with the shearing factors.
+#'  If \code{NULL}, no column is added.
 #'
-#'  Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing factors
+#'  Also adds a string version with the same name + \code{"_str"},
+#'  making it easier to group by the shearing factors
 #'  when plotting multiple shearings.
-#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
+#' @param origin_col_name Name of new column with the origin coordinates.
+#'  If \code{NULL}, no column is added.
 #' @family mutate functions
 #' @family shearing functions
 #' @export
-#' @return \code{data.frame} (\code{tibble}) with sheared columns, the shearing factors and the origin coordinates.
+#' @return \code{data.frame} (\code{tibble}) with sheared columns,
+#'  the shearing factors and the origin coordinates.
 #' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{
@@ -51,10 +55,7 @@
 #' df <- data.frame(
 #'   "x" = rep(1:6, each = 2),
 #'   "y" = rep(c(1, 4), 6),
-#'   "g" = c(
-#'     1, 1, 1, 1, 1, 1,
-#'     2, 2, 2, 2, 2, 2
-#'   )
+#'   "g" = rep(1:2, each = 6)
 #' )
 #'
 #' # Shear the x variable with regards to y

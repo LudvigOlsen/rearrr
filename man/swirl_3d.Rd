@@ -91,7 +91,8 @@ when plotting multiple rotations.}
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
-\code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
+\code{data.frame} (\code{tibble}) with new columns containing
+the swirled x- and y-values, the degrees, the radiuses, and the origin coordinates.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -314,9 +315,19 @@ Other rotation functions:
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
 \code{\link{swirl_2d}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_2d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{mutate functions}
 \concept{rotation functions}

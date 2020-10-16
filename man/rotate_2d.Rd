@@ -105,14 +105,8 @@ set.seed(1)
 # Create a data frame
 df <- data.frame(
   "Index" = 1:12,
-  "A" = c(
-    1, 2, 3, 4, 9, 10, 11,
-    12, 15, 16, 17, 18
-  ),
-  "G" = c(
-    1, 1, 1, 1, 2, 2,
-    2, 2, 3, 3, 3, 3
-  )
+  "A" = c(1:4, 9:12, 15:18),
+  "G" = rep(1:3, each = 4)
 )
 
 # Rotate values around (0, 0)

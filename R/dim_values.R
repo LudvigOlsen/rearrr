@@ -71,6 +71,7 @@
 #'    \item Applies the \code{`dimming_fn`} to the \code{`dim_col`} based on the distances.
 #'  }
 #' @family mutate functions
+#' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
 #' \donttest{

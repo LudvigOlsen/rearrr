@@ -45,12 +45,7 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = c(
-    1, 1, 1, 1, 1,
-    2, 2, 2, 2, 2,
-    3, 3, 3, 3, 3,
-    4, 4, 4, 4, 4
-  )
+  "g" = rep(1:4, each = 5)
 )
 
 # Create another data frame with different x and y values

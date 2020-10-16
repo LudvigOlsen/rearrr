@@ -30,9 +30,9 @@ Each column is considered a dimension to expand in.}
 A scalar to use in all dimensions or
 a \code{vector} with one scalar per dimension.
 
-\strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multipliers become \emph{exponents}.}
+\strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the \code{`multipliers`} become \emph{exponents}.}
 
-\item{multipliers_fn}{Function for finding the multipliers.
+\item{multipliers_fn}{Function for finding the \code{`multipliers`}.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
@@ -100,8 +100,10 @@ along with the applied multiplier/exponent and origin coordinates.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-The distance to the specified origin is increased/decreased in each dimension separately.
-A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
+Moves the data points in n-dimensional space such that their distance
+to the specified origin is increased/decreased \emph{in each dimension separately}.
+A \code{`multiplier`} greater than 1 leads to expansion,
+while a positive \code{`multiplier`} lower than 1 leads to contraction.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and expanding around e.g. the centroid
@@ -112,7 +114,7 @@ The latter can be useful when supplying a grouped \code{data.frame} and the mult
 on the data in the groups.
 If supplying multiple constants, there must be one per dimension (length of \code{`cols`}).
 
-For expansion of the multidimensional distance, use \code{\link[rearrr:expand_distances_each]{expand_distances()}}.
+For expansion of the \emph{multidimensional} distance, use \code{\link[rearrr:expand_distances_each]{expand_distances()}}.
 
 \strong{NOTE}: When exponentiating, the default is to first add \code{1} or \code{-1}
 (depending on the sign of the distance) to the distances,
@@ -316,9 +318,19 @@ Other mutate functions:
 
 Other expander functions: 
 \code{\link{expand_distances}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{expander functions}
 \concept{mutate functions}

@@ -10,10 +10,10 @@
 #'
 #'  Scales the vectors to unit length \emph{row-wise} or \emph{column-wise}.
 #'
-#'  The \code{*_vec()} version take and return a vector.
+#'  The \code{*_vec()} version take and return a \code{vector}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param cols Names of columns in \code{`data`} to scale.
-#' @param by_row Whether to scale row vectors instead of column vectors. (Logical)
+#' @param by_row Whether to scale row \code{vector}s instead of column \code{vector}s. (Logical)
 #'
 #'  Note: Disable when \code{`data`} is a \code{vector}.
 #' @export

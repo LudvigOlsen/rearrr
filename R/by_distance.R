@@ -38,6 +38,7 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
+#' @family distance functions
 #' @inheritParams by_distance_rearranger_
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
@@ -187,6 +188,7 @@ closest_to_vec <- function(data,
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
+#' @family distance functions
 #' @inheritParams by_distance_rearranger_
 #' @aliases farthest_from
 #' @return

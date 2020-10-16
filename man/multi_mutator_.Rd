@@ -15,6 +15,7 @@ multi_mutator_(
   allowed_types = c("numeric", "factor"),
   allow_missing = FALSE,
   min_dims = 1,
+  altered_col = NULL,
   keep_original = TRUE,
   origin_fn = NULL,
   ...
@@ -38,7 +39,7 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
 
-\item{allowed_types}{Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
+\item{allowed_types}{Allowed types of the \code{`col(s)`} columns. The type restrictions do not apply to
 columns not mentioned in the \code{`col(s)`} argument.}
 
 \item{allow_missing}{Whether to allow missing values (\code{NA}s). (Logical)}

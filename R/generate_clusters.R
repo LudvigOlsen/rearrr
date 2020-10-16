@@ -8,7 +8,7 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  Generates \code{data.frame} with clustered groups.
+#'  Generates \code{data.frame} (\code{tibble}) with clustered groups.
 #'
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param num_rows Number of rows.
@@ -17,7 +17,7 @@
 #' @param compactness How compact the clusters should be. A larger value leads to more compact clusters (on average).
 #'
 #'  Technically, it is passed to the \code{`multiplier`} argument in
-#'  \code{\link[rearrr:cluster_groups]{cluster_groups()}} as \code{0.1 / compactness}.
+#'  \code{\link[rearrr:cluster_groups]{cluster_groups()}} as \eqn{`0.1 / compactness`}.
 #' @param generator Function to generate the numeric values.
 #'
 #'  Must have the \emph{number of values to generate} as its first (and only required) argument,

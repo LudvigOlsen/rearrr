@@ -11,7 +11,7 @@
 #'  Adds a specified value to each element in the vector and wraps the values around
 #'  the min-max range with:
 #'
-#'  \code{(x - .min) \% (.max - .min + between) + .min}
+#'  \code{\eqn{(x - .min)} \% \eqn{(.max - .min + between) + .min}}
 #'
 #'  Useful when adding to the degrees of a circle, where the values should remain in the
 #'  \code{0-360} range. A value larger than \code{360} will start over from \code{0}, e.g. \eqn{365 -> 5},
@@ -26,7 +26,7 @@
 #'  The \code{*_vec()} versions take and return a vector.
 #'
 #'  Should not be confused with \code{\link[rearrr:roll_elements]{roll_elements()}},
-#'  which changes the position of the elements.
+#'  which changes the \emph{positions} of the elements.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param data \code{vector} or \code{data.frame} to roll/wrap values of. When a \code{data.frame} is
 #'  grouped, the rolling/wrapping is applied group-wise.
@@ -41,11 +41,11 @@
 #'  maximum value in the \code{vector}/\code{column} is used.
 #' @param between The wrapping distance between \code{`.max`} and \code{`.min`}.
 #'
-#'  When \code{0}, they are considered the same. I.e. \code{`.max` == `.min`}.
+#'  When \code{0}, they are considered the same. I.e. \eqn{`.max == .min`}.
 #'
 #'  When \code{1}, \code{`x`} can be greater than \code{`.max`} by up to \code{1}, why
 #'  \code{`.min`} and \code{`.max`} are two separate values with \code{1} in-between them. I.e.
-#'  \code{`.max` + 1 == `.min`}.
+#'  \eqn{`.max + 1 == .min`}.
 #' @param na.rm Whether to remove missing values (\code{NA}s)
 #'  when finding the \code{`.min`} and \code{`.max`} values.
 #' @param range_col_name Name of new column with the min-max range. If \code{NULL}, no column is added.
