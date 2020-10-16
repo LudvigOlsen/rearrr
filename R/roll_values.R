@@ -11,7 +11,7 @@
 #'  Adds a specified value to each element in the vector and wraps the values around
 #'  the min-max range with:
 #'
-#'  \code{\eqn{(x - .min)} \% \eqn{(.max - .min + between) + .min}}
+#'  \eqn{(x - .min)}\code{ \% }\eqn{(.max - .min + between) + .min}
 #'
 #'  Useful when adding to the degrees of a circle, where the values should remain in the
 #'  \code{0-360} range. A value larger than \code{360} will start over from \code{0}, e.g. \eqn{365 -> 5},
