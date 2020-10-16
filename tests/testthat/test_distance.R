@@ -473,7 +473,7 @@ test_that("distance()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12554[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_12554 <- xpectr::suppress_mw(distance(data = df, cols = c("x", "y", "z"), origin = c(0.5, 0.5, 0.5), origin_fn = centroid, distance_col_name = ".distance", origin_col_name = ".origin"))
@@ -548,7 +548,7 @@ test_that("distance()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_14622 <- xpectr::suppress_mw(distance(data = df, cols = c("x", "y", "z"), origin = 0, origin_fn = centroid, distance_col_name = ".distance", origin_col_name = ".origin"))

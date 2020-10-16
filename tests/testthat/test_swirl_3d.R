@@ -255,7 +255,7 @@ test_that("fuzz testing swirl_3d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_17365 <- xpectr::suppress_mw(swirl_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_radius = 1, y_radius = 1, z_radius = 1, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE))
@@ -1417,7 +1417,7 @@ test_that("fuzz testing swirl_3d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14357[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_14357 <- xpectr::suppress_mw(swirl_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_radius = 1, y_radius = 1, z_radius = 1, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE))

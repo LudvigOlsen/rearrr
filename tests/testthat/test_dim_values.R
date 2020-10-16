@@ -538,7 +538,7 @@ test_that("dim_values()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_11174 <- xpectr::suppress_mw(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = c(0.5, 0.5, 0.5), origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE))

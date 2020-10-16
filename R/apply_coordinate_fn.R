@@ -45,7 +45,7 @@ apply_coordinate_fn_ <- function(dim_vectors,
         "When '", fn_name,
         "' is specified, '",
         coordinate_name,
-        "', is ignored."
+        "' is ignored."
       ))
     }
     coordinates <- NULL

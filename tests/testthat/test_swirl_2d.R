@@ -243,7 +243,7 @@ test_that("fuzz testing swirl_2d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_17365 <- xpectr::suppress_mw(swirl_2d(data = dplyr::group_by(df, g), radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE))
@@ -966,7 +966,7 @@ test_that("fuzz testing swirl_2d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18360[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_18360 <- xpectr::suppress_mw(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE))
@@ -1034,7 +1034,7 @@ test_that("fuzz testing swirl_2d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17375[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_17375 <- xpectr::suppress_mw(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = most_centered, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE))
