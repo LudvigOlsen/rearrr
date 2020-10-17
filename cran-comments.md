@@ -8,3 +8,5 @@
 0 errors | 0 warnings | 1 note
 
 * This is a new release.
+* Added single quotes to 'rearrr' in Description.
+* Fixed broken link in documentation for internal function.
