@@ -21,7 +21,6 @@
 #'  for the edge the data point is a part of.
 #' @family forming functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -118,7 +117,6 @@
 #'   )) +
 #'   geom_point() +
 #'   theme_minimal()
-#' }
 square <- function(data,
                    y_col = NULL,
                    .min = NULL,

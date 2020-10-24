@@ -93,7 +93,6 @@ Where \eqn{\theta} is the angle in radians.
 As specified at \href{https://en.wikipedia.org/wiki/Rotation_matrix}{Wikipedia/Rotation_matrix}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -147,7 +146,6 @@ ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees
   geom_point() +
   theme_minimal() +
   labs(x = "Index", y = "Value", color = "Degrees")
-}
 }
 \seealso{
 Other mutate functions: 

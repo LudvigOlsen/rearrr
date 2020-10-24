@@ -66,7 +66,6 @@ Transform values such that the elements in each group move closer to their centr
 }
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -158,7 +157,6 @@ df_clustered <- cluster_groups(
   group_col = "g"
 )
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(

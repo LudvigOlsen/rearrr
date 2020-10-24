@@ -92,7 +92,6 @@ latter can be useful when supplying a grouped \code{data.frame} and shearing aro
 of each group.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -168,7 +167,6 @@ shear_2d(
   x_shear = c(1, 1.5, 2, 2.5),
   origin = c(0, 0)
 )
-}
 }
 \seealso{
 Other mutate functions: 

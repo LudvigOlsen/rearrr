@@ -31,7 +31,6 @@
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -72,7 +71,6 @@
 #' # Plot the centered values
 #' plot(x = 1:10, y = center_max(df, col = "B")$B)
 #' plot(x = 1:10, y = center_max(df, col = "B", shuffle_sides = TRUE)$B)
-#' }
 center_max <- function(data,
                        col = NULL,
                        shuffle_sides = FALSE) {
@@ -112,7 +110,6 @@ center_max <- function(data,
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -153,7 +150,6 @@ center_max <- function(data,
 #' # Plot the centered values
 #' plot(x = 1:10, y = center_min(df, col = "B")$B)
 #' plot(x = 1:10, y = center_min(df, col = "B", shuffle_sides = TRUE)$B)
-#' }
 center_min <- function(data,
                        col = NULL,
                        shuffle_sides = FALSE) {

@@ -119,7 +119,6 @@ of each group.
 }
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -190,7 +189,6 @@ ggplot(
   geom_point() +
   theme_minimal() +
   labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
-}
 }
 \seealso{
 Other mutate functions: 

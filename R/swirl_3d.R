@@ -57,7 +57,6 @@
 #' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -110,7 +109,6 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 #'
-#' }
 #' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
@@ -122,7 +120,6 @@
 #'   color = df_swirled$.radius_str
 #' )
 #' }
-#' \donttest{
 #'
 #' # Swirl around the centroid
 #' df_swirled <- swirl_3d(
@@ -147,7 +144,6 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 #'
-#' }
 #' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(

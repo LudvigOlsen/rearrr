@@ -62,7 +62,6 @@
 #'  the sheared x-, y- and z-values and the shearing amounts and origin coordinates.
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -170,7 +169,6 @@
 #'   mode = "markers",
 #'   color = df_sheared$.shear_str
 #' )
-#' }
 #' }
 shear_3d <- function(data,
                      x_col,

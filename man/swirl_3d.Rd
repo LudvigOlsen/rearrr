@@ -107,7 +107,6 @@ latter can be useful when supplying a grouped \code{data.frame} and swirling aro
 of each group.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -160,7 +159,6 @@ ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha 
   theme_minimal() +
   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
@@ -172,7 +170,6 @@ plotly::plot_ly(
   color = df_swirled$.radius_str
 )
 }
-\donttest{
 
 # Swirl around the centroid
 df_swirled <- swirl_3d(
@@ -197,7 +194,6 @@ ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha 
   theme_minimal() +
   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(

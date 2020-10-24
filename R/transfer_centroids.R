@@ -27,7 +27,6 @@
 #' @return The \code{`to_data`} \code{data.frame} (\code{tibble}) with the
 #'  centroids from the \code{`from_data`} \code{data.frame}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -70,7 +69,6 @@
 #' df3 %>%
 #'   dplyr::group_by(g) %>%
 #'   dplyr::summarize_all(mean)
-#' }
 transfer_centroids <- function(to_data,
                                from_data,
                                cols,

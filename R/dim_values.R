@@ -74,7 +74,6 @@
 #' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -145,7 +144,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
-#' }
 dim_values <- function(data,
                        cols,
                        dimming_fn = create_dimming_fn(

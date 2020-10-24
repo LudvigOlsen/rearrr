@@ -38,7 +38,6 @@ are \strong{ordered as}:
 \code{c(3,} \strong{\code{5}}\code{, 4, 2, 1)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -80,7 +79,6 @@ df \%>\%
 # Plot the rearranged values
 plot(x = 1:10, y = position_max(df, col = "B", position = 3)$B)
 plot(x = 1:10, y = position_max(df, col = "B", position = 3, shuffle_sides = TRUE)$B)
-}
 }
 \seealso{
 Other rearrange functions: 

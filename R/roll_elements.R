@@ -52,7 +52,6 @@
 #' @family roll functions
 #' @family rearrange functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -106,7 +105,6 @@
 #'   n_fn = median_index,
 #'   negate = TRUE
 #' )
-#' }
 roll_elements <- function(data,
                           cols = NULL,
                           n = NULL,

@@ -110,7 +110,6 @@ Given \code{`y_shear`} and \code{`z_shear`}:\tabular{llll}{
 }
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -218,7 +217,6 @@ plotly::plot_ly(
   mode = "markers",
   color = df_sheared$.shear_str
 )
-}
 }
 }
 \seealso{

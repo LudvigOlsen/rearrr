@@ -31,7 +31,6 @@
 #' @family measuring functions
 #' @family distance functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -60,7 +59,6 @@
 #'   cols = c("x", "y"),
 #'   origin_fn = centroid
 #' )
-#' }
 distance <- function(data,
                      cols = NULL,
                      origin = NULL,

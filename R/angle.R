@@ -1,6 +1,5 @@
 
 
-
 #   __________________ #< 1bae15c31fc98d40b9bd4b7b5434d7b3 ># __________________
 #   Angle                                                                   ####
 
@@ -36,7 +35,6 @@
 #' @inheritParams multi_mutator_
 #' @family measuring functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -78,7 +76,6 @@
 #'   y_col = "y",
 #'   origin_fn = centroid
 #' )
-#' }
 angle <- function(data,
                   x_col = NULL,
                   y_col = NULL,

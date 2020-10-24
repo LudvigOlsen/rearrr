@@ -21,7 +21,6 @@ each element in \code{...} (usually one vector per dimension).
 Creates a function that applies a supplied function to all input vectors.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 
@@ -57,7 +56,6 @@ c(mean(x, na.rm = TRUE),
   mean(y, na.rm = TRUE),
   mean(z, na.rm = TRUE)
 )
-}
 }
 \seealso{
 Other coordinate functions: 

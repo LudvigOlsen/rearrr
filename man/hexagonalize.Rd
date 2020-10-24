@@ -53,7 +53,6 @@ This will likely look most like a hexagon when the y-coordinates are somewhat eq
 e.g. a uniform distribution.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -150,7 +149,6 @@ df_expanded \%>\%
   )) +
   geom_point() +
   theme_minimal()
-}
 }
 \seealso{
 Other forming functions: 

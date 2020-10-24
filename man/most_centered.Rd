@@ -28,7 +28,6 @@ whether a data point is the most centered,
 use \code{\link[rearrr:is_most_centered]{is_most_centered()}}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -73,8 +72,6 @@ df \%>\%
 df \%>\%
   dplyr::group_by(g) \%>\%
   dplyr::filter(is_most_centered(x, y, z))
-
-}
 }
 \seealso{
 Other coordinate functions: 

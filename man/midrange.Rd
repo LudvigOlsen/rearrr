@@ -27,7 +27,6 @@ Midrange is defined as:
 \deqn{(max x + min x) / 2}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -62,7 +61,6 @@ midrange(df, cols = c("x", "y", "z"))
 df \%>\%
   dplyr::group_by(g) \%>\%
   midrange(cols = c("x", "y", "z"))
-}
 }
 \seealso{
 Other coordinate functions: 

@@ -84,7 +84,6 @@ are \strong{ordered as}:
 \code{c(}\strong{\code{2}}\code{, 1, 3, 4, 5)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -139,7 +138,8 @@ plot(
     cols = "B",
     origin_fn = create_origin_fn(median)
   )$B,
-  xlab = "Position", ylab = "B"
+  xlab = "Position",
+  ylab = "B"
 )
 plot(
   x = 1:10,
@@ -148,13 +148,13 @@ plot(
     origin_fn = create_origin_fn(median),
     shuffle_ties = TRUE
   )$A,
-  xlab = "Position", ylab = "A"
+  xlab = "Position",
+  ylab = "A"
 )
 
 # In multiple dimensions
 df \%>\%
   closest_to(cols = c("A", "B"), origin_fn = most_centered)
-}
 }
 \seealso{
 Other rearrange functions: 

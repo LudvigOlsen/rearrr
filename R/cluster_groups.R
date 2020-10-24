@@ -39,7 +39,6 @@
 #' @family mutate functions
 #' @family clustering functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -131,7 +130,6 @@
 #'   group_col = "g"
 #' )
 #'
-#' }
 #' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(

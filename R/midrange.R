@@ -21,7 +21,6 @@
 #' @return Either a \code{vector} with the midrange of each supplied \code{vector}
 #'  or a \code{data.frame} with the midrange of each supplied column along with any grouping variables.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -56,7 +55,6 @@
 #' df %>%
 #'   dplyr::group_by(g) %>%
 #'   midrange(cols = c("x", "y", "z"))
-#' }
 midrange <- function(..., cols = NULL, na.rm = FALSE) {
   # Midrange coordinate function
   midrange_coord_fn <- create_origin_fn(function(x) {

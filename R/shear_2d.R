@@ -45,7 +45,6 @@
 #'  the shearing factors and the origin coordinates.
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -121,7 +120,6 @@
 #'   x_shear = c(1, 1.5, 2, 2.5),
 #'   origin = c(0, 0)
 #' )
-#' }
 shear_2d <- function(data,
                      x_shear,
                      y_shear = 0,

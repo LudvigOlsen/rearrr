@@ -132,7 +132,6 @@ we add \code{1} to the distance before the exponentiation
 and subtract it afterwards. See \code{`add_one_exp`}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -268,7 +267,6 @@ ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))
   geom_point() +
   theme_minimal() +
   labs(x = "x", y = "y", color = "g")
-}
 }
 \seealso{
 Other mutate functions: 

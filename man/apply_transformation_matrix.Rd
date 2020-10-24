@@ -96,7 +96,6 @@ Example with 2 columns (\code{x}, \code{y}) and a 2x2 transformation matrix:
 }
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -117,7 +116,7 @@ df <- data.frame(
 )
 
 # Apply identity matrix
-mat <- matrix(c(1,0,0,0,1,0,0,0,1), nrow=3)
+mat <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), nrow = 3)
 apply_transformation_matrix(
   data = df,
   mat = mat,
@@ -128,7 +127,7 @@ apply_transformation_matrix(
 # Apply rotation matrix
 # 90 degrees around z-axis
 # Origin is the most centered point
-mat <- matrix(c(0,1,0,-1,0,0,0,0,1), nrow=3)
+mat <- matrix(c(0, 1, 0, -1, 0, 0, 0, 0, 1), nrow = 3)
 res <- apply_transformation_matrix(
   data = df,
   mat = mat,
@@ -139,9 +138,9 @@ res <- apply_transformation_matrix(
 # Plot the rotation
 # z wasn't changed so we plot x and y
 res \%>\%
-  ggplot(aes(x=x, y=y)) +
+  ggplot(aes(x = x, y = y)) +
   geom_point() +
-  geom_point(aes(x=x_transformed, y=y_transformed)) +
+  geom_point(aes(x = x_transformed, y = y_transformed)) +
   theme_minimal()
 
 # Apply rotation matrix to grouped data frame
@@ -156,12 +155,10 @@ res <- apply_transformation_matrix(
 
 # Plot the rotation
 res \%>\%
-  ggplot(aes(x=x, y=y, color=g)) +
+  ggplot(aes(x = x, y = y, color = g)) +
   geom_point() +
-  geom_point(aes(x=x_transformed, y=y_transformed)) +
+  geom_point(aes(x = x_transformed, y = y_transformed)) +
   theme_minimal()
-
-}
 }
 \seealso{
 Other mutate functions: 

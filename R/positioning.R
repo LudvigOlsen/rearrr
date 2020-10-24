@@ -32,7 +32,6 @@
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -74,7 +73,6 @@
 #' # Plot the rearranged values
 #' plot(x = 1:10, y = position_max(df, col = "B", position = 3)$B)
 #' plot(x = 1:10, y = position_max(df, col = "B", position = 3, shuffle_sides = TRUE)$B)
-#' }
 position_max <- function(data,
                          col = NULL,
                          position = NULL,

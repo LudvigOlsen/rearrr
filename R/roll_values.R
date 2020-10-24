@@ -60,7 +60,6 @@
 #' @family roll functions
 #' @family mutate functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #'
@@ -139,7 +138,6 @@
 #'   .max = 5,
 #'   between = 1
 #' )
-#' }
 roll_values <- function(data,
                         cols = NULL,
                         add = 0,

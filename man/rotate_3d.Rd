@@ -93,7 +93,6 @@ Where \eqn{\alpha =} \code{`z_deg`} in radians, \eqn{\beta =} \code{`y_deg`} in 
 As specified at \href{https://en.wikipedia.org/wiki/Rotation_matrix}{Wikipedia/Rotation_matrix}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -135,7 +134,6 @@ ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha
   theme_minimal() +
   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(

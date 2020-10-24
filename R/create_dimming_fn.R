@@ -38,7 +38,6 @@
 #'
 #'  \code{\}}
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(ggplot2)
@@ -73,7 +72,6 @@
 #'   geom_point() +
 #'   geom_line() +
 #'   theme_minimal()
-#' }
 create_dimming_fn <- function(numerator = 1, exponent = 2, add_to_distance = 1) {
 
   # Check arguments ####

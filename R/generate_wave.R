@@ -1,6 +1,5 @@
 
 
-
 #   __________________ #< 68d7309fea7a007c29abd251c0f33a7c ># __________________
 #   Generate wave signal                                                    ####
 
@@ -25,37 +24,6 @@
 #' @param trig_fn Trigonometric function like \code{sin} and \code{cos}.
 #' @keywords internal
 #' @return y-values for the wave signal.
-#' @examples
-#' \dontrun{
-#' # Attach packages
-#' library(rearrr)
-#' library(dplyr)
-#' library(ggplot2)
-#'
-#' # Set seed
-#' set.seed(2)
-#'
-#' # Create a data frame
-#' df <- data.frame(
-#'   "x" = 1:100
-#' )
-#'
-#' # Generate sine wave
-#' df$sine <- rearrr:::generate_sine_wave(ts = df$x, freq = 1 / 50)
-#'
-#' df %>%
-#'   ggplot(aes(x = x, y = sine)) +
-#'   geom_path() +
-#'   theme_minimal()
-#'
-#' # Generate cosine wave
-#' df$cosine <- rearrr:::generate_cosine_wave(ts = df$x, freq = 1 / 50)
-#'
-#' df %>%
-#'   ggplot(aes(x = x, y = cosine)) +
-#'   geom_path() +
-#'   theme_minimal()
-#' }
 generate_wave <- function(ts,
                           fs = 44100,
                           amplitude = 1,
@@ -124,3 +92,37 @@ generate_cosine_wave <- function(ts,
     trig_fn = cos
   )
 }
+
+
+# Future examples (Only add when functions are exported)
+# @examples
+# \dontrun{
+# # Attach packages
+# library(rearrr)
+# library(dplyr)
+# library(ggplot2)
+#
+# # Set seed
+# set.seed(2)
+#
+# # Create a data frame
+# df <- data.frame(
+#   "x" = 1:100
+# )
+#
+# # Generate sine wave
+# df$sine <- rearrr:::generate_sine_wave(ts = df$x, freq = 1 / 50)
+#
+# df %>%
+#   ggplot(aes(x = x, y = sine)) +
+#   geom_path() +
+#   theme_minimal()
+#
+# # Generate cosine wave
+# df$cosine <- rearrr:::generate_cosine_wave(ts = df$x, freq = 1 / 50)
+#
+# df %>%
+#   ggplot(aes(x = x, y = cosine)) +
+#   geom_path() +
+#   theme_minimal()
+# }

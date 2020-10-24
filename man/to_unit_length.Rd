@@ -41,7 +41,6 @@ Scales the vectors to unit length \emph{row-wise} or \emph{column-wise}.
 The \code{*_vec()} version take and return a \code{vector}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -74,7 +73,6 @@ df \%>\%
 to_unit_length_vec(c(1:10))
 to_unit_length(c(1:10), suffix = "", overwrite = TRUE)
 vector_length(to_unit_length_vec(c(1:10)))
-}
 }
 \seealso{
 Other scaling functions: 

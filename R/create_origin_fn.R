@@ -17,7 +17,6 @@
 #' @return Function with the dots (\code{...}) argument that applies the \code{`fn`} function to
 #'  each element in \code{...} (usually one vector per dimension).
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #'
@@ -53,7 +52,6 @@
 #'   mean(y, na.rm = TRUE),
 #'   mean(z, na.rm = TRUE)
 #' )
-#' }
 create_origin_fn <- function(fn, ...) {
   args <- list(...)
   function(...) {

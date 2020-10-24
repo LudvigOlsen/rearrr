@@ -22,7 +22,6 @@ Means of the supplied \code{vectors}/\code{columns}. Either as a \code{vector} o
 Calculates the mean of each passed \code{vector}/\code{column}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -59,7 +58,6 @@ centroid(df, cols = c("x", "y", "z"))
 df \%>\%
   dplyr::group_by(g) \%>\%
   centroid(cols = c("x", "y", "z"))
-}
 }
 \seealso{
 Other coordinate functions: 

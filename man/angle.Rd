@@ -68,7 +68,6 @@ latter can be useful when supplying a grouped \code{data.frame} and finding the 
 of each group.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -110,7 +109,6 @@ angle(
   y_col = "y",
   origin_fn = centroid
 )
-}
 }
 \seealso{
 Other measuring functions: 

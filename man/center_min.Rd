@@ -34,7 +34,6 @@ are \strong{ordered as}:
 \code{c(5, 3,} \strong{\code{1}}\code{, 2, 4)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -75,7 +74,6 @@ df \%>\%
 # Plot the centered values
 plot(x = 1:10, y = center_min(df, col = "B")$B)
 plot(x = 1:10, y = center_min(df, col = "B", shuffle_sides = TRUE)$B)
-}
 }
 \seealso{
 Other rearrange functions: 

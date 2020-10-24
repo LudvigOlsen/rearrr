@@ -82,7 +82,6 @@ Changes the values to :
 \code{c(2, 5, 0, 3, 4, 6)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -147,7 +146,6 @@ ggplot(df, aes(x = Index, y = A)) +
   geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
   geom_hline(aes(color = "3", yintercept = 3)) +
   theme_minimal()
-}
 }
 \seealso{
 Other mutate functions: 

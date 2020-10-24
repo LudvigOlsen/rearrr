@@ -13,7 +13,6 @@
 #'
 #'  Missing values (\code{NA}s) are returned as they are.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -26,7 +25,6 @@
 #'
 #' # Get back the original degrees
 #' radians_to_degrees(degrees_to_radians(c(90, 180, 270)))
-#' }
 degrees_to_radians <- function(degrees) {
   checkmate::assert_numeric(degrees)
   degrees * (pi / 180)
