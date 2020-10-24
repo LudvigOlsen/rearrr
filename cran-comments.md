@@ -8,3 +8,6 @@
 0 errors | 0 warnings | 1 note
 
 * This is a new release.
+* Removed examples for unexported functions
+* Made examples testable in most cases
+* Replaced <<- assignment with specific assignment to the right environment
