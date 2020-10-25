@@ -71,7 +71,6 @@ Should not be confused with \code{\link[rearrr:roll_values]{roll_values()}},
 which changes the \emph{values} of the elements and wraps to a given range.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -125,7 +124,6 @@ roll_elements(
   n_fn = median_index,
   negate = TRUE
 )
-}
 }
 \seealso{
 Other roll functions: 

@@ -46,7 +46,6 @@ Are \strong{ordered as}:
 \code{c(3, 2, 1, 6, 4, 5)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -82,7 +81,6 @@ plot(
   x = 1:10,
   y = rev_windows_vec(1:10, window_size = 3)
 )
-}
 }
 \seealso{
 Other rearrange functions: 

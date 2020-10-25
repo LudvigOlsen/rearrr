@@ -44,7 +44,6 @@ As used with \code{\link[rearrr:roll_elements]{roll_elements()}}. E.g. to
 find the the median index in a subset of a grouped \code{data.frame}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 
@@ -88,7 +87,6 @@ round(c(
   mean(y, na.rm = TRUE),
   mean(z, na.rm = TRUE)
 ))
-}
 }
 \seealso{
 Other n functions: 

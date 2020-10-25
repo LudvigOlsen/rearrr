@@ -39,7 +39,6 @@
 #'  Note: The dots argument in the generated function should not to be confused with the dots
 #'  argument in \code{create_n_fn()}).
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #'
@@ -83,7 +82,6 @@
 #'   mean(y, na.rm = TRUE),
 #'   mean(z, na.rm = TRUE)
 #' ))
-#' }
 create_n_fn <- function(fn,
                         use_index = FALSE,
                         negate = FALSE,

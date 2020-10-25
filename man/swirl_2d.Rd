@@ -100,7 +100,6 @@ latter can be useful when supplying a grouped \code{data.frame} and swirling aro
 of each group.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -127,6 +126,7 @@ swirl_2d(
   origin = c(0, 0)
 )
 
+\donttest{
 # Swirl around the centroid
 # with 6 different radius settings
 # Scale the distances with custom function
@@ -149,6 +149,7 @@ df_swirled \%>\%
   geom_point() +
   theme_minimal() +
   labs(x = "x", y = "y", color = ".radius")
+}
 
 #
 # Swirl random data
@@ -170,7 +171,6 @@ df_swirled \%>\%
   geom_point() +
   theme_minimal() +
   labs(x = "r1", y = "r2")
-}
 }
 \seealso{
 Other mutate functions: 

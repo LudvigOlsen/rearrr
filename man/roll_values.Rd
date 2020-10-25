@@ -117,7 +117,6 @@ Should not be confused with \code{\link[rearrr:roll_elements]{roll_elements()}},
 which changes the \emph{positions} of the elements.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 
@@ -196,7 +195,6 @@ wrap_to_range(
   .max = 5,
   between = 1
 )
-}
 }
 \seealso{
 Other roll functions: 

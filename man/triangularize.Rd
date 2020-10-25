@@ -56,7 +56,6 @@ This will likely look most like a triangle when the y-coordinates are somewhat e
 e.g. a uniform distribution.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -126,6 +125,7 @@ df_tri \%>\%
 # Multiple triangles by contraction
 #
 
+\donttest{
 # Start by squaring 'y'
 df_tri <- triangularize(df, y_col = "y")
 

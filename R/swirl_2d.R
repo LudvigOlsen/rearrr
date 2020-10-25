@@ -39,7 +39,6 @@
 #' @inheritParams multi_mutator_
 #' @inheritParams swirl_3d
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -66,6 +65,7 @@
 #'   origin = c(0, 0)
 #' )
 #'
+#' \donttest{
 #' # Swirl around the centroid
 #' # with 6 different radius settings
 #' # Scale the distances with custom function
@@ -88,6 +88,7 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = ".radius")
+#' }
 #'
 #' #
 #' # Swirl random data
@@ -109,7 +110,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "r1", y = "r2")
-#' }
 swirl_2d <- function(data,
                      radius,
                      x_col = NULL,

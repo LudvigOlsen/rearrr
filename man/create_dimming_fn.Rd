@@ -43,7 +43,6 @@ With the default values, the returned function is:
 \code{\}}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(ggplot2)
@@ -78,7 +77,6 @@ ggplot(df, aes(x=d, y=x_dimmed)) +
   geom_point() +
   geom_line() +
   theme_minimal()
-}
 }
 \seealso{
 Other function creators: 

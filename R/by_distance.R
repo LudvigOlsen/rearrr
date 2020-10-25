@@ -43,7 +43,6 @@
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -98,7 +97,8 @@
 #'     cols = "B",
 #'     origin_fn = create_origin_fn(median)
 #'   )$B,
-#'   xlab = "Position", ylab = "B"
+#'   xlab = "Position",
+#'   ylab = "B"
 #' )
 #' plot(
 #'   x = 1:10,
@@ -107,13 +107,13 @@
 #'     origin_fn = create_origin_fn(median),
 #'     shuffle_ties = TRUE
 #'   )$A,
-#'   xlab = "Position", ylab = "A"
+#'   xlab = "Position",
+#'   ylab = "A"
 #' )
 #'
 #' # In multiple dimensions
 #' df %>%
 #'   closest_to(cols = c("A", "B"), origin_fn = most_centered)
-#' }
 closest_to <- function(data,
                        cols = NULL,
                        origin = NULL,

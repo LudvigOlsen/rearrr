@@ -47,7 +47,6 @@
 #' @family rotation functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -101,7 +100,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "Index", y = "Value", color = "Degrees")
-#' }
 rotate_2d <- function(data,
                       degrees,
                       x_col = NULL,

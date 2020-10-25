@@ -52,7 +52,6 @@ Generates \code{data.frame} (\code{tibble}) with clustered groups.
 }
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -90,7 +89,6 @@ clusters <- generate_clusters(
   num_clusters = 5, compactness = 1.6
 )
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(

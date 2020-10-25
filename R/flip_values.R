@@ -41,7 +41,6 @@
 #' @family mutate functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -106,7 +105,6 @@
 #'   geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
 #'   geom_hline(aes(color = "3", yintercept = 3)) +
 #'   theme_minimal()
-#' }
 flip_values <- function(data,
                         cols = NULL,
                         origin = NULL,

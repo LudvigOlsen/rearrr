@@ -90,7 +90,6 @@
 #' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -251,7 +250,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "g")
-#' }
 expand_distances_each <- function(data,
                                   cols = NULL,
                                   multipliers = NULL,

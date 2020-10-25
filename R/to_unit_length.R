@@ -21,7 +21,6 @@
 #' @family scaling functions
 #' @return Scaled \code{vector} or \code{data.frame} (\code{tibble}) with the scaled columns.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -54,7 +53,6 @@
 #' to_unit_length_vec(c(1:10))
 #' to_unit_length(c(1:10), suffix = "", overwrite = TRUE)
 #' vector_length(to_unit_length_vec(c(1:10)))
-#' }
 to_unit_length <- function(data,
                            cols = NULL,
                            by_row = is.data.frame(data),

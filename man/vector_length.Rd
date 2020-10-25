@@ -47,7 +47,6 @@ Where \eqn{x} is the \code{vector} to get the length/magnitude of.
 Should not be confused with \code{\link[base:length]{length()}}, which counts the elements.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -75,7 +74,6 @@ df \%>\%
 
 # Measure vector length of a vector
 vector_length(c(1:10))
-}
 }
 \seealso{
 Other measuring functions: 

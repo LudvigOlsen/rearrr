@@ -21,7 +21,6 @@
 #' @return The coordinates for the data point closest to the centroid.
 #'  Either as a \code{vector} or a \code{data.frame}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -66,8 +65,6 @@
 #' df %>%
 #'   dplyr::group_by(g) %>%
 #'   dplyr::filter(is_most_centered(x, y, z))
-#'
-#' }
 most_centered <- function(..., cols = NULL, na.rm = FALSE) {
   most_centered_coord_fn <- function(...) {
     # Convert inputs to list

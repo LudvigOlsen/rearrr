@@ -25,7 +25,6 @@ Missing values (\code{NA}s) are returned as they are.
 Convert degrees to radians or radians to degrees.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -38,7 +37,6 @@ radians_to_degrees(c(pi / 2, pi, 1.5 * pi))
 
 # Get back the original degrees
 radians_to_degrees(degrees_to_radians(c(90, 180, 270)))
-}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

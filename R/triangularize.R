@@ -24,7 +24,6 @@
 #'  for the edge the data point is a part of.
 #' @family forming functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -94,6 +93,7 @@
 #' # Multiple triangles by contraction
 #' #
 #'
+#' \donttest{
 #' # Start by squaring 'y'
 #' df_tri <- triangularize(df, y_col = "y")
 #'
