@@ -318,9 +318,34 @@ rearrange_by_distance <- function(data,
 ##  .................. #< da4fe0fffb24210b784112591123dcc6 ># ..................
 ##  Pair extremes                                                           ####
 
+# Wrapper for running extreme pairing and ordering data by it
+pair_extremes_and_order_ <- function(data, col, new_col, unequal_method, shuffle_members, shuffle_pairs){
+
+  # Order data frame
+  data <- data[order(data[[col]]), , drop = FALSE]
+
+  # Add rearrange factor (of type integer)
+  data[[new_col]] <-
+    create_rearrange_factor_pair_extremes_(
+      size = nrow(data),
+      unequal_method = unequal_method
+    )
+
+  # Order data by the pairs
+  data <- order_by_group(
+    data = data,
+    group_col = new_col,
+    shuffle_members = shuffle_members,
+    shuffle_pairs = shuffle_pairs
+  )
+
+  data
+}
+
 
 # TODO Add aggregate_fn for recursive pairings
-rearrange_pair_extremes <- function(data, cols,
+rearrange_pair_extremes <- function(data,
+                                    cols,
                                     overwrite,
                                     unequal_method,
                                     num_pairings,
@@ -335,43 +360,121 @@ rearrange_pair_extremes <- function(data, cols,
     return(data)
   }
 
-  # Order data frame
-  data <- data[order(data[[col]]), , drop = FALSE]
+  optimize_for = "mean" # TODO make argument
+  equal_nrows <- nrow(data) %% 2 == 0
+
+  # Prepare factor names for output
+  factor_names <- factor_name
+  if (!is.null(factor_names) && num_pairings > 1){
+    factor_names <- paste0(factor_name, "_", seq_len(num_pairings))
+  }
 
   ## First extreme pairing
 
-  # Create
-  local_tmp_rearrange_var <- create_tmp_var(data, ".tmp_rearrange_col")
-  data[[local_tmp_rearrange_var]] <-
-    create_rearrange_factor_pair_extremes_(
-      size = nrow(data), unequal_method = unequal_method
-    )
+  # Create num_pairings tmp column names
+  tmp_rearrange_vars <- purrr::map(.x = seq_len(num_pairings), .f = ~ {
+    create_tmp_var(data, paste0(".tmp_rearrange_col_", .x))
+  }) %>% unlist(recursive = TRUE)
 
-  # Order data by the pairs
-  data <- order_by_group(
+  # Pair the extreme values and order by the pairs
+  data <- pair_extremes_and_order_(
     data = data,
-    group_col = local_tmp_rearrange_var,
+    col = col,
+    new_col = tmp_rearrange_vars[[1]],
+    unequal_method = unequal_method,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs
   )
 
   # TODO Perform recursive pairing
 
-  # if (num_pairings > 1){
-  #
-  #
-  #
-  # }
+  if (num_pairings > 1){
 
-  # TODO Make this work for num_pairings factors
+    # Get environment so we can update `data`
+    pairing_env <- environment()
 
-  # Add rearrange factor
-  data <- add_info_col_(
-    data = base_deselect_(data, cols = local_tmp_rearrange_var),
-    nm = factor_name,
-    content = as.factor(data[[local_tmp_rearrange_var]]),
-    overwrite = overwrite
-  )
+    # Perform num_pairings-1 pairings
+    plyr::l_ply(seq_len(num_pairings - 1), function(i) {
+
+      # Note that `tmp_rearrange_vars[[i]]` is for the previous level
+      # and `tmp_rearrange_vars[[i + 1]]` is for the current level
+
+      # What to optimize for ("mean" or "spread")
+      if (length(optimize_for) > 1) {
+        current_optimize_for <- optimize_for[[i]]
+      } else {
+        current_optimize_for <- optimize_for
+      }
+
+      if (current_optimize_for == "mean") {
+        tmp_group_scores <- data %>%
+          dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
+          dplyr::summarize(group_aggr = sum(!!as.name(col)))
+      } else if (current_optimize_for == "spread") {
+        tmp_group_scores <- data %>%
+          dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
+          dplyr::summarize(group_aggr = sum(abs(diff(!!as.name(col))))) # TODO why the sum?
+      }
+
+      if (!equal_nrows & unequal_method == "first") {
+
+        # Reorder with first group always first
+        # (otherwise doesn't work with negative numbers)
+        # TODO Better to just move to positive numbers and back afterwards?
+        # TODO Investigate this behavior!
+        tmp_group_scores_sorted <- tmp_group_scores %>%
+          dplyr::filter(dplyr::row_number() == 1) %>%
+          dplyr::bind_rows(
+            tmp_group_scores %>%
+              dplyr::filter(dplyr::row_number() != 1) %>%
+              dplyr::arrange(.data$group_aggr))
+      } else {
+        tmp_group_scores_sorted <- tmp_group_scores %>%
+          dplyr::arrange(.data$group_aggr)
+      }
+      print(tmp_group_scores_sorted)
+      # Pair the extreme pairs and order by the new pairs
+      tmp_rearrange <- pair_extremes_and_order_(
+        data = tmp_group_scores_sorted,
+        col = "group_aggr",
+        new_col = tmp_rearrange_vars[[i + 1]],
+        unequal_method = unequal_method,
+        shuffle_members = shuffle_members,
+        shuffle_pairs = shuffle_pairs
+      ) %>%
+        base_select_(cols = c(tmp_rearrange_vars[[i]], tmp_rearrange_vars[[i + 1]]))
+
+      # Add the new pair identifiers to `data`
+      data <- data %>%
+        dplyr::left_join(tmp_rearrange, by = tmp_rearrange_vars[[i]])
+
+      # Update `data` in parent environment
+      pairing_env[["data"]] <- data
+
+    })
+  }
+
+  # Arrange by generated grouping factors
+  data <- data %>%
+    dplyr::arrange(!!!rlang::syms(c(rev(tmp_rearrange_vars), col)))
+
+  # Order by all recursive levels
+
+  if (!is.null(factor_names)){
+    # Convert to factors and give correct names
+    rearrange_factors <- as.list(data[, tmp_rearrange_vars, drop=FALSE])
+    rearrange_factors <- purrr::map(rearrange_factors, .f = ~{as.factor(.x)})
+    names(rearrange_factors) <- factor_names
+
+    # Remove tmp vars and add factors
+    data <- base_deselect_(data, cols = tmp_rearrange_vars) %>%
+      add_dimensions_(new_vectors = rearrange_factors,
+                      overwrite = overwrite)
+  } else {
+    # If names are NULL, we just remove the tmp columns
+    data <- base_deselect_(data, cols = tmp_rearrange_vars)
+  }
+
 
   data
 }
