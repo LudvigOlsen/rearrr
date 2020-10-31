@@ -1,6 +1,5 @@
 
 
-
 #   __________________ #< 1bae15c31fc98d40b9bd4b7b5434d7b3 ># __________________
 #   Angle                                                                   ####
 
@@ -25,8 +24,8 @@
 #'  the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param origin Coordinates of the origin to calculate angle to.
-#'  Must be either a single constant to use in all dimensions
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions
+#'  or a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param degrees_col_name Name of new column with the degrees.
@@ -36,7 +35,6 @@
 #' @inheritParams multi_mutator_
 #' @family measuring functions
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -78,7 +76,6 @@
 #'   y_col = "y",
 #'   origin_fn = centroid
 #' )
-#' }
 angle <- function(data,
                   x_col = NULL,
                   y_col = NULL,

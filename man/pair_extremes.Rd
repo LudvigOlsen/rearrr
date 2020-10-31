@@ -132,7 +132,6 @@ And are \strong{ordered as}:
 \code{c(1, 6, 2, 5, 3, 4)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -188,7 +187,6 @@ plot(
   x = rep(1:5, each = 2),
   y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B
 )
-}
 }
 \seealso{
 Other rearrange functions: 

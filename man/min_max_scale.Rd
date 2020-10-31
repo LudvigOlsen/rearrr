@@ -41,7 +41,6 @@ Scaled version of \code{`x`}.
 Scales the values to a range with MinMax scaling.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 
@@ -54,7 +53,6 @@ x <- runif(10)
 # Scale
 min_max_scale(x, new_min = -1, new_max = 0)
 min_max_scale(x, new_min = -1, new_max = 0, old_max = 3)
-}
 }
 \seealso{
 Other scaling functions: 

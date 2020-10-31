@@ -34,7 +34,6 @@
 #'  When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -48,10 +47,7 @@
 #'   "A" = sample(1:10),
 #'   "B" = runif(10),
 #'   "C" = LETTERS[1:10],
-#'   "G" = c(
-#'     1, 1, 1, 1, 1,
-#'     2, 2, 2, 2, 2
-#'   ),
+#'   "G" = rep(1:2, each = 5),
 #'   stringsAsFactors = FALSE
 #' )
 #'
@@ -73,7 +69,6 @@
 #'   x = 1:10,
 #'   y = rev_windows_vec(1:10, window_size = 3)
 #' )
-#' }
 rev_windows <- function(data,
                         window_size,
                         factor_name = ".window",

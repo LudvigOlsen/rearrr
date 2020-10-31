@@ -42,21 +42,23 @@ them more as width settings where a larger number leads to fewer full rotations.
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to swirl around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+\item{origin}{Coordinates of the origin to swirl around.
+\code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{scale_fn}{Function for scaling the distances before calculating the degrees.
@@ -89,7 +91,8 @@ when plotting multiple rotations.}
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
-\code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
+\code{data.frame} (\code{tibble}) with new columns containing
+the swirled x- and y-values, the degrees, the radiuses, and the origin coordinates.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -104,7 +107,6 @@ latter can be useful when supplying a grouped \code{data.frame} and swirling aro
 of each group.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -157,7 +159,6 @@ ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha 
   theme_minimal() +
   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
@@ -169,7 +170,6 @@ plotly::plot_ly(
   color = df_swirled$.radius_str
 )
 }
-\donttest{
 
 # Swirl around the centroid
 df_swirled <- swirl_3d(
@@ -194,7 +194,6 @@ ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha 
   theme_minimal() +
   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
@@ -295,6 +294,7 @@ ggplot(
 }
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
@@ -303,15 +303,27 @@ Other mutate functions:
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
 \code{\link{swirl_2d}()}
 
 Other rotation functions: 
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
 \code{\link{swirl_2d}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_2d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{mutate functions}
 \concept{rotation functions}

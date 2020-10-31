@@ -27,7 +27,7 @@ Should not return anything.}
 \item{cols}{Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
-\item{allowed_types}{Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
+\item{allowed_types}{Allowed types of the \code{`col(s)`} columns. The type restrictions do not apply to
 columns not mentioned in the \code{`col(s)`} argument.}
 
 \item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
@@ -39,14 +39,15 @@ the row numbers are used.}
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{...}{Named arguments for the \code{`rearrange_fn`}.}

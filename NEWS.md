@@ -1,5 +1,5 @@
 
-# rearrr 0.0.0.9000
+# rearrr 0.1.0
 
 Note: Multiple of the new functions also have `*_vec()` versions that take and return vectors. The same can *usually* be achieved with the regular versions, but these wrappers make it easier and less verbose.
 
@@ -34,12 +34,16 @@ Note: Multiple of the new functions also have `*_vec()` versions that take and r
 
 * Adds `swirl_2d()` and `swirl_3d()` for rotating values around an origin. (Mutator)
 
+* Adds `shear_2d()` and `shear_3d()` for shearing values around an origin. (Mutator)
+
 * Adds `flip_values()` for flipping values around a center value. (Mutator)
 
 * Adds `roll_values()` and `wrap_to_range()` for rolling/shifting values and wrapping to a range. (Mutator)
 
 * Adds `transfer_centroids()` for transferring centroids from one `data.frame` to another. (Mutator)
 
+* Adds `apply_transformation_matrix()` for performing matrix multiplication with a given transformation matrix
+and a set of `data.frame` columns. Allows moving the origin before and after the transformation.
 
 ## Formers
 

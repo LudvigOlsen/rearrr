@@ -14,13 +14,13 @@
 #'  \deqn{(max x + min x) / 2}
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @inheritParams apply_coord_fn_
-#' @param na.rm Whether to ignore missing values when calculating \code{min} and \code{max} values. (Logical)
+#' @param na.rm Whether to ignore missing values when calculating
+#'  \code{min} and \code{max} values. (Logical)
 #' @family coordinate functions
 #' @export
-#' @return Either a \code{vector} with the midrange of each supplied vector or a \code{data.frame} with the
-#'  midrange of each supplied column along with any grouping variables.
+#' @return Either a \code{vector} with the midrange of each supplied \code{vector}
+#'  or a \code{data.frame} with the midrange of each supplied column along with any grouping variables.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -55,7 +55,6 @@
 #' df %>%
 #'   dplyr::group_by(g) %>%
 #'   midrange(cols = c("x", "y", "z"))
-#' }
 midrange <- function(..., cols = NULL, na.rm = FALSE) {
   # Midrange coordinate function
   midrange_coord_fn <- create_origin_fn(function(x) {

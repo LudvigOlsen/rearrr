@@ -20,9 +20,12 @@ dim_values(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{cols}{Names of columns in \code{`data`}.
+\item{cols}{Names of columns in \code{`data`} to calculate distances from.
 The dimming column (\code{`dim_col`}) is dimmed based on all the columns.
-Each column is considered a dimension.}
+Each column is considered a dimension.
+
+\strong{N.B.} when the dimming dimension is included in \code{`cols`},
+it is used in the distance calculation as well.}
 
 \item{dimming_fn}{\code{Function} for calculating the dimmed values.
 
@@ -47,8 +50,8 @@ This kind of dimming function can be created with
 which for instance makes it easy to change the exponent (the \code{2} above).}
 
 \item{origin}{Coordinates of the origin to dim around.
-Must be either a single constant to use in all dimensions
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions
+or a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
@@ -56,17 +59,20 @@ or a \code{vector} with one constant per dimension.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
-\item{dim_col}{Name of column to dim. Default is the last column in \code{`cols`}. This column must also be in \code{`cols`}.}
+\item{dim_col}{Name of column to dim. Default is the last column in \code{`cols`}.
+
+When the \code{`dim_col`} is not present in \code{`cols`}, it is not used in the distance calculation.}
 
 \item{suffix}{Suffix to add to the names of the generated columns.
 
@@ -87,7 +93,8 @@ along with the origin coordinates.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Dims the values in the dimming dimension (last by default) based on the data point's distance to the origin.
+Dims the values in the dimming dimension (last by default)
+based on the data point's distance to the origin.
 
 Distance is calculated as:
 \deqn{d(P1, P2) = sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 + ... )}
@@ -112,7 +119,6 @@ of each group.
 }
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -139,11 +145,12 @@ dim_values(
   origin = c(0.5, 0.5, 0.5)
 )
 
-# Dim the values in the `o` column
+# Dim the values in the `o` column (all 1s)
 # around the centroid
 dim_values(
   data = df,
-  cols = c("x", "y", "o"),
+  cols = c("x", "y"),
+  dim_col = "o",
   origin_fn = centroid
 )
 
@@ -151,7 +158,8 @@ dim_values(
 # around the centroid
 dim_values(
   data = df,
-  cols = c("x", "y", "o"),
+  cols = c("x", "y"),
+  dim_col = "o",
   origin_fn = centroid,
   dimming_fn = function(x, d) {
     x * 1 / (2^(1 + d))
@@ -166,7 +174,8 @@ dim_values(
 df_dimmed <- df \%>\%
   dplyr::group_by(.cluster) \%>\%
   dim_values(
-    cols = c("x", "y", "o"),
+    cols = c("x", "y"),
+    dim_col = "o",
     origin_fn = centroid
   )
 
@@ -181,9 +190,9 @@ ggplot(
   theme_minimal() +
   labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
 }
-}
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{expand_distances_each}()},
 \code{\link{expand_distances}()},
@@ -191,10 +200,22 @@ Other mutate functions:
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{mutate functions}

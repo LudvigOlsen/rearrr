@@ -39,8 +39,6 @@ sine_up_ <- function(data,
 
   print(fs)
 
-  # Move origin
-  # x <- x - origin_coordinate
   sined_dim_vectors <-
     purrr::map2(.x = dim_vectors, .y = fs, .f = ~ {
       .x * generate_sine_wave(.x,

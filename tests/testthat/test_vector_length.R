@@ -166,7 +166,7 @@ test_that("fuzz testing vector_length()", {
     "y" = runif(20),
     "z" = runif(20),
     "ch" = LETTERS[1:20],
-    "g" = rep(1:4, each=5),
+    "g" = rep(1:4, each = 5),
     stringsAsFactors = FALSE
   )
 

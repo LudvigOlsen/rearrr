@@ -62,7 +62,7 @@ test_that("fuzz testing apply_coordinate_fn()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['messages']]),
-    xpectr::strip("When 'leFunction' is specified, 'leCoordinate', is ignored.\n"),
+    xpectr::strip("When 'leFunction' is specified, 'leCoordinate' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_19148 <- xpectr::suppress_mw(apply_coordinate_fn_(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", grp_id = 1, allow_len_one = FALSE))
@@ -181,7 +181,7 @@ test_that("fuzz testing apply_coordinate_fn()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['messages']]),
-    xpectr::strip("When 'leFunction' is specified, 'leCoordinate', is ignored.\n"),
+    xpectr::strip("When 'leFunction' is specified, 'leCoordinate' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_17365 <- xpectr::suppress_mw(apply_coordinate_fn_(dim_vectors = dim_vecs, coordinates = c(5, 5, 5), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", grp_id = 1, allow_len_one = FALSE))
@@ -225,7 +225,7 @@ test_that("fuzz testing apply_coordinate_fn()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['messages']]),
-    xpectr::strip("When 'leFunction' is specified, 'leCoordinate', is ignored.\n"),
+    xpectr::strip("When 'leFunction' is specified, 'leCoordinate' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_11346 <- xpectr::suppress_mw(apply_coordinate_fn_(dim_vectors = dim_vecs, coordinates = c(0, 0, 0, 0), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", grp_id = 1, allow_len_one = FALSE))
@@ -392,7 +392,7 @@ test_that("fuzz testing apply_coordinate_fn()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['messages']]),
-    xpectr::strip("When 'leFunction' is specified, 'leCoordinate', is ignored.\n"),
+    xpectr::strip("When 'leFunction' is specified, 'leCoordinate' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_19400 <- xpectr::suppress_mw(apply_coordinate_fn_(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = most_centered, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = "dimVar", grp_id = 1, allow_len_one = FALSE))
@@ -589,7 +589,7 @@ test_that("fuzz testing apply_coordinate_fn()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15142[['messages']]),
-    xpectr::strip("When 'leFunction' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'leFunction' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_15142 <- xpectr::suppress_mw(apply_coordinate_fn_(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "origin", fn_name = "leFunction", dim_var_name = "dimVar", grp_id = 1, allow_len_one = FALSE))
@@ -753,7 +753,7 @@ test_that("fuzz testing apply_coordinate_fn()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10039[['messages']]),
-    xpectr::strip("When 'leFunction' is specified, 'leCoordinate', is ignored.\n"),
+    xpectr::strip("When 'leFunction' is specified, 'leCoordinate' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_10039 <- xpectr::suppress_mw(apply_coordinate_fn_(dim_vectors = dim_vecs, coordinates = c(0, 1, 2), fn = centroid, num_dims = 3, coordinate_name = "leCoordinate", fn_name = "leFunction", dim_var_name = NULL, grp_id = 1, allow_len_one = FALSE))

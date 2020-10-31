@@ -19,7 +19,8 @@
 #' @param x_col Name of x column in \code{`data`}. If \code{NULL} and \code{`data`} is a \code{vector},
 #'  the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
-#' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
+#' @param origin Coordinates of the origin to rotate around.
+#'  A \code{vector} with 2 elements (i.e. origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
@@ -46,7 +47,6 @@
 #' @family rotation functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -58,14 +58,8 @@
 #' # Create a data frame
 #' df <- data.frame(
 #'   "Index" = 1:12,
-#'   "A" = c(
-#'     1, 2, 3, 4, 9, 10, 11,
-#'     12, 15, 16, 17, 18
-#'   ),
-#'   "G" = c(
-#'     1, 1, 1, 1, 2, 2,
-#'     2, 2, 3, 3, 3, 3
-#'   )
+#'   "A" = c(1:4, 9:12, 15:18),
+#'   "G" = rep(1:3, each = 4)
 #' )
 #'
 #' # Rotate values around (0, 0)
@@ -106,7 +100,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "Index", y = "Value", color = "Degrees")
-#' }
 rotate_2d <- function(data,
                       degrees,
                       x_col = NULL,
@@ -208,10 +201,12 @@ rotate_2d_mutator_method_ <- function(data,
   if (is.null(x_col)) {
     x_col <- "Index"
     x <- seq_len(nrow(data))
+    cols <- c(x_col, y_col)
   } else {
     x <- data[[x_col]]
   }
   y <- data[[y_col]]
+  dim_vectors <- list(x, y)
 
   # Find origin if specified
   origin <- apply_coordinate_fn_(
@@ -226,35 +221,21 @@ rotate_2d_mutator_method_ <- function(data,
     allow_len_one = FALSE
   )
 
-  # Move origin
-  x <- x - origin[[1]]
-  y <- y - origin[[2]]
-
-  # Convert to matrix
-  xy_matrix <- rbind(x, y)
-
   # Apply rotation matrix
-  xy_matrix <- rotation_matrix %*% xy_matrix
-
-  # Extract x and y
-  x <- xy_matrix[1, ]
-  y <- xy_matrix[2, ]
-
-  # Move origin
-  x <- x + origin[[1]]
-  y <- y + origin[[2]]
+  # Handles moving of the origin
+  dim_vectors <- apply_transformation_matrix_dim_vectors_(
+    dim_vectors = dim_vectors,
+    mat = rotation_matrix,
+    cols = cols,
+    origin = origin
+  )
 
   # Add rotated columns to data
-  data <- add_info_col_(
+  # Add dim_vectors as columns with the suffix
+  data <- add_dimensions_(
     data = data,
-    nm = paste0(x_col, suffix),
-    content = x,
-    overwrite = overwrite
-  )
-  data <- add_info_col_(
-    data = data,
-    nm = paste0(y_col, suffix),
-    content = y,
+    new_vectors = setNames(dim_vectors, cols),
+    suffix = suffix,
     overwrite = overwrite
   )
 

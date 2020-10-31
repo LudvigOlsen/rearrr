@@ -15,6 +15,7 @@ multi_mutator_(
   allowed_types = c("numeric", "factor"),
   allow_missing = FALSE,
   min_dims = 1,
+  altered_col = NULL,
   keep_original = TRUE,
   origin_fn = NULL,
   ...
@@ -38,13 +39,16 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 \item{force_df}{Whether to return a \code{data.frame} when \code{`data`} is a \code{vector}.}
 
-\item{allowed_types}{Allowed types of the \code{`col(s)`} colums. The type restrictions do not apply to
+\item{allowed_types}{Allowed types of the \code{`col(s)`} columns. The type restrictions do not apply to
 columns not mentioned in the \code{`col(s)`} argument.}
 
 \item{allow_missing}{Whether to allow missing values (\code{NA}s). (Logical)}
 
 \item{min_dims}{Minimum number of dimensions (cols) after preparations. When \code{`data`} is a \code{vector}
 setting \code{`min_dims`} to \code{2} will use both the index and the values as columns.}
+
+\item{altered_col}{Additional column that is mutated but is not
+mentioned in \code{`cols`}.}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
@@ -54,14 +58,15 @@ Some columns may have been overwritten, in which case only the newest versions a
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{...}{Named arguments for the \code{`mutate_fn`}.}

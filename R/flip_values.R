@@ -8,12 +8,12 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The values are flipped with the formula \code{x = 2 * c - x} where \code{x} is the value and \code{c} is
+#'  The values are flipped with the formula \eqn{`x = 2 * c - x`} where \emph{x} is the value and \emph{c} is
 #'  the origin coordinate to flip the values around.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
 #'  latter can be useful when supplying a grouped \code{data.frame} and flipping around e.g. the centroid
-#'  of each group.
+#'  of each group. By default the median value in each dimension is used.
 #'
 #'  The \code{*_vec()} version take and return a vector.
 #'
@@ -31,16 +31,16 @@
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param cols Names of columns in \code{`data`} to flip values of.
 #' @param origin Coordinates of the origin to flip around.
-#'  Must be either a single constant to use in all dimensions (columns)
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions (columns)
+#'  or a \code{vector} with one scalar per dimension.
 #'
-#'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
+#'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}. Remember to set it to \code{NULL}
+#'  when passing origin coordinates manually!
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @export
 #' @family mutate functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -64,10 +64,11 @@
 #' # Flip values of the columns
 #' flip_values(df$A)
 #' flip_values(df, cols = "A")
-#' flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
+#' flip_values(df, cols = "B", origin = 0.3, origin_fn = NULL, keep_original = FALSE)
 #' flip_values(df,
 #'   cols = c("A", "B"),
 #'   origin = c(3, 0.3),
+#'   origin_fn = NULL,
 #'   suffix = "",
 #'   keep_original = FALSE,
 #'   overwrite = TRUE
@@ -88,7 +89,8 @@
 #' # First flip A around the median and then around the value 3.
 #' df <- df %>%
 #'   flip_values(cols = "A", suffix = "_flip_median", origin_col_name = NULL) %>%
-#'   flip_values(cols = "A", suffix = "_flip_3", origin = 3, origin_col_name = NULL)
+#'   flip_values(cols = "A", suffix = "_flip_3", origin = 3,
+#'               origin_fn = NULL, origin_col_name = NULL)
 #'
 #' # Plot A and A flipped around its median
 #' ggplot(df, aes(x = Index, y = A)) +
@@ -103,7 +105,6 @@
 #'   geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
 #'   geom_hline(aes(color = "3", yintercept = 3)) +
 #'   theme_minimal()
-#' }
 flip_values <- function(data,
                         cols = NULL,
                         origin = NULL,

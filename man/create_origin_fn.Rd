@@ -21,7 +21,6 @@ each element in \code{...} (usually one vector per dimension).
 Creates a function that applies a supplied function to all input vectors.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 
@@ -53,12 +52,10 @@ y[[5]] <- NA
 mean_origin_fn(x, y, z)
 
 # Should be the same as
-c(
-  mean(x, na.rm = TRUE),
+c(mean(x, na.rm = TRUE),
   mean(y, na.rm = TRUE),
   mean(z, na.rm = TRUE)
 )
-}
 }
 \seealso{
 Other coordinate functions: 
@@ -66,8 +63,13 @@ Other coordinate functions:
 \code{\link{is_most_centered}()},
 \code{\link{midrange}()},
 \code{\link{most_centered}()}
+
+Other function creators: 
+\code{\link{create_dimming_fn}()},
+\code{\link{create_n_fn}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
 \concept{coordinate functions}
+\concept{function creators}

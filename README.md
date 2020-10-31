@@ -60,9 +60,9 @@ origin.
 
 ### Install
 
-<!-- CRAN: -->
+CRAN (when available):
 
-<!-- > `install.packages("rearrr")` -->
+> `install.packages("rearrr")`
 
 Development
 version:
@@ -93,20 +93,20 @@ version:
 
 ### Mutators
 
-| Function                  | Description                                                           | Dimensions   |
-| :------------------------ | :-------------------------------------------------------------------- | :----------- |
-| `rotate_2d()`             | Rotate values around an origin in 2 dimensions.                       | 2            |
-| `rotate_3d()`             | Rotate values around an origin in 3 dimensions.                       | 3            |
-| `swirl_2d()`              | Swirl values around an origin in 2 dimensions.                        | 2            |
-| `swirl_3d()`              | Swirl values around an origin in 3 dimensions.                        | 3            |
-| `expand_distances()`      | Expand distances to an origin.                                        | n            |
-| `expand_distances_each()` | Expand distances to an origin separately for each dimension.          | n            |
-| `cluster_groups()`        | Move data points into clusters around group centroids.                | n            |
-| `dim_values()`            | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
-| `flip_values()`           | Flip the values around an origin.                                     | n            |
-| `roll_values()`           | Shifts values and wraps to a range.                                   | n            |
-| `wrap_to_range()`         | Wraps values to a range.                                              | n            |
-| `transfer_centroids()`    | Transfer centroids from one `data.frame` to another.                  | n            |
+| Function                        | Description                                                           | Dimensions   |
+| :------------------------------ | :-------------------------------------------------------------------- | :----------- |
+| `rotate_2d()`, `rotate_3d()`    | Rotate values around an origin in 2 or 3 dimensions.                  | 2 or 3       |
+| `swirl_2d()`, `swirl_3d()`      | Swirl values around an origin in 2 or 3 dimensions.                   | 2 or 3       |
+| `shear_2d()`, `shear_3d()`      | Shear values around an origin in 2 or 3 dimensions.                   | 2 or 3       |
+| `expand_distances()`            | Expand distances to an origin.                                        | n            |
+| `expand_distances_each()`       | Expand distances to an origin separately for each dimension.          | n            |
+| `cluster_groups()`              | Move data points into clusters around group centroids.                | n            |
+| `dim_values()`                  | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
+| `flip_values()`                 | Flip the values around an origin.                                     | n            |
+| `roll_values()`                 | Shifts values and wraps to a range.                                   | n            |
+| `wrap_to_range()`               | Wraps values to a range.                                              | n            |
+| `transfer_centroids()`          | Transfer centroids from one `data.frame` to another.                  | n            |
+| `apply_transformation_matrix()` | Apply transformation `matrix` to `data.frame` columns.                | n            |
 
 ### Formers
 
@@ -163,7 +163,7 @@ measuring functions) are listed at the bottom of the readme.
           - [Converters](#converters)
           - [Scalers](#scalers)
           - [Measuring functions](#measuring-functions)
-          - [Helpers functions](#helpers-functions)
+          - [Helper functions](#helper-functions)
 
 ## Attach packages
 
@@ -398,7 +398,7 @@ df <- data.frame(
   "r1" = runif(50),
   "r2" = runif(50) * 35,
   "o" = 1,
-  "g" = rep(1:5, each=10)
+  "g" = rep(1:5, each = 10)
 )
 
 # They see me swiiirling
@@ -533,27 +533,28 @@ cluster_groups(
 # Add a column with 1s
 df_clustered$o <- 1
 
-# Dim the "o" column (dims last column in `cols` by default)
-# based on the data point's distance to the most central point in the cluster
+# Dim the "o" column based on the data point's distance 
+# to the most central point in the cluster
 df_clustered %>% 
   dplyr::group_by(g) %>% 
   dim_values(
-    cols = c("x_clustered", "y_clustered", "o"), 
+    cols = c("x_clustered", "y_clustered"), 
+    dim_col = "o",
     origin_fn = most_centered
   )
 #> # A tibble: 50 x 6
 #>    x_clustered y_clustered     g     o o_dimmed .origin  
 #>          <dbl>       <dbl> <dbl> <dbl>    <dbl> <list>   
-#>  1       0.335       0.420     1     1    0.853 <dbl [3]>
-#>  2       0.449       0.417     1     1    0.936 <dbl [3]>
-#>  3       0.374       0.540     1     1    0.798 <dbl [3]>
-#>  4       0.364       0.562     1     1    0.765 <dbl [3]>
-#>  5       0.413       0.534     1     1    0.819 <dbl [3]>
-#>  6       0.413       0.547     1     1    0.801 <dbl [3]>
-#>  7       0.328       0.465     1     1    0.831 <dbl [3]>
-#>  8       0.358       0.419     1     1    0.889 <dbl [3]>
-#>  9       0.408       0.401     1     1    0.943 <dbl [3]>
-#> 10       0.418       0.429     1     1    1     <dbl [3]>
+#>  1       0.335       0.420     1     1    0.853 <dbl [2]>
+#>  2       0.449       0.417     1     1    0.936 <dbl [2]>
+#>  3       0.374       0.540     1     1    0.798 <dbl [2]>
+#>  4       0.364       0.562     1     1    0.765 <dbl [2]>
+#>  5       0.413       0.534     1     1    0.819 <dbl [2]>
+#>  6       0.413       0.547     1     1    0.801 <dbl [2]>
+#>  7       0.328       0.465     1     1    0.831 <dbl [2]>
+#>  8       0.358       0.419     1     1    0.889 <dbl [2]>
+#>  9       0.408       0.401     1     1    0.943 <dbl [2]>
+#> 10       0.418       0.429     1     1    1     <dbl [2]>
 #> # … with 40 more rows
 ```
 
@@ -747,7 +748,7 @@ generate_clusters(
 | `angle()`         | Calculates angle between points and an origin.                  |
 | `vector_length()` | Calculates vector length/magnitude *row-wise* or *column-wise*. |
 
-### Helpers functions
+### Helper functions
 
 | Function             | Description                                                          |
 | :------------------- | :------------------------------------------------------------------- |

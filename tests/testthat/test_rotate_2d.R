@@ -133,7 +133,7 @@ test_that("fuzz testing rotate_2d()", {
   # Testing column names
   expect_equal(
     names(output_19370),
-    c("x", "y", "g", ".origin", ".degrees"),
+    c("g", "x", "y", ".origin", ".degrees"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -227,7 +227,7 @@ test_that("fuzz testing rotate_2d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_17365 <- xpectr::suppress_mw(rotate_2d(data = dplyr::group_by(df, g), degrees = 10, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE))
@@ -259,7 +259,7 @@ test_that("fuzz testing rotate_2d()", {
   # Testing column names
   expect_equal(
     names(output_17365),
-    c("x", "y", "g", ".origin", ".degrees"),
+    c("g", "x", "y", ".origin", ".degrees"),
     fixed = TRUE)
   # Testing column classes
   expect_equal(
@@ -856,7 +856,7 @@ test_that("fuzz testing rotate_2d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14469[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_14469 <- xpectr::suppress_mw(rotate_2d(data = df, degrees = 10, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE))
@@ -1029,7 +1029,7 @@ test_that("fuzz testing rotate_2d()", {
   side_effects_13881 <- xpectr::capture_side_effects(rotate_2d(data = df, degrees = 10, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13881[['error']]),
-    xpectr::strip("1 assertions failed:\n * The column 'x' already exists and 'overwrite' is disabled."),
+    xpectr::strip("Adding these dimensions would overwrite existing columns: x, y."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13881[['error_class']]),

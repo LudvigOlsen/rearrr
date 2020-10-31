@@ -35,21 +35,23 @@ Can be \code{vector}s with multiple degrees.
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+\item{origin}{Coordinates of the origin to rotate around.
+\code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
@@ -91,7 +93,6 @@ Where \eqn{\alpha =} \code{`z_deg`} in radians, \eqn{\beta =} \code{`y_deg`} in 
 As specified at \href{https://en.wikipedia.org/wiki/Rotation_matrix}{Wikipedia/Rotation_matrix}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -103,15 +104,9 @@ set.seed(3)
 # Create a data frame
 df <- data.frame(
   "x" = 1:12,
-  "y" = c(
-    1, 2, 3, 4, 9, 10, 11,
-    12, 15, 16, 17, 18
-  ),
+  "y" = c(1:4, 9:12, 15:18),
   "z" = runif(12),
-  "g" = c(
-    1, 1, 1, 1, 2, 2,
-    2, 2, 3, 3, 3, 3
-  )
+  "g" = rep(1:3, each = 4)
 )
 
 # Rotate values 45 degrees around x-axis at (0, 0, 0)
@@ -139,7 +134,6 @@ ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha
   theme_minimal() +
   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
@@ -223,6 +217,7 @@ plotly::plot_ly(
 }
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
@@ -230,6 +225,8 @@ Other mutate functions:
 \code{\link{flip_values}()},
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}
 

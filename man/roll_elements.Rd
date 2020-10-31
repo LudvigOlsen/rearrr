@@ -32,18 +32,22 @@ A negative number rolls \emph{right/down}.}
 \item{n_fn}{Function to find \code{`n`}. Useful when \code{`data`} is a
 grouped \code{data.frame} and \code{`n`} should depend on the rows in the group.
 
-\strong{Input}: Each \code{vector}/\code{column} in \code{`data`} is passed to the function as a separate argument.
+\strong{Input}: Each specified \code{vector}/\code{column} in \code{`data`}
+is passed to the function as a separate argument.
 
-\strong{Output}: It should return either a \code{vector} with one \code{integer-like scalar} \emph{per column}
+\strong{Output}: It should return either a \code{vector}
+with one \code{integer-like scalar} \emph{per column}
 or a single \code{integer-like scalar} to use for all columns.
 
 Can be created with \code{\link[rearrr:create_n_fn]{create_n_fn()}}.
 See also \code{\link[rearrr:median_index]{median_index()}} and
 \code{\link[rearrr:median_index]{quantile_index()}}.}
 
-\item{n_col_name}{Name of new column with the applied \code{`n`} values. If \code{NULL}, no column is added.}
+\item{n_col_name}{Name of new column with the applied \code{`n`} values.
+If \code{NULL}, no column is added.}
 
-\item{overwrite}{Whether to allow overwriting of columns with the same name as \code{`n_col_name`}. (Logical)}
+\item{overwrite}{Whether to allow overwriting of columns with the
+same name as \code{`n_col_name`}. (Logical)}
 
 \item{...}{Extra arguments for \code{`n_fn`}.}
 }
@@ -64,10 +68,9 @@ Rolling \code{c(1, 2, 3, 4, 5)} with \code{`n = 2`} becomes:
 \code{roll_elements_vec()} takes and returns a \code{vector}.
 
 Should not be confused with \code{\link[rearrr:roll_values]{roll_values()}},
-which changes the \code{value} of the elements and wraps to a given range.
+which changes the \emph{values} of the elements and wraps to a given range.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -121,7 +124,6 @@ roll_elements(
   n_fn = median_index,
   negate = TRUE
 )
-}
 }
 \seealso{
 Other roll functions: 

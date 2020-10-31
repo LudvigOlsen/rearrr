@@ -27,8 +27,12 @@ with both expected to be \code{numeric vector}s. More specifically:
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-Creates a function that multiplies its first input
-by an inverse-exponential (as in \eqn{1 / exp(d)}) of its second input.
+Creates a function that takes 2 inputs (\code{`x`}, \code{`d`}) and performs the operation:
+
+\deqn{x * (numerator / ((add_to_distance + d) ^ exponent))}
+
+Here, \code{`x`} is the current value and \code{`d`} is its distance to an origin.
+The greater the distance, the more we will dim the value of \code{`x`}.
 
 With the default values, the returned function is:
 
@@ -39,18 +43,18 @@ With the default values, the returned function is:
 \code{\}}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
+library(ggplot2)
 
 # Set seed
 set.seed(1)
 
-# Create three vectors
+# Create two vectors
 x <- runif(10)
 d <- runif(10, max = 0.5)
 
-# Create dimming_fn with and add_to_distance of 0
+# Create dimming_fn with an add_to_distance of 0
 # Note: In practice this risks zero-division
 non_smoothed_dimming_fn <- create_dimming_fn(add_to_distance = 0)
 non_smoothed_dimming_fn
@@ -58,8 +62,28 @@ as.list(environment(non_smoothed_dimming_fn))
 
 # Use median_origin_fn
 non_smoothed_dimming_fn(x, d)
+
+# Plotting the dimming
+
+# Create data.frame with distance-based dimming
+df <- data.frame(
+  "x" = 1,
+  "d" = 1:10
+)
+df$x_dimmed <- non_smoothed_dimming_fn(df$x, df$d)
+
+# Plot the dimming
+ggplot(df, aes(x=d, y=x_dimmed)) +
+  geom_point() +
+  geom_line() +
+  theme_minimal()
 }
+\seealso{
+Other function creators: 
+\code{\link{create_n_fn}()},
+\code{\link{create_origin_fn}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{function creators}

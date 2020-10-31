@@ -39,36 +39,4 @@ Generate y-values for the wave signal at the given time points with:
 
 \deqn{amplitude * trig_fn(2 * pi * (1 / fs) * ts + phase)}
 }
-\examples{
-\dontrun{
-# Attach packages
-library(rearrr)
-library(dplyr)
-library(ggplot2)
-
-# Set seed
-set.seed(2)
-
-# Create a data frame
-df <- data.frame(
-  "x" = 1:100
-)
-
-# Generate sine wave
-df$sine <- rearrr:::generate_sine_wave(ts = df$x, freq = 1 / 50)
-
-df \%>\%
-  ggplot(aes(x = x, y = sine)) +
-  geom_path() +
-  theme_minimal()
-
-# Generate cosine wave
-df$cosine <- rearrr:::generate_cosine_wave(ts = df$x, freq = 1 / 50)
-
-df \%>\%
-  ggplot(aes(x = x, y = cosine)) +
-  geom_path() +
-  theme_minimal()
-}
-}
 \keyword{internal}

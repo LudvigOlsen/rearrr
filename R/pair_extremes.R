@@ -42,7 +42,6 @@
 #'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -98,7 +97,6 @@
 #'   x = rep(1:5, each = 2),
 #'   y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B
 #' )
-#' }
 pair_extremes <- function(data,
                           col = NULL,
                           unequal_method = "middle",

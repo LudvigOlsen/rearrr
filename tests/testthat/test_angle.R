@@ -280,7 +280,7 @@ test_that("fuzz testing angle()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_16417 <- xpectr::suppress_mw(angle(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE))
@@ -652,7 +652,7 @@ test_that("fuzz testing angle()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_19040 <- xpectr::suppress_mw(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = centroid, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE))
@@ -722,7 +722,7 @@ test_that("fuzz testing angle()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11387[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_11387 <- xpectr::suppress_mw(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0), origin_fn = most_centered, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE))

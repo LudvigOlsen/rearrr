@@ -7,13 +7,14 @@
 shear_2d(
   data,
   x_shear,
+  y_shear = 0,
   x_col = NULL,
   y_col = NULL,
   suffix = "_sheared",
   origin = NULL,
   origin_fn = NULL,
   keep_original = TRUE,
-  shear_col_name = ".x_shear",
+  shear_col_name = ".shear",
   origin_col_name = ".origin",
   overwrite = FALSE
 )
@@ -21,8 +22,11 @@ shear_2d(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{x_shear}{TODO (Also, can this work with data == vector?
-Or do we need to specify that it HAS to be a data.frame?)}
+\item{x_shear}{Shear factor for the x dimension (\code{numeric}). Decides the amount of shearing.
+Can be a \code{vector} with multiple shear factors.}
+
+\item{y_shear}{Shear factor for the y dimension (\code{numeric}). Decides the amount of shearing.
+Can be a \code{vector} with multiple shear factors.}
 
 \item{x_col}{Name of x column in \code{`data`}.}
 
@@ -32,78 +36,158 @@ Or do we need to specify that it HAS to be a data.frame?)}
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to shear around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
+\item{origin}{Coordinates of the origin to shear around.
+\code{Vector} with 2 elements (origin_x, origin_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
-\item{shear_col_name}{Name of new column with the shearing amounts. If \code{NULL}, no column is added.
+\item{shear_col_name}{Name of new column with the shearing factors.
+If \code{NULL}, no column is added.
 
-Also adds a string version with the same name + \code{"_str"}, making it easier to group by the shearing amounts
-when plotting multiple shears.}
+Also adds a string version with the same name + \code{"_str"},
+making it easier to group by the shearing factors
+when plotting multiple shearings.}
 
-\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+\item{origin_col_name}{Name of new column with the origin coordinates.
+If \code{NULL}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
-\code{data.frame} (\code{tibble}) TODO
+\code{data.frame} (\code{tibble}) with sheared columns,
+the shearing factors and the origin coordinates.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-TODO
+Shear a set of 2d points around an origin.
+The shearing formulas (excluding the origin movements) is:
+\deqn{x' = x + x_shear * y}
+\deqn{y' = y + y_shear * x}
+
+The data points in \code{`data`} are moved prior to the shearing, to bring
+the origin to \code{0} in all dimensions. After the shearing, the
+inverse move is applied to bring the origin back to its original position.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and shearing around e.g. the centroid
 of each group.
 }
-\details{
-TODO
-}
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
 library(ggplot2)
 
-# Set seed
-set.seed(1)
-
 # Create a data frame
 df <- data.frame(
-  "Index" = 1:12,
-  "A" = c(
-    1, 2, 3, 4, 9, 10, 11,
-    12, 15, 16, 17, 18
-  ),
-  "G" = c(
-    1, 1, 1, 1, 2, 2,
-    2, 2, 3, 3, 3, 3
-  )
+  "x" = rep(1:6, each = 2),
+  "y" = rep(c(1, 4), 6),
+  "g" = rep(1:2, each = 6)
 )
 
-# TODO Add examples ;)
+# Shear the x variable with regards to y
+# around the centroid
+df_sheared <- shear_2d(
+  data = df,
+  x_shear = 2.5,
+  x_col = "x",
+  y_col = "y",
+  origin_fn = centroid
+)
+
+# Plot sheared data
+# Black: original points
+# Red: sheared points
+df_sheared \%>\%
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+  theme_minimal()
+
+# Shear in both dimensions
+df_sheared <- shear_2d(
+  data = df,
+  x_shear = 2.5,
+  y_shear = 2.5,
+  x_col = "x",
+  y_col = "y",
+  origin_fn = centroid
+)
+
+# Plot sheared data
+# Black: original points
+# Red: sheared points
+df_sheared \%>\%
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_point(aes(x = x_sheared,y = y_sheared, color = "red")) +
+  theme_minimal()
+
+# Shear grouped data frame
+# Affects the calculated origin
+df_sheared <- shear_2d(
+  data = dplyr::group_by(df, g),
+  x_shear = 2.5,
+  x_col = "x",
+  y_col = "y",
+  origin_fn = centroid
+)
+
+# Plot sheared data
+# Black: original points
+# Red: sheared points
+df_sheared \%>\%
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+  theme_minimal()
+
+# Shear a vector with multiple shearing factors
+shear_2d(
+  data = c(1:10),
+  x_shear = c(1, 1.5, 2, 2.5),
+  origin = c(0, 0)
+)
 }
+\seealso{
+Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
+\code{\link{cluster_groups}()},
+\code{\link{dim_values}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{flip_values}()},
+\code{\link{roll_values}()},
+\code{\link{rotate_2d}()},
+\code{\link{rotate_3d}()},
+\code{\link{shear_3d}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
+
+Other shearing functions: 
+\code{\link{shear_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
-\keyword{internal}
+\concept{mutate functions}
+\concept{shearing functions}

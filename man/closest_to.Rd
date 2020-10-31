@@ -25,8 +25,8 @@ closest_to_vec(data, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE)
 the row numbers are used.}
 
 \item{origin}{Coordinates of the origin to calculate distances to.
-Must be either a single constant to use in all dimensions
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions
+or a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
@@ -34,14 +34,15 @@ or a \code{vector} with one constant per dimension.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
@@ -83,7 +84,6 @@ are \strong{ordered as}:
 \code{c(}\strong{\code{2}}\code{, 1, 3, 4, 5)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -138,7 +138,8 @@ plot(
     cols = "B",
     origin_fn = create_origin_fn(median)
   )$B,
-  xlab = "Position", ylab = "B"
+  xlab = "Position",
+  ylab = "B"
 )
 plot(
   x = 1:10,
@@ -147,13 +148,13 @@ plot(
     origin_fn = create_origin_fn(median),
     shuffle_ties = TRUE
   )$A,
-  xlab = "Position", ylab = "A"
+  xlab = "Position",
+  ylab = "A"
 )
 
 # In multiple dimensions
 df \%>\%
   closest_to(cols = c("A", "B"), origin_fn = most_centered)
-}
 }
 \seealso{
 Other rearrange functions: 
@@ -165,8 +166,18 @@ Other rearrange functions:
 \code{\link{position_min}()},
 \code{\link{rev_windows}()},
 \code{\link{roll_elements}()}
+
+Other distance functions: 
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{rearrange functions}

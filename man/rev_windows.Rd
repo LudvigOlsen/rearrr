@@ -46,7 +46,6 @@ Are \strong{ordered as}:
 \code{c(3, 2, 1, 6, 4, 5)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -60,10 +59,7 @@ df <- data.frame(
   "A" = sample(1:10),
   "B" = runif(10),
   "C" = LETTERS[1:10],
-  "G" = c(
-    1, 1, 1, 1, 1,
-    2, 2, 2, 2, 2
-  ),
+  "G" = rep(1:2, each = 5),
   stringsAsFactors = FALSE
 )
 
@@ -85,7 +81,6 @@ plot(
   x = 1:10,
   y = rev_windows_vec(1:10, window_size = 3)
 )
-}
 }
 \seealso{
 Other rearrange functions: 

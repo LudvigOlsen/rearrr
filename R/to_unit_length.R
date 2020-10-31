@@ -10,10 +10,10 @@
 #'
 #'  Scales the vectors to unit length \emph{row-wise} or \emph{column-wise}.
 #'
-#'  The \code{*_vec()} version take and return a vector.
+#'  The \code{*_vec()} version take and return a \code{vector}.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @param cols Names of columns in \code{`data`} to scale.
-#' @param by_row Whether to scale row vectors instead of column vectors. (Logical)
+#' @param by_row Whether to scale row \code{vector}s instead of column \code{vector}s. (Logical)
 #'
 #'  Note: Disable when \code{`data`} is a \code{vector}.
 #' @export
@@ -21,7 +21,6 @@
 #' @family scaling functions
 #' @return Scaled \code{vector} or \code{data.frame} (\code{tibble}) with the scaled columns.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -54,7 +53,6 @@
 #' to_unit_length_vec(c(1:10))
 #' to_unit_length(c(1:10), suffix = "", overwrite = TRUE)
 #' vector_length(to_unit_length_vec(c(1:10)))
-#' }
 to_unit_length <- function(data,
                            cols = NULL,
                            by_row = is.data.frame(data),

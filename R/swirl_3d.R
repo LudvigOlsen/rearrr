@@ -27,7 +27,8 @@
 #'  Note: With a custom \code{`scaling_fn`}, these might not be the actual swirl radiuses anymore. Think of
 #'  them more as width settings where a larger number leads to fewer full rotations.
 #' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
-#' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+#' @param origin Coordinates of the origin to swirl around.
+#'  \code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param scale_fn Function for scaling the distances before calculating the degrees.
 #'
@@ -49,12 +50,13 @@
 #' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
 #' @param radius_col_name Name of new column with the radiuses. If \code{NULL}, no column is added.
 #' @export
-#' @return \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
+#' @return \code{data.frame} (\code{tibble}) with new columns containing
+#'  the swirled x- and y-values, the degrees, the radiuses, and the origin coordinates.
 #' @family mutate functions
 #' @family rotation functions
+#' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -107,7 +109,6 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 #'
-#' }
 #' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
@@ -119,7 +120,6 @@
 #'   color = df_swirled$.radius_str
 #' )
 #' }
-#' \donttest{
 #'
 #' # Swirl around the centroid
 #' df_swirled <- swirl_3d(
@@ -144,7 +144,6 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
 #'
-#' }
 #' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(

@@ -16,7 +16,6 @@
 #' @export
 #' @return Means of the supplied \code{vectors}/\code{columns}. Either as a \code{vector} or a \code{data.frame}.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -53,7 +52,6 @@
 #' df %>%
 #'   dplyr::group_by(g) %>%
 #'   centroid(cols = c("x", "y", "z"))
-#' }
 centroid <- function(..., cols = NULL, na.rm = FALSE) {
   # Apply centroid function
   apply_coord_fn_(

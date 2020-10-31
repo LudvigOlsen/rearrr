@@ -28,17 +28,17 @@ Each column is considered a dimension.}
 
 \item{multiplier}{Constant to multiply/exponentiate the distances to the origin by.
 
-\strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multiplier becomes an \emph{exponent}.}
+\strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the \code{`multiplier`} becomes an \emph{exponent}.}
 
-\item{multiplier_fn}{Function for finding the multiplier.
+\item{multiplier_fn}{Function for finding the \code{`multiplier`}.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
 \strong{Output}: A \code{numeric scalar}.}
 
 \item{origin}{Coordinates of the origin to expand around.
-Must be either a single constant to use in all dimensions
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions
+or a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
@@ -46,14 +46,15 @@ or a \code{vector} with one constant per dimension.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{exponentiate}{Whether to exponentiate instead of multiplying. (Logical)}
@@ -80,9 +81,11 @@ Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
 Some columns may have been overwritten, in which case only the newest versions are returned.}
 
-\item{mult_col_name}{Name of new column with the multiplier. If \code{NULL}, no column is added.}
+\item{mult_col_name}{Name of new column with the \code{`multiplier`}.
+If \code{NULL}, no column is added.}
 
-\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+\item{origin_col_name}{Name of new column with the origin coordinates.
+If \code{NULL}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
@@ -93,8 +96,10 @@ along with the applied multiplier/exponent and origin coordinates.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-The distance to the specified origin is increased/decreased.
-A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
+Moves the data points in n-dimensional space such that their distance
+to a specified origin is increased/decreased.
+A \code{`multiplier`} greater than 1 leads to expansion,
+while a positive \code{`multiplier`} lower than 1 leads to contraction.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and expanding around e.g. the centroid
@@ -112,10 +117,11 @@ If you need the purely exponentiated distances,
 disable \code{`add_one_exp`}.
 }
 \details{
-Increases the distance to the origin in n-dimensional space by multiplying or exponentiating it by the multiplier.
+Increases the distance to the origin in n-dimensional space by
+multiplying or exponentiating it by the multiplier.
 
 We first move the origin to the zero-coordinates (e.g. \code{c(0, 0, 0)})
-and normalize each vector to unit length. We then multiply by this unit vector by the
+and normalize each vector to unit length. We then multiply this unit vector by the
 multiplied/exponentiated distance and moves the origin back to its original coordinates.
 
 The distance to the specified origin is calculated with:
@@ -126,7 +132,6 @@ we add \code{1} to the distance before the exponentiation
 and subtract it afterwards. See \code{`add_one_exp`}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -263,9 +268,9 @@ ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))
   theme_minimal() +
   labs(x = "x", y = "y", color = "g")
 }
-}
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
@@ -273,14 +278,26 @@ Other mutate functions:
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}
 
 Other expander functions: 
 \code{\link{expand_distances_each}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{expander functions}
 \concept{mutate functions}

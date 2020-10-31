@@ -24,23 +24,25 @@ flip_values_vec(data, origin = NULL, origin_fn = create_origin_fn(median))
 \item{cols}{Names of columns in \code{`data`} to flip values of.}
 
 \item{origin}{Coordinates of the origin to flip around.
-Must be either a single constant to use in all dimensions (columns)
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions (columns)
+or a \code{vector} with one scalar per dimension.
 
-\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
+\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}. Remember to set it to \code{NULL}
+when passing origin coordinates manually!}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{suffix}{Suffix to add to the names of the generated columns.
@@ -58,12 +60,12 @@ Some columns may have been overwritten, in which case only the newest versions a
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-The values are flipped with the formula \code{x = 2 * c - x} where \code{x} is the value and \code{c} is
+The values are flipped with the formula \eqn{`x = 2 * c - x`} where \emph{x} is the value and \emph{c} is
 the origin coordinate to flip the values around.
 
 The origin can be supplied as coordinates or as a function that returns coordinates. The
 latter can be useful when supplying a grouped \code{data.frame} and flipping around e.g. the centroid
-of each group.
+of each group. By default the median value in each dimension is used.
 
 The \code{*_vec()} version take and return a vector.
 
@@ -80,7 +82,6 @@ Changes the values to :
 \code{c(2, 5, 0, 3, 4, 6)}
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -104,10 +105,11 @@ df <- data.frame(
 # Flip values of the columns
 flip_values(df$A)
 flip_values(df, cols = "A")
-flip_values(df, cols = "B", origin = 0.3, keep_original = FALSE)
+flip_values(df, cols = "B", origin = 0.3, origin_fn = NULL, keep_original = FALSE)
 flip_values(df,
   cols = c("A", "B"),
   origin = c(3, 0.3),
+  origin_fn = NULL,
   suffix = "",
   keep_original = FALSE,
   overwrite = TRUE
@@ -128,7 +130,8 @@ df \%>\%
 # First flip A around the median and then around the value 3.
 df <- df \%>\%
   flip_values(cols = "A", suffix = "_flip_median", origin_col_name = NULL) \%>\%
-  flip_values(cols = "A", suffix = "_flip_3", origin = 3, origin_col_name = NULL)
+  flip_values(cols = "A", suffix = "_flip_3", origin = 3,
+              origin_fn = NULL, origin_col_name = NULL)
 
 # Plot A and A flipped around its median
 ggplot(df, aes(x = Index, y = A)) +
@@ -144,9 +147,9 @@ ggplot(df, aes(x = Index, y = A)) +
   geom_hline(aes(color = "3", yintercept = 3)) +
   theme_minimal()
 }
-}
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
@@ -154,6 +157,8 @@ Other mutate functions:
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}
 }

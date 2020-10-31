@@ -33,7 +33,6 @@
 #'  When \code{`data`} is a \code{data.frame} and \code{`by_row`} is \code{FALSE}:
 #'  A \code{data.frame} with the summarized column vector lengths.
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -61,7 +60,6 @@
 #'
 #' # Measure vector length of a vector
 #' vector_length(c(1:10))
-#' }
 vector_length <- function(data,
                           cols = NULL,
                           by_row = is.data.frame(data),

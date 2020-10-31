@@ -480,7 +480,7 @@ test_that("fuzz testing flipped_values()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11174[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_11174 <- xpectr::suppress_mw(flip_values(data = df, cols = c("x", "y"), origin = 0, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE))
@@ -1105,7 +1105,7 @@ test_that("testing flip_values_vec()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_19148 <- xpectr::suppress_mw(flip_values_vec(runif(10), origin = 0, origin_fn = centroid))

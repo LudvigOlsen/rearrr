@@ -5,7 +5,7 @@
 #' A simple function to extract headers from an RMarkdown or Markdown document
 #' and build a table of contents. Returns a markdown list with links to the
 #' headers using
-#' [pandoc header identifiers](http://pandoc.org/MANUAL.html#header-identifiers).
+#' [pandoc header identifiers](https://pandoc.org/MANUAL.html).
 #'
 #' WARNING: This function only works with hash-tag headers.
 #'
@@ -31,8 +31,7 @@
 #'   prior to the first header at the base_level are dropped silently.
 #' @param toc_depth Maximum depth for TOC, relative to base_level. Default is
 #'   `toc_depth = 3`, which results in a TOC of at most 3 levels.
-render_toc <- function(
-                       filename,
+render_toc <- function(filename,
                        toc_header_name = "Table of Contents",
                        base_level = NULL,
                        toc_depth = 3) {
@@ -53,6 +52,7 @@ render_toc <- function(
     base_level <- min(sapply(gsub("(#+).+", "\\1", x), nchar))
   }
   start_at_base_level <- FALSE
+  this_env <- environment()
   x <- sapply(x, function(h) {
     level <- nchar(gsub("(#+).+", "\\1", h)) - base_level
     if (level < 0) {
@@ -64,7 +64,7 @@ render_toc <- function(
     if (level > toc_depth - 1) {
       return("")
     }
-    if (!start_at_base_level && level == 0) start_at_base_level <<- TRUE
+    if (!start_at_base_level && level == 0) this_env[["start_at_base_level"]] <- TRUE
     if (!start_at_base_level) {
       return("")
     }

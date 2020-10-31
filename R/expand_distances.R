@@ -8,8 +8,10 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The distance to the specified origin is increased/decreased.
-#'  A multiplier greater than 1 leads to expansion, while a positive multiplier lower than 1 leads to contraction.
+#'  Moves the data points in n-dimensional space such that their distance
+#'  to a specified origin is increased/decreased.
+#'  A \code{`multiplier`} greater than 1 leads to expansion,
+#'  while a positive \code{`multiplier`} lower than 1 leads to contraction.
 #'
 #'  The origin can be supplied as coordinates or as a function that returns coordinates. The
 #'  latter can be useful when supplying a grouped \code{data.frame} and expanding around e.g. the centroid
@@ -30,14 +32,14 @@
 #' @param cols Names of columns in \code{`data`} to expand coordinates of.
 #'  Each column is considered a dimension.
 #' @param origin Coordinates of the origin to expand around.
-#'  Must be either a single constant to use in all dimensions
-#'  or a \code{vector} with one constant per dimension.
+#'  A scalar to use in all dimensions
+#'  or a \code{vector} with one scalar per dimension.
 #'
 #'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param multiplier Constant to multiply/exponentiate the distances to the origin by.
 #'
-#'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the multiplier becomes an \emph{exponent}.
-#' @param multiplier_fn Function for finding the multiplier.
+#'  \strong{N.B.} When \code{`exponentiate`} is \code{TRUE}, the \code{`multiplier`} becomes an \emph{exponent}.
+#' @param multiplier_fn Function for finding the \code{`multiplier`}.
 #'
 #'  \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 #'
@@ -56,16 +58,19 @@
 #'  \code{d <- d - 1}
 #'
 #'  \strong{N.B.} Ignored when \code{`exponentiate`} is \code{FALSE}.
-#' @param mult_col_name Name of new column with the multiplier. If \code{NULL}, no column is added.
-#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
+#' @param mult_col_name Name of new column with the \code{`multiplier`}.
+#'  If \code{NULL}, no column is added.
+#' @param origin_col_name Name of new column with the origin coordinates.
+#'  If \code{NULL}, no column is added.
 #' @export
 #' @return \code{data.frame} (\code{tibble}) with the expanded columns,
 #'  along with the applied multiplier/exponent and origin coordinates.
 #' @details
-#'  Increases the distance to the origin in n-dimensional space by multiplying or exponentiating it by the multiplier.
+#'  Increases the distance to the origin in n-dimensional space by
+#'  multiplying or exponentiating it by the multiplier.
 #'
 #'  We first move the origin to the zero-coordinates (e.g. \code{c(0, 0, 0)})
-#'  and normalize each vector to unit length. We then multiply by this unit vector by the
+#'  and normalize each vector to unit length. We then multiply this unit vector by the
 #'  multiplied/exponentiated distance and moves the origin back to its original coordinates.
 #'
 #'  The distance to the specified origin is calculated with:
@@ -76,9 +81,9 @@
 #'  and subtract it afterwards. See \code{`add_one_exp`}.
 #' @family mutate functions
 #' @family expander functions
+#' @family distance functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -214,7 +219,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "g")
-#' }
 expand_distances <- function(data,
                              cols = NULL,
                              multiplier = NULL,
@@ -321,10 +325,12 @@ expand_mutator_method_ <- function(data,
 
   # Move origin
   # x <- x - origin_coordinate
-  dim_vectors <-
-    purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
-      .x - .y
-    })
+  if (!is_zero_vector_(origin)){
+    dim_vectors <-
+      purrr::map2(.x = dim_vectors, .y = origin, .f = ~ {
+        .x - .y
+      })
+  }
 
   # Calculate distances
   # formula: sqrt( (x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2 )
@@ -359,10 +365,12 @@ expand_mutator_method_ <- function(data,
   }
 
   # Move origin
-  expanded_dim_vectors <-
-    purrr::map2(.x = expanded_dim_vectors, .y = origin, .f = ~ {
-      .x + .y
-    })
+  if (!is_zero_vector_(origin)){
+    expanded_dim_vectors <-
+      purrr::map2(.x = expanded_dim_vectors, .y = origin, .f = ~ {
+        .x + .y
+      })
+  }
 
   # Add expanded columns to data
 

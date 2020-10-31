@@ -25,18 +25,20 @@
 #' @param x_col Name of x column in \code{`data`}. If \code{NULL} and \code{`data`} is a \code{vector},
 #'  the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it must be specified.
 #' @param y_col Name of y column in \code{`data`}. If \code{`data`} is a \code{data.frame}, it must be specified.
-#' @param origin Coordinates of the origin to swirl around. Must be a \code{vector} with 2 elements (i.e. origin_x, origin_y).
+#' @param origin Coordinates of the origin to swirl around.
+#'  \code{Vector} with 2 elements (i.e. origin_x, origin_y).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #' @param radius_col_name Name of new column with the radius. If \code{NULL}, no column is added.
 #' @export
-#' @return \code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
+#' @return \code{data.frame} (\code{tibble}) with three new columns containing
+#'  the swirled x- and y-values, the degrees, the radius, and the origin coordinates.
 #' @family mutate functions
 #' @family rotation functions
+#' @family distance functions
 #' @inheritParams multi_mutator_
 #' @inheritParams swirl_3d
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -63,15 +65,18 @@
 #'   origin = c(0, 0)
 #' )
 #'
+#' \donttest{
 #' # Swirl around the centroid
+#' # with 6 different radius settings
+#' # Scale the distances with custom function
 #' df_swirled <- swirl_2d(
 #'   data = df,
 #'   radius = c(95, 96, 97, 98, 99, 100),
 #'   x_col = "x",
 #'   y_col = "y",
 #'   origin_fn = centroid,
-#'   scale_fn = function(x) {
-#'     x^1.6
+#'   scale_fn = function(d) {
+#'     d^1.6
 #'   }
 #' )
 #'
@@ -83,6 +88,7 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = ".radius")
+#' }
 #'
 #' #
 #' # Swirl random data
@@ -104,7 +110,6 @@
 #'   geom_point() +
 #'   theme_minimal() +
 #'   labs(x = "r1", y = "r2")
-#' }
 swirl_2d <- function(data,
                      radius,
                      x_col = NULL,

@@ -184,7 +184,7 @@ test_that("expand_distances_each()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['messages']]),
-    xpectr::strip("When 'multipliers_fn' is specified, 'multipliers', is ignored.\n"),
+    xpectr::strip("When 'multipliers_fn' is specified, 'multipliers' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_15190 <- xpectr::suppress_mw(expand_distances_each(data = dplyr::group_by(df, g), cols = c("x", "y", "z"), multipliers = 1.5, multipliers_fn = centroid, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin", overwrite = TRUE))
@@ -688,7 +688,7 @@ test_that("expand_distances_each()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19782[['messages']]),
-    xpectr::strip("When 'multipliers_fn' is specified, 'multipliers', is ignored.\n"),
+    xpectr::strip("When 'multipliers_fn' is specified, 'multipliers' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_19782 <- xpectr::suppress_mw(expand_distances_each(data = df, cols = c("x", "y", "z"), multipliers = 1.5, multipliers_fn = centroid, origin = NULL, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin", overwrite = TRUE))
@@ -797,7 +797,7 @@ test_that("expand_distances_each()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_14749 <- xpectr::suppress_mw(expand_distances_each(data = df, cols = c("x", "y", "z"), multipliers = 1.5, multipliers_fn = NULL, origin = c(0.5, 0.5, 0.5), origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin", overwrite = TRUE))
@@ -871,7 +871,7 @@ test_that("expand_distances_each()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_15603 <- xpectr::suppress_mw(expand_distances_each(data = df, cols = c("x", "y", "z"), multipliers = 1.5, multipliers_fn = NULL, origin = 0, origin_fn = centroid, exponentiate = FALSE, add_one_exp = TRUE, suffix = "", keep_original = TRUE, origin_col_name = ".origin", overwrite = TRUE))

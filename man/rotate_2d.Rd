@@ -33,21 +33,23 @@ the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it 
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to rotate around. Must be a \code{vector} with 2 elements (orig_x, orig_y).
+\item{origin}{Coordinates of the origin to rotate around.
+A \code{vector} with 2 elements (i.e. origin_x, origin_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{keep_original}{Whether to keep the original columns. (Logical)
@@ -91,7 +93,6 @@ Where \eqn{\theta} is the angle in radians.
 As specified at \href{https://en.wikipedia.org/wiki/Rotation_matrix}{Wikipedia/Rotation_matrix}.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -103,14 +104,8 @@ set.seed(1)
 # Create a data frame
 df <- data.frame(
   "Index" = 1:12,
-  "A" = c(
-    1, 2, 3, 4, 9, 10, 11,
-    12, 15, 16, 17, 18
-  ),
-  "G" = c(
-    1, 1, 1, 1, 2, 2,
-    2, 2, 3, 3, 3, 3
-  )
+  "A" = c(1:4, 9:12, 15:18),
+  "G" = rep(1:3, each = 4)
 )
 
 # Rotate values around (0, 0)
@@ -152,9 +147,9 @@ ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees
   theme_minimal() +
   labs(x = "Index", y = "Value", color = "Degrees")
 }
-}
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
@@ -162,6 +157,8 @@ Other mutate functions:
 \code{\link{flip_values}()},
 \code{\link{roll_values}()},
 \code{\link{rotate_3d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}
 

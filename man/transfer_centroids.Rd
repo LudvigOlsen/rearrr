@@ -33,7 +33,6 @@ transfer the centroids from one to the other.
 This is commonly used to restore the centroids after transforming the columns.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -45,12 +44,7 @@ set.seed(1)
 df <- data.frame(
   "x" = runif(20),
   "y" = runif(20),
-  "g" = c(
-    1, 1, 1, 1, 1,
-    2, 2, 2, 2, 2,
-    3, 3, 3, 3, 3,
-    4, 4, 4, 4, 4
-  )
+  "g" = rep(1:4, each = 5)
 )
 
 # Create another data frame with different x and y values
@@ -81,7 +75,6 @@ df3 <- transfer_centroids(
 df3 \%>\%
   dplyr::group_by(g) \%>\%
   dplyr::summarize_all(mean)
-}
 }
 \seealso{
 Other clustering functions: 

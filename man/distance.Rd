@@ -21,8 +21,8 @@ distance(
 Each column is considered a dimension.}
 
 \item{origin}{Coordinates of the origin to calculate distances to.
-Must be either a single constant to use in all dimensions
-or a \code{vector} with one constant per dimension.
+A scalar to use in all dimensions
+or a \code{vector} with one scalar per dimension.
 
 \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
@@ -30,14 +30,15 @@ or a \code{vector} with one constant per dimension.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{distance_col_name}{Name of new column with the distances.}
@@ -60,7 +61,6 @@ latter can be useful when supplying a grouped \code{data.frame} and finding the 
 of each group.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -90,13 +90,22 @@ distance(
   origin_fn = centroid
 )
 }
-}
 \seealso{
 Other measuring functions: 
 \code{\link{angle}()},
 \code{\link{vector_length}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_2d}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{measuring functions}

@@ -307,7 +307,7 @@ test_that("fuzz testing rotate_3d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_17365 <- xpectr::suppress_mw(rotate_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_deg = 10, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE))
@@ -1519,7 +1519,7 @@ test_that("fuzz testing rotate_3d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10389[['messages']]),
-    xpectr::strip("When 'origin_fn' is specified, 'origin', is ignored.\n"),
+    xpectr::strip("When 'origin_fn' is specified, 'origin' is ignored.\n"),
     fixed = TRUE)
   # Assigning output
   output_10389 <- xpectr::suppress_mw(rotate_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_deg = 0, y_deg = 0, z_deg = 0, suffix = "", origin = c(0, 0, 0), origin_fn = centroid, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE))

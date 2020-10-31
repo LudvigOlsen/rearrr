@@ -39,21 +39,23 @@ the index of \code{`data`} is used. If \code{`data`} is a \code{data.frame}, it 
 
 Use an empty string (i.e. \code{""}) to overwrite the original columns.}
 
-\item{origin}{Coordinates of the origin to swirl around. Must be a \code{vector} with 2 elements (i.e. origin_x, origin_y).
+\item{origin}{Coordinates of the origin to swirl around.
+\code{Vector} with 2 elements (i.e. origin_x, origin_y).
 Ignored when \code{`origin_fn`} is not \code{NULL}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
 \strong{Input}: Each column will be passed as a \code{vector} in the order of \code{`cols`}.
 
-\strong{Output}: A \code{vector} with one constant per dimension.
+\strong{Output}: A \code{vector} with one scalar per dimension.
 
 Can be created with \code{\link[rearrr:create_origin_fn]{create_origin_fn()}} if you want to apply
 the same function to each dimension.
 
 E.g. \code{`create_origin_fn(median)`} would find the median of each column.
 
-Built-in functions are \code{\link[rearrr:centroid]{centroid()}}, \code{\link[rearrr:most_centered]{most_centered()}},
+\strong{Built-in functions} are \code{\link[rearrr:centroid]{centroid()}},
+\code{\link[rearrr:most_centered]{most_centered()}},
 and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{scale_fn}{Function for scaling the distances before calculating the degrees.
@@ -83,7 +85,8 @@ Some columns may have been overwritten, in which case only the newest versions a
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
-\code{data.frame} (\code{tibble}) with three new columns containing the swirled x- and y-values and the degrees.
+\code{data.frame} (\code{tibble}) with three new columns containing
+the swirled x- and y-values, the degrees, the radius, and the origin coordinates.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -97,7 +100,6 @@ latter can be useful when supplying a grouped \code{data.frame} and swirling aro
 of each group.
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -124,15 +126,18 @@ swirl_2d(
   origin = c(0, 0)
 )
 
+\donttest{
 # Swirl around the centroid
+# with 6 different radius settings
+# Scale the distances with custom function
 df_swirled <- swirl_2d(
   data = df,
   radius = c(95, 96, 97, 98, 99, 100),
   x_col = "x",
   y_col = "y",
   origin_fn = centroid,
-  scale_fn = function(x) {
-    x^1.6
+  scale_fn = function(d) {
+    d^1.6
   }
 )
 
@@ -144,6 +149,7 @@ df_swirled \%>\%
   geom_point() +
   theme_minimal() +
   labs(x = "x", y = "y", color = ".radius")
+}
 
 #
 # Swirl random data
@@ -166,9 +172,9 @@ df_swirled \%>\%
   theme_minimal() +
   labs(x = "r1", y = "r2")
 }
-}
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
@@ -177,15 +183,27 @@ Other mutate functions:
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
 \code{\link{swirl_3d}()}
 
 Other rotation functions: 
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
 \code{\link{swirl_3d}()}
+
+Other distance functions: 
+\code{\link{closest_to}()},
+\code{\link{dim_values}()},
+\code{\link{distance}()},
+\code{\link{expand_distances_each}()},
+\code{\link{expand_distances}()},
+\code{\link{furthest_from}()},
+\code{\link{swirl_3d}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 }
+\concept{distance functions}
 \concept{mutate functions}
 \concept{rotation functions}

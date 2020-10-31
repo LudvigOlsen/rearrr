@@ -66,7 +66,6 @@ Transform values such that the elements in each group move closer to their centr
 }
 }
 \examples{
-\donttest{
 # Attach packages
 library(rearrr)
 library(dplyr)
@@ -158,7 +157,6 @@ df_clustered <- cluster_groups(
   group_col = "g"
 )
 
-}
 \dontrun{
 # Plot 3d with plotly
 plotly::plot_ly(
@@ -173,6 +171,7 @@ plotly::plot_ly(
 }
 \seealso{
 Other mutate functions: 
+\code{\link{apply_transformation_matrix}()},
 \code{\link{dim_values}()},
 \code{\link{expand_distances_each}()},
 \code{\link{expand_distances}()},
@@ -180,6 +179,8 @@ Other mutate functions:
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
 \code{\link{rotate_3d}()},
+\code{\link{shear_2d}()},
+\code{\link{shear_3d}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}
 

@@ -1,6 +1,5 @@
 
 
-
 #   __________________ #< e3dcc976d88c1f44e868b048aaf7d875 ># __________________
 #   Rotate 3d                                                               ####
 
@@ -20,7 +19,8 @@
 #'
 #'  \code{`x_deg`} is \emph{roll}. \code{`y_deg`} is \emph{pitch}. \code{`z_deg`} is \emph{yaw}.
 #' @param x_col,y_col,z_col Name of x/y/z column in \code{`data`}. All must be specified.
-#' @param origin Coordinates of the origin to rotate around. Must be a \code{vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
+#' @param origin Coordinates of the origin to rotate around.
+#'  \code{Vector} with 3 elements (i.e. origin_x, origin_y, origin_z).
 #'  Ignored when \code{`origin_fn`} is not \code{NULL}.
 #' @param degrees_col_name Name of new column with the degrees. If \code{NULL}, no column is added.
 #'
@@ -45,7 +45,6 @@
 #' @family rotation functions
 #' @inheritParams multi_mutator_
 #' @examples
-#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -57,15 +56,9 @@
 #' # Create a data frame
 #' df <- data.frame(
 #'   "x" = 1:12,
-#'   "y" = c(
-#'     1, 2, 3, 4, 9, 10, 11,
-#'     12, 15, 16, 17, 18
-#'   ),
+#'   "y" = c(1:4, 9:12, 15:18),
 #'   "z" = runif(12),
-#'   "g" = c(
-#'     1, 1, 1, 1, 2, 2,
-#'     2, 2, 3, 3, 3, 3
-#'   )
+#'   "g" = rep(1:3, each = 4)
 #' )
 #'
 #' # Rotate values 45 degrees around x-axis at (0, 0, 0)
@@ -93,7 +86,6 @@
 #'   theme_minimal() +
 #'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
 #'
-#' }
 #' \dontrun{
 #' # Plot 3d with plotly
 #' plotly::plot_ly(
@@ -308,10 +300,6 @@ rotate_3d_mutator_method_ <- function(data,
                                       origin_fn,
                                       origin_col_name,
                                       ...) {
-  # Extract columns
-  x_col <- cols[[1]]
-  y_col <- cols[[2]]
-  z_col <- cols[[3]]
 
   # Create rotation matrix
   rotation_matrix <- create_rotation_matrix_3d_(
@@ -320,14 +308,12 @@ rotate_3d_mutator_method_ <- function(data,
     z_deg = z_deg
   )
 
-  # Extract x and y values
-  x <- data[[x_col]]
-  y <- data[[y_col]]
-  z <- data[[z_col]]
+  # Convert columns to list of vectors
+  dim_vectors <- as.list(data[, cols, drop = FALSE])
 
   # Find origin if specified
   origin <- apply_coordinate_fn_(
-    dim_vectors = list(x, y, z),
+    dim_vectors = dim_vectors,
     coordinates = origin,
     fn = origin_fn,
     num_dims = length(cols),
@@ -338,33 +324,21 @@ rotate_3d_mutator_method_ <- function(data,
     allow_len_one = FALSE
   )
 
-  # Move origin
-  x <- x - origin[[1]]
-  y <- y - origin[[2]]
-  z <- z - origin[[3]]
-
-  # Convert to matrix
-  xyz_matrix <- rbind(x, y, z)
-
   # Apply rotation matrix
-  xyz_matrix <- rotation_matrix %*% xyz_matrix
-
-  # Extract x and y
-  x <- xyz_matrix[1, ]
-  y <- xyz_matrix[2, ]
-  z <- xyz_matrix[3, ]
-
-  # Move origin
-  x <- x + origin[[1]]
-  y <- y + origin[[2]]
-  z <- z + origin[[3]]
+  # Handles moving of the origin
+  dim_vectors <- apply_transformation_matrix_dim_vectors_(
+    dim_vectors = dim_vectors,
+    mat = rotation_matrix,
+    cols = cols,
+    origin = origin
+  )
 
   # Add rotated columns to data
   data <- add_dimensions_(
     data = data,
     new_vectors = setNames(
-      list(x, y, z),
-      c(x_col, y_col, z_col)),
+      dim_vectors,
+      cols),
     suffix = suffix,
     overwrite = overwrite
   )
