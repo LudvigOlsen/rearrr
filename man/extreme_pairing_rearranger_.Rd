@@ -11,6 +11,7 @@ extreme_pairing_rearranger_(
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
   num_pairings = 1,
+  balance = "mean",
   factor_name = ".pair",
   overwrite = FALSE
 )
@@ -31,7 +32,7 @@ The first group will have size \code{1}.
 
 \strong{Example}:
 
-The column values:
+The ordered column values:
 
 \code{c(1, 2, 3, 4, 5)}
 
@@ -50,7 +51,7 @@ The middle group will have size \code{1}.
 
 \strong{Example}:
 
-The column values:
+The ordered column values:
 
 \code{c(1, 2, 3, 4, 5)}
 
@@ -68,7 +69,7 @@ The last group will have size \code{1}.
 
 \strong{Example}:
 
-The column values:
+The ordered column values:
 
 \code{c(1, 2, 3, 4, 5)}
 
@@ -86,15 +87,40 @@ And are \strong{ordered as}:
 
 \item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
 
+\item{num_pairings}{Number of pairings to perform (recursively). At least \code{1}.
+
+Based on \code{`balance`}, the secondary pairings perform extreme pairing on either the
+\emph{sum}, \emph{absolute difference}, \emph{min}, or \emph{max} of the pair elements.}
+
+\item{balance}{What to balance pairs for in a given \emph{secondary} pairing.
+Either \code{"mean"}, \code{"spread"}, \code{"min"}, or \code{"max"}.
+Can be a single string used for all secondary pairings
+or one for each secondary pairing (\code{`num_pairings` - 1}).
+
+The first pairing always pairs the actual element values.
+
+\subsection{mean}{
+Pairs have similar means. The values in the pairs from the previous pairing
+are aggregated with \code{`sum()`} and paired.
+}
+\subsection{spread}{
+Pairs have similar spread (e.g. standard deviations). The values in the pairs from the previous pairing
+are aggregated with \code{`sum(abs(diff()))`} and paired.
+}
+\subsection{min / max}{
+Pairs have similar minimum / maximum values. The values in the pairs from the previous pairing
+are aggregated with \code{`min()`} / \code{`max()`} and paired.
+}}
+
 \item{factor_name}{Name of new column with the sorting factor. If \code{NULL}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-Optionally with the sorting factor added.
+Optionally with the sorting factor(s) added.
 
-When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
+When \code{`data`} is a \code{vector} and \code{`factor_name`} is \code{NULL},
 the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 }
 \description{

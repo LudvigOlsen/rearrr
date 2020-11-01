@@ -318,30 +318,6 @@ rearrange_by_distance <- function(data,
 ##  .................. #< da4fe0fffb24210b784112591123dcc6 ># ..................
 ##  Pair extremes                                                           ####
 
-# Wrapper for running extreme pairing and ordering data by it
-pair_extremes_and_order_ <- function(data, col, new_col, unequal_method, shuffle_members, shuffle_pairs){
-
-  # Order data frame
-  data <- data[order(data[[col]]), , drop = FALSE]
-
-  # Add rearrange factor (of type integer)
-  data[[new_col]] <-
-    create_rearrange_factor_pair_extremes_(
-      size = nrow(data),
-      unequal_method = unequal_method
-    )
-
-  # Order data by the pairs
-  data <- order_by_group(
-    data = data,
-    group_col = new_col,
-    shuffle_members = shuffle_members,
-    shuffle_pairs = shuffle_pairs
-  )
-
-  data
-}
-
 
 # TODO Add aggregate_fn for recursive pairings
 rearrange_pair_extremes <- function(data,
@@ -349,6 +325,7 @@ rearrange_pair_extremes <- function(data,
                                     overwrite,
                                     unequal_method,
                                     num_pairings,
+                                    balance,
                                     shuffle_members,
                                     shuffle_pairs,
                                     factor_name,
@@ -360,7 +337,6 @@ rearrange_pair_extremes <- function(data,
     return(data)
   }
 
-  optimize_for = "mean" # TODO make argument
   equal_nrows <- nrow(data) %% 2 == 0
 
   # Prepare factor names for output
@@ -377,13 +353,19 @@ rearrange_pair_extremes <- function(data,
   }) %>% unlist(recursive = TRUE)
 
   # Pair the extreme values and order by the pairs
-  data <- pair_extremes_and_order_(
+  data <- order_and_pair_extremes_(
     data = data,
     col = col,
     new_col = tmp_rearrange_vars[[1]],
-    unequal_method = unequal_method,
-    shuffle_members = shuffle_members,
-    shuffle_pairs = shuffle_pairs
+    unequal_method = unequal_method
+  )
+
+  # Order data by the pairs
+  data <- order_by_group(
+    data = data,
+    group_col = tmp_rearrange_vars[[1]],
+    shuffle_members = FALSE, # Done at the end
+    shuffle_pairs = FALSE # Done at the end
   )
 
   # TODO Perform recursive pairing
@@ -399,22 +381,30 @@ rearrange_pair_extremes <- function(data,
       # Note that `tmp_rearrange_vars[[i]]` is for the previous level
       # and `tmp_rearrange_vars[[i + 1]]` is for the current level
 
-      # What to optimize for ("mean" or "spread")
-      if (length(optimize_for) > 1) {
-        current_optimize_for <- optimize_for[[i]]
+      # What to balance ("mean", "spread", "min", or "max")
+      if (length(balance) > 1) {
+        current_balance_target <- balance[[i]]
       } else {
-        current_optimize_for <- optimize_for
+        current_balance_target <- balance
       }
 
-      if (current_optimize_for == "mean") {
-        tmp_group_scores <- data %>%
-          dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
-          dplyr::summarize(group_aggr = sum(!!as.name(col)))
-      } else if (current_optimize_for == "spread") {
-        tmp_group_scores <- data %>%
-          dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
-          dplyr::summarize(group_aggr = sum(abs(diff(!!as.name(col))))) # TODO why the sum?
+      # Define function to summarize with
+      if (current_balance_target == "mean") {
+        summ_fn <- sum
+      } else if (current_balance_target == "spread") {
+        summ_fn <- function(v) {
+          sum(abs(diff(v)))
+        }
+      } else if (current_balance_target == "min") {
+        summ_fn <- min
+      } else if (current_balance_target == "max") {
+        summ_fn <- max
       }
+
+      # Aggregate values for pairs from previous pairing
+      tmp_group_scores <- data %>%
+        dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
+        dplyr::summarize(group_aggr = summ_fn(!!as.name(col)))
 
       if (!equal_nrows & unequal_method == "first") {
 
@@ -432,15 +422,13 @@ rearrange_pair_extremes <- function(data,
         tmp_group_scores_sorted <- tmp_group_scores %>%
           dplyr::arrange(.data$group_aggr)
       }
-      print(tmp_group_scores_sorted)
+
       # Pair the extreme pairs and order by the new pairs
-      tmp_rearrange <- pair_extremes_and_order_(
+      tmp_rearrange <- order_and_pair_extremes_(
         data = tmp_group_scores_sorted,
         col = "group_aggr",
         new_col = tmp_rearrange_vars[[i + 1]],
-        unequal_method = unequal_method,
-        shuffle_members = shuffle_members,
-        shuffle_pairs = shuffle_pairs
+        unequal_method = unequal_method
       ) %>%
         base_select_(cols = c(tmp_rearrange_vars[[i]], tmp_rearrange_vars[[i + 1]]))
 
@@ -448,17 +436,36 @@ rearrange_pair_extremes <- function(data,
       data <- data %>%
         dplyr::left_join(tmp_rearrange, by = tmp_rearrange_vars[[i]])
 
+      # Order data by the pairs
+      data <- order_by_group(
+        data = data,
+        group_col = tmp_rearrange_vars[[i + 1]],
+        shuffle_members = FALSE,
+        shuffle_pairs = FALSE
+      )
+
       # Update `data` in parent environment
       pairing_env[["data"]] <- data
 
     })
   }
 
-  # Arrange by generated grouping factors
-  data <- data %>%
-    dplyr::arrange(!!!rlang::syms(c(rev(tmp_rearrange_vars), col)))
+  # Find columns to shuffle
+  shuffling_group_cols <- rev(tmp_rearrange_vars)
+  cols_to_shuffle <- c()
+  if (isTRUE(shuffle_members))
+    cols_to_shuffle <- shuffling_group_cols
+  if (isTRUE(shuffle_pairs)) {
+    shuffling_group_cols <- c(shuffling_group_cols, col)
+    cols_to_shuffle <- c(cols_to_shuffle, col)
+  }
 
-  # Order by all recursive levels
+  # Shuffle members and/or pairs if specified
+  if (length(cols_to_shuffle) > 0) {
+    data <- dplyr::ungroup(data) %>%
+      shuffle_hierarchy(group_cols = shuffling_group_cols,
+                        cols_to_shuffle = cols_to_shuffle)
+  }
 
   if (!is.null(factor_names)){
     # Convert to factors and give correct names
@@ -475,6 +482,21 @@ rearrange_pair_extremes <- function(data,
     data <- base_deselect_(data, cols = tmp_rearrange_vars)
   }
 
+  data
+}
+
+# Wrapper for running extreme pairing and ordering data by it
+order_and_pair_extremes_ <- function(data, col, new_col, unequal_method){
+
+  # Order data frame
+  data <- data[order(data[[col]]), , drop = FALSE]
+
+  # Add rearrange factor (of type integer)
+  data[[new_col]] <-
+    create_rearrange_factor_pair_extremes_(
+      size = nrow(data),
+      unequal_method = unequal_method
+    )
 
   data
 }
