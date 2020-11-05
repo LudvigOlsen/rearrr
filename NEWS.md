@@ -1,4 +1,6 @@
 
+# rearrr 0.1.0.9000
+
 # rearrr 0.1.0
 
 Note: Multiple of the new functions also have `*_vec()` versions that take and return vectors. The same can *usually* be achieved with the regular versions, but these wrappers make it easier and less verbose.
