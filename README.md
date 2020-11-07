@@ -24,7 +24,7 @@ coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg
 status](https://travis-ci.com/LudvigOlsen/rearrr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/rearrr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/rearrr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/rearrr)
-<!-- [![DOI](https://zenodo.org/badge/71063931.svg)](https://zenodo.org/badge/latestdoi/71063931) -->
+[![DOI](https://zenodo.org/badge/259158437.svg)](https://zenodo.org/badge/latestdoi/259158437)
 
 ## Overview
 
