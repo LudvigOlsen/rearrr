@@ -76,6 +76,9 @@
 #' # Shuffle the order of the pairs
 #' pair_extremes(df, col = "A", shuffle_pairs = TRUE)
 #'
+#' # Use recursive pairing
+#' pair_extremes(df, col = "A", num_pairings = 2)
+#'
 #' # Grouped by G
 #' df %>%
 #'   dplyr::select(G, A) %>% # For clarity

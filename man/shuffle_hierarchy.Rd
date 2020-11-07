@@ -15,15 +15,16 @@ shuffle_hierarchy(
 \item{data}{\code{data.frame}.}
 
 \item{group_cols}{Names of columns making up the group hierarchy.
-The last column (which is also in \code{`cols_to_shuffle`}) is the \emph{leaf} and is shuffled first.}
+The last column is the \emph{leaf} and is shuffled first (if also in \code{`cols_to_shuffle`}).}
 
 \item{cols_to_shuffle}{Names of columns to shuffle hierarchically.
 By default, all the \code{`group_cols`} are shuffled.}
 
 \item{leaf_has_groups}{Whether the leaf column contains groups or values. (Logical)
 
-When the elements are group identifiers, they are ordered sequentially and shuffled together.
-When the elements are are values, they are simply shuffled.}
+When the elements are \emph{group identifiers}, they are ordered sequentially and shuffled together.
+
+When the elements are \emph{values}, they are simply shuffled.}
 }
 \value{
 The shuffled \code{data.frame} (\code{tibble}).

@@ -16,13 +16,14 @@
 #' @family rearrange functions
 #' @param data \code{data.frame}.
 #' @param group_cols Names of columns making up the group hierarchy.
-#'  The last column (which is also in \code{`cols_to_shuffle`}) is the \emph{leaf} and is shuffled first.
+#'  The last column is the \emph{leaf} and is shuffled first (if also in \code{`cols_to_shuffle`}).
 #' @param cols_to_shuffle Names of columns to shuffle hierarchically.
 #'  By default, all the \code{`group_cols`} are shuffled.
 #' @param leaf_has_groups Whether the leaf column contains groups or values. (Logical)
 #'
-#'  When the elements are group identifiers, they are ordered sequentially and shuffled together.
-#'  When the elements are are values, they are simply shuffled.
+#'  When the elements are \emph{group identifiers}, they are ordered sequentially and shuffled together.
+#'
+#'  When the elements are \emph{values}, they are simply shuffled.
 #' @return
 #'  The shuffled \code{data.frame} (\code{tibble}).
 #' @examples
@@ -75,7 +76,7 @@ shuffle_hierarchy <- function(data, group_cols, cols_to_shuffle = group_cols, le
   # End of argument checks ####
 
   # Extract leaf column
-  leaf_col <- tail(cols_to_shuffle, 1)
+  leaf_col <- tail(group_cols, 1)
 
   # Get environment to update 'data' in
   data_env <- environment()
