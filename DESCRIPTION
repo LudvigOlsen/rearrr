@@ -23,6 +23,7 @@ Imports:
     purrr (>= 0.3.4),
     rlang (>= 0.4.7),
     stats,
+    tibble,
     utils
 Suggests: 
     covr,

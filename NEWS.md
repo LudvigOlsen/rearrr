@@ -3,7 +3,7 @@
 
 * Adds `shuffle_hierarchy()` for shuffling a multi-column hierarchy of groups. (Rearranger)
 
-* Adds optional recursion to `pair_extremes()`. This adds the `num_pairings` and `balance` arguments. Now returns one additional sorting factor per `num_pairing` levels.
+* Adds optional recursion to `pair_extremes()`. This adds the `num_pairings` and `balance` arguments. Now returns one additional sorting factor per `num_pairing` level.
 
 # rearrr 0.1.0
 

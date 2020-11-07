@@ -410,8 +410,6 @@ rearrange_pair_extremes <- function(data,
 
         # Reorder with first group always first
         # (otherwise doesn't work with negative numbers)
-        # TODO Better to just move to positive numbers and back afterwards?
-        # TODO Investigate this behavior!
         tmp_group_scores_sorted <- tmp_group_scores %>%
           dplyr::filter(dplyr::row_number() == 1) %>%
           dplyr::bind_rows(
@@ -464,7 +462,8 @@ rearrange_pair_extremes <- function(data,
   if (length(cols_to_shuffle) > 0) {
     data <- dplyr::ungroup(data) %>%
       shuffle_hierarchy(group_cols = shuffling_group_cols,
-                        cols_to_shuffle = cols_to_shuffle)
+                        cols_to_shuffle = cols_to_shuffle,
+                        leaf_has_groups = !shuffle_members)
   }
 
   if (!is.null(factor_names)){
