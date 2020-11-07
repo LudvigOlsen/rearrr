@@ -165,7 +165,8 @@ Other rearrange functions:
 \code{\link{position_max}()},
 \code{\link{position_min}()},
 \code{\link{rev_windows}()},
-\code{\link{roll_elements}()}
+\code{\link{roll_elements}()},
+\code{\link{shuffle_hierarchy}()}
 
 Other distance functions: 
 \code{\link{dim_values}()},
