@@ -9,15 +9,19 @@ pair_extremes(
   data,
   col = NULL,
   unequal_method = "middle",
+  num_pairings = 1,
+  balance = "mean",
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
-  factor_name = ".pair",
+  factor_name = ifelse(num_pairings == 1, ".pair", ".pairing"),
   overwrite = FALSE
 )
 
 pair_extremes_vec(
   data,
   unequal_method = "middle",
+  num_pairings = 1,
+  balance = "mean",
   shuffle_members = FALSE,
   shuffle_pairs = FALSE
 )
@@ -38,7 +42,7 @@ The first group will have size \code{1}.
 
 \strong{Example}:
 
-The column values:
+The ordered column values:
 
 \code{c(1, 2, 3, 4, 5)}
 
@@ -57,7 +61,7 @@ The middle group will have size \code{1}.
 
 \strong{Example}:
 
-The column values:
+The ordered column values:
 
 \code{c(1, 2, 3, 4, 5)}
 
@@ -75,7 +79,7 @@ The last group will have size \code{1}.
 
 \strong{Example}:
 
-The column values:
+The ordered column values:
 
 \code{c(1, 2, 3, 4, 5)}
 
@@ -87,6 +91,31 @@ And are \strong{ordered as}:
 
 \code{c(1, 4, 2, 3,} \strong{\code{5}}\code{)}
 
+}}
+
+\item{num_pairings}{Number of pairings to perform (recursively). At least \code{1}.
+
+Based on \code{`balance`}, the secondary pairings perform extreme pairing on either the
+\emph{sum}, \emph{absolute difference}, \emph{min}, or \emph{max} of the pair elements.}
+
+\item{balance}{What to balance pairs for in a given \emph{secondary} pairing.
+Either \code{"mean"}, \code{"spread"}, \code{"min"}, or \code{"max"}.
+Can be a single string used for all secondary pairings
+or one for each secondary pairing (\code{`num_pairings` - 1}).
+
+The first pairing always pairs the actual element values.
+
+\subsection{mean}{
+Pairs have similar means. The values in the pairs from the previous pairing
+are aggregated with \code{`sum()`} and paired.
+}
+\subsection{spread}{
+Pairs have similar spread (e.g. standard deviations). The values in the pairs from the previous pairing
+are aggregated with \code{`sum(abs(diff()))`} and paired.
+}
+\subsection{min / max}{
+Pairs have similar minimum / maximum values. The values in the pairs from the previous pairing
+are aggregated with \code{`min()`} / \code{`max()`} and paired.
 }}
 
 \item{shuffle_members}{Whether to shuffle the pair members. (Logical)}
@@ -166,6 +195,9 @@ pair_extremes(df, col = "A", shuffle_members = TRUE)
 # Shuffle the order of the pairs
 pair_extremes(df, col = "A", shuffle_pairs = TRUE)
 
+# Use recursive pairing
+pair_extremes(df, col = "A", num_pairings = 2)
+
 # Grouped by G
 df \%>\%
   dplyr::select(G, A) \%>\% # For clarity
@@ -197,7 +229,8 @@ Other rearrange functions:
 \code{\link{position_max}()},
 \code{\link{position_min}()},
 \code{\link{rev_windows}()},
-\code{\link{roll_elements}()}
+\code{\link{roll_elements}()},
+\code{\link{shuffle_hierarchy}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

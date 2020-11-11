@@ -39,7 +39,7 @@ rvers <- substring(dep, 7, nchar(dep)-1)
 [![Codecov test coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/rearrr?branch=master)
 [![Travis build status](https://travis-ci.com/LudvigOlsen/rearrr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/rearrr)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/rearrr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/rearrr)
-<!-- [![DOI](https://zenodo.org/badge/71063931.svg)](https://zenodo.org/badge/latestdoi/71063931) -->
+[![DOI](https://zenodo.org/badge/259158437.svg)](https://zenodo.org/badge/latestdoi/259158437)
 
 
 ## Overview
@@ -94,6 +94,7 @@ Development version:
 |`furthest_from()`      |Order values by longest distance to an origin.                         |
 |`rev_windows()`        |Reverse order window-wise.                                             |
 |`roll_elements()`      |Rolls/shifts positions of elements.                                    |
+|`shuffle_hierarchy()`  |Shuffle multi-column hierarchy of groups.                              |
 
 ### Mutators
 
@@ -306,6 +307,22 @@ orderings %>%
   scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
   scale_colour_brewer(palette = "Dark2")
 ```
+
+### Shuffle Hierarchy
+
+When having a `data.frame` with multiple grouping columns, we can shuffle them one column (hierarchical level) at a time:
+
+```{r eval=FALSE}
+# Shuffle a given data frame 'df'
+shuffle_hierarchy(df, group_cols = c("a", "b", "c"))
+```
+
+The columns are shuffled one at a time, as so:
+
+<div style="width: 100%; text-align: center; display: block;">
+<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/shuffle_hierarchy.gif' width="175" style="padding-bottom:28px !important; padding-right:28px !important;" />
+</div>
+
 
 ## Mutator examples
 

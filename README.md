@@ -24,7 +24,7 @@ coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg
 status](https://travis-ci.com/LudvigOlsen/rearrr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/rearrr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/rearrr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/rearrr)
-<!-- [![DOI](https://zenodo.org/badge/71063931.svg)](https://zenodo.org/badge/latestdoi/71063931) -->
+[![DOI](https://zenodo.org/badge/259158437.svg)](https://zenodo.org/badge/latestdoi/259158437)
 
 ## Overview
 
@@ -79,17 +79,18 @@ version:
 
 ### Rearrangers
 
-| Function          | Description                                                            |
-| :---------------- | :--------------------------------------------------------------------- |
-| `center_max()`    | Center the highest value with values decreasing around it.             |
-| `center_min()`    | Center the lowest value with values increasing around it.              |
-| `position_max()`  | Position the highest value with values decreasing around it.           |
-| `position_min()`  | Position the lowest value with values increasing around it.            |
-| `pair_extremes()` | Arrange values as highest, lowest, second highest, second lowest, etc. |
-| `closest_to()`    | Order values by shortest distance to an origin.                        |
-| `furthest_from()` | Order values by longest distance to an origin.                         |
-| `rev_windows()`   | Reverse order window-wise.                                             |
-| `roll_elements()` | Rolls/shifts positions of elements.                                    |
+| Function              | Description                                                            |
+| :-------------------- | :--------------------------------------------------------------------- |
+| `center_max()`        | Center the highest value with values decreasing around it.             |
+| `center_min()`        | Center the lowest value with values increasing around it.              |
+| `position_max()`      | Position the highest value with values decreasing around it.           |
+| `position_min()`      | Position the lowest value with values increasing around it.            |
+| `pair_extremes()`     | Arrange values as highest, lowest, second highest, second lowest, etc. |
+| `closest_to()`        | Order values by shortest distance to an origin.                        |
+| `furthest_from()`     | Order values by longest distance to an origin.                         |
+| `rev_windows()`       | Reverse order window-wise.                                             |
+| `roll_elements()`     | Rolls/shifts positions of elements.                                    |
+| `shuffle_hierarchy()` | Shuffle multi-column hierarchy of groups.                              |
 
 ### Mutators
 
@@ -145,6 +146,7 @@ measuring functions) are listed at the bottom of the readme.
           - [Pair extremes](#pair-extremes)
           - [Closest to / furthest from](#closest-to-/-furthest-from)
           - [Reverse windows](#reverse-windows)
+          - [Shuffle Hierarchy](#shuffle-hierarchy)
       - [Mutator examples](#mutator-examples)
           - [Rotate values](#rotate-values)
           - [Swirl values](#swirl-values)
@@ -272,6 +274,25 @@ rev_windows_vec(data = 1:10, window_size = 3)
 
 <img src="man/figures/README-unnamed-chunk-16-1.png" width="552" style="display: block; margin: auto;" />
 
+### Shuffle Hierarchy
+
+When having a `data.frame` with multiple grouping columns, we can
+shuffle them one column (hierarchical level) at a time:
+
+``` r
+# Shuffle a given data frame 'df'
+shuffle_hierarchy(df, group_cols = c("a", "b", "c"))
+```
+
+The columns are shuffled one at a time, as
+so:
+
+<div style="width: 100%; text-align: center; display: block;">
+
+<img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/shuffle_hierarchy.gif' width="175" style="padding-bottom:28px !important; padding-right:28px !important;" />
+
+</div>
+
 ## Mutator examples
 
 Mutators change the values of the data points.
@@ -309,7 +330,7 @@ rotate_2d(
 #> 10    10 0.0618          8.17        4.20   <dbl [2]>       60
 ```
 
-<img src="man/figures/README-unnamed-chunk-18-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="552" style="display: block; margin: auto;" />
 
 3-dimensional rotation:
 
@@ -353,7 +374,7 @@ rotate_3d(
 #> 12    12    18 0.505    -1.67       9.88   -5.04   <dbl [… <dbl [3… x=45,y=90,z…
 ```
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-21-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Swirl values
 
@@ -461,7 +482,7 @@ expand_distances(
 2d
 expansion:
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-27-1.png" width="552" style="display: block; margin: auto;" />
 
 Expand differently in each axis:
 
@@ -489,7 +510,7 @@ expand_distances_each(
 #> 10 0.361  0.169     -0.466       0.251 <dbl [2]>    x=7,y=0.5        <dbl [2]>
 ```
 
-<img src="man/figures/README-unnamed-chunk-28-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-29-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Cluster groups
 
@@ -525,7 +546,7 @@ cluster_groups(
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-30-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-31-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Dim values
 
@@ -558,7 +579,7 @@ df_clustered %>%
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-32-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-33-1.png" width="552" style="display: block; margin: auto;" />
 
 ### Flip values
 
@@ -587,7 +608,7 @@ flip_values(
 #> 10 0.0618         1.14  <dbl [1]>
 ```
 
-<img src="man/figures/README-unnamed-chunk-34-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-35-1.png" width="552" style="display: block; margin: auto;" />
 
 ## Forming examples
 
@@ -722,7 +743,7 @@ generate_clusters(
 #> # … with 40 more rows
 ```
 
-<img src="man/figures/README-unnamed-chunk-45-1.png" width="552" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-46-1.png" width="552" style="display: block; margin: auto;" />
 
 ## Utilities
 

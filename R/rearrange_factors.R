@@ -29,19 +29,25 @@ create_rearrange_factor_pair_extremes_ <- function(size, unequal_method = "middl
   if (size == 1) {
     return(1)
   }
+
   half_size <- floor(size / 2)
   idx <- seq_len(half_size)
+
   if (half_size * 2 == size) {
     return(c(idx, rev(idx)))
-  } else {
-    if (unequal_method == "middle") {
-      middle <- ceiling((half_size / 2)) + 1
-      idx <- ifelse(idx >= middle, idx + 1, idx)
-      return(c(idx, middle, rev(idx)))
-    } else if (unequal_method == "first") {
-      return(c(1, c(idx, rev(idx)) + 1))
-    } else if (unequal_method == "last") {
-      return(c(c(idx, rev(idx)), max(idx) + 1))
-    }
+  }
+
+  if (unequal_method == "middle") {
+    middle <- ceiling(half_size / 2) + 1
+    idx <- ifelse(idx >= middle, idx + 1, idx)
+    return(c(idx, middle, rev(idx)))
+  }
+
+  if (unequal_method == "first") {
+    return(c(1, c(idx, rev(idx)) + 1))
+  }
+
+  if (unequal_method == "last") {
+    return(c(c(idx, rev(idx)), max(idx) + 1))
   }
 }

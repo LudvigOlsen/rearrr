@@ -320,10 +320,12 @@ rearrange_by_distance <- function(data,
 
 
 # TODO Add aggregate_fn for recursive pairings
-rearrange_pair_extremes <- function(data, cols,
+rearrange_pair_extremes <- function(data,
+                                    cols,
                                     overwrite,
                                     unequal_method,
                                     num_pairings,
+                                    balance,
                                     shuffle_members,
                                     shuffle_pairs,
                                     factor_name,
@@ -335,43 +337,165 @@ rearrange_pair_extremes <- function(data, cols,
     return(data)
   }
 
-  # Order data frame
-  data <- data[order(data[[col]]), , drop = FALSE]
+  equal_nrows <- nrow(data) %% 2 == 0
+
+  # Prepare factor names for output
+  factor_names <- factor_name
+  if (!is.null(factor_names) && num_pairings > 1){
+    factor_names <- paste0(factor_name, "_", seq_len(num_pairings))
+  }
 
   ## First extreme pairing
 
-  # Create
-  local_tmp_rearrange_var <- create_tmp_var(data, ".tmp_rearrange_col")
-  data[[local_tmp_rearrange_var]] <-
-    create_rearrange_factor_pair_extremes_(
-      size = nrow(data), unequal_method = unequal_method
-    )
+  # Create num_pairings tmp column names
+  tmp_rearrange_vars <- purrr::map(.x = seq_len(num_pairings), .f = ~ {
+    create_tmp_var(data, paste0(".tmp_rearrange_col_", .x))
+  }) %>% unlist(recursive = TRUE)
+
+  # Pair the extreme values and order by the pairs
+  data <- order_and_pair_extremes_(
+    data = data,
+    col = col,
+    new_col = tmp_rearrange_vars[[1]],
+    unequal_method = unequal_method
+  )
 
   # Order data by the pairs
   data <- order_by_group(
     data = data,
-    group_col = local_tmp_rearrange_var,
-    shuffle_members = shuffle_members,
-    shuffle_pairs = shuffle_pairs
+    group_col = tmp_rearrange_vars[[1]],
+    shuffle_members = FALSE, # Done at the end
+    shuffle_pairs = FALSE # Done at the end
   )
 
   # TODO Perform recursive pairing
 
-  # if (num_pairings > 1){
-  #
-  #
-  #
-  # }
+  if (num_pairings > 1){
 
-  # TODO Make this work for num_pairings factors
+    # Get environment so we can update `data`
+    pairing_env <- environment()
 
-  # Add rearrange factor
-  data <- add_info_col_(
-    data = base_deselect_(data, cols = local_tmp_rearrange_var),
-    nm = factor_name,
-    content = as.factor(data[[local_tmp_rearrange_var]]),
-    overwrite = overwrite
-  )
+    # Perform num_pairings-1 pairings
+    plyr::l_ply(seq_len(num_pairings - 1), function(i) {
+
+      # Note that `tmp_rearrange_vars[[i]]` is for the previous level
+      # and `tmp_rearrange_vars[[i + 1]]` is for the current level
+
+      # What to balance ("mean", "spread", "min", or "max")
+      if (length(balance) > 1) {
+        current_balance_target <- balance[[i]]
+      } else {
+        current_balance_target <- balance
+      }
+
+      # Define function to summarize with
+      if (current_balance_target == "mean") {
+        summ_fn <- sum
+      } else if (current_balance_target == "spread") {
+        summ_fn <- function(v) {
+          sum(abs(diff(v)))
+        }
+      } else if (current_balance_target == "min") {
+        summ_fn <- min
+      } else if (current_balance_target == "max") {
+        summ_fn <- max
+      }
+
+      # Aggregate values for pairs from previous pairing
+      tmp_group_scores <- data %>%
+        dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
+        dplyr::summarize(group_aggr = summ_fn(!!as.name(col)))
+
+      if (!equal_nrows & unequal_method == "first") {
+
+        # Reorder with first group always first
+        # (otherwise doesn't work with negative numbers)
+        tmp_group_scores_sorted <- tmp_group_scores %>%
+          dplyr::filter(dplyr::row_number() == 1) %>%
+          dplyr::bind_rows(
+            tmp_group_scores %>%
+              dplyr::filter(dplyr::row_number() != 1) %>%
+              dplyr::arrange(.data$group_aggr))
+      } else {
+        tmp_group_scores_sorted <- tmp_group_scores %>%
+          dplyr::arrange(.data$group_aggr)
+      }
+
+      # Pair the extreme pairs and order by the new pairs
+      tmp_rearrange <- order_and_pair_extremes_(
+        data = tmp_group_scores_sorted,
+        col = "group_aggr",
+        new_col = tmp_rearrange_vars[[i + 1]],
+        unequal_method = unequal_method
+      ) %>%
+        base_select_(cols = c(tmp_rearrange_vars[[i]], tmp_rearrange_vars[[i + 1]]))
+
+      # Add the new pair identifiers to `data`
+      data <- data %>%
+        dplyr::left_join(tmp_rearrange, by = tmp_rearrange_vars[[i]])
+
+      # Order data by the pairs
+      data <- order_by_group(
+        data = data,
+        group_col = tmp_rearrange_vars[[i + 1]],
+        shuffle_members = FALSE,
+        shuffle_pairs = FALSE
+      )
+
+      # Update `data` in parent environment
+      pairing_env[["data"]] <- data
+
+    })
+  }
+
+  # Find columns to shuffle
+  shuffling_group_cols <- rev(tmp_rearrange_vars)
+  cols_to_shuffle <- c()
+  if (isTRUE(shuffle_members))
+    cols_to_shuffle <- shuffling_group_cols
+  if (isTRUE(shuffle_pairs)) {
+    shuffling_group_cols <- c(shuffling_group_cols, col)
+    cols_to_shuffle <- c(cols_to_shuffle, col)
+  }
+
+  # Shuffle members and/or pairs if specified
+  if (length(cols_to_shuffle) > 0) {
+    data <- dplyr::ungroup(data) %>%
+      shuffle_hierarchy(group_cols = shuffling_group_cols,
+                        cols_to_shuffle = cols_to_shuffle,
+                        leaf_has_groups = !shuffle_members)
+  }
+
+  if (!is.null(factor_names)){
+    # Convert to factors and give correct names
+    rearrange_factors <- as.list(data[, tmp_rearrange_vars, drop=FALSE])
+    rearrange_factors <- purrr::map(rearrange_factors, .f = ~{as.factor(.x)})
+    names(rearrange_factors) <- factor_names
+
+    # Remove tmp vars and add factors
+    data <- base_deselect_(data, cols = tmp_rearrange_vars) %>%
+      add_dimensions_(new_vectors = rearrange_factors,
+                      overwrite = overwrite)
+  } else {
+    # If names are NULL, we just remove the tmp columns
+    data <- base_deselect_(data, cols = tmp_rearrange_vars)
+  }
+
+  data
+}
+
+# Wrapper for running extreme pairing and ordering data by it
+order_and_pair_extremes_ <- function(data, col, new_col, unequal_method){
+
+  # Order data frame
+  data <- data[order(data[[col]]), , drop = FALSE]
+
+  # Add rearrange factor (of type integer)
+  data[[new_col]] <-
+    create_rearrange_factor_pair_extremes_(
+      size = nrow(data),
+      unequal_method = unequal_method
+    )
 
   data
 }

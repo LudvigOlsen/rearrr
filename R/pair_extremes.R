@@ -76,6 +76,9 @@
 #' # Shuffle the order of the pairs
 #' pair_extremes(df, col = "A", shuffle_pairs = TRUE)
 #'
+#' # Use recursive pairing
+#' pair_extremes(df, col = "A", num_pairings = 2)
+#'
 #' # Grouped by G
 #' df %>%
 #'   dplyr::select(G, A) %>% # For clarity
@@ -100,16 +103,18 @@
 pair_extremes <- function(data,
                           col = NULL,
                           unequal_method = "middle",
-                          # num_pairings = 1, # TODO
+                          num_pairings = 1,
+                          balance = "mean",
                           shuffle_members = FALSE,
                           shuffle_pairs = FALSE,
-                          factor_name = ".pair",
+                          factor_name = ifelse(num_pairings == 1, ".pair", ".pairing"),
                           overwrite = FALSE) {
   extreme_pairing_rearranger_(
     data = data,
     col = col,
     unequal_method = unequal_method,
-    num_pairings = 1,
+    num_pairings = num_pairings,
+    balance = balance,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
     factor_name = factor_name,
@@ -121,6 +126,8 @@ pair_extremes <- function(data,
 #' @export
 pair_extremes_vec <- function(data,
                               unequal_method = "middle",
+                              num_pairings = 1,
+                              balance = "mean",
                               shuffle_members = FALSE,
                               shuffle_pairs = FALSE){
   checkmate::assert(checkmate::check_vector(data, strict = TRUE),
@@ -128,6 +135,8 @@ pair_extremes_vec <- function(data,
   pair_extremes(
     data = data,
     unequal_method = unequal_method,
+    num_pairings = num_pairings,
+    balance = balance,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
     factor_name = NULL,

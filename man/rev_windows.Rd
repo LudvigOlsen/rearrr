@@ -91,7 +91,8 @@ Other rearrange functions:
 \code{\link{pair_extremes}()},
 \code{\link{position_max}()},
 \code{\link{position_min}()},
-\code{\link{roll_elements}()}
+\code{\link{roll_elements}()},
+\code{\link{shuffle_hierarchy}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

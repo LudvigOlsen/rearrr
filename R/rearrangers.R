@@ -196,6 +196,29 @@ centering_rearranger_ <- function(data,
 #' @param shuffle_members Whether to shuffle the pair members. (Logical)
 #' @param shuffle_pairs Whether to shuffle the pairs. (Logical)
 #' @param factor_name Name of new column with the sorting factor. If \code{NULL}, no column is added.
+#' @param num_pairings Number of pairings to perform (recursively). At least \code{1}.
+#'
+#'  Based on \code{`balance`}, the secondary pairings perform extreme pairing on either the
+#'  \emph{sum}, \emph{absolute difference}, \emph{min}, or \emph{max} of the pair elements.
+#' @param balance What to balance pairs for in a given \emph{secondary} pairing.
+#'  Either \code{"mean"}, \code{"spread"}, \code{"min"}, or \code{"max"}.
+#'  Can be a single string used for all secondary pairings
+#'  or one for each secondary pairing (\code{`num_pairings` - 1}).
+#'
+#'  The first pairing always pairs the actual element values.
+#'
+#'  \subsection{mean}{
+#'  Pairs have similar means. The values in the pairs from the previous pairing
+#'  are aggregated with \code{`sum()`} and paired.
+#'  }
+#'  \subsection{spread}{
+#'  Pairs have similar spread (e.g. standard deviations). The values in the pairs from the previous pairing
+#'  are aggregated with \code{`sum(abs(diff()))`} and paired.
+#'  }
+#'  \subsection{min / max}{
+#'  Pairs have similar minimum / maximum values. The values in the pairs from the previous pairing
+#'  are aggregated with \code{`min()`} / \code{`max()`} and paired.
+#'  }
 #' @param unequal_method Method for dealing with an unequal number of rows
 #'  in \code{`data`}.
 #'
@@ -206,7 +229,7 @@ centering_rearranger_ <- function(data,
 #'
 #'  \strong{Example}:
 #'
-#'  The column values:
+#'  The ordered column values:
 #'
 #'  \code{c(1, 2, 3, 4, 5)}
 #'
@@ -225,7 +248,7 @@ centering_rearranger_ <- function(data,
 #'
 #'  \strong{Example}:
 #'
-#'  The column values:
+#'  The ordered column values:
 #'
 #'  \code{c(1, 2, 3, 4, 5)}
 #'
@@ -243,7 +266,7 @@ centering_rearranger_ <- function(data,
 #'
 #'  \strong{Example}:
 #'
-#'  The column values:
+#'  The ordered column values:
 #'
 #'  \code{c(1, 2, 3, 4, 5)}
 #'
@@ -259,9 +282,9 @@ centering_rearranger_ <- function(data,
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
-#'  Optionally with the sorting factor added.
+#'  Optionally with the sorting factor(s) added.
 #'
-#'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
+#'  When \code{`data`} is a \code{vector} and \code{`factor_name`} is \code{NULL},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 extreme_pairing_rearranger_ <- function(data,
                                         col = NULL,
@@ -269,6 +292,7 @@ extreme_pairing_rearranger_ <- function(data,
                                         shuffle_members = FALSE,
                                         shuffle_pairs = FALSE,
                                         num_pairings = 1,
+                                        balance = "mean",
                                         factor_name = ".pair",
                                         overwrite = FALSE) {
 
@@ -276,14 +300,22 @@ extreme_pairing_rearranger_ <- function(data,
   assert_collection <- checkmate::makeAssertCollection()
   checkmate::assert_count(num_pairings, positive = TRUE, add = assert_collection)
   checkmate::assert_string(unequal_method, min.chars = 1, add = assert_collection)
+  checkmate::assert_character(balance, min.chars = 1, any.missing = FALSE, add = assert_collection)
   checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(shuffle_members, add = assert_collection)
   checkmate::assert_flag(shuffle_pairs, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   checkmate::assert_names(unequal_method,
-    subset.of = c("first", "middle", "last"),
-    add = assert_collection
-  )
+                          subset.of = c("first", "middle", "last"),
+                          add = assert_collection)
+  checkmate::assert_names(balance,
+                          subset.of = c("mean", "spread", "min", "max"),
+                          add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (num_pairings > 1 &&
+      length(balance) %ni% c(1, num_pairings - 1)){
+    assert_collection$push("length of 'balance' must be either 1 or 'num_pairings' - 1.")
+  }
   checkmate::reportAssertions(assert_collection)
   # End of argument checks ####
 
@@ -296,6 +328,7 @@ extreme_pairing_rearranger_ <- function(data,
     overwrite = overwrite,
     unequal_method = unequal_method,
     num_pairings = num_pairings,
+    balance = balance,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
     factor_name = factor_name
