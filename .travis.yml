@@ -19,7 +19,7 @@ matrix:
     before_script: Rscript -e "remotes::install_github('ludvigolsen/xpectr')"
   - r: release
     name: multiple-devel
-    before_script: Rscript -e "remotes::install_github(c('ludvigolsen/xpectr', 'r-lib/vctrs', 'tidyverse/dplyr', 'tidyverse/tidyr', 'tidyverse/tibble'), dependencies = TRUE)"
+    before_script: Rscript -e "remotes::install_github(c('ludvigolsen/xpectr', 'tidyverse/dplyr', 'tidyverse/tidyr', 'tidyverse/tibble'), dependencies = TRUE)"
   - r: release
     os: osx
     name: release osx

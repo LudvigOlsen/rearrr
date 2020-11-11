@@ -1,5 +1,5 @@
 
-# rearrr 0.1.0.9000
+# rearrr 0.2.0
 
 * Adds `shuffle_hierarchy()` for shuffling a multi-column hierarchy of groups. (Rearranger)
 
