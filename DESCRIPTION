@@ -22,6 +22,7 @@ Imports:
     plyr,
     purrr (>= 0.3.4),
     rlang (>= 0.4.7),
+    R6,
     stats,
     tibble,
     utils
