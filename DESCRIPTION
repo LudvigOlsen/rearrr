@@ -1,6 +1,6 @@
 Package: rearrr
 Title: Rearranging Data
-Version: 0.1.0.9000
+Version: 0.2.0.9000
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
@@ -22,6 +22,7 @@ Imports:
     plyr,
     purrr (>= 0.3.4),
     rlang (>= 0.4.7),
+    R6,
     stats,
     tibble,
     utils
