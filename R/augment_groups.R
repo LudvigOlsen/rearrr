@@ -108,6 +108,9 @@ GroupedPipe <- R6::R6Class("GroupedPipe", list(
 
     self$names <- append(self$names, name)
     transformation <- GroupedTransformation$new(fn=fn, args=args, var_args=var_args, name=name)
+    if (transformation$num_groups != self$num_groups){
+      stop("the transformation must have the same number of groups (see var_args) as the GroupedPipe.")
+    }
     self$transformations <- c(self$transformations, setNames(list(transformation), name))
   },
   apply = function(data, verbose=FALSE){
