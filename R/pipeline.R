@@ -11,20 +11,32 @@ Transformation <- R6::R6Class(
     name = NULL,
     fn = NULL,
     args = NULL,
-    initialize = function(fn, args, name = NULL) {
+    group_cols = NULL,
+    initialize = function(fn, args, name = NULL, group_cols = NULL) {
       # Check arguments
-      private$check_initialize_args(fn = fn, args = args, name = name)
+      private$check_initialize_args(fn = fn, args = args, name = name,
+                                    group_cols = group_cols)
 
       # Assign to object
       self$fn <- fn
       self$args <- args
       self$name <- name
+
+      # In this type of Transformation,
+      # we need to specify potential group columns
+      self$group_cols <- group_cols
     },
     apply = function(data) {
+      if (isTRUE(private$ungroup_input)){
+        data <- dplyr::ungroup(data)
+      }
+      if (!is.null(self$group_cols)){
+        data <- dplyr::group_by(data, !!!rlang::syms(self$group_cols))
+      }
       run_by_group(
         data = data,
         fn = private$apply_to_group,
-        restore_grouping = TRUE
+        restore_grouping = dplyr::is_grouped_df(data)
       )
     },
     print = function(...,
@@ -47,10 +59,15 @@ Transformation <- R6::R6Class(
       cat(indentation_str, name, "\n", sep = "")
       args_str <- private$args_to_string(self$args)
       cat(indentation_str, "  Arguments:  ", args_str, "\n", sep = "")
+      if (!is.null(self$group_cols)){
+        group_cols_str <- private$args_to_string(self$group_cols)
+        cat(indentation_str, "  Grouping columns:  ", group_cols_str, "\n", sep = "")
+      }
       invisible(self)
     }
   ),
   private = list(
+    ungroup_input = TRUE,
     apply_to_group = function(data, group_id) {
       if (dplyr::is_grouped_df(data)) {
         stop("`data` was grouped. Pass the group subset instead.")
@@ -58,20 +75,34 @@ Transformation <- R6::R6Class(
       args <- c(list(data = data), self$args)
       do.call(self$fn, args, envir = parent.frame())
     },
-    check_initialize_args = function(fn, args, name){
+    check_initialize_args = function(fn, args, name, group_cols){
       assert_collection <- checkmate::makeAssertCollection()
       checkmate::assert_function(fn, add = assert_collection)
       checkmate::assert_list(args, names = "unique", add = assert_collection)
       checkmate::assert_string(name, null.ok = TRUE, add = assert_collection)
+      checkmate::assert_character(group_cols, null.ok = TRUE, min.chars = 1,
+                                  any.missing = FALSE, add = assert_collection)
       checkmate::reportAssertions(assert_collection)
     },
-    args_to_string = function(args){
+    args_to_string = function(args, max_len = 20, rm_function_start = FALSE, rm_capitalized_l = FALSE) {
       arg_names <- names(args)
-      arg_vals_strings <- lapply(args, clean_arg_str)
-      paste0(arg_names, "=", arg_vals_strings, collapse = ", ")
+      arg_vals_strings <- lapply(
+        args,
+        clean_arg_str,
+        max_len = max_len,
+        rm_function_start = rm_function_start,
+        rm_capitalized_l = rm_capitalized_l
+      )
+      if (length(arg_names) == 0){
+        string <- paste0(arg_vals_strings, collapse = ", ")
+      } else {
+        string <- paste0(arg_names, "=", arg_vals_strings, collapse = ", ")
+      }
+      string
     }
   )
 )
+
 
 # Applies one transformation at a time
 # With the same arguments for all groups
@@ -80,16 +111,22 @@ Pipeline <- R6::R6Class(
   public = list(
     transformations = list(),
     names = character(),
-    add_transformation = function(fn, args, name){
+    add_transformation = function(fn, args, name, group_cols = NULL){
       if (name %in% self$names){
         stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
       }
 
       self$names <- append(self$names, name)
-      transformation <- Transformation$new(fn = fn, args = args, name = name)
+      transformation <- Transformation$new(fn = fn, args = args,
+                                           name = name, group_cols = group_cols)
       self$transformations <- c(self$transformations, setNames(list(transformation), name))
     },
     apply = function(data, verbose = FALSE) {
+      if (isTRUE(private$warn_grouped_input) && dplyr::is_grouped_df(data)){
+        warning(
+          "Ignoring groups in `data`. Only the `group_cols` grouping specifications are used."
+        )
+      }
       if (isTRUE(verbose)){
         cat(paste0("\n", paste0(rep("-", 54), collapse = "")))
         cat("\nApplying transformations.")
@@ -133,7 +170,12 @@ Pipeline <- R6::R6Class(
       }
       invisible(self)
     }
-))
+  ),
+  private = list(
+    warn_grouped_input = TRUE
+  )
+
+)
 
 format_running_time_ <- function(t_start, t_end, digits = 4, suffix = "s") {
   t_total <- t_end[["elapsed"]] - t_start[["elapsed"]]
@@ -151,13 +193,24 @@ collapse_strings <- function(strings) {
 
 
 # This is applied to each argument value separately
-clean_arg_str <- function(string, max_len = 20) {
+clean_arg_str <- function(string, max_len = 20, rm_function_start = FALSE, rm_capitalized_l = FALSE) {
   # Deparse the strings and make sure split strings are collapsed
   string <- collapse_strings(deparse(string))
   # Reduce multiple consecutive whitespaces to a single whitespace
   string <- gsub("[[:blank:]]+", " ", string)
   # Remove trailing whitespaces
   string <- trimws(string)
+  # Compress function string
+  string <- gsub("function[[:space:]]?\\([[:space:]]?", "function(", string)
+  string <- gsub("[[:space:]]?\\) \\{[[:space:]]*", "){", string)
+  string <- gsub("\\{[[:space:]]*", "{", string)
+  string <- gsub("[[:space:]]*\\}", "}", string)
+  if (isTRUE(rm_function_start)){
+    string <- gsub("function\\(\\)", "", string)
+  }
+  if (isTRUE(rm_capitalized_l)){
+    string <- gsub("L", "", string, fixed = TRUE)
+  }
   # Shorten long strings
   if (!is.null(max_len) && nchar(string) > max_len + 3) {
     string <- substr(string, 1, max_len)
