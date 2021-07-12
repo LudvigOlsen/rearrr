@@ -11,10 +11,121 @@
 
 # Applies one transformation at a time
 # With different generated argument values per group
+
+#' @title Chain multiple transformations and generate argument values per group
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Build a pipeline of transformations to be applied sequentially.
+#'
+#'  Generate argument values for selected arguments with a given set of generators.
+#'  E.g. randomly generate argument values for each group in a \code{data.frame}.
+#'
+#'  Groupings are reset between each transformation. See `group_cols`.
+#'
+#'  \strong{Standard workflow}: Instantiate pipeline -> Add transformations -> Apply to data
+#'
+#'  To apply the same arguments to all groups, see
+#'  \code{\link[rearrr:Pipeline]{Pipeline}}.
+#'
+#'  To apply different but specified argument values to a fixed set of groups,
+#'  see \code{\link[rearrr:FixedGroupsPipeline]{FixedGroupsPipeline}}.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
+#' @family pipelines
+#' @examples
+#' # Attach package
+#' library(rearrr)
+#'
+#' # Create a data frame
+#' df <- data.frame(
+#'   "Index" = 1:12,
+#'   "A" = c(1:4, 9:12, 15:18),
+#'   "G" = rep(1:3, each = 4)
+#' )
+#'
+#' # Create new pipeline
+#' pipe <- GeneratedPipeline$new()
+#'
+#' # Add 2D rotation transformation
+#' # Note that we specify the grouping via `group_cols`
+#' pipe$add_transformation(
+#'   fn = rotate_2d,
+#'   args = list(
+#'     x_col = "Index",
+#'     y_col = "A",
+#'     suffix = "",
+#'     overwrite = TRUE
+#'   ),
+#'   generators = list(degrees = function(){sample.int(360, 1)},
+#'                     origin = function(){rnorm(2)}),
+#'   name = "Rotate",
+#'   group_cols = "G"
+#' )
+#'
+#' # Add the `cluster_group` transformation
+#' # Note that this function requires the entire input data
+#' # to properly scale the groups. We therefore specify `group_cols`
+#' # as part of `args`. This works as `cluster_groups()` accepts that
+#' # argument.
+#' # Also note the `.apply` generator which generates a TRUE/FALSE scalar
+#' # for whether the transformation should be applied to the current group
+#' pipe$add_transformation(
+#'   fn = cluster_groups,
+#'   args = list(
+#'     cols = c("Index", "A"),
+#'     suffix = "",
+#'     overwrite = TRUE,
+#'     group_cols = "G"
+#'   ),
+#'   generators = list(
+#'     multiplier = function() {
+#'       0.1 * runif(1) * 3 ^ sample.int(5, 1)
+#'     },
+#'     .apply = function(){sample(c(TRUE, FALSE), 1)}
+#'   ),
+#'   name = "Cluster"
+#' )
+#'
+#' # Check pipeline object
+#' pipe
+#'
+#' # Apply pipeline to data.frame
+#' # Enable `verbose` to print progress
+#' pipe$apply(df, verbose = TRUE)
+#'
 GeneratedPipeline <- R6::R6Class(
   "GeneratedPipeline",
   inherit = Pipeline,
   public = list(
+
+    #' @description
+    #'  Add a transformation to the pipeline.
+    #' @param fn Function that performs the transformation.
+    #' @param args Named \code{list} with arguments for the \code{`fn`} function.
+    #' @param generators Named \code{list} of functions for generating argument values
+    #'  for a single call of \code{`fn`}.
+    #'
+    #'  It is possible to include an \emph{apply generator} for deciding whether
+    #'  the transformation should be applied to the current group or not.
+    #'  This is done by adding a function with the name \code{`.apply`} to the \code{`generators`} list.
+    #'  E.g. \code{".apply" = function(){sample(c(TRUE, FALSE), 1)}}.
+    #' @param name Name of the transformation step. Must be unique.
+    #' @param group_cols Names of the columns to group the input
+    #'  data by before applying the transformation.
+    #'
+    #'   Note that the transformation function is applied separately to each group (subset).
+    #'   If the \code{`fn`} function requires access to the entire \code{data.frame}, the
+    #'   grouping columns should be specified as part of \code{`args`} and
+    #'   handled by the \code{`fn`} function.
+    #' @return The pipeline. To allow chaining of methods.
+    #' @examples
+    #' # `generators` is a list of functions for generating
+    #' # argument values for a chosen set of arguments
+    #' # `.apply` can be used to disable the transformation
+    #' generators = list(degrees = function(){sample.int(360, 1)},
+    #'                   origin = function(){rnorm(2)},
+    #'                   .apply = function(){sample(c(TRUE, FALSE), 1)})
     add_transformation = function(fn, args, generators, name, group_cols = NULL) {
       if (name %in% self$names) {
         stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
@@ -30,7 +141,15 @@ GeneratedPipeline <- R6::R6Class(
       )
       self$transformations <- c(self$transformations,
                                 setNames(list(transformation), name))
+
+      # Return object invisibly to allow method chaining
+      invisible(self)
     },
+
+    #' @description
+    #'  Print an overview of the pipeline.
+    #' @param ... further arguments passed to or from other methods.
+    #' @return The pipeline. To allow chaining of methods.
     print = function(...) {
       cat("GeneratedPipeline: \n")
       for (name in self$names){

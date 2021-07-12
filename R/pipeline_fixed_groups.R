@@ -8,31 +8,130 @@
 # why a function that requires group_cols (e.g. cluster_groups) will get an ungrouped data frame
 # and one should set group_cols in the args
 
-# Idea for example:
-# agp <- FixedGroupsPipeline$new(3)
-# agp$add_transformation(fn=rotate_2d, args=list(x_col="Index", y_col="A", origin=c(0,0),
-#                                                suffix="", overwrite=TRUE),
-#                        var_args = list(degrees=list(45, 90, 120)), name="rotate")
-# agp$add_transformation(fn=cluster_groups, args=list(cols=c("Index","A"),
-#                                                     suffix="", overwrite=TRUE),
-#                        var_args = list(multiplier=list(0.05, 0.1, 0.2)), name="cluster")
-# # agp$transformations
-# agp$apply(dplyr::group_by(df, G), verbose=T)
-
-
 # Reminder: Side-effect R6 methods should always return self invisibly!
 
 # Applies one transformation at a time
 # With different arguments per group
+
+
+#' @title Chain multiple transformations with different argument values per group
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Build a pipeline of transformations to be applied sequentially.
+#'
+#'  Specify different argument values for each group in a fixed set of groups.
+#'  E.g. if your \code{data.frame} contains 5 groups, you provide 5 argument values
+#'  for each of the non-constant arguments (see \code{`var_args`}).
+#'
+#'  The number of expected groups is specified during initialization and the input
+#'  \code{`data`} must be grouped such that it contains that exact number of groups.
+#'
+#'  Transformations are applied to groups separately, why the given transformation function
+#'  only receives the subset of \code{`data`} belonging to the current group.
+#'
+#'  \strong{Standard workflow}: Instantiate pipeline -> Add transformations -> Apply to data
+#'
+#'  To apply the same arguments to all groups, see
+#'  \code{\link[rearrr:Pipeline]{Pipeline}}.
+#'
+#'  To apply generated argument values to an arbitrary number of groups,
+#'  see \code{\link[rearrr:GeneratedPipeline]{GeneratedPipeline}}.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
+#' @family pipelines
+#' @examples
+#' # Attach package
+#' library(rearrr)
+#' library(dplyr)
+#'
+#' # Create a data frame
+#' df <- data.frame(
+#'   "Index" = 1:12,
+#'   "A" = c(1:4, 9:12, 15:18),
+#'   "G" = rep(1:3, each = 4)
+#' ) %>%
+#'   dplyr::group_by(G)
+#'
+#' # Create new pipeline
+#' pipe <- FixedGroupsPipeline$new(num_groups = 3)
+#'
+#' # Add 2D rotation transformation
+#' pipe$add_transformation(
+#'   fn = rotate_2d,
+#'   args = list(
+#'     x_col = "Index",
+#'     y_col = "A",
+#'     suffix = "",
+#'     overwrite = TRUE
+#'   ),
+#'   var_args = list(
+#'     degrees = list(45, 90, 180),
+#'     origin = list(c(0, 0), c(1, 2), c(-1, 0))
+#'   ),
+#'   name = "Rotate"
+#' )
+#'
+#' # Add the `cluster_group` transformation
+#' # As the function is fed an ungrouped subset of `data`,
+#' # i.e. the rows of that group, we need to specify `group_cols` in `args`
+#' # That is specific to `cluster_groups()` though
+#' # Also note `.apply` in `var_args` which tells the pipeline *not*
+#' # to apply this transformation to the second group
+#' pipe$add_transformation(
+#'   fn = cluster_groups,
+#'   args = list(
+#'     cols = c("Index", "A"),
+#'     suffix = "",
+#'     overwrite = TRUE,
+#'     group_cols = "G"
+#'   ),
+#'   var_args = list(
+#'     multiplier = list(0.5, 1, 5),
+#'     .apply = list(TRUE, FALSE, TRUE)
+#'   ),
+#'   name = "Cluster"
+#' )
+#'
+#' # Check pipeline object
+#' pipe
+#'
+#' # Apply pipeline to already grouped data.frame
+#' # Enable `verbose` to print progress
+#' pipe$apply(df, verbose = TRUE)
+#'
 FixedGroupsPipeline <- R6::R6Class(
   "FixedGroupsPipeline",
   inherit = Pipeline,
   public = list(
-    # Requires pre-specifying number of groups
+
+    #' @field num_groups Number of groups the pipeline will be applied to.
     num_groups = NULL,
+
+    #' @description
+    #'  Initialize the pipeline with the number of groups the
+    #'  pipeline will be applied to.
+    #' @param num_groups Number of groups the pipeline will be applied to.
     initialize = function(num_groups) {
+      checkmate::assert_integerish(num_groups, lower = 1, any.missing = FALSE, len = 1)
       self$num_groups <- num_groups
     },
+
+    #' @description
+    #'  Add a transformation to the pipeline.
+    #' @param fn Function that performs the transformation.
+    #' @param args Named \code{list} with arguments for the \code{`fn`} function.
+    #' @param var_args Named \code{list} of arguments with \code{list} of differing
+    #'   values for each group.
+    #'
+    #'   E.g. \code{list("a" = list(1, 2, 3), "b" = list("a", "b", "c"))} given 3 groups.
+    #'
+    #'   By adding \code{".apply"} with a list of \code{TRUE}/\code{FALSE} flags, the transformation
+    #'   can be disabled for a specific group.
+    #'
+    #'   E.g. \code{list(".apply" = list(TRUE, FALSE, TRUE), ...}.
+    #' @param name Name of the transformation step. Must be unique.
+    #' @return The pipeline. To allow chaining of methods.
     add_transformation = function(fn, args, var_args, name) {
       if (name %in% self$names) {
         stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
@@ -58,13 +157,31 @@ FixedGroupsPipeline <- R6::R6Class(
       }
       self$transformations <- c(self$transformations,
                                 setNames(list(transformation), name))
+
+      # Return object invisibly to allow method chaining
+      invisible(self)
     },
+
+    #' @description
+    #'  Apply the pipeline to a \code{data.frame}.
+    #' @param data \code{data.frame} with the same number of groups as pre-registered
+    #'  in the pipeline.
+    #'
+    #'  You can find the number of groups in \code{`data`} with \code{`dplyr::n_groups(data)`}.
+    #'  The number of groups expected by the pipeline can be accessed with \code{`pipe$num_groups`}.
+    #' @param verbose Whether to print the progress.
+    #' @return Transformed version of \code{`data`}.
     apply = function(data, verbose = FALSE) {
       if (dplyr::n_groups(data) != self$num_groups){
         stop(paste0("`data` did not have exactly ", self$num_groups, " groups as expected."))
       }
       super$apply(data = data, verbose = verbose)
     },
+
+    #' @description
+    #'  Print an overview of the pipeline.
+    #' @param ... further arguments passed to or from other methods.
+    #' @return The pipeline. To allow chaining of methods.
     print = function(...) {
       cat("FixedGroupsPipeline: \n")
       cat("  No. expected groups: ", self$num_groups, "\n", sep = "")

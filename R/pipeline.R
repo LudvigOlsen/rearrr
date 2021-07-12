@@ -9,11 +9,103 @@
 
 # Applies one transformation at a time
 # With the same arguments for all groups
+
+#' @title Chain multiple transformations
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Build a pipeline of transformations to be applied sequentially.
+#'
+#'  Uses the same arguments for all groups in \code{`data`}.
+#'
+#'  Groupings are reset between each transformation. See `group_cols`.
+#'
+#'  \strong{Standard workflow}: Instantiate pipeline -> Add transformations -> Apply to data
+#'
+#'  To apply different argument values to each group, see
+#'  \code{\link[rearrr:GeneratedPipeline]{GeneratedPipeline}} for generating
+#'  argument values for an arbitrary number of groups and
+#'  \code{\link[rearrr:FixedGroupsPipeline]{FixedGroupsPipeline}} for specifying
+#'  specific values for a fixed set of groups.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
+#' @family pipelines
+#' @examples
+#' # Attach package
+#' library(rearrr)
+#'
+#' # Create a data frame
+#' df <- data.frame(
+#'   "Index" = 1:12,
+#'   "A" = c(1:4, 9:12, 15:18),
+#'   "G" = rep(1:3, each = 4)
+#' )
+#'
+#' # Create new pipeline
+#' pipe <- Pipeline$new()
+#'
+#' # Add 2D rotation transformation
+#' # Note that we specify the grouping via `group_cols`
+#' pipe$add_transformation(
+#'   fn = rotate_2d,
+#'   args = list(
+#'     x_col = "Index",
+#'     y_col = "A",
+#'     origin = c(0, 0),
+#'     degrees = 45,
+#'     suffix = "",
+#'     overwrite = TRUE
+#'   ),
+#'   name = "Rotate",
+#'   group_cols = "G"
+#' )
+#'
+#' # Add the `cluster_group` transformation
+#' # Note that this function requires the entire input data
+#' # to properly scale the groups. We therefore specify `group_cols`
+#' # as part of `args`. This works as `cluster_groups()` accepts that
+#' # argument.
+#' pipe$add_transformation(
+#'   fn = cluster_groups,
+#'   args = list(
+#'     cols = c("Index", "A"),
+#'     suffix = "",
+#'     overwrite = TRUE,
+#'     multiplier = 0.05,
+#'     group_cols = "G"
+#'   ),
+#'   name = "Cluster"
+#' )
+#'
+#' # Check pipeline object
+#' pipe
+#'
+#' # Apply pipeline to data.frame
+#' # Enable `verbose` to print progress
+#' pipe$apply(df, verbose = TRUE)
 Pipeline <- R6::R6Class(
   "Pipeline",
   public = list(
+
+    #' @field transformations \code{list} of transformations to apply.
     transformations = list(),
+
+    #' @field names Names of the transformations.
     names = character(),
+
+    #' @description
+    #'  Add a transformation to the pipeline.
+    #' @param fn Function that performs the transformation.
+    #' @param args Named \code{list} with arguments for the \code{`fn`} function.
+    #' @param name Name of the transformation step. Must be unique.
+    #' @param group_cols Names of the columns to group the input
+    #'  data by before applying the transformation.
+    #'
+    #'   Note that the transformation function is applied separately to each group (subset).
+    #'   If the \code{`fn`} function requires access to the entire \code{data.frame}, the
+    #'   grouping columns should be specified as part of \code{`args`} and
+    #'   handled by the \code{`fn`} function.
+    #' @return The pipeline. To allow chaining of methods.
     add_transformation = function(fn, args, name, group_cols = NULL){
       if (name %in% self$names){
         stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
@@ -23,7 +115,20 @@ Pipeline <- R6::R6Class(
       transformation <- Transformation$new(fn = fn, args = args,
                                            name = name, group_cols = group_cols)
       self$transformations <- c(self$transformations, setNames(list(transformation), name))
+
+      # Return object invisibly to allow method chaining
+      invisible(self)
     },
+
+    #' @description
+    #'  Apply the pipeline to a \code{data.frame}.
+    #' @param data \code{data.frame}.
+    #'
+    #'  A grouped \code{data.frame} will raise a warning and the grouping will be ignored.
+    #'  Use the \code{`group_cols`} argument in the \code{`add_transformation`} method to
+    #'  specify how \code{`data`} should be grouped for each transformation.
+    #' @param verbose Whether to print the progress.
+    #' @return Transformed version of \code{`data`}.
     apply = function(data, verbose = FALSE) {
       # Warn if `data` is grouped and that grouping would be ignored
       if (isTRUE(private$warn_grouped_input) && dplyr::is_grouped_df(data)){
@@ -73,6 +178,11 @@ Pipeline <- R6::R6Class(
       # Return transformed data frame
       data
     },
+
+    #' @description
+    #'  Print an overview of the pipeline.
+    #' @param ... further arguments passed to or from other methods.
+    #' @return The pipeline. To allow chaining of methods.
     print = function(...) {
       cat("Pipeline: \n")
       for (name in self$names){
