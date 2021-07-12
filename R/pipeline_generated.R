@@ -1,6 +1,51 @@
 
+
+#   __________________ #< 374d2f927b10366fe88a1e973e84371d ># __________________
+#   Generated pipeline                                                      ####
+
+
 # Adding .apply=function(){sample(c(TRUE, FALSE), 1)} to generators
 # means transformations would only include a transformation 50% of the time
+
+
+
+# Applies one transformation at a time
+# With different generated argument values per group
+GeneratedPipeline <- R6::R6Class(
+  "GeneratedPipeline",
+  inherit = Pipeline,
+  public = list(
+    add_transformation = function(fn, args, generators, name, group_cols = NULL) {
+      if (name %in% self$names) {
+        stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
+      }
+      # Add transformation to pipeline
+      self$names <- append(self$names, name)
+      transformation <- GeneratedTransformation$new(
+        fn = fn,
+        args = args,
+        generators = generators,
+        name = name,
+        group_cols = group_cols
+      )
+      self$transformations <- c(self$transformations,
+                                setNames(list(transformation), name))
+    },
+    print = function(...) {
+      cat("GeneratedPipeline: \n")
+      for (name in self$names){
+        print(self$transformations[[name]], indent = 2, show_class = FALSE)
+      }
+      # Return object invisibly to allow method chaining
+      invisible(self)
+    }
+  )
+)
+
+
+##  .................. #< 66acc1f3fe1ee1b09d407746e25f326f ># ..................
+##  Generated transformation                                                ####
+
 
 # A transformation to be applied with different
 # generated argument values to each group
@@ -19,10 +64,12 @@ GeneratedTransformation <- R6::R6Class(
         name = name,
         group_cols = group_cols
       )
+
       # Assign to object
       self$fn <- fn
       self$args <- args
       self$name <- name
+
       # In this type of Transformation,
       # we need to specify potential group columns
       self$group_cols <- group_cols
@@ -32,13 +79,17 @@ GeneratedTransformation <- R6::R6Class(
         self$apply_generator <- generators[[".apply"]]
         generators <- generators[names(generators) != ".apply"]
       }
+
+      # Assign generators
       self$generators <- generators
     },
     get_group_args = function() {
+      # Prepare arguments for a group
       generated_args <- self$generate_args()
       c(self$args, generated_args)
     },
     generate_args = function() {
+      # Call each generator to generate arg values for a single group
       lapply(self$generators, do.call, args = list())
     },
     print = function(...,
@@ -53,35 +104,50 @@ GeneratedTransformation <- R6::R6Class(
         name <- "NoName"
       }
 
+      # Print transformation class name
       if (isTRUE(show_class)){
         cat(indentation_str, "GeneratedTransformation: \n")
         indentation_str <- paste0(rep(" ", indent + 2), collapse = "")
       }
 
+      # Print name of transformation
       cat(indentation_str, name, "\n", sep = "")
+
+      # Print arguments
       args_str <- private$args_to_string(self$args)
       cat(indentation_str, "  Constant arguments:  ", args_str, "\n", sep = "")
+
+      # Print generator functions
       generators_str <- private$args_to_string(self$generators, max_len = 30,
                                                rm_function_start = TRUE)
       cat(indentation_str, "  Generators:  ", generators_str, "\n", sep = "")
+
+      # Print the apply generator function
       if (!is.null(self$apply_generator)){
         apply_generator_str <- private$args_to_string(self$apply_generator, max_len = 30,
                                                       rm_function_start = TRUE)
         cat(indentation_str, "  Apply generator:  ", apply_generator_str, "\n", sep = "")
       }
+
+      # Print group columns
       if (!is.null(self$group_cols)){
         group_cols_str <- private$args_to_string(self$group_cols)
         cat(indentation_str, "  Grouping columns:  ", group_cols_str, "\n", sep = "")
       }
+
+      # Return object invisibly to allow method chaining
       invisible(self)
     }
   ),
   private = list(
+    # We don't use existing groupings in the given data frame
     ungroup_input = TRUE,
     apply_to_group = function(data, group_id) {
       if (dplyr::is_grouped_df(data)) {
         stop("`data` was grouped. Pass the group subset instead.")
       }
+
+      # Whether to apply transformation to this group
       if (!is.null(self$apply_generator)){
         do_apply <- self$apply_generator()
         if (!checkmate::test_flag(do_apply)) {
@@ -93,6 +159,8 @@ GeneratedTransformation <- R6::R6Class(
           return(data)
         }
       }
+
+      # Get arguments for group and apply function
       args <- self$get_group_args()
       args <- c(list(data = data), args)
       do.call(self$fn, args, envir = parent.frame())
@@ -111,34 +179,3 @@ GeneratedTransformation <- R6::R6Class(
   )
 )
 
-# Applies one transformation at a time
-# With different generated argument values per group
-GeneratedPipeline <- R6::R6Class(
-  "GeneratedPipeline",
-  inherit = Pipeline,
-  public = list(
-    add_transformation = function(fn, args, generators, name, group_cols = NULL) {
-      if (name %in% self$names) {
-        stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
-      }
-
-      self$names <- append(self$names, name)
-      transformation <- GeneratedTransformation$new(
-        fn = fn,
-        args = args,
-        generators = generators,
-        name = name,
-        group_cols = group_cols
-      )
-      self$transformations <- c(self$transformations,
-                                setNames(list(transformation), name))
-    },
-    print = function(...) {
-      cat("GeneratedPipeline: \n")
-      for (name in self$names){
-        print(self$transformations[[name]], indent = 2, show_class = FALSE)
-      }
-      invisible(self)
-    }
-  )
-)

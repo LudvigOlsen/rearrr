@@ -1,7 +1,7 @@
 
 
 #   __________________ #< b374fd49354d1eddc7d25f2e43608f7c ># __________________
-#   Apply transformation differently per group                              ####
+#   Fixed groups pipeline                                                   ####
 
 # Describe how this pipeline requires grouping the data frame beforehand
 # Also that the transformations are applied to groups separately
@@ -22,6 +22,69 @@
 
 # Reminder: Side-effect R6 methods should always return self invisibly!
 
+# Applies one transformation at a time
+# With different arguments per group
+FixedGroupsPipeline <- R6::R6Class(
+  "FixedGroupsPipeline",
+  inherit = Pipeline,
+  public = list(
+    # Requires pre-specifying number of groups
+    num_groups = NULL,
+    initialize = function(num_groups) {
+      self$num_groups <- num_groups
+    },
+    add_transformation = function(fn, args, var_args, name) {
+      if (name %in% self$names) {
+        stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
+      }
+
+      # Add transformation to pipeline
+      self$names <- append(self$names, name)
+      # Convert to transformation object
+      transformation <- FixedGroupsTransformation$new(
+        fn = fn,
+        args = args,
+        var_args = var_args,
+        name = name
+      )
+      # Check transformation has correct number of groups setting
+      if (transformation$num_groups != self$num_groups) {
+        stop(
+          paste0(
+            "the transformation must have the same number of groups (see",
+            " `var_args`) as the `FixedGroupsPipeline`."
+          )
+        )
+      }
+      self$transformations <- c(self$transformations,
+                                setNames(list(transformation), name))
+    },
+    apply = function(data, verbose = FALSE) {
+      if (dplyr::n_groups(data) != self$num_groups){
+        stop(paste0("`data` did not have exactly ", self$num_groups, " groups as expected."))
+      }
+      super$apply(data = data, verbose = verbose)
+    },
+    print = function(...) {
+      cat("FixedGroupsPipeline: \n")
+      cat("  No. expected groups: ", self$num_groups, "\n", sep = "")
+      for (name in self$names){
+        print(self$transformations[[name]], indent = 2, show_class = FALSE)
+      }
+      # Return object invisibly to allow method chaining
+      invisible(self)
+    }
+  ),
+  private = list(
+    # Groupings in the input data will be used
+    warn_grouped_input = FALSE
+  )
+)
+
+
+##  .................. #< cc7000f69b35bea0385d03803f3444b0 ># ..................
+##  Fixed group transformation                                              ####
+
 
 # A transformation to be applied with
 # different argument values to each group
@@ -40,10 +103,13 @@ FixedGroupsTransformation <- R6::R6Class(
         var_args = var_args,
         name = name
       )
+
       # Assign to object
       self$fn <- fn
       self$args <- args
       self$name <- name
+
+      # Extract potential apply argument
       if (".apply" %in% names(var_args)){
         self$apply_arg <- var_args[[".apply"]]
         if (checkmate::test_logical(self$apply_arg, any.missing = FALSE)){
@@ -51,6 +117,8 @@ FixedGroupsTransformation <- R6::R6Class(
         }
         var_args <- var_args[names(var_args) != ".apply"]
       }
+
+      # Assign rest to object
       self$var_args <- var_args
       self$num_groups <- length(var_args[[1]])
     },
@@ -62,11 +130,14 @@ FixedGroupsTransformation <- R6::R6Class(
         any.missing = FALSE,
         len = 1
       )
+      # Get var args values for current group
       var_args <- sapply(self$var_args, `[[`, group_id)
       var_args <- setNames(var_args, names(self$var_args))
       c(self$args, var_args)
     },
     apply = function(data) {
+      # Ensure we have the right number of groups
+      # E.g. if `data` was somehow ungrouped between transformations
       if (dplyr::n_groups(data) != self$num_groups) {
         stop(
           paste0(
@@ -92,37 +163,52 @@ FixedGroupsTransformation <- R6::R6Class(
         name <- "NoName"
       }
 
+      # Print transformation class name
       if (isTRUE(show_class)){
         cat(indentation_str, "FixedGroupsTransformation: \n")
         indentation_str <- paste0(rep(" ", indent + 2), collapse = "")
       }
 
+      # Print name of transformation
       cat(indentation_str, name, "\n", sep = "")
+
+      # Print arguments
       args_str <- private$args_to_string(self$args)
       cat(indentation_str, "  Constant arguments:  ", args_str, "\n", sep = "")
+
+      # Print varying arguments
       var_args_str <- private$args_to_string(self$var_args)
       cat(indentation_str, "  Varying arguments:   ", var_args_str, "\n", sep = "")
+
+      # Print which groups this transformation should *not* be applied to
       if (!is.null(self$apply_arg)){
         group_ids <- seq_len(self$num_groups)
         dont_apply_to <- group_ids[!unlist(self$apply_arg)]
         dont_apply_to_str <- private$args_to_string(dont_apply_to, rm_capitalized_l = TRUE)
         cat(indentation_str, "  Don't apply to these groups:  ", dont_apply_to_str, "\n", sep = "")
       }
+
+      # Return object invisibly to allow method chaining
       invisible(self)
     }
   ),
   private = list(
+    # We use existing groupings in the given data frame
     ungroup_input = FALSE,
     apply_to_group = function(data, group_id) {
       if (dplyr::is_grouped_df(data)) {
         stop("`data` was grouped. Pass the group subset instead.")
       }
+
+      # Check if we should apply the transformation to this group
       if (!is.null(self$apply_arg) &&
           !isTRUE(self$apply_arg[[group_id]])){
         # If the transformation should not be applied to this group
         # It becomes an identity function
         return(data)
       }
+
+      # Prepare arguments and apply function
       args <- self$get_group_args(group_id)
       args <- c(list(data = data), args)
       do.call(self$fn, args, envir = parent.frame())
@@ -143,54 +229,4 @@ FixedGroupsTransformation <- R6::R6Class(
   )
 )
 
-# Applies one transformation at a time
-# With different arguments per group
-FixedGroupsPipeline <- R6::R6Class(
-  "FixedGroupsPipeline",
-  inherit = Pipeline,
-  public = list(
-    num_groups = NULL,
-    initialize = function(num_groups) {
-      self$num_groups <- num_groups
-    },
-    add_transformation = function(fn, args, var_args, name) {
-      if (name %in% self$names) {
-        stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
-      }
-      self$names <- append(self$names, name)
-      transformation <- FixedGroupsTransformation$new(
-        fn = fn,
-        args = args,
-        var_args = var_args,
-        name = name
-      )
-      if (transformation$num_groups != self$num_groups) {
-        stop(
-          paste0(
-            "the transformation must have the same number of groups (see",
-            " `var_args`) as the `FixedGroupsPipeline`."
-          )
-        )
-      }
-      self$transformations <- c(self$transformations,
-                                setNames(list(transformation), name))
-    },
-    apply = function(data, verbose = FALSE) {
-      if (dplyr::n_groups(data) != self$num_groups){
-        stop(paste0("`data` did not have exactly ", self$num_groups, " groups as expected."))
-      }
-      super$apply(data = data, verbose = verbose)
-    },
-    print = function(...) {
-      cat("FixedGroupsPipeline: \n")
-      cat("  No. expected groups: ", self$num_groups, "\n", sep = "")
-      for (name in self$names){
-        print(self$transformations[[name]], indent = 2, show_class = FALSE)
-      }
-      invisible(self)
-    }
-  ),
-  private = list(
-    warn_grouped_input = FALSE
-  )
-)
+

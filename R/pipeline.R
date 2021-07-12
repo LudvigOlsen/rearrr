@@ -1,7 +1,98 @@
 
-# TODO Add way to save pipeline to disk?
 
+#   __________________ #< 48020236dfd0dbd89a97a74647216c72 ># __________________
+#   Basic pipeline                                                          ####
+
+
+# TODO Add way to save pipeline to disk?
 # NOTE: Any R6 method called for its side effects should return invisible(self).
+
+# Applies one transformation at a time
+# With the same arguments for all groups
+Pipeline <- R6::R6Class(
+  "Pipeline",
+  public = list(
+    transformations = list(),
+    names = character(),
+    add_transformation = function(fn, args, name, group_cols = NULL){
+      if (name %in% self$names){
+        stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
+      }
+      # Add transformation to pipeline
+      self$names <- append(self$names, name)
+      transformation <- Transformation$new(fn = fn, args = args,
+                                           name = name, group_cols = group_cols)
+      self$transformations <- c(self$transformations, setNames(list(transformation), name))
+    },
+    apply = function(data, verbose = FALSE) {
+      # Warn if `data` is grouped and that grouping would be ignored
+      if (isTRUE(private$warn_grouped_input) && dplyr::is_grouped_df(data)){
+        warning(
+          "Ignoring groups in `data`. Only the `group_cols` grouping specifications are used."
+        )
+      }
+      # Print start of process
+      if (isTRUE(verbose)){
+        cat(paste0("\n", paste0(rep("-", 54), collapse = "")))
+        cat("\nApplying transformations.")
+        start_time <- proc.time()
+      }
+
+      # Apply each of the transformations sequentially
+      # TODO benchmark if another looping function with env assignment
+      # is faster with e.g. 5-10 transformations
+      for (name in self$names){
+        # Print start of transformation
+        if (isTRUE(verbose)){
+          cat(paste0("\nStarting: ", name))
+          transf_start_time <- proc.time()
+        }
+
+        # Apply transformation
+        data <- self$transformations[[name]]$apply(data = data)
+
+        # Print running time of the transformation
+        if (isTRUE(verbose)){
+          transf_end_time <- proc.time()
+          cat(paste0(
+            "\nEnded: ", name,
+            " | Took ", format_running_time_(transf_start_time, transf_end_time), "."
+          ))
+        }
+      }
+      # Print end of finish with running time etc.
+      if (isTRUE(verbose)){
+        end_time <- proc.time()
+        cat(paste0(
+          "\nFinished applying transformations. Total time: ",
+          format_running_time_(start_time, end_time), "."
+        ))
+        cat(paste0("\n", paste0(rep("-", 54), collapse = ""), "\n"))
+      }
+
+      # Return transformed data frame
+      data
+    },
+    print = function(...) {
+      cat("Pipeline: \n")
+      for (name in self$names){
+        print(self$transformations[[name]], indent = 2, show_class = FALSE)
+      }
+      # Return object invisibly to allow method chaining
+      invisible(self)
+    }
+  ),
+  private = list(
+    # Groupings in the input data will be ignored
+    # We instead rely on `group_cols` specifications
+    warn_grouped_input = TRUE
+  )
+)
+
+
+##  .................. #< 79fc422a3b7326a8c27f242052fbd9c1 ># ..................
+##  Transformation class                                                    ####
+
 
 # A transformation to be applied with
 # different argument values to each group
@@ -27,12 +118,15 @@ Transformation <- R6::R6Class(
       self$group_cols <- group_cols
     },
     apply = function(data) {
+      # Ungroup data frame if specified
       if (isTRUE(private$ungroup_input)){
         data <- dplyr::ungroup(data)
       }
+      # Group data frame if given some group column names
       if (!is.null(self$group_cols)){
         data <- dplyr::group_by(data, !!!rlang::syms(self$group_cols))
       }
+      # Apply transformation to each group
       run_by_group(
         data = data,
         fn = private$apply_to_group,
@@ -51,27 +145,38 @@ Transformation <- R6::R6Class(
         name <- "NoName"
       }
 
+      # Print transformation class name
       if (isTRUE(show_class)){
         cat(indentation_str, "Transformation: \n")
         indentation_str <- paste0(rep(" ", indent + 2), collapse = "")
       }
 
+      # Print name of transformation
       cat(indentation_str, name, "\n", sep = "")
+
+      # Print arguments
       args_str <- private$args_to_string(self$args)
       cat(indentation_str, "  Arguments:  ", args_str, "\n", sep = "")
+
+      # Print group columns
       if (!is.null(self$group_cols)){
         group_cols_str <- private$args_to_string(self$group_cols)
         cat(indentation_str, "  Grouping columns:  ", group_cols_str, "\n", sep = "")
       }
+
+      # Return object invisibly to allow method chaining
       invisible(self)
     }
   ),
   private = list(
+    # We don't use existing groupings in the given data frame
     ungroup_input = TRUE,
     apply_to_group = function(data, group_id) {
       if (dplyr::is_grouped_df(data)) {
         stop("`data` was grouped. Pass the group subset instead.")
       }
+
+      # Prepare arguments and apply function
       args <- c(list(data = data), self$args)
       do.call(self$fn, args, envir = parent.frame())
     },
@@ -84,6 +189,7 @@ Transformation <- R6::R6Class(
                                   any.missing = FALSE, add = assert_collection)
       checkmate::reportAssertions(assert_collection)
     },
+    # Convert list of arguments to single string for print methods
     args_to_string = function(args, max_len = 20, rm_function_start = FALSE, rm_capitalized_l = FALSE) {
       arg_names <- names(args)
       arg_vals_strings <- lapply(
@@ -104,78 +210,9 @@ Transformation <- R6::R6Class(
 )
 
 
-# Applies one transformation at a time
-# With the same arguments for all groups
-Pipeline <- R6::R6Class(
-  "Pipeline",
-  public = list(
-    transformations = list(),
-    names = character(),
-    add_transformation = function(fn, args, name, group_cols = NULL){
-      if (name %in% self$names){
-        stop(paste0("the `name`, ", name, ", already exists. Names must be unique."))
-      }
+##  .................. #< b86e070947c65180cf4882eb350888c6 ># ..................
+##  Utilities                                                               ####
 
-      self$names <- append(self$names, name)
-      transformation <- Transformation$new(fn = fn, args = args,
-                                           name = name, group_cols = group_cols)
-      self$transformations <- c(self$transformations, setNames(list(transformation), name))
-    },
-    apply = function(data, verbose = FALSE) {
-      if (isTRUE(private$warn_grouped_input) && dplyr::is_grouped_df(data)){
-        warning(
-          "Ignoring groups in `data`. Only the `group_cols` grouping specifications are used."
-        )
-      }
-      if (isTRUE(verbose)){
-        cat(paste0("\n", paste0(rep("-", 54), collapse = "")))
-        cat("\nApplying transformations.")
-        start_time <- proc.time()
-      }
-
-      # TODO benchmark if another looping function with env assignment
-      # is faster with e.g. 5-10 transformations
-      for (name in self$names){
-        if (isTRUE(verbose)){
-          cat(paste0("\nStarting: ", name))
-          transf_start_time <- proc.time()
-        }
-
-        # Apply transformation
-        data <- self$transformations[[name]]$apply(data = data)
-
-        if (isTRUE(verbose)){
-          transf_end_time <- proc.time()
-          cat(paste0(
-            "\nEnded: ", name,
-            " | Took ", format_running_time_(transf_start_time, transf_end_time), "."
-          ))
-        }
-      }
-      if (isTRUE(verbose)){
-        end_time <- proc.time()
-        cat(paste0(
-          "\nFinished applying transformations. Total time: ",
-          format_running_time_(start_time, end_time), "."
-        ))
-        cat(paste0("\n", paste0(rep("-", 54), collapse = ""), "\n"))
-      }
-
-      data
-    },
-    print = function(...) {
-      cat("Pipeline: \n")
-      for (name in self$names){
-        print(self$transformations[[name]], indent = 2, show_class = FALSE)
-      }
-      invisible(self)
-    }
-  ),
-  private = list(
-    warn_grouped_input = TRUE
-  )
-
-)
 
 format_running_time_ <- function(t_start, t_end, digits = 4, suffix = "s") {
   t_total <- t_end[["elapsed"]] - t_start[["elapsed"]]
@@ -190,7 +227,6 @@ collapse_strings <- function(strings) {
   }
   strings
 }
-
 
 # This is applied to each argument value separately
 clean_arg_str <- function(string, max_len = 20, rm_function_start = FALSE, rm_capitalized_l = FALSE) {
