@@ -206,13 +206,44 @@ Pipeline <- R6::R6Class(
 
 # A transformation to be applied with
 # different argument values to each group
+
+#' @title Transformation
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Container for the type of transformation used in
+#'  \code{\link[rearrr:Pipeline]{Pipeline}}.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
+#' @family transformation classes
 Transformation <- R6::R6Class(
   "Transformation",
   public = list(
+
+    #' @field name Name of transformation.
     name = NULL,
+
+    #' @field fn Transformation function.
     fn = NULL,
+
+    #' @field args \code{list} of arguments for \code{`fn`}.
     args = NULL,
+
+    #' @field group_cols Names of columns to group \code{data.frame}
+    #'  by before applying \code{`fn`}.
+    #'
+    #'  When \code{`NULL`}, the \code{data.frame} is not grouped.
     group_cols = NULL,
+
+    #' @description
+    #'  Initialize transformation.
+    #' @param fn Transformation function.
+    #' @param args \code{list} of arguments for \code{`fn`}.
+    #' @param name Name of transformation.
+    #' @param group_cols Names of columns to group \code{data.frame}
+    #'  by before applying \code{`fn`}.
+    #'
+    #'  When \code{`NULL`}, the \code{data.frame} is not grouped.
     initialize = function(fn, args, name = NULL, group_cols = NULL) {
       # Check arguments
       private$check_initialize_args(fn = fn, args = args, name = name,
@@ -227,6 +258,14 @@ Transformation <- R6::R6Class(
       # we need to specify potential group columns
       self$group_cols <- group_cols
     },
+
+    #' @description
+    #'  Apply the transformation to a \code{data.frame}.
+    #' @param data \code{data.frame}.
+    #'
+    #'  A grouped \code{data.frame} will first be ungrouped. If \code{`group_cols`} is specified,
+    #'  it will then be grouped by those columns.
+    #' @return Transformed version of \code{`data`}.
     apply = function(data) {
       # Ungroup data frame if specified
       if (isTRUE(private$ungroup_input)){
@@ -243,6 +282,13 @@ Transformation <- R6::R6Class(
         restore_grouping = dplyr::is_grouped_df(data)
       )
     },
+
+    #' @description
+    #'  Print an overview of the transformation.
+    #' @param ... further arguments passed to or from other methods.
+    #' @param indent How many spaces to indent when printing.
+    #' @param show_class Whether to print the transformation class name.
+    #' @return The pipeline. To allow chaining of methods.
     print = function(...,
                      indent = 0,
                      show_class = TRUE) {

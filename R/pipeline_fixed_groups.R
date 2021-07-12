@@ -105,6 +105,12 @@ FixedGroupsPipeline <- R6::R6Class(
   inherit = Pipeline,
   public = list(
 
+    #' @field transformations \code{list} of transformations to apply.
+    transformations = list(),
+
+    #' @field names Names of the transformations.
+    names = character(),
+
     #' @field num_groups Number of groups the pipeline will be applied to.
     num_groups = NULL,
 
@@ -205,13 +211,54 @@ FixedGroupsPipeline <- R6::R6Class(
 
 # A transformation to be applied with
 # different argument values to each group
+
+#' @title FixedGroupsTransformation
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Container for the type of transformation used in
+#'  \code{\link[rearrr:FixedGroupsPipeline]{FixedGroupsPipeline}}.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
+#' @family transformation classes
 FixedGroupsTransformation <- R6::R6Class(
   "FixedGroupsTransformation",
   inherit = Transformation,
   public = list(
+
+    #' @field name Name of transformation.
+    name = NULL,
+
+    #' @field fn Transformation function.
+    fn = NULL,
+
+    #' @field args \code{list} of constant arguments for \code{`fn`}.
+    args = NULL,
+
+    #' @field var_args \code{list} of arguments for \code{`fn`} with different values per group.
     var_args = NULL,
+
+    #' @field num_groups Number of groups that the transformation expects.
     num_groups = NULL,
+
+    #' @field apply_arg \code{list} of \code{TRUE}/\code{FALSE} flags indicating
+    #'  whether the transformation should be applied to each of the groups.
+    #'
+    #'  When \code{`NULL`}, the transformation is applied to all groups.
     apply_arg = NULL,
+
+    #' @description
+    #'  Initialize transformation.
+    #' @param fn Transformation function.
+    #' @param args \code{list} of constant arguments for \code{`fn`}.
+    #' @param var_args \code{list} of arguments for \code{`fn`} with different values per group.
+    #'  Each argument should have a list of values (one per group).
+    #'
+    #'  By adding \code{".apply"} with a list of \code{TRUE}/\code{FALSE} flags, the transformation
+    #'   can be disabled for a specific group.
+    #'
+    #'   E.g. \code{list(".apply" = list(TRUE, FALSE, TRUE), ...}.
+    #' @param name Name of transformation.
     initialize = function(fn, args, var_args, name = NULL) {
       # Check arguments
       private$check_initialize_args(
@@ -239,6 +286,11 @@ FixedGroupsTransformation <- R6::R6Class(
       self$var_args <- var_args
       self$num_groups <- length(var_args[[1]])
     },
+
+    #' @description
+    #'  Get arguments for specific group ID.
+    #' @param group_id ID of the group to get arguments for.
+    #' @return \code{list} of arguments.
     get_group_args = function(group_id) {
       checkmate::assert_integerish(
         group_id,
@@ -252,6 +304,11 @@ FixedGroupsTransformation <- R6::R6Class(
       var_args <- setNames(var_args, names(self$var_args))
       c(self$args, var_args)
     },
+
+    #' @description
+    #'  Apply the transformation to a \code{data.frame}.
+    #' @param data \code{data.frame} with the expected number of groups.
+    #' @return Transformed version of \code{`data`}.
     apply = function(data) {
       # Ensure we have the right number of groups
       # E.g. if `data` was somehow ungrouped between transformations
@@ -268,6 +325,13 @@ FixedGroupsTransformation <- R6::R6Class(
       }
       super$apply(data = data)
     },
+
+    #' @description
+    #'  Print an overview of the transformation.
+    #' @param ... further arguments passed to or from other methods.
+    #' @param indent How many spaces to indent when printing.
+    #' @param show_class Whether to print the transformation class name.
+    #' @return The pipeline. To allow chaining of methods.
     print = function(...,
                      indent = 0,
                      show_class = TRUE) {

@@ -106,6 +106,15 @@ Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 \section{Super class}{
 \code{\link[rearrr:Pipeline]{rearrr::Pipeline}} -> \code{GeneratedPipeline}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{transformations}}{\code{list} of transformations to apply.}
+
+\item{\code{names}}{Names of the transformations.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

@@ -102,6 +102,10 @@ Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{transformations}}{\code{list} of transformations to apply.}
+
+\item{\code{names}}{Names of the transformations.}
+
 \item{\code{num_groups}}{Number of groups the pipeline will be applied to.}
 }
 \if{html}{\out{</div>}}

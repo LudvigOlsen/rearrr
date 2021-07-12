@@ -99,6 +99,12 @@ GeneratedPipeline <- R6::R6Class(
   inherit = Pipeline,
   public = list(
 
+    #' @field transformations \code{list} of transformations to apply.
+    transformations = list(),
+
+    #' @field names Names of the transformations.
+    names = character(),
+
     #' @description
     #'  Add a transformation to the pipeline.
     #' @param fn Function that performs the transformation.
@@ -168,12 +174,54 @@ GeneratedPipeline <- R6::R6Class(
 
 # A transformation to be applied with different
 # generated argument values to each group
+
+#' @title GeneratedTransformation
+#' @description
+#'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#'
+#'  Container for the type of transformation used in
+#'  \code{\link[rearrr:GeneratedPipeline]{GeneratedPipeline}}.
+#' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
+#' @export
+#' @family transformation classes
 GeneratedTransformation <- R6::R6Class(
   "GeneratedTransformation",
   inherit = Transformation,
   public = list(
+
+    #' @field name Name of transformation.
+    name = NULL,
+
+    #' @field fn Transformation function.
+    fn = NULL,
+
+    #' @field args \code{list} of constant arguments for \code{`fn`}.
+    args = NULL,
+
+    #' @field generators \code{list} of generator functions
+    #'  for generating argument values.
     generators = NULL,
+
+    #' @field apply_generator Generator function for deciding
+    #'  whether to apply the transformation to the current group.
     apply_generator = NULL,
+
+    #' @description
+    #'  Initialize transformation.
+    #' @param fn Transformation function.
+    #' @param args \code{list} of constant arguments for \code{`fn`}.
+    #' @param generators Named \code{list} of functions for generating argument values
+    #'  for a single call of \code{`fn`}.
+    #'
+    #'  It is possible to include an \emph{apply generator} for deciding whether
+    #'  the transformation should be applied to the current group or not.
+    #'  This is done by adding a function with the name \code{`.apply`} to the \code{`generators`} list.
+    #'  E.g. \code{".apply" = function(){sample(c(TRUE, FALSE), 1)}}.
+    #' @param name Name of transformation.
+    #' @param group_cols Names of columns to group \code{data.frame}
+    #'  by before applying \code{`fn`}.
+    #'
+    #'  When \code{`NULL`}, the \code{data.frame} is not grouped.
     initialize = function(fn, args, generators, name = NULL, group_cols = NULL) {
       # Check arguments
       private$check_initialize_args(
@@ -202,15 +250,32 @@ GeneratedTransformation <- R6::R6Class(
       # Assign generators
       self$generators <- generators
     },
+
+    #' @description
+    #'  Get arguments for a group.
+    #' @return \code{list} of arguments (both constant and generated).
     get_group_args = function() {
       # Prepare arguments for a group
       generated_args <- self$generate_args()
       c(self$args, generated_args)
     },
+
+    #' @description
+    #'  Generate arguments for a group with the \code{`generators`}.
+    #' @return \code{list} of generated arguments.
+    #'
+    #'  Does not include the constant arguments.
     generate_args = function() {
       # Call each generator to generate arg values for a single group
       lapply(self$generators, do.call, args = list())
     },
+
+    #' @description
+    #'  Print an overview of the transformation.
+    #' @param ... further arguments passed to or from other methods.
+    #' @param indent How many spaces to indent when printing.
+    #' @param show_class Whether to print the transformation class name.
+    #' @return The pipeline. To allow chaining of methods.
     print = function(...,
                      indent = 0,
                      show_class = TRUE) {
