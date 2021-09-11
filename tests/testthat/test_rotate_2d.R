@@ -193,7 +193,11 @@ test_that("fuzz testing rotate_2d()", {
   side_effects_16417 <- xpectr::capture_side_effects(rotate_2d(data = NA, degrees = 10, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, keep_original = FALSE, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
-    xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
+    xpectr::strip(ifelse(
+      is_checkmate_v2_1(),
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Must be of type 'factor', not 'logical'",
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"
+    )),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error_class']]),

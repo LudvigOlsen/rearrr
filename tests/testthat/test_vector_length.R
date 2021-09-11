@@ -382,7 +382,11 @@ test_that("fuzz testing vector_length()", {
   side_effects_15190 <- xpectr::capture_side_effects(vector_length(data = NA, cols = c("x", "y", "z"), by_row = TRUE, len_col_name = ".vec_len"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error']]),
-    xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
+    xpectr::strip(ifelse(
+      is_checkmate_v2_1(),
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Must be of type 'factor', not 'logical'",
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"
+    )),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error_class']]),

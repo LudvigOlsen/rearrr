@@ -82,9 +82,9 @@ test_that("pair_extremes() throws expected errors", {
     pair_extremes(df,
                   unequal_method = "none"
   ), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_19148[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'unequal_method': Must be a subset of set {first,middle,last}."),
+  expect_match(
+    xpectr::strip(side_effects_19148[['error']], lowercase = TRUE),
+    xpectr::strip("Must be a subset of set {first,middle,last}.", lowercase = TRUE), # unequal_method
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['error_class']]),
@@ -460,7 +460,11 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   side_effects_17365 <- xpectr::capture_side_effects(pair_extremes(data = NA, col = NULL, unequal_method = "middle", num_pairings = 1, balance = "mean", shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = NULL, overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error']]),
-    xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
+    xpectr::strip(ifelse(
+      is_checkmate_v2_1(),
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Must be of type 'factor', not 'logical'",
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"
+    )),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17365[['error_class']]),

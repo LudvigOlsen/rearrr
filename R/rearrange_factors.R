@@ -5,7 +5,7 @@
 
 
 ##  .................. #< 84b698caf2948082bfc0473ea1b08fe7 ># ..................
-##  Pair extremes rearrance factor                                          ####
+##  Pair extremes rearrange factor                                          ####
 
 
 create_rearrange_factor_pair_extremes_ <- function(size, unequal_method = "middle") {

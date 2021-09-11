@@ -1,6 +1,8 @@
 
 # rearrr 0.2.0.9000
 
+* Prepares package's tests for `checkmate 2.1.0`.
+
 # rearrr 0.2.0
 
 * Adds `shuffle_hierarchy()` for shuffling a multi-column hierarchy of groups. (Rearranger)

@@ -723,7 +723,11 @@ test_that("fuzz testing roll_elements()", {
   side_effects_16417 <- xpectr::capture_side_effects(roll_elements(data = NA, cols = NULL, n = 2, n_fn = NULL, n_col_name = ".n"), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error']]),
-    xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
+    xpectr::strip(ifelse(
+      is_checkmate_v2_1(),
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Must be of type 'factor', not 'logical'",
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"
+    )),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error_class']]),
