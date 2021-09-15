@@ -80,15 +80,15 @@ rearrange_center_by <- function(data, cols,
 ##  Order by group                                                          ####
 
 
-order_by_group <- function(data, group_col, shuffle_members, shuffle_pairs, ...) {
+order_by_group <- function(data, group_col, shuffle_members, shuffle_groups, ...) {
 
-  backup_group_col <- isTRUE(shuffle_pairs) || isTRUE(shuffle_members)
+  backup_group_col <- isTRUE(shuffle_groups) || isTRUE(shuffle_members)
   if (isTRUE(backup_group_col)) {
     tmp_backup_group_col <- create_tmp_var(data, tmp_var = "group_col_backup_")
     data[[tmp_backup_group_col]] <- data[[group_col]]
   }
 
-  if (isTRUE(shuffle_pairs)) {
+  if (isTRUE(shuffle_groups)) {
     # Randomize levels
     data[[group_col]] <- as.numeric(
       factor(data[[group_col]], levels = sample(unique(data[[group_col]])))
@@ -353,10 +353,11 @@ rearrange_pair_extremes <- function(data,
   }) %>% unlist(recursive = TRUE)
 
   # Pair the extreme values and order by the pairs
-  data <- order_and_pair_extremes_(
+  data <- order_and_group_extremes_(
     data = data,
     col = col,
     new_col = tmp_rearrange_vars[[1]],
+    group_fn = create_rearrange_factor_pair_extremes_,
     unequal_method = unequal_method
   )
 
@@ -365,7 +366,7 @@ rearrange_pair_extremes <- function(data,
     data = data,
     group_col = tmp_rearrange_vars[[1]],
     shuffle_members = FALSE, # Done at the end
-    shuffle_pairs = FALSE # Done at the end
+    shuffle_groups = FALSE # Done at the end
   )
 
   # TODO Perform recursive pairing
@@ -382,24 +383,7 @@ rearrange_pair_extremes <- function(data,
       # and `tmp_rearrange_vars[[i + 1]]` is for the current level
 
       # What to balance ("mean", "spread", "min", or "max")
-      if (length(balance) > 1) {
-        current_balance_target <- balance[[i]]
-      } else {
-        current_balance_target <- balance
-      }
-
-      # Define function to summarize with
-      if (current_balance_target == "mean") {
-        summ_fn <- sum
-      } else if (current_balance_target == "spread") {
-        summ_fn <- function(v) {
-          sum(abs(diff(v)))
-        }
-      } else if (current_balance_target == "min") {
-        summ_fn <- min
-      } else if (current_balance_target == "max") {
-        summ_fn <- max
-      }
+      summ_fn <- get_summ_fn_(balance = balance, i = i)
 
       # Aggregate values for pairs from previous pairing
       tmp_group_scores <- data %>%
@@ -422,10 +406,11 @@ rearrange_pair_extremes <- function(data,
       }
 
       # Pair the extreme pairs and order by the new pairs
-      tmp_rearrange <- order_and_pair_extremes_(
+      tmp_rearrange <- order_and_group_extremes_(
         data = tmp_group_scores_sorted,
         col = "group_aggr",
         new_col = tmp_rearrange_vars[[i + 1]],
+        group_fn = create_rearrange_factor_pair_extremes_,
         unequal_method = unequal_method
       ) %>%
         base_select_(cols = c(tmp_rearrange_vars[[i]], tmp_rearrange_vars[[i + 1]]))
@@ -439,7 +424,7 @@ rearrange_pair_extremes <- function(data,
         data = data,
         group_col = tmp_rearrange_vars[[i + 1]],
         shuffle_members = FALSE,
-        shuffle_pairs = FALSE
+        shuffle_groups = FALSE
       )
 
       # Update `data` in parent environment
@@ -448,23 +433,98 @@ rearrange_pair_extremes <- function(data,
     })
   }
 
+  # Shuffle columns
+  data <- shuffle_extreme_groups_(
+    data = data,
+    col = col,
+    tmp_rearrange_vars = tmp_rearrange_vars,
+    shuffle_members = shuffle_members,
+    shuffle_groups = shuffle_pairs
+  )
+
+  # Select grouping factors to include in the output
+  data <- pick_extreme_group_factors_(
+    data = data,
+    tmp_rearrange_vars = tmp_rearrange_vars,
+    factor_names = factor_names,
+    overwrite = overwrite
+  )
+
+  data
+}
+
+# Wrapper for running extreme grouping and ordering data by it
+order_and_group_extremes_ <- function(data, col, new_col, group_fn, ...){
+
+  # Order data frame
+  data <- data[order(data[[col]]), , drop = FALSE]
+
+  # Add rearrange factor (of type integer)
+  data[[new_col]] <-
+    group_fn(
+      size = nrow(data),
+      ...
+    )
+
+  data
+}
+
+
+get_summ_fn_ <- function(balance, i) {
+  # What to balance ("mean", "spread", "min", or "max")
+  if (length(balance) > 1) {
+    current_balance_target <- balance[[i]]
+  } else {
+    current_balance_target <- balance
+  }
+
+  # Define function to summarize with
+  if (current_balance_target == "mean") {
+    summ_fn <- sum
+  } else if (current_balance_target == "spread") {
+    summ_fn <- function(v) {
+      sum(abs(diff(v)))
+    }
+  } else if (current_balance_target == "min") {
+    summ_fn <- min
+  } else if (current_balance_target == "max") {
+    summ_fn <- max
+  }
+
+  summ_fn
+
+}
+
+
+shuffle_extreme_groups_ <- function(data,
+                                    col,
+                                    tmp_rearrange_vars,
+                                    shuffle_members,
+                                    shuffle_groups) {
   # Find columns to shuffle
   shuffling_group_cols <- rev(tmp_rearrange_vars)
   cols_to_shuffle <- c()
   if (isTRUE(shuffle_members))
     cols_to_shuffle <- shuffling_group_cols
-  if (isTRUE(shuffle_pairs)) {
+  if (isTRUE(shuffle_groups)) {
     shuffling_group_cols <- c(shuffling_group_cols, col)
     cols_to_shuffle <- c(cols_to_shuffle, col)
   }
 
-  # Shuffle members and/or pairs if specified
+  # Shuffle members and/or groups if specified
   if (length(cols_to_shuffle) > 0) {
     data <- dplyr::ungroup(data) %>%
-      shuffle_hierarchy(group_cols = shuffling_group_cols,
-                        cols_to_shuffle = cols_to_shuffle,
-                        leaf_has_groups = !shuffle_members)
+      shuffle_hierarchy(
+        group_cols = shuffling_group_cols,
+        cols_to_shuffle = cols_to_shuffle,
+        leaf_has_groups = !shuffle_members
+      )
   }
+
+  data
+}
+
+pick_extreme_group_factors_ <- function(data, tmp_rearrange_vars, factor_names, overwrite){
 
   if (!is.null(factor_names)){
     # Convert to factors and give correct names
@@ -482,20 +542,141 @@ rearrange_pair_extremes <- function(data,
   }
 
   data
+
 }
 
-# Wrapper for running extreme pairing and ordering data by it
-order_and_pair_extremes_ <- function(data, col, new_col, unequal_method){
 
-  # Order data frame
-  data <- data[order(data[[col]]), , drop = FALSE]
+##  .................. #< 292b6b4611ef393dc12e26ba55f351b7 ># ..................
+##  Triplet extremes                                                        ####
 
-  # Add rearrange factor (of type integer)
-  data[[new_col]] <-
-    create_rearrange_factor_pair_extremes_(
-      size = nrow(data),
-      unequal_method = unequal_method
+
+rearrange_triplet_extremes <- function(data,
+                                       cols,
+                                       overwrite,
+                                       middle_is,
+                                       unequal_method_1,
+                                       unequal_method_2,
+                                       num_groupings,
+                                       balance,
+                                       shuffle_members,
+                                       shuffle_triplets,
+                                       factor_name,
+                                       ...) {
+  stopifnot(length(cols) == 1)
+  col <- cols
+
+  if (nrow(data) < 2) {
+    return(data)
+  }
+
+  divisible_by_three <- nrow(data) %% 3 == 0
+
+  # Prepare factor names for output
+  factor_names <- factor_name
+  if (!is.null(factor_names) && num_groupings > 1){
+    factor_names <- paste0(factor_name, "_", seq_len(num_groupings))
+  }
+
+  ## First extreme triplet grouping
+
+  # Create num_groupings tmp column names
+  tmp_rearrange_vars <- purrr::map(.x = seq_len(num_groupings), .f = ~ {
+    create_tmp_var(data, paste0(".tmp_rearrange_col_", .x))
+  }) %>% unlist(recursive = TRUE)
+
+  # Triplet group the extreme values and order by the triplets
+  data <- order_and_group_extremes_(
+    data = data,
+    col = col,
+    new_col = tmp_rearrange_vars[[1]],
+    group_fn = create_rearrange_factor_triplet_extreme_grouping_,
+    middle_is = middle_is,
+    unequal_method_1 = unequal_method_1,
+    unequal_method_2 = unequal_method_2
+  )
+
+  # Order data by the triplets
+  data <- data %>%
+    dplyr::arrange(
+      !!as.name(tmp_rearrange_vars[[1]]),
+      !!as.name(col)
     )
 
+  # Perform recursive triplet groupings
+  # Note: Actually iterative, not recursion
+  if (num_groupings > 1){
+
+    # Get environment so we can update `data`
+    grouping_env <- environment()
+
+    # Perform num_groupings-1 groupings
+    plyr::l_ply(seq_len(num_groupings - 1), function(i) {
+
+      # Note that `tmp_rearrange_vars[[i]]` is for the previous level
+      # and `tmp_rearrange_vars[[i + 1]]` is for the current level
+
+      # What to balance ("mean", "spread", "min", or "max")
+      summ_fn <- get_summ_fn_(balance = balance, i = i)
+
+      # Aggregate values for triplets from previous grouping
+      tmp_group_scores <- data %>%
+        dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
+        dplyr::summarize(group_aggr = summ_fn(!!as.name(col))) %>%
+        dplyr::arrange(.data$group_aggr)
+
+      # Group the extreme triplet and order by the new triplets
+      tmp_rearrange <- order_and_group_extremes_(
+        data = tmp_group_scores,
+        col = "group_aggr",
+        new_col = tmp_rearrange_vars[[i + 1]],
+        group_fn = create_rearrange_factor_triplet_extreme_grouping_,
+        middle_is = middle_is,
+        unequal_method_1 = unequal_method_1,
+        unequal_method_2 = unequal_method_2
+      ) %>%
+        base_select_(cols = c(tmp_rearrange_vars[[i]], tmp_rearrange_vars[[i + 1]]))
+
+      # Add the new pair identifiers to `data`
+      data <- data %>%
+        dplyr::left_join(tmp_rearrange, by = tmp_rearrange_vars[[i]])
+
+      # Order data by the groups
+      data <- data %>%
+        dplyr::arrange(
+          !!as.name(tmp_rearrange_vars[[i + 1]]),
+          !!as.name(col)
+        )
+
+      # Update `data` in parent environment
+      grouping_env[["data"]] <- data
+
+    })
+  }
+
+  # Order data by the groups
+  data <- data %>%
+    dplyr::arrange(
+      !!!rlang::syms(rev(tmp_rearrange_vars)),
+      !!as.name(col)
+    )
+
+  # Shuffle columns
+  data <- shuffle_extreme_groups_(
+    data = data,
+    col = col,
+    tmp_rearrange_vars = tmp_rearrange_vars,
+    shuffle_members = shuffle_members,
+    shuffle_groups = shuffle_triplets
+  )
+
+  # Select grouping factors to include in the output
+  data <- pick_extreme_group_factors_(
+    data = data,
+    tmp_rearrange_vars = tmp_rearrange_vars,
+    factor_names = factor_names,
+    overwrite = overwrite
+  )
+
   data
+
 }

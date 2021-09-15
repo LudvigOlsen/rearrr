@@ -167,7 +167,8 @@ Other rearrange functions:
 \code{\link{position_min}()},
 \code{\link{rev_windows}()},
 \code{\link{roll_elements}()},
-\code{\link{shuffle_hierarchy}()}
+\code{\link{shuffle_hierarchy}()},
+\code{\link{triplet_extremes}()}
 
 Other distance functions: 
 \code{\link{closest_to}()},

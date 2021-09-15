@@ -32,7 +32,7 @@ pair_extremes_vec(
 \item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
-\item{unequal_method}{Method for dealing with an unequal number of rows
+\item{unequal_method}{Method for dealing with an unequal number of rows/elements
 in \code{`data`}.
 
 One of: \code{first}, \code{middle} or \code{last}
@@ -230,7 +230,8 @@ Other rearrange functions:
 \code{\link{position_min}()},
 \code{\link{rev_windows}()},
 \code{\link{roll_elements}()},
-\code{\link{shuffle_hierarchy}()}
+\code{\link{shuffle_hierarchy}()},
+\code{\link{triplet_extremes}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

@@ -219,7 +219,7 @@ centering_rearranger_ <- function(data,
 #'  Pairs have similar minimum / maximum values. The values in the pairs from the previous pairing
 #'  are aggregated with \code{`min()`} / \code{`max()`} and paired.
 #'  }
-#' @param unequal_method Method for dealing with an unequal number of rows
+#' @param unequal_method Method for dealing with an unequal number of rows/elements
 #'  in \code{`data`}.
 #'
 #'  One of: \code{first}, \code{middle} or \code{last}
@@ -335,6 +335,145 @@ extreme_pairing_rearranger_ <- function(data,
   )
 }
 
+
+##  .................. #< 0d18e5cce4c2fa79b6de2ef076de4a36 ># ..................
+##  Triplet extremes rearranger                                             ####
+
+
+#' Wrapper for running extreme triplet grouping
+#'
+#' @inheritParams extreme_pairing_rearranger_
+#' @param shuffle_triplets Whether to shuffle the pairs. (Logical)
+#' @param num_groupings Number of times to group into triplets (recursively). At least \code{1}.
+#'
+#'  Based on \code{`balance`}, the secondary groupings perform extreme triplet grouping on either the
+#'  \emph{sum}, \emph{absolute difference}, \emph{min}, or \emph{max} of the triplet elements.
+#' @param balance What to balance triplets for in a given \emph{secondary} triplet grouping.
+#'  Either \code{"mean"}, \code{"spread"}, \code{"min"}, or \code{"max"}.
+#'  Can be a single string used for all secondary pairings
+#'  or one for each secondary pairing (\code{`num_pairings` - 1}).
+#'
+#'  The first triplet grouping always groups the actual element values.
+#'
+#'  \subsection{mean}{
+#'  Triplets have similar means. The values in the triplets from the previous grouping
+#'  are aggregated with \code{`sum()`} and extreme triplet grouped.
+#'  }
+#'  \subsection{spread}{
+#'  Triplets have similar spread (e.g. standard deviations). The values in the triplets
+#'  from the previous triplet grouping are aggregated with \code{`sum(abs(diff()))`} and
+#'  extreme triplet grouped.
+#'  }
+#'  \subsection{min / max}{
+#'  Triplets have similar minimum / maximum values. The values in the triplets from the
+#'  previous triplet grouping are aggregated with \code{`min()`} / \code{`max()`} and extreme
+#'  triplet grouped.
+#'  }
+#' @param unequal_method_1,unequal_method_2 Method for dealing with either
+#'  a single excessive element (\code{`unequal_method_1`}) or two excessive elements (\code{`unequal_method_2`})
+#'  when the number of rows/elements in \code{`data`} are not evenly divisible by three.
+#'
+#'  \code{`unequal_method_1`}: One of: \code{min}, \code{middle} or \code{max}.
+#'
+#'  \code{`unequal_method_2`}: Vector with two of: \code{min}, \code{middle} or \code{max}.
+#'
+#'  Note: The excessive element(s) are extracted before triplet grouping. These elements
+#'  are put in their own group and given group identifier \code{1}.
+#'
+#'  When \code{`unequal_method_2`} is \code{c("middle", "middle")} the two elements
+#'  closest to the mean are extracted.
+#' @param middle_is Whether the middle element in the triplet is the nth closest element
+#'  to the median value or the nth+1 lowest/highest value.
+#'
+#'  One of: \code{min}, \code{middle} or \code{max}.
+#'
+#'  Triplet grouping is performed greedily from the most extreme values to the least extreme
+#'  values. E.g. \code{c(1, 6, 12)} is created before \code{c(2, 5, 11)} which is made
+#'  before \code{c(3, 7, 10)}.
+#'
+#'  \strong{Examples}:
+#'
+#'  When \code{middle_is} \code{min}, a \code{1:12} sequence is grouped into:
+#'
+#'  TODO CHECK!
+#'  \code{c( c(1, 2, 12), c(3, 4, 11), c(5, 6, 10),  c(7, 8, 9) )}
+#'
+#'  When \code{middle_is} \code{middle}, a \code{1:12} sequence is grouped into:
+#'
+#'  \code{c( c(1, 6, 12), c(2, 7, 11), c(3, 5, 10),  c(4, 8, 9) )}
+#'
+#'  When \code{middle_is} \code{max}, a \code{1:12} sequence is grouped into:
+#'
+#'  \code{c( c(1, 11, 12), c(2, 9, 10), c(3, 7, 8),  c(4, 5, 6) )}
+#'
+#' @keywords internal
+#' @return
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
+#'  Optionally with the sorting factor(s) added.
+#'
+#'  When \code{`data`} is a \code{vector} and \code{`factor_name`} is \code{NULL},
+#'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
+extreme_triplet_grouping_rearranger_ <- function(data,
+                                                 col = NULL,
+                                                 middle_is = "middle",
+                                                 unequal_method_1 = "middle",
+                                                 unequal_method_2 = c("middle", "middle"),
+                                                 shuffle_members = FALSE,
+                                                 shuffle_triplets = FALSE,
+                                                 num_groupings = 1,
+                                                 balance = "mean",
+                                                 factor_name = ".triplet",
+                                                 overwrite = FALSE) {
+
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_count(num_groupings, positive = TRUE, add = assert_collection)
+  checkmate::assert_string(middle_is, min.chars = 1, add = assert_collection)
+  checkmate::assert_string(unequal_method_1, min.chars = 1, add = assert_collection)
+  checkmate::assert_character(unequal_method_2, len = 2, min.chars = 1, add = assert_collection)
+  checkmate::assert_character(balance, min.chars = 1, any.missing = FALSE, add = assert_collection)
+  checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(shuffle_members, add = assert_collection)
+  checkmate::assert_flag(shuffle_triplets, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  checkmate::assert_names(middle_is,
+                          subset.of = c("min", "middle", "max"),
+                          add = assert_collection)
+  checkmate::assert_names(unequal_method_1,
+                          subset.of = c("min", "middle", "max"),
+                          add = assert_collection)
+  checkmate::assert_names(unequal_method_2,
+                          subset.of = c("min", "middle", "max"),
+                          add = assert_collection)
+  checkmate::assert_names(balance,
+                          subset.of = c("mean", "spread", "min", "max"),
+                          add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (num_groupings > 1 &&
+      length(balance) %ni% c(1, num_groupings - 1)){
+    assert_collection$push("length of 'balance' must be either 1 or 'num_groupings' - 1.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Rearrange 'data'
+  rearranger_(
+    data = data,
+    rearrange_fn = rearrange_triplet_extremes,
+    check_fn = NULL,
+    cols = col,
+    overwrite = overwrite,
+    middle_is = middle_is,
+    unequal_method_1 = unequal_method_1,
+    unequal_method_2 = unequal_method_2,
+    num_groupings = num_groupings,
+    balance = balance,
+    shuffle_members = shuffle_members,
+    shuffle_triplets = shuffle_triplets,
+    factor_name = factor_name
+  )
+}
 
 ##  .................. #< 4ef3bd62472cbceb75369a8355d9288d ># ..................
 ##  Reverse windows rearranger                                              ####
