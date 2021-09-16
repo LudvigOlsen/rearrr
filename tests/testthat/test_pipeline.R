@@ -1,7 +1,7 @@
 library(rearrr)
 context("Pipeline")
 
-# NOTE I have only tested a few very narrow use cases
+# TODO I have only tested a few very narrow use cases
 # I should find some cases and build out some more examples
 
 # Test printing methods
