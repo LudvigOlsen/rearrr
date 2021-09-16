@@ -193,15 +193,23 @@ pair_extremes(df, col = "B")$B
 pair_extremes(df, col = "C")$C
 
 # Shuffle the members pair-wise
+# The rows within each pair are shuffled
+# while the `.pair` column maintains it order
 pair_extremes(df, col = "A", shuffle_members = TRUE)
 
 # Shuffle the order of the pairs
+# The rows within each pair maintain their order
+# and stay together but the `.pair` column is shuffled
 pair_extremes(df, col = "A", shuffle_pairs = TRUE)
 
 # Use recursive pairing
 pair_extremes(df, col = "A", num_pairings = 2)
 
 # Grouped by G
+# Each G group only has 3 elements
+# so it only creates 1 pair and a group
+# with the single excessive element
+# per G group
 df \%>\%
   dplyr::select(G, A) \%>\% # For clarity
   dplyr::group_by(G) \%>\%
@@ -210,17 +218,20 @@ df \%>\%
 # Plot the extreme pairs
 plot(
   x = 1:10,
-  y = pair_extremes(df, col = "B")$B
+  y = pair_extremes(df, col = "B")$B,
+  col = as.character(rep(1:5, each = 2))
 )
 # With shuffled pair members (run a few times)
 plot(
   x = 1:10,
-  y = pair_extremes(df, col = "B", shuffle_members = TRUE)$B
+  y = pair_extremes(df, col = "B", shuffle_members = TRUE)$B,
+  col = as.character(rep(1:5, each = 2))
 )
 # With shuffled pairs (run a few times)
 plot(
   x = rep(1:5, each = 2),
-  y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B
+  y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B,
+  col = as.character(rep(1:5, each = 2))
 )
 }
 \seealso{

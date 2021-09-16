@@ -155,54 +155,66 @@ set.seed(1)
 
 # Create a data frame
 df <- data.frame(
-  "index" = 1:10,
-  "A" = sample(1:10),
-  "B" = runif(10),
-  "C" = LETTERS[1:10],
+  "index" = 1:12,
+  "A" = sample(1:12),
+  "B" = runif(12),
+  "C" = LETTERS[1:12],
   "G" = c(
-    1, 1, 1, 2, 2,
-    2, 3, 3, 3, 3
+    1, 1, 1, 1, 2, 2,
+    2, 2, 3, 3, 3, 3
   ),
   stringsAsFactors = FALSE
 )
 
-# Pair extreme indices (row numbers)
-pair_extremes(df)
+# Triplet group extreme indices (row numbers)
+triplet_extremes(df)
 
-# Pair extremes in each of the columns
-pair_extremes(df, col = "A")$A
-pair_extremes(df, col = "B")$B
-pair_extremes(df, col = "C")$C
+# Triplet group extremes in each of the columns
+triplet_extremes(df, col = "A")$A
+triplet_extremes(df, col = "B")$B
+triplet_extremes(df, col = "C")$C
 
-# Shuffle the members pair-wise
-pair_extremes(df, col = "A", shuffle_members = TRUE)
+# Shuffle the members triplet-wise
+# The triplets maintain their order
+# but the rows within each triplet are shuffled
+triplet_extremes(df, col = "A", shuffle_members = TRUE)
 
-# Shuffle the order of the pairs
-pair_extremes(df, col = "A", shuffle_pairs = TRUE)
+# Shuffle the order of the triplets
+# The triplets are shuffled but
+# the rows within each triplet maintain their order
+triplet_extremes(df, col = "A", shuffle_triplets = TRUE)
 
-# Use recursive pairing
-pair_extremes(df, col = "A", num_groupings = 2)
+# Use recursive grouping
+# Mostly meaningful with much larger datasets
+triplet_extremes(df, col = "A", num_groupings = 2)
 
 # Grouped by G
+# Each G group only has 4 elements
+# so it only creates 1 triplet and a group
+# with the single excessive element
+# per G group
 df \%>\%
   dplyr::select(G, A) \%>\% # For clarity
   dplyr::group_by(G) \%>\%
-  pair_extremes(col = "A")
+  triplet_extremes(col = "A")
 
-# Plot the extreme pairs
+# Plot the extreme triplets
 plot(
-  x = 1:10,
-  y = pair_extremes(df, col = "B")$B
+  x = 1:12,
+  y = triplet_extremes(df, col = "A")$A,
+  col = as.character(rep(1:4, each = 3))
 )
-# With shuffled pair members (run a few times)
+# With shuffled triplet members (run a few times)
 plot(
-  x = 1:10,
-  y = pair_extremes(df, col = "B", shuffle_members = TRUE)$B
+  x = 1:12,
+  y = triplet_extremes(df, col = "A", shuffle_members = TRUE)$A,
+  col = as.character(rep(1:4, each = 3))
 )
-# With shuffled pairs (run a few times)
+# With shuffled triplets (run a few times)
 plot(
-  x = rep(1:5, each = 2),
-  y = pair_extremes(df, col = "B", shuffle_pairs = TRUE)$B
+  x = rep(1:6, each = 2),
+  y = triplet_extremes(df, col = "A", shuffle_triplets = TRUE)$A,
+  col = as.character(rep(1:4, each = 3))
 )
 }
 \seealso{
