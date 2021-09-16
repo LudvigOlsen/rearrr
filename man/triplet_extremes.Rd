@@ -33,13 +33,14 @@ triplet_extremes_vec(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{col}{Column to create sorting factor by.
+When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{middle_is}{Whether the middle element in the triplet is the nth closest element
 to the median value or the nth+1 lowest/highest value.
 
-One of: \code{min}, \code{middle} or \code{max}.
+One of: \code{middle} (default), \code{min}, or \code{max}.
 
 Triplet grouping is performed greedily from the most extreme values to the least extreme
 values. E.g. \code{c(1, 6, 12)} is created before \code{c(2, 5, 11)} which is made
@@ -47,48 +48,31 @@ before \code{c(3, 7, 10)}.
 
 \strong{Examples}:
 
-When \code{middle_is} \code{min}, a \code{1:12} sequence is grouped into:
+When \code{`middle_is` == 'middle'}, a \code{1:12} sequence is grouped into:
 
-TODO CHECK!
+\code{c( c(1, 6, 12), c(2, 7, 11), c(3, 5, 10),  c(4, 8, 9) )}
+
+When \code{`middle_is` == 'min'}, a \code{1:12} sequence is grouped into:
+
 \code{c( c(1, 2, 12), c(3, 4, 11), c(5, 6, 10),  c(7, 8, 9) )}
 
-When \code{middle_is} \code{middle}, a \code{1:12} sequence is grouped into:
+When \code{`middle_is` == 'max'}, a \code{1:12} sequence is grouped into:
 
-TODO CHECK!
-\code{c( c(1, 6, 12), c(2, 5, 11), c(3, 7, 10),  c(4, 8, 9) )}
-
-When \code{middle_is} \code{max}, a \code{1:12} sequence is grouped into:
-
-TODO CHECK!
 \code{c( c(1, 11, 12), c(2, 9, 10), c(3, 7, 8),  c(4, 5, 6) )}}
 
-\item{unequal_method_1}{Method for dealing with either
+\item{unequal_method_1, unequal_method_2}{Method for dealing with either
 a single excessive element (\code{`unequal_method_1`}) or two excessive elements (\code{`unequal_method_2`})
 when the number of rows/elements in \code{`data`} are not evenly divisible by three.
 
 \code{`unequal_method_1`}: One of: \code{min}, \code{middle} or \code{max}.
 
-\code{`unequal_method_2`}: Vector with two of: \code{min}, \code{middle} or \code{max}.
+\code{`unequal_method_2`}: Vector with two of: \code{min}, \code{middle} or \code{max}. Can be the same value twice.
 
 Note: The excessive element(s) are extracted before triplet grouping. These elements
 are put in their own group and given group identifier \code{1}.
 
-When \code{`unequal_method_2`} is \code{c("middle", "middle")} the two elements
-closest to the mean are extracted.}
-
-\item{unequal_method_2}{Method for dealing with either
-a single excessive element (\code{`unequal_method_1`}) or two excessive elements (\code{`unequal_method_2`})
-when the number of rows/elements in \code{`data`} are not evenly divisible by three.
-
-\code{`unequal_method_1`}: One of: \code{min}, \code{middle} or \code{max}.
-
-\code{`unequal_method_2`}: Vector with two of: \code{min}, \code{middle} or \code{max}.
-
-Note: The excessive element(s) are extracted before triplet grouping. These elements
-are put in their own group and given group identifier \code{1}.
-
-When \code{`unequal_method_2`} is \code{c("middle", "middle")} the two elements
-closest to the mean are extracted.}
+E.g. When \code{`unequal_method_2`} is \code{c("middle", "middle")} the two elements
+closest to the median are extracted.}
 
 \item{num_groupings}{Number of times to group into triplets (recursively). At least \code{1}.
 
@@ -97,8 +81,8 @@ Based on \code{`balance`}, the secondary groupings perform extreme triplet group
 
 \item{balance}{What to balance triplets for in a given \emph{secondary} triplet grouping.
 Either \code{"mean"}, \code{"spread"}, \code{"min"}, or \code{"max"}.
-Can be a single string used for all secondary pairings
-or one for each secondary pairing (\code{`num_pairings` - 1}).
+Can be a single string used for all secondary groupings
+or one for each secondary grouping (\code{`num_groupings` - 1}).
 
 The first triplet grouping always groups the actual element values.
 
@@ -117,11 +101,12 @@ previous triplet grouping are aggregated with \code{`min()`} / \code{`max()`} an
 triplet grouped.
 }}
 
-\item{shuffle_members}{Whether to shuffle the pair members. (Logical)}
+\item{shuffle_members}{Whether to shuffle the group members. (Logical)}
 
-\item{shuffle_triplets}{Whether to shuffle the pairs. (Logical)}
+\item{shuffle_triplets}{Whether to shuffle the triplets. (Logical)}
 
-\item{factor_name}{Name of new column with the sorting factor. If \code{NULL}, no column is added.}
+\item{factor_name}{Name of new column with the sorting factor.
+If \code{`NULL`}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
@@ -129,15 +114,15 @@ triplet grouped.
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 Optionally with the sorting factor added.
 
-When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
+When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{`FALSE`},
 the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-The values are grouped in three such the first group is formed by
+The values are grouped in three such that the first group is formed by
 the lowest and highest values and the value closest to the median,
-the second group is formed by the second lowest and the second
+the second group is formed by the second lowest and second
 highest values and the value second closest to the median, and so on.
 The values are then sorted by these groups and their actual value.
 
@@ -156,13 +141,9 @@ The column values:
 
 \code{c(1, 2, 3, 4, 5, 6)}
 
-Creates the \strong{sorting factor}:
-TODO!!
-###\code{c(1, 2, 3, 3, 2, 1)}
+Are sorted in triplets as:
 
-And are \strong{ordered as}:
-
-###\code{c(1, 6, 2, 5, 3, 4)}
+\code{c(1, 3, 6, 2, 4, 5)}
 }
 \examples{
 # Attach packages

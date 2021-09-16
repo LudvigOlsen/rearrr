@@ -24,13 +24,15 @@ rearranger_(
 \item{check_fn}{Function with checks post-preparation of \code{`data`} and \code{`col(s)`}.
 Should not return anything.}
 
-\item{cols}{Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{cols}{Column(s) to create sorting factor by.
+When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{allowed_types}{Allowed types of the \code{`col(s)`} columns. The type restrictions do not apply to
 columns not mentioned in the \code{`col(s)`} argument.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{col}{Column to create sorting factor by.
+When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}

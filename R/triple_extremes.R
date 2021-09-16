@@ -14,9 +14,9 @@
 #' @description
 #'  \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
-#'  The values are grouped in three such the first group is formed by
+#'  The values are grouped in three such that the first group is formed by
 #'  the lowest and highest values and the value closest to the median,
-#'  the second group is formed by the second lowest and the second
+#'  the second group is formed by the second lowest and second
 #'  highest values and the value second closest to the median, and so on.
 #'  The values are then sorted by these groups and their actual value.
 #'
@@ -35,22 +35,31 @@
 #'
 #'  \code{c(1, 2, 3, 4, 5, 6)}
 #'
-#'  Creates the \strong{sorting factor}:
-#'  TODO!!
-#'  ###\code{c(1, 2, 3, 3, 2, 1)}
+#'  Are sorted in triplets as:
 #'
-#'  And are \strong{ordered as}:
-#'
-#'  ###\code{c(1, 6, 2, 5, 3, 4)}
+#'  \code{c(1, 3, 6, 2, 4, 5)}
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family rearrange functions
 #' @inheritParams extreme_triplet_grouping_rearranger_
+#' @param unequal_method_1,unequal_method_2 Method for dealing with either
+#'  a single excessive element (\code{`unequal_method_1`}) or two excessive elements (\code{`unequal_method_2`})
+#'  when the number of rows/elements in \code{`data`} are not evenly divisible by three.
+#'
+#'  \code{`unequal_method_1`}: One of: \code{min}, \code{middle} or \code{max}.
+#'
+#'  \code{`unequal_method_2`}: Vector with two of: \code{min}, \code{middle} or \code{max}. Can be the same value twice.
+#'
+#'  Note: The excessive element(s) are extracted before triplet grouping. These elements
+#'  are put in their own group and given group identifier \code{1}.
+#'
+#'  E.g. When \code{`unequal_method_2`} is \code{c("middle", "middle")} the two elements
+#'  closest to the median are extracted.
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the sorting factor added.
 #'
-#'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{FALSE},
+#'  When \code{`data`} is a \code{vector} and \code{`keep_factors`} is \code{`FALSE`},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 #' @examples
 #' # Attach packages
