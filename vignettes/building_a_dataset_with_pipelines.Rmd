@@ -1,0 +1,401 @@
+---
+title: "Building a dataset with pipelines"
+author: 
+  - "Ludvig Renbo Olsen"
+date: "`r Sys.Date()`"
+abstract: |
+  In this vignette, we build a dataset with diverse groups using 
+  `rearrr` pipelines and transformations.
+  
+  This vignette is a work in progress.
+  
+  Contact the author at r-pkgs@ludvigolsen.dk
+  
+  &nbsp;  
+  
+output: 
+  rmarkdown::html_vignette:
+    css: 
+    - !expr system.file("rmarkdown/templates/html_vignette/resources/vignette.css", package = "rmarkdown")
+    - styles.css
+    fig_width: 6
+    fig_height: 4
+    toc: yes
+    number_sections: no
+  rmarkdown::pdf_document:
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
+vignette: >
+  %\VignetteIndexEntry{building_a_dataset_with_pipelines}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/vignette_building_dataset-",
+  dpi = 92,
+  fig.retina = 2
+)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(rearrr)
+library(dplyr)
+library(ggplot2)
+```
+
+## Generating clusters
+
+We can build a dataset with 5 clusters using the `generate_clusters()` function:
+
+```{r fig.align='center', fig.width=7.5, fig.height=3.5}
+# Set seed for reproducibility
+xpectr::set_test_seed(1)
+
+# Generate dataset with 5 clusters
+# It will have 100 rows and 4 columns
+cluster_data <- generate_clusters(num_rows = 100, num_cols = 4, num_clusters = 5)
+
+cluster_data
+
+# Plot each column against the first (D1) column
+cluster_data %>%
+  tidyr::gather(key = "feature", value = "value", 2:4) %>%
+  ggplot(aes(x = value, y = D1, color = .cluster)) +
+  facet_wrap(. ~ feature) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "", y = "D1", color = "Cluster") +
+  scale_colour_brewer(palette = "Dark2")
+```
+
+## Using pipelines
+
+```{r}
+# Set seed for reproducibility
+xpectr::set_test_seed(1)
+
+data <- data.frame(
+  
+)
+
+```
+
+## Generate from a linear model
+
+> Based on experiment from my master's thesis.
+
+$y \sim b_{0} + b_{1}x + b_{group} + \epsilon$
+
+```{r}
+simulate_data <- function(
+  num_reps, # Rows per group
+  num_groups,
+  
+  # Linear model
+  b0 = 5,
+  b1 = 2.5,
+  bs = runif(num_groups, -5, 5), # Group coefficients
+  
+  # Predictor noise
+  x_mean = 0,
+  x_sigma = 2,
+  
+  # Target noise
+  y_mean = 0,
+  y_sigma = 2,
+  standardize = TRUE) {
+  
+  # Check that we have a coefficient for each group
+  if (length(bs) != num_groups)
+    stop("`bs` must have length `num_groups`.")
+  
+  # Meta
+  num_points <- num_groups * num_reps
+  group_names <- factor(seq_len(num_groups))
+  group <- rep(group_names, each = num_reps)
+  
+  # Generate the variables
+  y_eps <- rnorm(n = num_points, mean = y_mean, sd = y_sigma)
+  x <- rnorm(n = num_points, mean = x_mean, sd = x_sigma)
+  y_ungrouped <- b0 + b1 * x + y_eps
+  
+  # Collect in data.frame
+  sim_data <- data.frame(group, x, y_ungrouped)
+  
+  # Now, we will bias the target by the group coefficients
+  
+  # Create group coefficient data.frame
+  group_bs_df <- data.frame("group" = group_names, "group_coeff" = bs)
+  
+  # Add the group coeffients to y
+  sim_data <- sim_data %>% 
+    dplyr::left_join(group_bs_df, by = "group") %>% 
+    dplyr::mutate(y = y_ungrouped + group_coeff) %>% 
+    dplyr::select(-y_ungrouped, -group_coeff)
+
+  # Standardize x and y
+  if (isTRUE(standardize)){
+    do_standardize <- function(x) (x - mean(x)) / sd(x)
+    sim_data <- sim_data %>% 
+      dplyr::mutate(x = do_standardize(x),
+                    y = do_standardize(y))
+  }
+  
+  # Convert to tibble
+  sim_data <- dplyr::as_tibble(sim_data)
+  
+  sim_data
+}
+```
+
+```{r}
+SEED <- 7
+NUM_GROUPS <- 10
+MAX_NUM_REPS <- 30
+MIN_NUM_REPS <- 7
+
+xpectr::set_test_seed(SEED)
+sim_data <- simulate_data(
+  num_reps = MAX_NUM_REPS,
+  num_groups = NUM_GROUPS,
+  x_mean = 1.5,
+  x_sigma = 1.5,
+  y_mean = 0,
+  y_sigma = 2,
+  standardize = TRUE
+) 
+
+```
+
+We might want the groups to have different sizes:
+
+```{r}
+# Function for sampling with different n per group
+sample_groupwise <- function(data, group_var, ns){
+  # Based on the solution by Jenny Bryan at
+  # https://jennybc.github.io/purrr-tutorial/ls12_different-sized-samples.html
+
+  # Group the dataset
+  data <- data %>%
+    dplyr::group_by(!!as.name(group_var))
+  
+  # Check correct number of `ns`
+  if (length(ns) != dplyr::n_groups(data)){
+    stop(paste0(
+      "`ns` must contain exactly one element per group in `data` (length ", 
+      length(ns), " != ", dplyr::n_groups(data), " groups)"))
+  }
+  
+  # Perform resampling
+  data %>%
+    tidyr::nest() %>% # Becomes one row per group
+    dplyr::ungroup() %>%
+    dplyr::mutate(n = ns) %>% # Add sample sizes
+    dplyr::mutate(samp = purrr::map2(data, n, sample_n)) %>%  # Sample each group
+    dplyr::select(-data, -n) %>%
+    tidyr::unnest(samp)
+}
+
+sim_data <- sim_data %>%
+  sample_groupwise(group_var = "group",
+                   ns = as.integer(runif(
+                     n = NUM_GROUPS,
+                     min = MIN_NUM_REPS,
+                     max = MAX_NUM_REPS
+                   )))
+```
+
+```{r fig.align='center', fig.width=4, fig.height=3}
+sim_data %>%
+  dplyr::count(group) %>%
+  ggplot(aes(x = n)) +
+  geom_histogram(binwidth = 1) +
+  theme_minimal() +
+  labs(x = "Frequency", y = "Group size")
+
+```
+
+Currently, the data looks like this:
+
+```{r fig.align='center'}
+sim_data %>% 
+  ggplot(aes(x = x, y = y, color = group)) +
+  geom_point() +
+  theme_minimal()
+
+```
+
+They are very similar, so we will create a transformation pipeline for increasing the diversity between groups. As we have 20 groups, we use the `GeneratePipeline` for randomly generating argument values per group for the transformation functions:
+
+The goal of the pipeline is to make slight changes.
+
+```{r}
+# Set seed for reproducibility
+xpectr::set_test_seed(SEED)
+
+# Initialize pipeline
+augmentor <- GeneratedPipeline$new()
+
+# Add rotation with different degrees per group
+augmentor$add_transformation(
+  fn = rotate_2d,
+  args = list(
+    x_col = "x",
+    y_col = "y",
+    origin_fn = centroid,
+    suffix = "",
+    overwrite = TRUE
+  ),
+  generators = list(
+    # Generates for 1 group at a time
+    degrees = function(){rnorm(n = 1, mean = 0, sd = 20)} 
+  ),
+  name = "Rotate",
+  group_cols = "group"  # Specify grouping
+)
+
+# Add clustering of groups around their centroids
+# Different multiplier per group
+# Note: `cluster_groups` need the entire dataset to rescale
+# properly after shortening the distances to the centroids
+# so we provide group_cols as part of args
+augmentor$add_transformation(
+  fn = cluster_groups,
+  args = list(
+    cols = c("x", "y"),
+    group_cols = "group",
+    suffix = "",
+    overwrite = TRUE,
+    keep_centroids = TRUE
+  ),
+  generators = list(
+    multiplier = function(){runif(n = 1, min = 0.1, max = 0.3)}
+  ),
+  name = "Cluster"
+)
+
+# Check pipeline info
+augmentor
+
+# Apply transformation pipeline to data
+sim_data <- sim_data %>% 
+  augmentor$apply(verbose = T) %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select(group, x, y)
+```
+
+Now, the data looks like this:
+
+```{r fig.align='center'}
+sim_data %>% 
+  ggplot(aes(x = x, y = y, color = group)) +
+  geom_point() +
+  theme_minimal()
+
+```
+
+This looks somewhat more diverse. We will turn them into 5 larger groups, where the 2 groups with the greatest and second greatest `y` means are combined, the 2 groups with the third and fourth greatest `y` means are combined, etc.
+
+```{r fig.align='center'}
+group_means <- sim_data %>% 
+  dplyr::group_by(group) %>% 
+  dplyr::summarise(mean_y = mean(y)) %>% 
+  dplyr::arrange(dplyr::desc(mean_y)) %>% 
+  dplyr::mutate(new_group = factor(rep(1:5, each = 2))) %>% 
+  dplyr::select(group, new_group)
+  
+sim_data <- sim_data %>% 
+  dplyr::left_join(group_means, by = "group")
+
+sim_data %>% 
+  ggplot(aes(x = x, y = y, color = new_group)) +
+  geom_point() +
+  theme_minimal() + 
+  scale_colour_brewer(palette = "Dark2")
+
+```
+
+If we wanted to continuously generate groups, e.g. for a simulation study, we can now combine the steps:
+
+```{r}
+
+generate_data <- function(
+  num_groups = 5,
+  max_num_reps = 20,
+  min_num_reps = 7,
+  num_patients_per_group = 10, # Create and combine n times the final groups
+  # Model parameters
+  x_mean = rnorm(1, 0, 2),
+  x_sigma = runif(1, 0, 2),
+  y_mean = rnorm(1, 0, 2),
+  y_sigma = runif(1, 0, 2)
+  ) {
+  
+  # Create the initial data.frame
+  sim_data <- simulate_data(
+    num_reps = max_num_reps,
+    num_groups = num_groups * num_patients_per_group, # Create n times the number of groups  
+    x_mean = x_mean,
+    x_sigma = x_sigma,
+    y_mean = y_mean,
+    y_sigma = y_sigma,
+    standardize = TRUE
+  ) %>%
+    # Sample each group with its own size
+    sample_groupwise(
+      group_var = "group",
+      ns = sample(
+        x = min_num_reps:max_num_reps, 
+        size = num_groups * num_patients_per_group, 
+        replace = TRUE
+      )
+    ) %>%
+    # Apply pipeline for increasing cross-group diversity
+    augmentor$apply(verbose = FALSE) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(group, x, y)
+  
+  # Combine to the specified number of groups 
+  group_means <- sim_data %>%
+    dplyr::group_by(group) %>%
+    dplyr::summarise(mean_y = mean(y)) %>%
+    dplyr::arrange(dplyr::desc(mean_y)) %>%
+    dplyr::mutate(new_group = factor(
+      rep(1:num_groups, each = num_patients_per_group)
+    )) %>%
+    dplyr::select(group, new_group)
+  
+  sim_data <- sim_data %>%
+    dplyr::left_join(group_means, by = "group") %>% 
+    dplyr::rename(patient_id = group,
+                  condition = new_group)
+  
+  sim_data
+}
+
+xpectr::set_test_seed(4)
+sim_data <- plyr::ldply(1:3, function(i){
+  generate_data(num_groups = 5) %>% 
+    dplyr::mutate(generation = i)
+    }) %>% 
+  dplyr::as_tibble()
+
+sim_data
+```
+
+```{r fig.align='center'}
+sim_data %>% 
+  ggplot(aes(x = x, y = y, color = condition)) +
+  geom_point() +
+  facet_wrap(. ~ generation) +
+  theme_minimal() +
+  scale_colour_brewer(palette = "Dark2")
+
+```
+
