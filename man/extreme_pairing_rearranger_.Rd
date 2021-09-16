@@ -84,9 +84,9 @@ And are \strong{ordered as}:
 
 }}
 
-\item{shuffle_members}{Whether to shuffle the group members. (Logical)}
+\item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 
-\item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
+\item{shuffle_pairs}{Whether to shuffle the order of the pairs. Pair members remain together. (Logical)}
 
 \item{num_pairings}{Number of pairings to perform (recursively). At least \code{1}.
 

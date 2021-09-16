@@ -120,9 +120,9 @@ Pairs have similar minimum / maximum values. The values in the pairs from the pr
 are aggregated with \code{`min()`} / \code{`max()`} and paired.
 }}
 
-\item{shuffle_members}{Whether to shuffle the group members. (Logical)}
+\item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 
-\item{shuffle_pairs}{Whether to shuffle the pairs. (Logical)}
+\item{shuffle_pairs}{Whether to shuffle the order of the pairs. Pair members remain together. (Logical)}
 
 \item{factor_name}{Name of new column with the sorting factor.
 If \code{`NULL`}, no column is added.}

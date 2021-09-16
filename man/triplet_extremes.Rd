@@ -101,9 +101,9 @@ previous triplet grouping are aggregated with \code{`min()`} / \code{`max()`} an
 triplet grouped.
 }}
 
-\item{shuffle_members}{Whether to shuffle the group members. (Logical)}
+\item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 
-\item{shuffle_triplets}{Whether to shuffle the triplets. (Logical)}
+\item{shuffle_triplets}{Whether to shuffle the order of the triplets. Triplet members remain together. (Logical)}
 
 \item{factor_name}{Name of new column with the sorting factor.
 If \code{`NULL`}, no column is added.}

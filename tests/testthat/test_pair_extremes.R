@@ -1210,20 +1210,20 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing column values
   expect_equal(
     output_19057[["index"]],
-    c(6, 4, 2, 5, 8, 7, 3, 1, 9),
+    c(9, 1, 2, 8, 5, 7, 3, 4, 6),
     tolerance = 1e-4)
   expect_equal(
     output_19057[["A"]],
-    c(7, 5, 8, 4, 1, 6, 3, 9, 2),
+    c(2, 9, 8, 1, 4, 6, 3, 5, 7),
     tolerance = 1e-4)
   expect_equal(
     output_19057[["B"]],
-    c(0.46229, 0.93467, 0.45774, 0.25543, 0.97823, 0.94001, 0.71911,
-      0.70506, 0.11749),
+    c(0.11749, 0.70506, 0.45774, 0.97823, 0.25543, 0.94001, 0.71911,
+      0.93467, 0.46229),
     tolerance = 1e-4)
   expect_equal(
     output_19057[["C"]],
-    c("F", "D", "B", "E", "H", "G", "C", "A", "I"),
+    c("I", "A", "B", "H", "E", "G", "C", "D", "F"),
     fixed = TRUE)
   # Testing column names
   expect_equal(
@@ -1331,20 +1331,20 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing column values
   expect_equal(
     output_17375[["index"]],
-    c(9, 1, 2, 8, 5, 7, 3, 4, 6),
+    c(4, 6, 3, 7, 1, 9, 2, 8, 5),
     tolerance = 1e-4)
   expect_equal(
     output_17375[["A"]],
-    c(2, 9, 8, 1, 4, 6, 3, 5, 7),
+    c(5, 7, 3, 6, 9, 2, 8, 1, 4),
     tolerance = 1e-4)
   expect_equal(
     output_17375[["B"]],
-    c(0.11749, 0.70506, 0.45774, 0.97823, 0.25543, 0.94001, 0.71911,
-      0.93467, 0.46229),
+    c(0.93467, 0.46229, 0.71911, 0.94001, 0.70506, 0.11749, 0.45774,
+      0.97823, 0.25543),
     tolerance = 1e-4)
   expect_equal(
     output_17375[["C"]],
-    c("I", "A", "B", "H", "E", "G", "C", "D", "F"),
+    c("D", "F", "C", "G", "A", "I", "B", "H", "E"),
     fixed = TRUE)
   # Testing column names
   expect_equal(

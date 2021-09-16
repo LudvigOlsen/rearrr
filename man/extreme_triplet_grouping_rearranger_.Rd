@@ -48,9 +48,9 @@ When \code{`middle_is` == 'max'}, a \code{1:12} sequence is grouped into:
 
 \code{c( c(1, 11, 12), c(2, 9, 10), c(3, 7, 8),  c(4, 5, 6) )}}
 
-\item{shuffle_members}{Whether to shuffle the group members. (Logical)}
+\item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 
-\item{shuffle_triplets}{Whether to shuffle the triplets. (Logical)}
+\item{shuffle_triplets}{Whether to shuffle the order of the triplets. Triplet members remain together. (Logical)}
 
 \item{num_groupings}{Number of times to group into triplets (recursively). At least \code{1}.
 

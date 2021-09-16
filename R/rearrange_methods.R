@@ -503,10 +503,10 @@ shuffle_extreme_groups_ <- function(data,
                                     shuffle_groups) {
   # Find columns to shuffle
   shuffling_group_cols <- rev(tmp_rearrange_vars)
-  cols_to_shuffle <- c()
-  if (isTRUE(shuffle_members))
+  cols_to_shuffle <- character(0)
+  if (isTRUE(shuffle_groups))
     cols_to_shuffle <- shuffling_group_cols
-  if (isTRUE(shuffle_groups)) {
+  if (isTRUE(shuffle_members)) {
     shuffling_group_cols <- c(shuffling_group_cols, col)
     cols_to_shuffle <- c(cols_to_shuffle, col)
   }
@@ -523,6 +523,7 @@ shuffle_extreme_groups_ <- function(data,
 
   data
 }
+
 
 pick_extreme_group_factors_ <- function(data, tmp_rearrange_vars, factor_names, overwrite){
 

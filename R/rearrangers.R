@@ -195,8 +195,8 @@ centering_rearranger_ <- function(data,
 #' Wrapper for running extreme pairing
 #'
 #' @inheritParams rearranger_
-#' @param shuffle_members Whether to shuffle the group members. (Logical)
-#' @param shuffle_pairs Whether to shuffle the pairs. (Logical)
+#' @param shuffle_members Whether to shuffle the order of the group members within the groups. (Logical)
+#' @param shuffle_pairs Whether to shuffle the order of the pairs. Pair members remain together. (Logical)
 #' @param factor_name Name of new column with the sorting factor.
 #'  If \code{`NULL`}, no column is added.
 #' @param num_pairings Number of pairings to perform (recursively). At least \code{1}.
@@ -347,7 +347,7 @@ extreme_pairing_rearranger_ <- function(data,
 #' Wrapper for running extreme triplet grouping
 #'
 #' @inheritParams extreme_pairing_rearranger_
-#' @param shuffle_triplets Whether to shuffle the triplets. (Logical)
+#' @param shuffle_triplets Whether to shuffle the order of the triplets. Triplet members remain together. (Logical)
 #' @param num_groupings Number of times to group into triplets (recursively). At least \code{1}.
 #'
 #'  Based on \code{`balance`}, the secondary groupings perform extreme triplet grouping on either the
