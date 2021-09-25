@@ -810,9 +810,12 @@ test_that("fuzz testing triplet_extremes()", {
   # Testing side effects
   # Assigning side effects
   side_effects_14622 <- xpectr::capture_side_effects(triplet_extremes(data = dfs, col = "A", middle_is = "hjsdf", unequal_method_1 = "middle", unequal_method_2 = c("middle", "middle"), num_groupings = 1, balance = "mean", order_by_aggregates = FALSE, shuffle_members = FALSE, shuffle_triplets = FALSE, factor_name = ".trip", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_14622[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'middle_is': Names must be a subset of set {min,middle,max}."),
+    xpectr::strip(
+      ifelse(is_checkmate_v2_1(),
+             "must be a subset of {'min','middle','max'}, but has additional elements {'hjsdf'}.",
+             "1 assertions failed:\n * Variable 'middle_is': Names must be a subset of set {min,middle,max}.")),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14622[['error_class']]),
@@ -959,9 +962,14 @@ test_that("fuzz testing triplet_extremes()", {
   # Testing side effects
   # Assigning side effects
   side_effects_15603 <- xpectr::capture_side_effects(triplet_extremes(data = dfs, col = "A", middle_is = "middle", unequal_method_1 = "hjsdf", unequal_method_2 = c("middle", "middle"), num_groupings = 1, balance = "mean", order_by_aggregates = FALSE, shuffle_members = FALSE, shuffle_triplets = FALSE, factor_name = ".trip", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_15603[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'unequal_method_1': Names must be a subset of set {min,middle,max}."),
+    xpectr::strip(
+      ifelse(
+        is_checkmate_v2_1(),
+        "must be a subset of {'min','middle','max'}, but has additional elements {'hjsdf'}.",
+        "1 assertions failed:\n * Variable 'unequal_method_1': Names must be a subset of set {min,middle,max}."
+      )),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error_class']]),
@@ -1138,9 +1146,14 @@ test_that("fuzz testing triplet_extremes()", {
   # Testing side effects
   # Assigning side effects
   side_effects_13902 <- xpectr::capture_side_effects(triplet_extremes(data = dfs, col = "A", middle_is = "middle", unequal_method_1 = "middle", unequal_method_2 = c("fdsf", "fdsf"), num_groupings = 1, balance = "mean", order_by_aggregates = FALSE, shuffle_members = FALSE, shuffle_triplets = FALSE, factor_name = ".trip", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_13902[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'unequal_method_2': Names must be a subset of set {min,middle,max}."),
+    xpectr::strip(
+      ifelse(
+        is_checkmate_v2_1(),
+        "must be a subset of {'min','middle','max'}, but has additional elements {'fdsf'}.",
+        "1 assertions failed:\n * Variable 'unequal_method_2': Names must be a subset of set {min,middle,max}."
+      )),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13902[['error_class']]),

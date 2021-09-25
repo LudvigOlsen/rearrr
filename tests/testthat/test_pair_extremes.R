@@ -84,7 +84,10 @@ test_that("pair_extremes() throws expected errors", {
   ), reset_seed = TRUE)
   expect_match(
     xpectr::strip(side_effects_19148[['error']], lowercase = TRUE),
-    xpectr::strip("Must be a subset of set {first,middle,last}.", lowercase = TRUE), # unequal_method
+    xpectr::strip(
+      ifelse(is_checkmate_v2_1(),
+             "must be a subset of firstmiddlelast but has additional elements none",
+             "Must be a subset of set {first,middle,last}."), lowercase = TRUE), # unequal_method
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['error_class']]),
