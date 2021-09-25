@@ -49,8 +49,10 @@ When \code{`middle_is` == 'max'}, a \code{1:12} sequence is grouped into:
 
 \code{c( c(1, 11, 12), c(2, 9, 10), c(3, 7, 8),  c(4, 5, 6) )}}
 
-\item{order_by_aggregates}{Whether to order the groups from initial groupings (first \code{`num_groupings` - 1}) by their aggregate values instead
-of their group identifiers. Only used when \code{`num_groupings` > 1}.}
+\item{order_by_aggregates}{Whether to order the groups from initial groupings (first \code{`num_groupings` - 1})
+by their aggregate values instead of their group identifiers.
+
+N.B. Only used when \code{`num_groupings` > 1}.}
 
 \item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 

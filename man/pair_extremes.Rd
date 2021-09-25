@@ -11,6 +11,7 @@ pair_extremes(
   unequal_method = "middle",
   num_pairings = 1,
   balance = "mean",
+  order_by_aggregates = FALSE,
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
   factor_name = ifelse(num_pairings == 1, ".pair", ".pairing"),
@@ -22,6 +23,7 @@ pair_extremes_vec(
   unequal_method = "middle",
   num_pairings = 1,
   balance = "mean",
+  order_by_aggregates = FALSE,
   shuffle_members = FALSE,
   shuffle_pairs = FALSE
 )
@@ -120,6 +122,11 @@ Pairs have similar minimum / maximum values. The values in the pairs from the pr
 are aggregated with \code{`min()`} / \code{`max()`} and paired.
 }}
 
+\item{order_by_aggregates}{Whether to order the pairs from initial pairings (first \code{`num_pairings` - 1})
+by their aggregate values instead of their pair identifiers.
+
+N.B. Only used when \code{`num_pairings` > 1}.}
+
 \item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 
 \item{shuffle_pairs}{Whether to shuffle the order of the pairs. Pair members remain together. (Logical)}
@@ -203,7 +210,11 @@ pair_extremes(df, col = "A", shuffle_members = TRUE)
 pair_extremes(df, col = "A", shuffle_pairs = TRUE)
 
 # Use recursive pairing
+# Mostly meaningful with much larger datasets
+# Order initial grouping by pair identifiers
 pair_extremes(df, col = "A", num_pairings = 2)
+# Order initial grouping by aggregate values
+pair_extremes(df, col = "A", num_pairings = 2, order_by_aggregates = TRUE)
 
 # Grouped by G
 # Each G group only has 3 elements

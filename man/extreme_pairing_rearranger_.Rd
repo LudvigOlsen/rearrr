@@ -8,6 +8,7 @@ extreme_pairing_rearranger_(
   data,
   col = NULL,
   unequal_method = "middle",
+  order_by_aggregates = FALSE,
   shuffle_members = FALSE,
   shuffle_pairs = FALSE,
   num_pairings = 1,
@@ -83,6 +84,11 @@ And are \strong{ordered as}:
 \code{c(1, 4, 2, 3,} \strong{\code{5}}\code{)}
 
 }}
+
+\item{order_by_aggregates}{Whether to order the pairs from initial pairings (first \code{`num_pairings` - 1})
+by their aggregate values instead of their pair identifiers.
+
+N.B. Only used when \code{`num_pairings` > 1}.}
 
 \item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 

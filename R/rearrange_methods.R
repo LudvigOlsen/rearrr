@@ -326,6 +326,7 @@ rearrange_pair_extremes <- function(data,
                                     unequal_method,
                                     num_pairings,
                                     balance,
+                                    order_by_aggregates,
                                     shuffle_members,
                                     shuffle_pairs,
                                     factor_name,
@@ -352,6 +353,15 @@ rearrange_pair_extremes <- function(data,
     create_tmp_var(data, paste0(".tmp_rearrange_col_", .x))
   }) %>% unlist(recursive = TRUE)
 
+  # Create tmp group aggregate column names
+  tmp_aggregate_vars <- character(0)
+  if (num_pairings > 1) {
+    tmp_aggregate_vars <-
+      purrr::map(.x = seq_len(num_pairings - 1), .f = ~ {
+        create_tmp_var(data, paste0(".tmp_aggregate_col_", .x))
+      }) %>% unlist(recursive = TRUE)
+  }
+
   # Pair the extreme values and order by the pairs
   data <- order_and_group_extremes_(
     data = data,
@@ -369,8 +379,6 @@ rearrange_pair_extremes <- function(data,
     shuffle_groups = FALSE # Done at the end
   )
 
-  # TODO Perform recursive pairing
-
   if (num_pairings > 1){
 
     # Get environment so we can update `data`
@@ -385,10 +393,24 @@ rearrange_pair_extremes <- function(data,
       # What to balance ("mean", "spread", "min", or "max")
       summ_fn <- get_summ_fn_(balance = balance, i = i)
 
+      # Get name of new group aggregate column
+      tmp_group_aggr_col <- tmp_aggregate_vars[[i]]
+
       # Aggregate values for pairs from previous pairing
       tmp_group_scores <- data %>%
         dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
-        dplyr::summarize(group_aggr = summ_fn(!!as.name(col)))
+        dplyr::summarize(!!tmp_group_aggr_col := summ_fn(!!as.name(col))) %>%
+        dplyr::arrange(!!as.name(tmp_group_aggr_col))
+
+      if (num_pairings > 1 && nrow(tmp_group_scores) < 2){
+        warning(
+          simpleWarning(
+            "Fewer than 2 aggregated scores. Consider reducing `num_pairings`.",
+            call = if (p <- sys.parent(9))
+              sys.call(p)
+          )
+        )
+      }
 
       if (!equal_nrows & unequal_method == "first") {
 
@@ -399,39 +421,62 @@ rearrange_pair_extremes <- function(data,
           dplyr::bind_rows(
             tmp_group_scores %>%
               dplyr::filter(dplyr::row_number() != 1) %>%
-              dplyr::arrange(.data$group_aggr))
+              dplyr::arrange(!!as.name(tmp_group_aggr_col)))
       } else {
         tmp_group_scores_sorted <- tmp_group_scores %>%
-          dplyr::arrange(.data$group_aggr)
+          dplyr::arrange(!!as.name(tmp_group_aggr_col))
       }
 
       # Pair the extreme pairs and order by the new pairs
       tmp_rearrange <- order_and_group_extremes_(
         data = tmp_group_scores_sorted,
-        col = "group_aggr",
+        col = tmp_group_aggr_col,
         new_col = tmp_rearrange_vars[[i + 1]],
         group_fn = create_rearrange_factor_pair_extremes_,
         unequal_method = unequal_method
-      ) %>%
-        base_select_(cols = c(tmp_rearrange_vars[[i]], tmp_rearrange_vars[[i + 1]]))
+      )
 
       # Add the new pair identifiers to `data`
       data <- data %>%
         dplyr::left_join(tmp_rearrange, by = tmp_rearrange_vars[[i]])
 
       # Order data by the pairs
-      data <- order_by_group(
-        data = data,
-        group_col = tmp_rearrange_vars[[i + 1]],
-        shuffle_members = FALSE,
-        shuffle_groups = FALSE
-      )
+      data <- data %>%
+        dplyr::arrange(
+          !!as.name(tmp_rearrange_vars[[i + 1]]),
+          !!as.name(tmp_group_aggr_col),
+          !!as.name(col)
+        )
 
       # Update `data` in parent environment
       pairing_env[["data"]] <- data
 
     })
   }
+
+  if (isTRUE(order_by_aggregates)) {
+
+    # Order data by the pairs and aggregates
+    new_order <- c(
+      rev(tmp_rearrange_vars)[[1]],
+      rev(tmp_aggregate_vars),
+      rev(tmp_rearrange_vars)[-1],
+      col
+    )
+    data <- data %>%
+      dplyr::arrange(!!!rlang::syms(new_order))
+
+  } else {
+
+    # Order data by the pairs
+    data <- data %>%
+      dplyr::arrange(!!!rlang::syms(rev(tmp_rearrange_vars)),!!as.name(col))
+
+  }
+
+  # Remove aggreate columns
+  data <- data %>%
+    base_deselect_(cols = tmp_aggregate_vars)
 
   # Shuffle columns
   data <- shuffle_extreme_groups_(
@@ -559,9 +604,9 @@ rearrange_triplet_extremes <- function(data,
                                        unequal_method_2,
                                        num_groupings,
                                        balance,
+                                       order_by_aggregates,
                                        shuffle_members,
                                        shuffle_triplets,
-                                       order_by_aggregates,
                                        factor_name,
                                        ...) {
 
@@ -587,6 +632,7 @@ rearrange_triplet_extremes <- function(data,
     create_tmp_var(data, paste0(".tmp_rearrange_col_", .x))
   }) %>% unlist(recursive = TRUE)
 
+  # Create tmp group aggregate column names
   tmp_aggregate_vars <- character(0)
   if (num_groupings > 1) {
     tmp_aggregate_vars <-
@@ -629,6 +675,7 @@ rearrange_triplet_extremes <- function(data,
       # What to balance ("mean", "spread", "min", or "max")
       summ_fn <- get_summ_fn_(balance = balance, i = i)
 
+      # Get name of new group aggregate column
       tmp_group_aggr_col <- tmp_aggregate_vars[[i]]
 
       # Aggregate values for triplets from previous grouping
@@ -658,7 +705,7 @@ rearrange_triplet_extremes <- function(data,
         unequal_method_2 = unequal_method_2
       )
 
-      # Add the new pair identifiers to `data`
+      # Add the new triplet identifiers to `data`
       data <- data %>%
         dplyr::left_join(tmp_rearrange, by = tmp_rearrange_vars[[i]])
 
@@ -676,18 +723,25 @@ rearrange_triplet_extremes <- function(data,
     })
   }
 
-  if (isTRUE(order_by_aggregates)){
-    # Order data by the groups
-    new_order <- c(rev(tmp_rearrange_vars)[[1]],
-                   rev(tmp_aggregate_vars),
-                   rev(tmp_rearrange_vars)[-1],
-                   col)
+  if (isTRUE(order_by_aggregates)) {
+
+    # Order data by the groups and aggregates
+    new_order <- c(
+      rev(tmp_rearrange_vars)[[1]],
+      rev(tmp_aggregate_vars),
+      rev(tmp_rearrange_vars)[-1],
+      col
+    )
     data <- data %>%
       dplyr::arrange(!!!rlang::syms(new_order))
+
   } else {
+
     # Order data by the groups
     data <- data %>%
-      dplyr::arrange(!!!rlang::syms(rev(tmp_rearrange_vars)), !!as.name(col))
+      dplyr::arrange(!!!rlang::syms(rev(tmp_rearrange_vars)),
+                     !!as.name(col))
+
   }
 
   # Remove aggreate columns

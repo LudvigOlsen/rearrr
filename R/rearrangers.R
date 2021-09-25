@@ -197,6 +197,10 @@ centering_rearranger_ <- function(data,
 #' @inheritParams rearranger_
 #' @param shuffle_members Whether to shuffle the order of the group members within the groups. (Logical)
 #' @param shuffle_pairs Whether to shuffle the order of the pairs. Pair members remain together. (Logical)
+#' @param order_by_aggregates Whether to order the pairs from initial pairings (first \code{`num_pairings` - 1})
+#'  by their aggregate values instead of their pair identifiers.
+#'
+#'  N.B. Only used when \code{`num_pairings` > 1}.
 #' @param factor_name Name of new column with the sorting factor.
 #'  If \code{`NULL`}, no column is added.
 #' @param num_pairings Number of pairings to perform (recursively). At least \code{1}.
@@ -293,6 +297,7 @@ centering_rearranger_ <- function(data,
 extreme_pairing_rearranger_ <- function(data,
                                         col = NULL,
                                         unequal_method = "middle",
+                                        order_by_aggregates = FALSE,
                                         shuffle_members = FALSE,
                                         shuffle_pairs = FALSE,
                                         num_pairings = 1,
@@ -306,6 +311,7 @@ extreme_pairing_rearranger_ <- function(data,
   checkmate::assert_string(unequal_method, min.chars = 1, add = assert_collection)
   checkmate::assert_character(balance, min.chars = 1, any.missing = FALSE, add = assert_collection)
   checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(order_by_aggregates, add = assert_collection)
   checkmate::assert_flag(shuffle_members, add = assert_collection)
   checkmate::assert_flag(shuffle_pairs, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -333,6 +339,7 @@ extreme_pairing_rearranger_ <- function(data,
     unequal_method = unequal_method,
     num_pairings = num_pairings,
     balance = balance,
+    order_by_aggregates = order_by_aggregates,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
     factor_name = factor_name
@@ -348,8 +355,10 @@ extreme_pairing_rearranger_ <- function(data,
 #'
 #' @inheritParams extreme_pairing_rearranger_
 #' @param shuffle_triplets Whether to shuffle the order of the triplets. Triplet members remain together. (Logical)
-#' @param order_by_aggregates Whether to order the groups from initial groupings (first \code{`num_groupings` - 1}) by their aggregate values instead
-#'  of their group identifiers. Only used when \code{`num_groupings` > 1}.
+#' @param order_by_aggregates Whether to order the groups from initial groupings (first \code{`num_groupings` - 1})
+#'  by their aggregate values instead of their group identifiers.
+#'
+#'  N.B. Only used when \code{`num_groupings` > 1}.
 #' @param num_groupings Number of times to group into triplets (recursively). At least \code{1}.
 #'
 #'  Based on \code{`balance`}, the secondary groupings perform extreme triplet grouping on either the
@@ -427,9 +436,9 @@ extreme_triplet_grouping_rearranger_ <- function(data,
   checkmate::assert_character(unequal_method_2, len = 2, min.chars = 1, add = assert_collection)
   checkmate::assert_character(balance, min.chars = 1, any.missing = FALSE, add = assert_collection)
   checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(order_by_aggregates, add = assert_collection)
   checkmate::assert_flag(shuffle_members, add = assert_collection)
   checkmate::assert_flag(shuffle_triplets, add = assert_collection)
-  checkmate::assert_flag(order_by_aggregates, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   checkmate::assert_names(middle_is,
                           subset.of = c("min", "middle", "max"),
@@ -463,9 +472,9 @@ extreme_triplet_grouping_rearranger_ <- function(data,
     unequal_method_2 = unequal_method_2,
     num_groupings = num_groupings,
     balance = balance,
+    order_by_aggregates = order_by_aggregates,
     shuffle_members = shuffle_members,
     shuffle_triplets = shuffle_triplets,
-    order_by_aggregates = order_by_aggregates,
     factor_name = factor_name
   )
 }

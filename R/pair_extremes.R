@@ -81,7 +81,11 @@
 #' pair_extremes(df, col = "A", shuffle_pairs = TRUE)
 #'
 #' # Use recursive pairing
+#' # Mostly meaningful with much larger datasets
+#' # Order initial grouping by pair identifiers
 #' pair_extremes(df, col = "A", num_pairings = 2)
+#' # Order initial grouping by aggregate values
+#' pair_extremes(df, col = "A", num_pairings = 2, order_by_aggregates = TRUE)
 #'
 #' # Grouped by G
 #' # Each G group only has 3 elements
@@ -116,6 +120,7 @@ pair_extremes <- function(data,
                           unequal_method = "middle",
                           num_pairings = 1,
                           balance = "mean",
+                          order_by_aggregates = FALSE,
                           shuffle_members = FALSE,
                           shuffle_pairs = FALSE,
                           factor_name = ifelse(num_pairings == 1, ".pair", ".pairing"),
@@ -126,6 +131,7 @@ pair_extremes <- function(data,
     unequal_method = unequal_method,
     num_pairings = num_pairings,
     balance = balance,
+    order_by_aggregates = order_by_aggregates,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
     factor_name = factor_name,
@@ -139,6 +145,7 @@ pair_extremes_vec <- function(data,
                               unequal_method = "middle",
                               num_pairings = 1,
                               balance = "mean",
+                              order_by_aggregates = FALSE,
                               shuffle_members = FALSE,
                               shuffle_pairs = FALSE){
   checkmate::assert(checkmate::check_vector(data, strict = TRUE),
@@ -148,6 +155,7 @@ pair_extremes_vec <- function(data,
     unequal_method = unequal_method,
     num_pairings = num_pairings,
     balance = balance,
+    order_by_aggregates = order_by_aggregates,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
     factor_name = NULL,

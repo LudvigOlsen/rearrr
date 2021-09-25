@@ -27,6 +27,7 @@ triplet_extremes_vec(
   unequal_method_2 = c("middle", "middle"),
   num_groupings = 1,
   balance = "mean",
+  order_by_aggregates = FALSE,
   shuffle_members = FALSE,
   shuffle_triplets = FALSE
 )
@@ -102,8 +103,10 @@ previous triplet grouping are aggregated with \code{`min()`} / \code{`max()`} an
 triplet grouped.
 }}
 
-\item{order_by_aggregates}{Whether to order the groups from initial groupings (first \code{`num_groupings` - 1}) by their aggregate values instead
-of their group identifiers. Only used when \code{`num_groupings` > 1}.}
+\item{order_by_aggregates}{Whether to order the groups from initial groupings (first \code{`num_groupings` - 1})
+by their aggregate values instead of their group identifiers.
+
+N.B. Only used when \code{`num_groupings` > 1}.}
 
 \item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 
@@ -190,7 +193,10 @@ triplet_extremes(df, col = "A", shuffle_triplets = TRUE)
 
 # Use recursive grouping
 # Mostly meaningful with much larger datasets
+# Order initial grouping by group identifiers
 triplet_extremes(df, col = "A", num_groupings = 2)
+# Order initial grouping by aggregate values
+triplet_extremes(df, col = "A", num_groupings = 2, order_by_aggregates = TRUE)
 
 # Grouped by G
 # Each G group only has 4 elements
