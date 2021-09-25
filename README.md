@@ -20,8 +20,6 @@ downloads](https://cranlogs.r-pkg.org/badges/rearrr)](https://cran.r-project.org
 version](https://img.shields.io/badge/R%3E%3D-3.5-6666ff.svg)](https://cran.r-project.org/)
 [![Codecov test
 coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/rearrr?branch=master)
-[![Travis build
-status](https://travis-ci.com/LudvigOlsen/rearrr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/rearrr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/rearrr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/rearrr)
 [![DOI](https://zenodo.org/badge/259158437.svg)](https://zenodo.org/badge/latestdoi/259158437)
