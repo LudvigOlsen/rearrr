@@ -1,5 +1,5 @@
 
-# rearrr 0.2.0.9000
+# rearrr 0.3.0
 
 * Breaking: Fixes bug where the `shuffle_pairs` and `shuffle_members` were kind of switched. Now `shuffle_pairs` changes the order of pairs while `shuffle_members` only shuffles the values of `col`.
 
