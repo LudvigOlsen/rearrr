@@ -13,6 +13,7 @@ triplet_extremes(
   unequal_method_2 = c("middle", "middle"),
   num_groupings = 1,
   balance = "mean",
+  order_by_aggregates = FALSE,
   shuffle_members = FALSE,
   shuffle_triplets = FALSE,
   factor_name = ifelse(num_groupings == 1, ".triplet", ".tripleting"),
@@ -100,6 +101,9 @@ Triplets have similar minimum / maximum values. The values in the triplets from 
 previous triplet grouping are aggregated with \code{`min()`} / \code{`max()`} and extreme
 triplet grouped.
 }}
+
+\item{order_by_aggregates}{Whether to order the groups from initial groupings (first \code{`num_groupings` - 1}) by their aggregate values instead
+of their group identifiers. Only used when \code{`num_groupings` > 1}.}
 
 \item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 

@@ -348,6 +348,8 @@ extreme_pairing_rearranger_ <- function(data,
 #'
 #' @inheritParams extreme_pairing_rearranger_
 #' @param shuffle_triplets Whether to shuffle the order of the triplets. Triplet members remain together. (Logical)
+#' @param order_by_aggregates Whether to order the groups from initial groupings (first \code{`num_groupings` - 1}) by their aggregate values instead
+#'  of their group identifiers. Only used when \code{`num_groupings` > 1}.
 #' @param num_groupings Number of times to group into triplets (recursively). At least \code{1}.
 #'
 #'  Based on \code{`balance`}, the secondary groupings perform extreme triplet grouping on either the
@@ -408,6 +410,7 @@ extreme_triplet_grouping_rearranger_ <- function(data,
                                                  middle_is = "middle",
                                                  unequal_method_1 = "middle",
                                                  unequal_method_2 = c("middle", "middle"),
+                                                 order_by_aggregates = FALSE,
                                                  shuffle_members = FALSE,
                                                  shuffle_triplets = FALSE,
                                                  num_groupings = 1,
@@ -426,6 +429,7 @@ extreme_triplet_grouping_rearranger_ <- function(data,
   checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
   checkmate::assert_flag(shuffle_members, add = assert_collection)
   checkmate::assert_flag(shuffle_triplets, add = assert_collection)
+  checkmate::assert_flag(order_by_aggregates, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
   checkmate::assert_names(middle_is,
                           subset.of = c("min", "middle", "max"),
@@ -461,6 +465,7 @@ extreme_triplet_grouping_rearranger_ <- function(data,
     balance = balance,
     shuffle_members = shuffle_members,
     shuffle_triplets = shuffle_triplets,
+    order_by_aggregates = order_by_aggregates,
     factor_name = factor_name
   )
 }

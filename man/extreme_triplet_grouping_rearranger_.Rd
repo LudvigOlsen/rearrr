@@ -10,6 +10,7 @@ extreme_triplet_grouping_rearranger_(
   middle_is = "middle",
   unequal_method_1 = "middle",
   unequal_method_2 = c("middle", "middle"),
+  order_by_aggregates = FALSE,
   shuffle_members = FALSE,
   shuffle_triplets = FALSE,
   num_groupings = 1,
@@ -47,6 +48,9 @@ When \code{`middle_is` == 'min'}, a \code{1:12} sequence is grouped into:
 When \code{`middle_is` == 'max'}, a \code{1:12} sequence is grouped into:
 
 \code{c( c(1, 11, 12), c(2, 9, 10), c(3, 7, 8),  c(4, 5, 6) )}}
+
+\item{order_by_aggregates}{Whether to order the groups from initial groupings (first \code{`num_groupings` - 1}) by their aggregate values instead
+of their group identifiers. Only used when \code{`num_groupings` > 1}.}
 
 \item{shuffle_members}{Whether to shuffle the order of the group members within the groups. (Logical)}
 

@@ -561,8 +561,10 @@ rearrange_triplet_extremes <- function(data,
                                        balance,
                                        shuffle_members,
                                        shuffle_triplets,
+                                       order_by_aggregates,
                                        factor_name,
                                        ...) {
+
   stopifnot(length(cols) == 1)
   col <- cols
 
@@ -584,6 +586,14 @@ rearrange_triplet_extremes <- function(data,
   tmp_rearrange_vars <- purrr::map(.x = seq_len(num_groupings), .f = ~ {
     create_tmp_var(data, paste0(".tmp_rearrange_col_", .x))
   }) %>% unlist(recursive = TRUE)
+
+  tmp_aggregate_vars <- character(0)
+  if (num_groupings > 1) {
+    tmp_aggregate_vars <-
+      purrr::map(.x = seq_len(num_groupings - 1), .f = ~ {
+        create_tmp_var(data, paste0(".tmp_aggregate_col_", .x))
+      }) %>% unlist(recursive = TRUE)
+  }
 
   # Triplet group the extreme values and order by the triplets
   data <- order_and_group_extremes_(
@@ -619,23 +629,34 @@ rearrange_triplet_extremes <- function(data,
       # What to balance ("mean", "spread", "min", or "max")
       summ_fn <- get_summ_fn_(balance = balance, i = i)
 
+      tmp_group_aggr_col <- tmp_aggregate_vars[[i]]
+
       # Aggregate values for triplets from previous grouping
       tmp_group_scores <- data %>%
         dplyr::group_by(!!as.name(tmp_rearrange_vars[[i]])) %>%
-        dplyr::summarize(group_aggr = summ_fn(!!as.name(col))) %>%
-        dplyr::arrange(.data$group_aggr)
+        dplyr::summarize(!!tmp_group_aggr_col := summ_fn(!!as.name(col))) %>%
+        dplyr::arrange(!!as.name(tmp_group_aggr_col))
+
+      if (num_groupings > 1 && nrow(tmp_group_scores) < 3){
+        warning(
+          simpleWarning(
+            "Fewer than 3 aggregated scores. Consider reducing `num_groupings`.",
+            call = if (p <- sys.parent(9))
+              sys.call(p)
+          )
+        )
+      }
 
       # Group the extreme triplet and order by the new triplets
       tmp_rearrange <- order_and_group_extremes_(
         data = tmp_group_scores,
-        col = "group_aggr",
+        col = tmp_group_aggr_col,
         new_col = tmp_rearrange_vars[[i + 1]],
         group_fn = create_rearrange_factor_triplet_extreme_grouping_,
         middle_is = middle_is,
         unequal_method_1 = unequal_method_1,
         unequal_method_2 = unequal_method_2
-      ) %>%
-        base_select_(cols = c(tmp_rearrange_vars[[i]], tmp_rearrange_vars[[i + 1]]))
+      )
 
       # Add the new pair identifiers to `data`
       data <- data %>%
@@ -645,6 +666,7 @@ rearrange_triplet_extremes <- function(data,
       data <- data %>%
         dplyr::arrange(
           !!as.name(tmp_rearrange_vars[[i + 1]]),
+          !!as.name(tmp_group_aggr_col),
           !!as.name(col)
         )
 
@@ -654,12 +676,22 @@ rearrange_triplet_extremes <- function(data,
     })
   }
 
-  # Order data by the groups
+  if (isTRUE(order_by_aggregates)){
+    # Order data by the groups
+    data <- data %>%
+      dplyr::arrange(!!as.name(rev(tmp_rearrange_vars)[[1]]),
+                     !!!rlang::syms(rev(tmp_aggregate_vars)),
+                     !!as.name(rev(tmp_rearrange_vars)[-1]),
+                     !!as.name(col))
+  } else {
+    # Order data by the groups
+    data <- data %>%
+      dplyr::arrange(!!!rlang::syms(rev(tmp_rearrange_vars)), !!as.name(col))
+  }
+
+  # Remove aggreate columns
   data <- data %>%
-    dplyr::arrange(
-      !!!rlang::syms(rev(tmp_rearrange_vars)),
-      !!as.name(col)
-    )
+    base_deselect_(cols = tmp_aggregate_vars)
 
   # Shuffle columns
   data <- shuffle_extreme_groups_(

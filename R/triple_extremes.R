@@ -102,7 +102,10 @@
 #'
 #' # Use recursive grouping
 #' # Mostly meaningful with much larger datasets
+#' # Order initial grouping by group identifiers
 #' triplet_extremes(df, col = "A", num_groupings = 2)
+#' # Order initial grouping by aggregate values
+#' triplet_extremes(df, col = "A", num_groupings = 2, order_by_aggregates = TRUE)
 #'
 #' # Grouped by G
 #' # Each G group only has 4 elements
@@ -139,6 +142,7 @@ triplet_extremes <- function(data,
                              unequal_method_2 = c("middle", "middle"),
                              num_groupings = 1,
                              balance = "mean",
+                             order_by_aggregates = FALSE,
                              shuffle_members = FALSE,
                              shuffle_triplets = FALSE,
                              factor_name = ifelse(num_groupings == 1, ".triplet", ".tripleting"),
@@ -151,6 +155,7 @@ triplet_extremes <- function(data,
     unequal_method_2 = unequal_method_2,
     num_groupings = num_groupings,
     balance = balance,
+    order_by_aggregates=order_by_aggregates,
     shuffle_members = shuffle_members,
     shuffle_triplets = shuffle_triplets,
     factor_name = factor_name,

@@ -64,6 +64,10 @@ create_rearrange_factor_triplet_extreme_grouping_ <- function(
   unequal_method_1,
   unequal_method_2) {
 
+  if (size < 3) {
+    return(rep(1, size))
+  }
+
   # Create index
   idx <- seq_len(size)
 
@@ -83,7 +87,7 @@ create_rearrange_factor_triplet_extreme_grouping_ <- function(
     # Get the unequal method for the first excess data point
     first_unequal_method <- ifelse(num_excess == 1,
                                    unequal_method_1[[1]],
-                                   unequal_method_2[[2]])
+                                   unequal_method_2[[1]])
 
     # Find first excess element
     locator <- locator_fns[[first_unequal_method]]
