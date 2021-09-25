@@ -814,8 +814,8 @@ test_that("hexagonalize()", {
   # Assigning side effects
   side_effects_19057 <- xpectr::capture_side_effects(hexagonalize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_match(
-    xpectr::strip(side_effects_19057[['error']]),
-    xpectr::strip("must have at least 1 characters"),
+    xpectr::strip(side_effects_19057[['error']], lowercase = TRUE),
+    xpectr::strip("must have at least 1 characters", lowercase = TRUE),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19057[['error_class']]),
@@ -1773,8 +1773,8 @@ test_that("circularize()", {
   # Assigning side effects
   side_effects_19057 <- xpectr::capture_side_effects(circularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_match(
-    xpectr::strip(side_effects_19057[['error']]),
-    xpectr::strip("must have at least 1 characters"),
+    xpectr::strip(side_effects_19057[['error']], lowercase = TRUE),
+    xpectr::strip("must have at least 1 characters", lowercase = TRUE),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19057[['error_class']]),
@@ -2804,8 +2804,8 @@ test_that("triangularize()", {
   # Assigning side effects
   side_effects_19057 <- xpectr::capture_side_effects(triangularize(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_match(
-    xpectr::strip(side_effects_19057[['error']]),
-    xpectr::strip("must have at least 1 characters"), # x_col_name
+    xpectr::strip(side_effects_19057[['error']], lowercase = TRUE),
+    xpectr::strip("must have at least 1 characters", lowercase = TRUE), # x_col_name
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19057[['error_class']]),
@@ -3747,8 +3747,8 @@ test_that("square()", {
   # Assigning side effects
   side_effects_19057 <- xpectr::capture_side_effects(square(data = c(1:10), y_col = NULL, .min = NULL, .max = NULL, offset_x = 0, keep_original = FALSE, x_col_name = "", edge_col_name = ".edge", overwrite = TRUE), reset_seed = TRUE)
   expect_match(
-    xpectr::strip(side_effects_19057[['error']]),
-    xpectr::strip("must have at least 1 characters"), # x_col_name
+    xpectr::strip(side_effects_19057[['error']], lowercase = TRUE),
+    xpectr::strip("must have at least 1 characters", lowercase = TRUE), # x_col_name
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19057[['error_class']]),
