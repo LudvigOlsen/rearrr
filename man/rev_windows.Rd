@@ -15,7 +15,7 @@ rev_windows_vec(data, window_size)
 \item{window_size}{Size of the windows. (Logical)}
 
 \item{factor_name}{Name of the factor with window identifiers.
-If \code{NULL}, no column is added.}
+If \code{`NULL`}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
@@ -92,7 +92,8 @@ Other rearrange functions:
 \code{\link{position_max}()},
 \code{\link{position_min}()},
 \code{\link{roll_elements}()},
-\code{\link{shuffle_hierarchy}()}
+\code{\link{shuffle_hierarchy}()},
+\code{\link{triplet_extremes}()}
 }
 \author{
 Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}

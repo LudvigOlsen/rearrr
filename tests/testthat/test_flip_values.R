@@ -227,7 +227,11 @@ test_that("fuzz testing flipped_values()", {
   side_effects_11346 <- xpectr::capture_side_effects(flip_values(data = NA, cols = NULL, origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error']]),
-    xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"),
+    xpectr::strip(ifelse(
+      is_checkmate_v2_1(),
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Must be of type 'factor', not 'logical'",
+      "Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'logical'\n * checkmate::check_vector(data): Contains missing values (element 1)\n * checkmate::check_factor(data): Contains missing values (element 1)"
+    )),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error_class']]),
@@ -399,9 +403,9 @@ test_that("fuzz testing flipped_values()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19346 <- xpectr::capture_side_effects(flip_values(data = df, cols = "", origin = NULL, origin_fn = create_origin_fn(median), suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19346[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'cols': All elements must have at least 1 characters."),
+    xpectr::strip("1 assertions failed:\n * Variable 'cols': All elements must have at least 1 characters"),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19346[['error_class']]),

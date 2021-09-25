@@ -20,8 +20,6 @@ downloads](https://cranlogs.r-pkg.org/badges/rearrr)](https://cran.r-project.org
 version](https://img.shields.io/badge/R%3E%3D-3.5-6666ff.svg)](https://cran.r-project.org/)
 [![Codecov test
 coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/rearrr?branch=master)
-[![Travis build
-status](https://travis-ci.com/LudvigOlsen/rearrr.svg?branch=master)](https://travis-ci.com/LudvigOlsen/rearrr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/rearrr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/rearrr)
 [![DOI](https://zenodo.org/badge/259158437.svg)](https://zenodo.org/badge/latestdoi/259158437)
@@ -79,18 +77,19 @@ version:
 
 ### Rearrangers
 
-| Function              | Description                                                            |
-| :-------------------- | :--------------------------------------------------------------------- |
-| `center_max()`        | Center the highest value with values decreasing around it.             |
-| `center_min()`        | Center the lowest value with values increasing around it.              |
-| `position_max()`      | Position the highest value with values decreasing around it.           |
-| `position_min()`      | Position the lowest value with values increasing around it.            |
-| `pair_extremes()`     | Arrange values as highest, lowest, second highest, second lowest, etc. |
-| `closest_to()`        | Order values by shortest distance to an origin.                        |
-| `furthest_from()`     | Order values by longest distance to an origin.                         |
-| `rev_windows()`       | Reverse order window-wise.                                             |
-| `roll_elements()`     | Rolls/shifts positions of elements.                                    |
-| `shuffle_hierarchy()` | Shuffle multi-column hierarchy of groups.                              |
+| Function              | Description                                                                             |
+| :-------------------- | :-------------------------------------------------------------------------------------- |
+| `center_max()`        | Center the highest value with values decreasing around it.                              |
+| `center_min()`        | Center the lowest value with values increasing around it.                               |
+| `position_max()`      | Position the highest value with values decreasing around it.                            |
+| `position_min()`      | Position the lowest value with values increasing around it.                             |
+| `pair_extremes()`     | Arrange as lowest, highest, 2nd lowest, 2nd highest, etc.                               |
+| `triplet_extremes()`  | Arrange as lowest, most middle, highest, 2nd lowest, 2nd most middle, 2nd highest, etc. |
+| `closest_to()`        | Order values by shortest distance to an origin.                                         |
+| `furthest_from()`     | Order values by longest distance to an origin.                                          |
+| `rev_windows()`       | Reverse order window-wise.                                                              |
+| `roll_elements()`     | Rolls/shifts positions of elements.                                                     |
+| `shuffle_hierarchy()` | Shuffle multi-column hierarchy of groups.                                               |
 
 ### Mutators
 
@@ -118,6 +117,14 @@ version:
 | `square()`        | Create x-coordinates for y-coordinates so they form a square.   |
 | `triangularize()` | Create x-coordinates for y-coordinates so they form a triangle. |
 
+### Pipelines
+
+| Class                 | Description                                                              |
+| :-------------------- | :----------------------------------------------------------------------- |
+| `Pipeline`            | Chain multiple transformations.                                          |
+| `GeneratedPipeline`   | Chain multiple transformations and generate argument values per group.   |
+| `FixedGroupsPipeline` | Chain multiple transformations with different argument values per group. |
+
 ### Generators
 
 | Function              | Description                      |
@@ -138,6 +145,7 @@ measuring functions) are listed at the bottom of the readme.
           - [Rearrangers](#rearrangers)
           - [Mutators](#mutators)
           - [Formers](#formers)
+          - [Pipelines](#pipelines)
           - [Generators](#generators)
       - [Attach packages](#attach-packages)
       - [Rearranger examples](#rearranger-examples)

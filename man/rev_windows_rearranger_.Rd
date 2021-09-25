@@ -17,7 +17,7 @@ rev_windows_rearranger_(
 \item{window_size}{Size of the windows. (Logical)}
 
 \item{factor_name}{Name of the factor with window identifiers.
-If \code{NULL}, no column is added.}
+If \code{`NULL`}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 
@@ -27,7 +27,7 @@ If \code{NULL}, no column is added.}
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 Optionally with the windows factor added.
 
-When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
+When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{`FALSE`},
 the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 }
 \description{

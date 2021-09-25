@@ -19,14 +19,15 @@ by_distance_rearranger_(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{cols}{Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{cols}{Column(s) to create sorting factor by.
+When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{origin}{Coordinates of the origin to calculate distances to.
 A scalar to use in all dimensions
 or a \code{vector} with one scalar per dimension.
 
-\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
+\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{`NULL`}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
@@ -47,9 +48,9 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{decreasing}{Whether to order by decreasing distances to the origin. (Logical)}
 
-\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+\item{origin_col_name}{Name of new column with the origin coordinates. If \code{`NULL`}, no column is added.}
 
-\item{distance_col_name}{Name of new column with the distances to the origin. If \code{NULL}, no column is added.}
+\item{distance_col_name}{Name of new column with the distances to the origin. If \code{`NULL`}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }

@@ -10,9 +10,11 @@
 
 #' Wrapper for running rearranging methods
 #'
-#' @param cols Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+#' @param cols Column(s) to create sorting factor by.
+#'  When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 #'  the row numbers are used.
-#' @param col Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+#' @param col Column to create sorting factor by.
+#'  When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 #'  the row numbers are used.
 #' @param rearrange_fn Rearrange function to apply.
 #' @param ... Named arguments for the \code{`rearrange_fn`}.
@@ -193,9 +195,14 @@ centering_rearranger_ <- function(data,
 #' Wrapper for running extreme pairing
 #'
 #' @inheritParams rearranger_
-#' @param shuffle_members Whether to shuffle the pair members. (Logical)
-#' @param shuffle_pairs Whether to shuffle the pairs. (Logical)
-#' @param factor_name Name of new column with the sorting factor. If \code{NULL}, no column is added.
+#' @param shuffle_members Whether to shuffle the order of the group members within the groups. (Logical)
+#' @param shuffle_pairs Whether to shuffle the order of the pairs. Pair members remain together. (Logical)
+#' @param order_by_aggregates Whether to order the pairs from initial pairings (first \code{`num_pairings` - 1})
+#'  by their aggregate values instead of their pair identifiers.
+#'
+#'  N.B. Only used when \code{`num_pairings` > 1}.
+#' @param factor_name Name of new column with the sorting factor.
+#'  If \code{`NULL`}, no column is added.
 #' @param num_pairings Number of pairings to perform (recursively). At least \code{1}.
 #'
 #'  Based on \code{`balance`}, the secondary pairings perform extreme pairing on either the
@@ -212,15 +219,16 @@ centering_rearranger_ <- function(data,
 #'  are aggregated with \code{`sum()`} and paired.
 #'  }
 #'  \subsection{spread}{
-#'  Pairs have similar spread (e.g. standard deviations). The values in the pairs from the previous pairing
+#'  Pairs have similar spread (e.g. standard deviations).
+#'  The values in the pairs from the previous pairing
 #'  are aggregated with \code{`sum(abs(diff()))`} and paired.
 #'  }
 #'  \subsection{min / max}{
 #'  Pairs have similar minimum / maximum values. The values in the pairs from the previous pairing
 #'  are aggregated with \code{`min()`} / \code{`max()`} and paired.
 #'  }
-#' @param unequal_method Method for dealing with an unequal number of rows
-#'  in \code{`data`}.
+#' @param unequal_method Method for dealing with an
+#'  unequal number of rows/elements in \code{`data`}.
 #'
 #'  One of: \code{first}, \code{middle} or \code{last}
 #'
@@ -284,11 +292,12 @@ centering_rearranger_ <- function(data,
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the sorting factor(s) added.
 #'
-#'  When \code{`data`} is a \code{vector} and \code{`factor_name`} is \code{NULL},
+#'  When \code{`data`} is a \code{vector} and \code{`factor_name`} is \code{`NULL`},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 extreme_pairing_rearranger_ <- function(data,
                                         col = NULL,
                                         unequal_method = "middle",
+                                        order_by_aggregates = FALSE,
                                         shuffle_members = FALSE,
                                         shuffle_pairs = FALSE,
                                         num_pairings = 1,
@@ -302,6 +311,7 @@ extreme_pairing_rearranger_ <- function(data,
   checkmate::assert_string(unequal_method, min.chars = 1, add = assert_collection)
   checkmate::assert_character(balance, min.chars = 1, any.missing = FALSE, add = assert_collection)
   checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(order_by_aggregates, add = assert_collection)
   checkmate::assert_flag(shuffle_members, add = assert_collection)
   checkmate::assert_flag(shuffle_pairs, add = assert_collection)
   checkmate::reportAssertions(assert_collection)
@@ -329,12 +339,145 @@ extreme_pairing_rearranger_ <- function(data,
     unequal_method = unequal_method,
     num_pairings = num_pairings,
     balance = balance,
+    order_by_aggregates = order_by_aggregates,
     shuffle_members = shuffle_members,
     shuffle_pairs = shuffle_pairs,
     factor_name = factor_name
   )
 }
 
+
+##  .................. #< 0d18e5cce4c2fa79b6de2ef076de4a36 ># ..................
+##  Triplet extremes rearranger                                             ####
+
+
+#' Wrapper for running extreme triplet grouping
+#'
+#' @inheritParams extreme_pairing_rearranger_
+#' @param shuffle_triplets Whether to shuffle the order of the triplets. Triplet members remain together. (Logical)
+#' @param order_by_aggregates Whether to order the groups from initial groupings (first \code{`num_groupings` - 1})
+#'  by their aggregate values instead of their group identifiers.
+#'
+#'  N.B. Only used when \code{`num_groupings` > 1}.
+#' @param num_groupings Number of times to group into triplets (recursively). At least \code{1}.
+#'
+#'  Based on \code{`balance`}, the secondary groupings perform extreme triplet grouping on either the
+#'  \emph{sum}, \emph{absolute difference}, \emph{min}, or \emph{max} of the triplet elements.
+#' @param balance What to balance triplets for in a given \emph{secondary} triplet grouping.
+#'  Either \code{"mean"}, \code{"spread"}, \code{"min"}, or \code{"max"}.
+#'  Can be a single string used for all secondary groupings
+#'  or one for each secondary grouping (\code{`num_groupings` - 1}).
+#'
+#'  The first triplet grouping always groups the actual element values.
+#'
+#'  \subsection{mean}{
+#'  Triplets have similar means. The values in the triplets from the previous grouping
+#'  are aggregated with \code{`sum()`} and extreme triplet grouped.
+#'  }
+#'  \subsection{spread}{
+#'  Triplets have similar spread (e.g. standard deviations). The values in the triplets
+#'  from the previous triplet grouping are aggregated with \code{`sum(abs(diff()))`} and
+#'  extreme triplet grouped.
+#'  }
+#'  \subsection{min / max}{
+#'  Triplets have similar minimum / maximum values. The values in the triplets from the
+#'  previous triplet grouping are aggregated with \code{`min()`} / \code{`max()`} and extreme
+#'  triplet grouped.
+#'  }
+#' @param middle_is Whether the middle element in the triplet is the nth closest element
+#'  to the median value or the nth+1 lowest/highest value.
+#'
+#'  One of: \code{middle} (default), \code{min}, or \code{max}.
+#'
+#'  Triplet grouping is performed greedily from the most extreme values to the least extreme
+#'  values. E.g. \code{c(1, 6, 12)} is created before \code{c(2, 5, 11)} which is made
+#'  before \code{c(3, 7, 10)}.
+#'
+#'  \strong{Examples}:
+#'
+#'  When \code{`middle_is` == 'middle'}, a \code{1:12} sequence is grouped into:
+#'
+#'  \code{c( c(1, 6, 12), c(2, 7, 11), c(3, 5, 10),  c(4, 8, 9) )}
+#'
+#'  When \code{`middle_is` == 'min'}, a \code{1:12} sequence is grouped into:
+#'
+#'  \code{c( c(1, 2, 12), c(3, 4, 11), c(5, 6, 10),  c(7, 8, 9) )}
+#'
+#'  When \code{`middle_is` == 'max'}, a \code{1:12} sequence is grouped into:
+#'
+#'  \code{c( c(1, 11, 12), c(2, 9, 10), c(3, 7, 8),  c(4, 5, 6) )}
+#'
+#' @keywords internal
+#' @return
+#'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
+#'  Optionally with the sorting factor(s) added.
+#'
+#'  When \code{`data`} is a \code{vector} and \code{`factor_name`} is \code{`NULL`},
+#'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
+extreme_triplet_grouping_rearranger_ <- function(data,
+                                                 col = NULL,
+                                                 middle_is = "middle",
+                                                 unequal_method_1 = "middle",
+                                                 unequal_method_2 = c("middle", "middle"),
+                                                 order_by_aggregates = FALSE,
+                                                 shuffle_members = FALSE,
+                                                 shuffle_triplets = FALSE,
+                                                 num_groupings = 1,
+                                                 balance = "mean",
+                                                 factor_name = ".triplet",
+                                                 overwrite = FALSE) {
+
+
+  # Check arguments ####
+  assert_collection <- checkmate::makeAssertCollection()
+  checkmate::assert_count(num_groupings, positive = TRUE, add = assert_collection)
+  checkmate::assert_string(middle_is, min.chars = 1, add = assert_collection)
+  checkmate::assert_string(unequal_method_1, min.chars = 1, add = assert_collection)
+  checkmate::assert_character(unequal_method_2, len = 2, min.chars = 1, add = assert_collection)
+  checkmate::assert_character(balance, min.chars = 1, any.missing = FALSE, add = assert_collection)
+  checkmate::assert_string(factor_name, min.chars = 1, null.ok = TRUE, add = assert_collection)
+  checkmate::assert_flag(order_by_aggregates, add = assert_collection)
+  checkmate::assert_flag(shuffle_members, add = assert_collection)
+  checkmate::assert_flag(shuffle_triplets, add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  checkmate::assert_names(middle_is,
+                          subset.of = c("min", "middle", "max"),
+                          add = assert_collection)
+  checkmate::assert_names(unequal_method_1,
+                          subset.of = c("min", "middle", "max"),
+                          add = assert_collection)
+  checkmate::assert_names(unequal_method_2,
+                          subset.of = c("min", "middle", "max"),
+                          add = assert_collection)
+  checkmate::assert_names(balance,
+                          subset.of = c("mean", "spread", "min", "max"),
+                          add = assert_collection)
+  checkmate::reportAssertions(assert_collection)
+  if (num_groupings > 1 &&
+      length(balance) %ni% c(1, num_groupings - 1)){
+    assert_collection$push("length of 'balance' must be either 1 or 'num_groupings' - 1.")
+  }
+  checkmate::reportAssertions(assert_collection)
+  # End of argument checks ####
+
+  # Rearrange 'data'
+  rearranger_(
+    data = data,
+    rearrange_fn = rearrange_triplet_extremes,
+    check_fn = NULL,
+    cols = col,
+    overwrite = overwrite,
+    middle_is = middle_is,
+    unequal_method_1 = unequal_method_1,
+    unequal_method_2 = unequal_method_2,
+    num_groupings = num_groupings,
+    balance = balance,
+    order_by_aggregates = order_by_aggregates,
+    shuffle_members = shuffle_members,
+    shuffle_triplets = shuffle_triplets,
+    factor_name = factor_name
+  )
+}
 
 ##  .................. #< 4ef3bd62472cbceb75369a8355d9288d ># ..................
 ##  Reverse windows rearranger                                              ####
@@ -345,13 +488,13 @@ extreme_pairing_rearranger_ <- function(data,
 #' @param window_size Size of the windows. (Logical)
 #' @param keep_windows Whether to keep the factor with window identifiers. (Logical)
 #' @param factor_name Name of the factor with window identifiers.
-#'  If \code{NULL}, no column is added.
+#'  If \code{`NULL`}, no column is added.
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
 #'  Optionally with the windows factor added.
 #'
-#'  When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{FALSE},
+#'  When \code{`data`} is a \code{vector} and \code{`keep_windows`} is \code{`FALSE`},
 #'  the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 rev_windows_rearranger_ <- function(data,
                                     window_size,
@@ -388,11 +531,11 @@ rev_windows_rearranger_ <- function(data,
 #'  A scalar to use in all dimensions
 #'  or a \code{vector} with one scalar per dimension.
 #'
-#'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.
+#'  \strong{N.B.} Ignored when \code{`origin_fn`} is not \code{`NULL`}.
 #' @param shuffle_ties Whether to shuffle elements with the same distance to the origin. (Logical)
 #' @param decreasing Whether to order by decreasing distances to the origin. (Logical)
-#' @param origin_col_name Name of new column with the origin coordinates. If \code{NULL}, no column is added.
-#' @param distance_col_name Name of new column with the distances to the origin. If \code{NULL}, no column is added.
+#' @param origin_col_name Name of new column with the origin coordinates. If \code{`NULL`}, no column is added.
+#' @param distance_col_name Name of new column with the distances to the origin. If \code{`NULL`}, no column is added.
 #' @keywords internal
 #' @return
 #'  The sorted \code{data.frame} (\code{tibble}) / \code{vector}.

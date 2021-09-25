@@ -15,7 +15,8 @@ positioning_rearranger_(
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{col}{Column to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{col}{Column to create sorting factor by.
+When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{position}{Index or quantile (in \code{0-1}) at which to position the element of interest.}

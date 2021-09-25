@@ -400,9 +400,9 @@ test_that("fuzz testing cluster_groups()", {
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
   }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
-    xpectr::strip(side_effects_11346[['error']]),
-    xpectr::strip("1 assertions failed:\n * Variable 'colnames(data)': Must include the elements {hej,g}."),
+  expect_match(
+    xpectr::strip(side_effects_11346[['error']], lowercase = TRUE),
+    xpectr::strip("Must include the elements {hej,g}.", lowercase = TRUE), # colnames(data)
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11346[['error_class']]),

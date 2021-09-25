@@ -21,14 +21,15 @@ closest_to_vec(data, origin = NULL, origin_fn = NULL, shuffle_ties = FALSE)
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}
 
-\item{cols}{Column(s) to create sorting factor by. When \code{NULL} and \code{`data`} is a \code{data.frame},
+\item{cols}{Column(s) to create sorting factor by.
+When \code{`NULL`} and \code{`data`} is a \code{data.frame},
 the row numbers are used.}
 
 \item{origin}{Coordinates of the origin to calculate distances to.
 A scalar to use in all dimensions
 or a \code{vector} with one scalar per dimension.
 
-\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{NULL}.}
+\strong{N.B.} Ignored when \code{`origin_fn`} is not \code{`NULL`}.}
 
 \item{origin_fn}{Function for finding the origin coordinates.
 
@@ -47,9 +48,9 @@ and \code{\link[rearrr:midrange]{midrange()}}}
 
 \item{shuffle_ties}{Whether to shuffle elements with the same distance to the origin. (Logical)}
 
-\item{origin_col_name}{Name of new column with the origin coordinates. If \code{NULL}, no column is added.}
+\item{origin_col_name}{Name of new column with the origin coordinates. If \code{`NULL`}, no column is added.}
 
-\item{distance_col_name}{Name of new column with the distances to the origin. If \code{NULL}, no column is added.}
+\item{distance_col_name}{Name of new column with the distances to the origin. If \code{`NULL`}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
 }
@@ -166,7 +167,8 @@ Other rearrange functions:
 \code{\link{position_min}()},
 \code{\link{rev_windows}()},
 \code{\link{roll_elements}()},
-\code{\link{shuffle_hierarchy}()}
+\code{\link{shuffle_hierarchy}()},
+\code{\link{triplet_extremes}()}
 
 Other distance functions: 
 \code{\link{dim_values}()},

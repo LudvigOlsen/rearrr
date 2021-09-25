@@ -1,5 +1,17 @@
 
-# rearrr 0.2.0.9000
+# rearrr 0.3.0
+
+* Breaking: Fixes bug where the `shuffle_pairs` and `shuffle_members` were kind of switched. Now `shuffle_pairs` changes the order of pairs while `shuffle_members` only shuffles the values of `col`.
+
+* Adds pipeline classes for piping transformations: `Pipeline`, `GeneratedPipeline`, `FixedGroupsPipeline`.
+
+* Adds transformation classes: `Transformation`, `GeneratedTransformation`, `FixedGroupsTransformation`. Used by their respective pipeline class.
+
+* Adds `triple_extremes()` for arranging values in triplets with (highest, most middle, lowest), (second highest, second most middle, second lowest), etc. (Rearranger)
+
+* Adds `order_by_aggregates` argument to `pair_extremes()`. When using recursive pairing, this allows ordering the first `num_pairings`-1 pair identifier columns by the aggregate values instead of the identifiers.
+
+* Prepares package's tests for `checkmate 2.1.0`.
 
 # rearrr 0.2.0
 
