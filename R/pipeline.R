@@ -4,7 +4,6 @@
 #   Basic pipeline                                                          ####
 
 
-# TODO Add way to save pipeline to disk?
 # NOTE: Any R6 method called for its side effects should return invisible(self).
 
 # Applies one transformation at a time
@@ -213,6 +212,8 @@ Pipeline <- R6::R6Class(
 #'
 #'  Container for the type of transformation used in
 #'  \code{\link[rearrr:Pipeline]{Pipeline}}.
+#'
+#'  \strong{Note}: For internal use.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family transformation classes

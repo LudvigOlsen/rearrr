@@ -8,6 +8,8 @@
 
 Container for the type of transformation used in
 \code{\link[rearrr:GeneratedPipeline]{GeneratedPipeline}}.
+
+\strong{Note}: For internal use.
 }
 \seealso{
 Other transformation classes: 

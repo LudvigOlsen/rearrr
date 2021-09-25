@@ -46,6 +46,7 @@
 #' library(dplyr)
 #'
 #' # Create a data frame
+#' # We group it by G so we have 3 groups
 #' df <- data.frame(
 #'   "Index" = 1:12,
 #'   "A" = c(1:4, 9:12, 15:18),
@@ -218,6 +219,8 @@ FixedGroupsPipeline <- R6::R6Class(
 #'
 #'  Container for the type of transformation used in
 #'  \code{\link[rearrr:FixedGroupsPipeline]{FixedGroupsPipeline}}.
+#'
+#'  \strong{Note}: For internal use.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family transformation classes

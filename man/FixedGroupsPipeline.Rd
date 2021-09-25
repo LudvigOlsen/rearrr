@@ -32,6 +32,7 @@ library(rearrr)
 library(dplyr)
 
 # Create a data frame
+# We group it by G so we have 3 groups
 df <- data.frame(
   "Index" = 1:12,
   "A" = c(1:4, 9:12, 15:18),

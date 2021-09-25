@@ -7,8 +7,6 @@
 # Adding .apply=function(){sample(c(TRUE, FALSE), 1)} to generators
 # means transformations would only include a transformation 50% of the time
 
-
-
 # Applies one transformation at a time
 # With different generated argument values per group
 
@@ -181,6 +179,8 @@ GeneratedPipeline <- R6::R6Class(
 #'
 #'  Container for the type of transformation used in
 #'  \code{\link[rearrr:GeneratedPipeline]{GeneratedPipeline}}.
+#'
+#'  \strong{Note}: For internal use.
 #' @author Ludvig Renbo Olsen, \email{r-pkgs@@ludvigolsen.dk}
 #' @export
 #' @family transformation classes
