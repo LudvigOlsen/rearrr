@@ -678,11 +678,12 @@ rearrange_triplet_extremes <- function(data,
 
   if (isTRUE(order_by_aggregates)){
     # Order data by the groups
+    new_order <- c(rev(tmp_rearrange_vars)[[1]],
+                   rev(tmp_aggregate_vars),
+                   rev(tmp_rearrange_vars)[-1],
+                   col)
     data <- data %>%
-      dplyr::arrange(!!as.name(rev(tmp_rearrange_vars)[[1]]),
-                     !!!rlang::syms(rev(tmp_aggregate_vars)),
-                     !!as.name(rev(tmp_rearrange_vars)[-1]),
-                     !!as.name(col))
+      dplyr::arrange(!!!rlang::syms(new_order))
   } else {
     # Order data by the groups
     data <- data %>%
