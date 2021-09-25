@@ -146,8 +146,8 @@ the output will be a \code{vector}. Otherwise, a \code{data.frame}.
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 
-The values are paired/grouped such that the highest and lowest values
-form the first group, the second highest and the second lowest values
+The values are paired/grouped such that the lowest and highest values
+form the first group, the second lowest and the second highest values
 form the second group, and so on.
 The values are then sorted by these groups/pairs.
 
