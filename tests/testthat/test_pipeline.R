@@ -4,7 +4,7 @@ context("Pipeline")
 # TODO I have only tested a few very narrow use cases
 # I should find some cases and build out some more examples
 
-# Test printing methods
+# Test print methods
 
 test_that("testing printing Pipeline", {
   xpectr::set_test_seed(42)
@@ -612,6 +612,15 @@ test_that("testing GeneratedPipeline()", {
   expect_equal(
     output_16399[[".degrees"]],
     c(330, 330, 330, 330, 187, 187, 187, 187, 165, 165, 165, 165),
+    tolerance = 1e-4)
+  expect_equal(
+    unlist(output_16399$.origin),
+    c(Index = 1.53068, A = 0.95594, Index = 1.53068, A = 0.95594, Index = 1.53068,
+      A = 0.95594, Index = 1.53068, A = 0.95594, Index = 0.63286,
+      A = 0.40427, Index = 0.63286, A = 0.40427, Index = 0.63286,
+      A = 0.40427, Index = 0.63286, A = 0.40427, Index = 0.58021,
+      A = -0.6575, Index = 0.58021, A = -0.6575, Index = 0.58021,
+      A = -0.6575, Index = 0.58021, A = -0.6575),
     tolerance = 1e-4)
   # Testing column names
   expect_equal(
