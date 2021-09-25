@@ -7,7 +7,9 @@
 
 * Adds transformation classes: `Transformation`, `GeneratedTransformation`, `FixedGroupsTransformation`. Used by their respective pipeline class.
 
-* Adds `triple_extremes()` for arranging values in triplets with highest, most middle, lowest, second highest, second most middle, second lowest, etc. (Rearranger)
+* Adds `triple_extremes()` for arranging values in triplets with (highest, most middle, lowest), (second highest, second most middle, second lowest), etc. (Rearranger)
+
+* Adds `order_by_aggregates` argument to `pair_extremes()`. When using recursive pairing, this allows ordering the first `num_pairings`-1 pair identifier columns by the aggregate values instead of the identifiers.
 
 * Prepares package's tests for `checkmate 2.1.0`.
 
