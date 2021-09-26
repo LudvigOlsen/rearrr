@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 *.Rproj
 inst/doc
+
+revdep/*.noindex/
+
