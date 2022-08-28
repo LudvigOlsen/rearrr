@@ -31,3 +31,10 @@
 rearrr_fn_ <- function(data, origin_fn, check_fn, allowed_types, force_df, min_dims){
   stop("'rearrr_fn' should not be called. Is used for documentation only.")
 }
+
+
+# Import R6 to avoid note
+
+#' @import R6
+NULL
+
