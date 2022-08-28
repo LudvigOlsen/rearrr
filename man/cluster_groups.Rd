@@ -8,8 +8,12 @@ cluster_groups(
   data,
   cols,
   group_cols = NULL,
-  scale_min_fn = function(x) {     quantile(x, 0.025) },
-  scale_max_fn = function(x) {     quantile(x, 0.975) },
+  scale_min_fn = function(x) {
+     quantile(x, 0.025)
+ },
+  scale_max_fn = function(x) {
+     quantile(x, 0.975)
+ },
   keep_centroids = FALSE,
   multiplier = 0.05,
   suffix = "_clustered",

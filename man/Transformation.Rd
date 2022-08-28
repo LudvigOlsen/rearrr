@@ -39,15 +39,15 @@ When \code{`NULL`}, the \code{data.frame} is not grouped.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Transformation$new()}}
-\item \href{#method-apply}{\code{Transformation$apply()}}
-\item \href{#method-print}{\code{Transformation$print()}}
-\item \href{#method-clone}{\code{Transformation$clone()}}
+\item \href{#method-Transformation-new}{\code{Transformation$new()}}
+\item \href{#method-Transformation-apply}{\code{Transformation$apply()}}
+\item \href{#method-Transformation-print}{\code{Transformation$print()}}
+\item \href{#method-Transformation-clone}{\code{Transformation$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Transformation-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Transformation-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize transformation.
 \subsection{Usage}{
@@ -72,8 +72,8 @@ When \code{`NULL`}, the \code{data.frame} is not grouped.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-apply"></a>}}
-\if{latex}{\out{\hypertarget{method-apply}{}}}
+\if{html}{\out{<a id="method-Transformation-apply"></a>}}
+\if{latex}{\out{\hypertarget{method-Transformation-apply}{}}}
 \subsection{Method \code{apply()}}{
 Apply the transformation to a \code{data.frame}.
 \subsection{Usage}{
@@ -95,8 +95,8 @@ Transformed version of \code{`data`}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Transformation-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Transformation-print}{}}}
 \subsection{Method \code{print()}}{
 Print an overview of the transformation.
 \subsection{Usage}{
@@ -119,8 +119,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Transformation-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Transformation-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -114,22 +114,16 @@ Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FixedGroupsPipeline$new()}}
-\item \href{#method-add_transformation}{\code{FixedGroupsPipeline$add_transformation()}}
-\item \href{#method-apply}{\code{FixedGroupsPipeline$apply()}}
-\item \href{#method-print}{\code{FixedGroupsPipeline$print()}}
-\item \href{#method-clone}{\code{FixedGroupsPipeline$clone()}}
+\item \href{#method-FixedGroupsPipeline-new}{\code{FixedGroupsPipeline$new()}}
+\item \href{#method-FixedGroupsPipeline-add_transformation}{\code{FixedGroupsPipeline$add_transformation()}}
+\item \href{#method-FixedGroupsPipeline-apply}{\code{FixedGroupsPipeline$apply()}}
+\item \href{#method-FixedGroupsPipeline-print}{\code{FixedGroupsPipeline$print()}}
+\item \href{#method-FixedGroupsPipeline-clone}{\code{FixedGroupsPipeline$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-FixedGroupsPipeline-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsPipeline-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize the pipeline with the number of groups the
 pipeline will be applied to.
@@ -146,8 +140,8 @@ pipeline will be applied to.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_transformation"></a>}}
-\if{latex}{\out{\hypertarget{method-add_transformation}{}}}
+\if{html}{\out{<a id="method-FixedGroupsPipeline-add_transformation"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsPipeline-add_transformation}{}}}
 \subsection{Method \code{add_transformation()}}{
 Add a transformation to the pipeline.
 \subsection{Usage}{
@@ -180,8 +174,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-apply"></a>}}
-\if{latex}{\out{\hypertarget{method-apply}{}}}
+\if{html}{\out{<a id="method-FixedGroupsPipeline-apply"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsPipeline-apply}{}}}
 \subsection{Method \code{apply()}}{
 Apply the pipeline to a \code{data.frame}.
 \subsection{Usage}{
@@ -206,8 +200,8 @@ Transformed version of \code{`data`}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-FixedGroupsPipeline-print"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsPipeline-print}{}}}
 \subsection{Method \code{print()}}{
 Print an overview of the pipeline.
 \subsection{Usage}{
@@ -226,8 +220,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-FixedGroupsPipeline-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsPipeline-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

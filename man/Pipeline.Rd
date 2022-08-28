@@ -95,15 +95,15 @@ Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-add_transformation}{\code{Pipeline$add_transformation()}}
-\item \href{#method-apply}{\code{Pipeline$apply()}}
-\item \href{#method-print}{\code{Pipeline$print()}}
-\item \href{#method-clone}{\code{Pipeline$clone()}}
+\item \href{#method-Pipeline-add_transformation}{\code{Pipeline$add_transformation()}}
+\item \href{#method-Pipeline-apply}{\code{Pipeline$apply()}}
+\item \href{#method-Pipeline-print}{\code{Pipeline$print()}}
+\item \href{#method-Pipeline-clone}{\code{Pipeline$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_transformation"></a>}}
-\if{latex}{\out{\hypertarget{method-add_transformation}{}}}
+\if{html}{\out{<a id="method-Pipeline-add_transformation"></a>}}
+\if{latex}{\out{\hypertarget{method-Pipeline-add_transformation}{}}}
 \subsection{Method \code{add_transformation()}}{
 Add a transformation to the pipeline.
 \subsection{Usage}{
@@ -134,8 +134,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-apply"></a>}}
-\if{latex}{\out{\hypertarget{method-apply}{}}}
+\if{html}{\out{<a id="method-Pipeline-apply"></a>}}
+\if{latex}{\out{\hypertarget{method-Pipeline-apply}{}}}
 \subsection{Method \code{apply()}}{
 Apply the pipeline to a \code{data.frame}.
 \subsection{Usage}{
@@ -160,8 +160,8 @@ Transformed version of \code{`data`}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Pipeline-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Pipeline-print}{}}}
 \subsection{Method \code{print()}}{
 Print an overview of the pipeline.
 \subsection{Usage}{
@@ -180,8 +180,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Pipeline-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Pipeline-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
