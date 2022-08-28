@@ -1,4 +1,6 @@
 
+# rearrr 0.3.1.9000
+
 # rearrr 0.3.1
 
 * Regenerates documentation to fix html5 problem.
