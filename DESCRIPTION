@@ -1,6 +1,6 @@
 Package: rearrr
 Title: Rearranging Data
-Version: 0.3.0.9000
+Version: 0.3.1
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
@@ -33,7 +33,7 @@ Suggests:
     plotly,
     testthat,
     tidyr,
-    xpectr (>= 0.4.0)
+    xpectr (>= 0.4.1)
 RdMacros: 
     lifecycle
 Encoding: UTF-8
