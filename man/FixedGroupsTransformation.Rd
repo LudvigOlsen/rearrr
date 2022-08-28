@@ -46,22 +46,16 @@ When \code{`NULL`}, the transformation is applied to all groups.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FixedGroupsTransformation$new()}}
-\item \href{#method-get_group_args}{\code{FixedGroupsTransformation$get_group_args()}}
-\item \href{#method-apply}{\code{FixedGroupsTransformation$apply()}}
-\item \href{#method-print}{\code{FixedGroupsTransformation$print()}}
-\item \href{#method-clone}{\code{FixedGroupsTransformation$clone()}}
+\item \href{#method-FixedGroupsTransformation-new}{\code{FixedGroupsTransformation$new()}}
+\item \href{#method-FixedGroupsTransformation-get_group_args}{\code{FixedGroupsTransformation$get_group_args()}}
+\item \href{#method-FixedGroupsTransformation-apply}{\code{FixedGroupsTransformation$apply()}}
+\item \href{#method-FixedGroupsTransformation-print}{\code{FixedGroupsTransformation$print()}}
+\item \href{#method-FixedGroupsTransformation-clone}{\code{FixedGroupsTransformation$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-FixedGroupsTransformation-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsTransformation-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize transformation.
 \subsection{Usage}{
@@ -89,8 +83,8 @@ E.g. \code{list(".apply" = list(TRUE, FALSE, TRUE), ...}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_group_args"></a>}}
-\if{latex}{\out{\hypertarget{method-get_group_args}{}}}
+\if{html}{\out{<a id="method-FixedGroupsTransformation-get_group_args"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsTransformation-get_group_args}{}}}
 \subsection{Method \code{get_group_args()}}{
 Get arguments for specific group ID.
 \subsection{Usage}{
@@ -109,8 +103,8 @@ Get arguments for specific group ID.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-apply"></a>}}
-\if{latex}{\out{\hypertarget{method-apply}{}}}
+\if{html}{\out{<a id="method-FixedGroupsTransformation-apply"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsTransformation-apply}{}}}
 \subsection{Method \code{apply()}}{
 Apply the transformation to a \code{data.frame}.
 \subsection{Usage}{
@@ -129,8 +123,8 @@ Transformed version of \code{`data`}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-FixedGroupsTransformation-print"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsTransformation-print}{}}}
 \subsection{Method \code{print()}}{
 Print an overview of the transformation.
 \subsection{Usage}{
@@ -153,8 +147,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-FixedGroupsTransformation-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FixedGroupsTransformation-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

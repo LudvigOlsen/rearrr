@@ -118,21 +118,21 @@ Ludvig Renbo Olsen, \email{r-pkgs@ludvigolsen.dk}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-add_transformation}{\code{GeneratedPipeline$add_transformation()}}
-\item \href{#method-print}{\code{GeneratedPipeline$print()}}
-\item \href{#method-clone}{\code{GeneratedPipeline$clone()}}
+\item \href{#method-GeneratedPipeline-add_transformation}{\code{GeneratedPipeline$add_transformation()}}
+\item \href{#method-GeneratedPipeline-print}{\code{GeneratedPipeline$print()}}
+\item \href{#method-GeneratedPipeline-clone}{\code{GeneratedPipeline$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="rearrr" data-topic="Pipeline" data-id="apply">}\href{../../rearrr/html/Pipeline.html#method-apply}{\code{rearrr::Pipeline$apply()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="rearrr" data-topic="Pipeline" data-id="apply"><a href='../../rearrr/html/Pipeline.html#method-Pipeline-apply'><code>rearrr::Pipeline$apply()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_transformation"></a>}}
-\if{latex}{\out{\hypertarget{method-add_transformation}{}}}
+\if{html}{\out{<a id="method-GeneratedPipeline-add_transformation"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedPipeline-add_transformation}{}}}
 \subsection{Method \code{add_transformation()}}{
 Add a transformation to the pipeline.
 \subsection{Usage}{
@@ -190,8 +190,8 @@ generators = list(degrees = function(){sample.int(360, 1)},
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-GeneratedPipeline-print"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedPipeline-print}{}}}
 \subsection{Method \code{print()}}{
 Print an overview of the pipeline.
 \subsection{Usage}{
@@ -210,8 +210,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-GeneratedPipeline-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedPipeline-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -43,23 +43,23 @@ whether to apply the transformation to the current group.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{GeneratedTransformation$new()}}
-\item \href{#method-get_group_args}{\code{GeneratedTransformation$get_group_args()}}
-\item \href{#method-generate_args}{\code{GeneratedTransformation$generate_args()}}
-\item \href{#method-print}{\code{GeneratedTransformation$print()}}
-\item \href{#method-clone}{\code{GeneratedTransformation$clone()}}
+\item \href{#method-GeneratedTransformation-new}{\code{GeneratedTransformation$new()}}
+\item \href{#method-GeneratedTransformation-get_group_args}{\code{GeneratedTransformation$get_group_args()}}
+\item \href{#method-GeneratedTransformation-generate_args}{\code{GeneratedTransformation$generate_args()}}
+\item \href{#method-GeneratedTransformation-print}{\code{GeneratedTransformation$print()}}
+\item \href{#method-GeneratedTransformation-clone}{\code{GeneratedTransformation$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="rearrr" data-topic="Transformation" data-id="apply">}\href{../../rearrr/html/Transformation.html#method-apply}{\code{rearrr::Transformation$apply()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="rearrr" data-topic="Transformation" data-id="apply"><a href='../../rearrr/html/Transformation.html#method-Transformation-apply'><code>rearrr::Transformation$apply()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-GeneratedTransformation-new"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedTransformation-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize transformation.
 \subsection{Usage}{
@@ -98,8 +98,8 @@ When \code{`NULL`}, the \code{data.frame} is not grouped.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_group_args"></a>}}
-\if{latex}{\out{\hypertarget{method-get_group_args}{}}}
+\if{html}{\out{<a id="method-GeneratedTransformation-get_group_args"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedTransformation-get_group_args}{}}}
 \subsection{Method \code{get_group_args()}}{
 Get arguments for a group.
 \subsection{Usage}{
@@ -111,8 +111,8 @@ Get arguments for a group.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate_args"></a>}}
-\if{latex}{\out{\hypertarget{method-generate_args}{}}}
+\if{html}{\out{<a id="method-GeneratedTransformation-generate_args"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedTransformation-generate_args}{}}}
 \subsection{Method \code{generate_args()}}{
 Generate arguments for a group with the \code{`generators`}.
 \subsection{Usage}{
@@ -126,8 +126,8 @@ Does not include the constant arguments.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-GeneratedTransformation-print"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedTransformation-print}{}}}
 \subsection{Method \code{print()}}{
 Print an overview of the transformation.
 \subsection{Usage}{
@@ -150,8 +150,8 @@ The pipeline. To allow chaining of methods.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-GeneratedTransformation-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-GeneratedTransformation-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

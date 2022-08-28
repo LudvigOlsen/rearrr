@@ -1,6 +1,5 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- # rearrr <a href='https://github.com/LudvigOlsen/rearrr'><img src='man/figures/rearrr_logo_242x280_250dpi.png' align="right" height="140" /></a> -->
 
 # rearrr
@@ -10,16 +9,15 @@
 <r-pkgs@ludvigolsen.dk> )
 <a href='https://twitter.com/ludvigolsen'><img src='man/figures/icons8-twitter.svg' height="17" /></a><br/>
 **License:** [MIT](https://opensource.org/licenses/MIT) <br/>
-**Started:** April
-2020
+**Started:** April 2020
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/rearrr)](https://cran.r-project.org/package=rearrr)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/rearrr)](https://cran.r-project.org/package=rearrr)
 [![metacran
 downloads](https://cranlogs.r-pkg.org/badges/rearrr)](https://cran.r-project.org/package=rearrr)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.5-6666ff.svg)](https://cran.r-project.org/)
 [![Codecov test
-coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg)](https://codecov.io/gh/ludvigolsen/rearrr?branch=master)
+coverage](https://codecov.io/gh/ludvigolsen/rearrr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ludvigolsen/rearrr?branch=master)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/LudvigOlsen/rearrr?branch=master&svg=true)](https://ci.appveyor.com/project/LudvigOlsen/rearrr)
 [![DOI](https://zenodo.org/badge/259158437.svg)](https://zenodo.org/badge/latestdoi/259158437)
@@ -35,8 +33,7 @@ data points.
 When performing an operation relative to a point in an n-dimensional
 vector space, we refer to the point as the **origin**. If we, for
 instance, wish to rotate our data points around the point at `x = 3` and
-`y = 7`, those are the coordinates of our
-origin.
+`y = 7`, those are the coordinates of our origin.
 
 </br>
 
@@ -62,23 +59,20 @@ CRAN (when available):
 
 > `install.packages("rearrr")`
 
-Development
-version:
+Development version:
 
 > `install.packages("devtools")`
-> 
+>
 > `devtools::install_github("LudvigOlsen/rearrr")`
 
 <!-- ## Vignettes   -->
-
 <!-- `rearrr` contains a number of vignettes with relevant use cases and descriptions:   -->
-
 <!-- > `vignette(package = "rearrr")` # for an overview    -->
 
 ### Rearrangers
 
 | Function              | Description                                                                             |
-| :-------------------- | :-------------------------------------------------------------------------------------- |
+|:----------------------|:----------------------------------------------------------------------------------------|
 | `center_max()`        | Center the highest value with values decreasing around it.                              |
 | `center_min()`        | Center the lowest value with values increasing around it.                               |
 | `position_max()`      | Position the highest value with values decreasing around it.                            |
@@ -94,7 +88,7 @@ version:
 ### Mutators
 
 | Function                        | Description                                                           | Dimensions   |
-| :------------------------------ | :-------------------------------------------------------------------- | :----------- |
+|:--------------------------------|:----------------------------------------------------------------------|:-------------|
 | `rotate_2d()`, `rotate_3d()`    | Rotate values around an origin in 2 or 3 dimensions.                  | 2 or 3       |
 | `swirl_2d()`, `swirl_3d()`      | Swirl values around an origin in 2 or 3 dimensions.                   | 2 or 3       |
 | `shear_2d()`, `shear_3d()`      | Shear values around an origin in 2 or 3 dimensions.                   | 2 or 3       |
@@ -111,7 +105,7 @@ version:
 ### Formers
 
 | Function          | Description                                                     |
-| :---------------- | :-------------------------------------------------------------- |
+|:------------------|:----------------------------------------------------------------|
 | `circularize()`   | Create x-coordinates for y-coordinates so they form a circle.   |
 | `hexagonalize()`  | Create x-coordinates for y-coordinates so they form a hexagon.  |
 | `square()`        | Create x-coordinates for y-coordinates so they form a square.   |
@@ -120,7 +114,7 @@ version:
 ### Pipelines
 
 | Class                 | Description                                                              |
-| :-------------------- | :----------------------------------------------------------------------- |
+|:----------------------|:-------------------------------------------------------------------------|
 | `Pipeline`            | Chain multiple transformations.                                          |
 | `GeneratedPipeline`   | Chain multiple transformations and generate argument values per group.   |
 | `FixedGroupsPipeline` | Chain multiple transformations with different argument values per group. |
@@ -128,7 +122,7 @@ version:
 ### Generators
 
 | Function              | Description                      |
-| :-------------------- | :------------------------------- |
+|:----------------------|:---------------------------------|
 | `generate_clusters()` | Generate n-dimensional clusters. |
 
 Additionally, some functions have `*_vec()` versions, that take and
@@ -139,41 +133,41 @@ measuring functions) are listed at the bottom of the readme.
 
 ## Table of Contents
 
-  - [rearrr](#rearrr)
-      - [Overview](#overview)
-          - [Install](#install)
-          - [Rearrangers](#rearrangers)
-          - [Mutators](#mutators)
-          - [Formers](#formers)
-          - [Pipelines](#pipelines)
-          - [Generators](#generators)
-      - [Attach packages](#attach-packages)
-      - [Rearranger examples](#rearranger-examples)
-          - [Center min/max](#center-min/max)
-          - [Position min/max](#position-min/max)
-          - [Pair extremes](#pair-extremes)
-          - [Closest to / furthest from](#closest-to-/-furthest-from)
-          - [Reverse windows](#reverse-windows)
-          - [Shuffle Hierarchy](#shuffle-hierarchy)
-      - [Mutator examples](#mutator-examples)
-          - [Rotate values](#rotate-values)
-          - [Swirl values](#swirl-values)
-          - [Expand distances](#expand-distances)
-          - [Cluster groups](#cluster-groups)
-          - [Dim values](#dim-values)
-          - [Flip values](#flip-values)
-      - [Forming examples](#forming-examples)
-          - [Circularize points](#circularize-points)
-          - [Hexagonalize points](#hexagonalize-points)
-          - [Square points](#square-points)
-          - [Triangularize points](#triangularize-points)
-      - [Generators](#generators)
-          - [Generate clusters](#generate-clusters)
-      - [Utilities](#utilities)
-          - [Converters](#converters)
-          - [Scalers](#scalers)
-          - [Measuring functions](#measuring-functions)
-          - [Helper functions](#helper-functions)
+-   [rearrr](#rearrr)
+    -   [Overview](#overview)
+        -   [Install](#install)
+        -   [Rearrangers](#rearrangers)
+        -   [Mutators](#mutators)
+        -   [Formers](#formers)
+        -   [Pipelines](#pipelines)
+        -   [Generators](#generators)
+    -   [Attach packages](#attach-packages)
+    -   [Rearranger examples](#rearranger-examples)
+        -   [Center min/max](#center-min/max)
+        -   [Position min/max](#position-min/max)
+        -   [Pair extremes](#pair-extremes)
+        -   [Closest to / furthest from](#closest-to-/-furthest-from)
+        -   [Reverse windows](#reverse-windows)
+        -   [Shuffle Hierarchy](#shuffle-hierarchy)
+    -   [Mutator examples](#mutator-examples)
+        -   [Rotate values](#rotate-values)
+        -   [Swirl values](#swirl-values)
+        -   [Expand distances](#expand-distances)
+        -   [Cluster groups](#cluster-groups)
+        -   [Dim values](#dim-values)
+        -   [Flip values](#flip-values)
+    -   [Forming examples](#forming-examples)
+        -   [Circularize points](#circularize-points)
+        -   [Hexagonalize points](#hexagonalize-points)
+        -   [Square points](#square-points)
+        -   [Triangularize points](#triangularize-points)
+    -   [Generators](#generators)
+        -   [Generate clusters](#generate-clusters)
+    -   [Utilities](#utilities)
+        -   [Converters](#converters)
+        -   [Scalers](#scalers)
+        -   [Measuring functions](#measuring-functions)
+        -   [Helper functions](#helper-functions)
 
 ## Attach packages
 
@@ -233,7 +227,7 @@ position_min(data = 1:10, position = 3)
 
 ``` r
 pair_extremes(data = 1:10)
-#> # A tibble: 10 x 2
+#> # A tibble: 10 × 2
 #>    Value .pair
 #>    <int> <fct>
 #>  1     1 1    
@@ -292,8 +286,7 @@ shuffle them one column (hierarchical level) at a time:
 shuffle_hierarchy(df, group_cols = c("a", "b", "c"))
 ```
 
-The columns are shuffled one at a time, as
-so:
+The columns are shuffled one at a time, as so:
 
 <div style="width: 100%; text-align: center; display: block;">
 
@@ -323,7 +316,7 @@ rotate_2d(
   degrees = 60,
   origin_fn = centroid
 )
-#> # A tibble: 10 x 6
+#> # A tibble: 10 × 6
 #>    Index  Value Index_rotated Value_rotated .origin   .degrees
 #>    <int>  <dbl>         <dbl>         <dbl> <list>       <dbl>
 #>  1     1 0.266           3.50       -3.49   <dbl [2]>       60
@@ -365,21 +358,22 @@ rotate_3d(
   z_deg = 135,
   origin_fn = centroid
 )
-#> # A tibble: 12 x 9
-#>        x     y     z x_rotated y_rotated z_rotated .origin .degrees .degrees_str
-#>    <int> <dbl> <dbl>     <dbl>     <dbl>     <dbl> <list>  <list>   <chr>       
-#>  1     1     1 0.168    15.3        9.54    5.96   <dbl [… <dbl [3… x=45,y=90,z…
-#>  2     2     2 0.808    14.3       10.2     4.96   <dbl [… <dbl [3… x=45,y=90,z…
-#>  3     3     3 0.385    13.3        9.76    3.96   <dbl [… <dbl [3… x=45,y=90,z…
-#>  4     4     4 0.328    12.3        9.70    2.96   <dbl [… <dbl [3… x=45,y=90,z…
-#>  5     5     9 0.602     7.33       9.97    1.96   <dbl [… <dbl [3… x=45,y=90,z…
-#>  6     6    10 0.604     6.33       9.98    0.962  <dbl [… <dbl [3… x=45,y=90,z…
-#>  7     7    11 0.125     5.33       9.50   -0.0384 <dbl [… <dbl [3… x=45,y=90,z…
-#>  8     8    12 0.295     4.33       9.67   -1.04   <dbl [… <dbl [3… x=45,y=90,z…
-#>  9     9    15 0.578     1.33       9.95   -2.04   <dbl [… <dbl [3… x=45,y=90,z…
-#> 10    10    16 0.631     0.333     10.0    -3.04   <dbl [… <dbl [3… x=45,y=90,z…
-#> 11    11    17 0.512    -0.667      9.88   -4.04   <dbl [… <dbl [3… x=45,y=90,z…
-#> 12    12    18 0.505    -1.67       9.88   -5.04   <dbl [… <dbl [3… x=45,y=90,z…
+#> # A tibble: 12 × 9
+#>        x     y     z x_rotated y_rotated z_rotated .origin   .degrees  .degree…¹
+#>    <int> <dbl> <dbl>     <dbl>     <dbl>     <dbl> <list>    <list>    <chr>    
+#>  1     1     1 0.168    15.3        9.54    5.96   <dbl [3]> <dbl [3]> x=45,y=9…
+#>  2     2     2 0.808    14.3       10.2     4.96   <dbl [3]> <dbl [3]> x=45,y=9…
+#>  3     3     3 0.385    13.3        9.76    3.96   <dbl [3]> <dbl [3]> x=45,y=9…
+#>  4     4     4 0.328    12.3        9.70    2.96   <dbl [3]> <dbl [3]> x=45,y=9…
+#>  5     5     9 0.602     7.33       9.97    1.96   <dbl [3]> <dbl [3]> x=45,y=9…
+#>  6     6    10 0.604     6.33       9.98    0.962  <dbl [3]> <dbl [3]> x=45,y=9…
+#>  7     7    11 0.125     5.33       9.50   -0.0384 <dbl [3]> <dbl [3]> x=45,y=9…
+#>  8     8    12 0.295     4.33       9.67   -1.04   <dbl [3]> <dbl [3]> x=45,y=9…
+#>  9     9    15 0.578     1.33       9.95   -2.04   <dbl [3]> <dbl [3]> x=45,y=9…
+#> 10    10    16 0.631     0.333     10.0    -3.04   <dbl [3]> <dbl [3]> x=45,y=9…
+#> 11    11    17 0.512    -0.667      9.88   -4.04   <dbl [3]> <dbl [3]> x=45,y=9…
+#> 12    12    18 0.505    -1.67       9.88   -5.04   <dbl [3]> <dbl [3]> x=45,y=9…
+#> # … with abbreviated variable name ¹​.degrees_str
 ```
 
 <img src="man/figures/README-unnamed-chunk-21-1.png" width="552" style="display: block; margin: auto;" />
@@ -391,7 +385,7 @@ rotate_3d(
 ``` r
 # Rotate values
 swirl_2d(data = rep(1, 50), radius = 95, origin = c(0, 0))
-#> # A tibble: 50 x 7
+#> # A tibble: 50 × 7
 #>    Index Value Index_swirled Value_swirled .origin   .degrees .radius
 #>    <int> <dbl>         <dbl>         <dbl> <list>       <dbl>   <dbl>
 #>  1     1     1         0.952          1.05 <dbl [2]>     2.68      95
@@ -407,7 +401,8 @@ swirl_2d(data = rep(1, 50), radius = 95, origin = c(0, 0))
 #> # … with 40 more rows
 ```
 
-<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div
+style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/swirl2d_patchwork_plot.png' width="630" />
 
@@ -440,7 +435,7 @@ swirl_3d(
   origin = c(0, 0, 0),
   keep_original = FALSE
 )
-#> # A tibble: 50 x 7
+#> # A tibble: 50 × 7
 #>    x_swirled y_swirled z_swirled .origin   .degrees  .radius   .radius_str 
 #>        <dbl>     <dbl>     <dbl> <list>    <list>    <list>    <chr>       
 #>  1         1     0.872      1.11 <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
@@ -456,7 +451,8 @@ swirl_3d(
 #> # … with 40 more rows
 ```
 
-<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div
+style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/swirl3d_patchwork_plot.png' width="630" />
 
@@ -472,7 +468,7 @@ expand_distances(
   origin_fn = centroid,
   exponentiate = TRUE
 )
-#> # A tibble: 10 x 4
+#> # A tibble: 10 × 4
 #>     Value Value_expanded .exponent .origin  
 #>     <dbl>          <dbl>     <dbl> <list>   
 #>  1 0.266         -0.575          3 <dbl [1]>
@@ -487,8 +483,7 @@ expand_distances(
 #> 10 0.0618        -1.75           3 <dbl [1]>
 ```
 
-2d
-expansion:
+2d expansion:
 
 <img src="man/figures/README-unnamed-chunk-27-1.png" width="552" style="display: block; margin: auto;" />
 
@@ -503,7 +498,7 @@ expand_distances_each(
   multipliers = c(7, 0.5),
   origin_fn = centroid
 )
-#> # A tibble: 10 x 7
+#> # A tibble: 10 × 7
 #>         x      y x_expanded y_expanded .multipliers .multipliers_str .origin  
 #>     <dbl>  <dbl>      <dbl>      <dbl> <list>       <chr>            <list>   
 #>  1 0.622  0.284      1.37        0.309 <dbl [2]>    x=7,y=0.5        <dbl [2]>
@@ -538,7 +533,7 @@ cluster_groups(
   cols = c("x", "y"), 
   group_col = "g"
 )
-#> # A tibble: 50 x 5
+#> # A tibble: 50 × 5
 #>        x     y x_clustered y_clustered     g
 #>    <dbl> <dbl>       <dbl>       <dbl> <dbl>
 #>  1 0.168 0.229       0.335       0.420     1
@@ -571,7 +566,7 @@ df_clustered %>%
     dim_col = "o",
     origin_fn = most_centered
   )
-#> # A tibble: 50 x 6
+#> # A tibble: 50 × 6
 #>    x_clustered y_clustered     g     o o_dimmed .origin  
 #>          <dbl>       <dbl> <dbl> <dbl>    <dbl> <list>   
 #>  1       0.335       0.420     1     1    0.853 <dbl [2]>
@@ -601,7 +596,7 @@ flip_values(
   data = random_sample, 
   origin_fn = create_origin_fn(median)
 )
-#> # A tibble: 10 x 3
+#> # A tibble: 10 × 3
 #>     Value Value_flipped .origin  
 #>     <dbl>         <dbl> <list>   
 #>  1 0.266          0.936 <dbl [1]>
@@ -624,7 +619,7 @@ flip_values(
 
 ``` r
 circularize(runif(200))
-#> # A tibble: 200 x 4
+#> # A tibble: 200 × 4
 #>     Value .circle_x .degrees .origin  
 #>     <dbl>     <dbl>    <dbl> <list>   
 #>  1 0.766     -0.418    148.  <dbl [2]>
@@ -640,7 +635,8 @@ circularize(runif(200))
 #> # … with 190 more rows
 ```
 
-<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div
+style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/circles_patchwork_plot.png' width="630" />
 
@@ -650,7 +646,7 @@ circularize(runif(200))
 
 ``` r
 hexagonalize(runif(200))
-#> # A tibble: 200 x 3
+#> # A tibble: 200 × 3
 #>     Value .hexagon_x .edge
 #>     <dbl>      <dbl> <fct>
 #>  1 0.0983   -0.0945  4    
@@ -666,7 +662,8 @@ hexagonalize(runif(200))
 #> # … with 190 more rows
 ```
 
-<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div
+style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/hexagons_patchwork_plot.png' width="630" />
 
@@ -676,7 +673,7 @@ hexagonalize(runif(200))
 
 ``` r
 square(runif(200))
-#> # A tibble: 200 x 3
+#> # A tibble: 200 × 3
 #>    Value .square_x .edge
 #>    <dbl>     <dbl> <fct>
 #>  1 0.296    0.291  2    
@@ -692,7 +689,8 @@ square(runif(200))
 #> # … with 190 more rows
 ```
 
-<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div
+style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/squares_patchwork_plot.png' width="630" />
 
@@ -702,7 +700,7 @@ square(runif(200))
 
 ``` r
 triangularize(runif(200))
-#> # A tibble: 200 x 3
+#> # A tibble: 200 × 3
 #>      Value .triangle_x .edge
 #>      <dbl>       <dbl> <fct>
 #>  1 0.00823       0     3    
@@ -718,7 +716,8 @@ triangularize(runif(200))
 #> # … with 190 more rows
 ```
 
-<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div
+style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/triangles_patchwork_plot.png' width="630" />
 
@@ -735,7 +734,7 @@ generate_clusters(
   num_clusters = 5,
   compactness = 1.6
 )
-#> # A tibble: 50 x 6
+#> # A tibble: 50 × 6
 #>       D1    D2    D3     D4    D5 .cluster
 #>    <dbl> <dbl> <dbl>  <dbl> <dbl> <fct>   
 #>  1 0.316 0.553 0.523 0.202  0.653 1       
@@ -758,21 +757,21 @@ generate_clusters(
 ### Converters
 
 | Function               | Description                  |
-| :--------------------- | :--------------------------- |
+|:-----------------------|:-----------------------------|
 | `radians_to_degrees()` | Converts radians to degrees. |
 | `degrees_to_radians()` | Converts degrees to radians. |
 
 ### Scalers
 
 | Function           | Description                                               |
-| :----------------- | :-------------------------------------------------------- |
+|:-------------------|:----------------------------------------------------------|
 | `min_max_scale()`  | Scale values to a range.                                  |
 | `to_unit_length()` | Scale vectors to unit length *row-wise* or *column-wise*. |
 
 ### Measuring functions
 
 | Function          | Description                                                     |
-| :---------------- | :-------------------------------------------------------------- |
+|:------------------|:----------------------------------------------------------------|
 | `distance()`      | Calculates distance to an origin.                               |
 | `angle()`         | Calculates angle between points and an origin.                  |
 | `vector_length()` | Calculates vector length/magnitude *row-wise* or *column-wise*. |
@@ -780,7 +779,7 @@ generate_clusters(
 ### Helper functions
 
 | Function             | Description                                                          |
-| :------------------- | :------------------------------------------------------------------- |
+|:---------------------|:---------------------------------------------------------------------|
 | `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
 | `centroid()`         | Calculates the mean of each supplied vector/column.                  |
 | `most_centered()`    | Finds coordinates of data point closest to the centroid.             |
