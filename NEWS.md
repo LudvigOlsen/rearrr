@@ -1,5 +1,7 @@
 
-# rearrr 0.3.1.9000
+# rearrr 0.3.2
+
+* Makes testing conditional on the availability of `xpectr`.
 
 # rearrr 0.3.1
 
