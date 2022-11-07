@@ -3,6 +3,8 @@
 
 * Makes testing conditional on the availability of `xpectr`.
 
+* Fixes `tidyselect`-related warnings.
+
 # rearrr 0.3.1
 
 * Regenerates documentation to fix html5 problem.
