@@ -131,23 +131,23 @@ transfer_centroids <- function(to_data,
 
   # Find from centroids
   from_centroids <- from_data %>%
-    dplyr::select(c(group_cols, cols)) %>%
+    dplyr::select(dplyr::all_of(c(group_cols, cols))) %>%
     dplyr::summarise_all(mean)
 
   # Find centroids in the new data
   to_centroids <- to_data %>%
-    dplyr::select(c(group_cols, cols)) %>%
+    dplyr::select(dplyr::all_of(c(group_cols, cols))) %>%
     dplyr::summarise_all(mean)
 
   # Extract summarized group columns
   from_group_columns <- from_centroids %>%
     dplyr::ungroup() %>%
-    dplyr::select(group_cols)
+    dplyr::select(dplyr::all_of(group_cols))
 
   # Extract summarized group columns
   to_group_columns <- to_centroids %>%
     dplyr::ungroup() %>%
-    dplyr::select(group_cols)
+    dplyr::select(dplyr::all_of(group_cols))
 
   # Make sure the group columns are the same in
   # both summaries
@@ -162,12 +162,12 @@ transfer_centroids <- function(to_data,
   # Remove group columns
   from_centroids <- from_centroids %>%
     dplyr::ungroup() %>%
-    dplyr::select(cols)
+    dplyr::select(dplyr::all_of(cols))
 
   # Remove group columns
   to_centroids <- to_centroids %>%
     dplyr::ungroup() %>%
-    dplyr::select(cols)
+    dplyr::select(dplyr::all_of(cols))
 
   # How much to move centroids per dimension
   distances <- from_centroids - to_centroids
