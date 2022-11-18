@@ -3,6 +3,8 @@
 
 * Makes testing conditional on the availability of `xpectr`.
 
+* Makes tests compatible with the upcoming release of `purrr v1`. (#1)
+
 * Fixes `tidyselect`-related warnings.
 
 # rearrr 0.3.1

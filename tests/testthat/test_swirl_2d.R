@@ -177,13 +177,13 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_12861 <- xpectr::capture_side_effects(swirl_2d(data = c(1, 2, 3, 4, 5), radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_12861[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_12861[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = "hej", radius = 1, x_col = "...
@@ -192,13 +192,13 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_18304 <- xpectr::capture_side_effects(swirl_2d(data = "hej", radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_18304[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18304[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = NA, radius = 1, x_col = "x",...
@@ -207,7 +207,7 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_16417 <- xpectr::capture_side_effects(swirl_2d(data = NA, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_16417[['error']]),
     xpectr::strip(ifelse(
       is_checkmate_v2_1(),
@@ -217,7 +217,7 @@ test_that("fuzz testing swirl_2d()", {
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16417[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = NULL, radius = 1, x_col = "x...
@@ -226,13 +226,13 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_15190 <- xpectr::capture_side_effects(swirl_2d(data = NULL, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_15190[['error']]),
     xpectr::strip("Assertion failed. One of the following must apply:\n * checkmate::check_data_frame(data): Must be of type 'data.frame', not 'NULL'\n * checkmate::check_vector(data): Must be of type 'vector', not 'NULL'\n * checkmate::check_factor(data): Must be of type 'factor', not 'NULL'"),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15190[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = dplyr::group_by(df, g), radi...
@@ -365,13 +365,13 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_16569 <- xpectr::capture_side_effects(swirl_2d(data = c(1, 2, 3, 4, 5), radius = 1, x_col = "x", y_col = NULL, suffix = "", origin = NULL, origin_fn = centroid, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * when 'data' is not a data.frame, 'col(s)' must be 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = df, radius = 0, x_col = "x",...
@@ -949,13 +949,13 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_14469 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = NULL, origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14469[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = df, radius = 1, x_col = "x",...
@@ -1163,13 +1163,13 @@ test_that("fuzz testing swirl_2d()", {
   side_effects_13881 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = function(d) {
       c(d, d + 1)
   }, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_13881[['error']]),
     xpectr::strip("the output of 'scale_fn' must have the same length as the input."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13881[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = df, radius = 1, x_col = "x",...
@@ -1193,13 +1193,13 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_10039 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = NULL, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_10039[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10039[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = df, radius = 1, x_col = "x",...
@@ -1576,13 +1576,13 @@ test_that("fuzz testing swirl_2d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19735 <- xpectr::capture_side_effects(swirl_2d(data = df, radius = 1, x_col = "x", y_col = "y", suffix = "", origin = c(0, 0), origin_fn = NULL, scale_fn = identity, keep_original = FALSE, degrees_col_name = ".degrees", radius_col_name = ".radius", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19735[['error']]),
     xpectr::strip("Adding these dimensions would overwrite existing columns: x, y."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19735[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing swirl_2d(data = df, radius = 1, x_col = "x",...

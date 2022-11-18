@@ -698,13 +698,13 @@ test_that("fuzz testing closest_to()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19400 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(identity), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (1) but had length 6."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing closest_to(data = df, col = NULL, origin = 2...
@@ -875,13 +875,13 @@ test_that("fuzz testing closest_to()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19040 <- xpectr::capture_side_effects(closest_to(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "A", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * The column 'A' already exists and 'overwrite' is disabled."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing closest_to(data = df, col = NULL, origin = 2...
@@ -1965,13 +1965,13 @@ test_that("fuzz testing furthest_from()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19400 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = NULL, origin_fn = create_origin_fn(identity), shuffle_ties = FALSE, origin_col_name = ".origin", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (1) but had length 6."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing furthest_from(data = df, col = NULL, origin ...
@@ -2142,13 +2142,13 @@ test_that("fuzz testing furthest_from()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19040 <- xpectr::capture_side_effects(furthest_from(data = df, col = NULL, origin = 2, origin_fn = NULL, shuffle_ties = FALSE, origin_col_name = "A", distance_col_name = ".distance", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("1 assertions failed:\n * The column 'A' already exists and 'overwrite' is disabled."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing furthest_from(data = df, col = NULL, origin ...

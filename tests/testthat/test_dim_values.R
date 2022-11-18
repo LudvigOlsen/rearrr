@@ -506,13 +506,13 @@ test_that("dim_values()", {
   side_effects_19400 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = function(x, d) {
       c(1, 2)
   }, origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("the output of 'dimming_fn' must have the same length as the input."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing dim_values(data = df, cols = c("x", "y", "o"...
@@ -726,13 +726,13 @@ test_that("dim_values()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19040 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = mean, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19040[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (3) but had length 1."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19040[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing dim_values(data = df, cols = c("x", "y", "o"...
@@ -803,13 +803,13 @@ test_that("dim_values()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19888 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = NULL, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19888[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing dim_values(data = df, cols = c("x", "y", "o"...
@@ -1273,13 +1273,13 @@ test_that("dim_values()", {
   # Testing side effects
   # Assigning side effects
   side_effects_18329 <- xpectr::capture_side_effects(dim_values(data = df, cols = c("x", "y", "o"), dimming_fn = create_dimming_fn(numerator = 1, exponent = 2, add_to_distance = 1), origin = NULL, origin_fn = centroid, dim_col = NULL, suffix = "", keep_original = FALSE, origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_18329[['error']]),
     xpectr::strip("Adding these dimensions would overwrite existing columns: o."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18329[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing dim_values(data = df, cols = c("x", "y", "o"...

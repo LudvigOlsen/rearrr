@@ -890,13 +890,13 @@ test_that("fuzz testing cluster_groups()", {
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
   }, keep_centroids = FALSE, multiplier = 0.05, suffix = "", keep_original = FALSE, overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * The column 'x' already exists and 'overwrite' is disabled."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10824[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing cluster_groups(data = df, cols = c("x", "y",...
@@ -1070,13 +1070,13 @@ test_that("fuzz testing cluster_groups()", {
   }, scale_max_fn = function(x) {
       quantile(x, 0.975)
   }, keep_centroids = FALSE, multiplier = 0.05, suffix = "_clustered", keep_original = FALSE, overwrite = NULL), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_14469[['error']]),
     xpectr::strip("Assertion on 'overwrite' failed: Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14469[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   ## Finished testing 'cluster_groups'                                        ####

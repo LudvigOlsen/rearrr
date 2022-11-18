@@ -1682,13 +1682,13 @@ test_that("fuzz testing pair_extremes method for rearrange()", {
   # Testing side effects
   # Assigning side effects
   side_effects_13795 <- xpectr::capture_side_effects(pair_extremes(data = df, col = NULL, unequal_method = "middle", num_pairings = 1, balance = "mean", order_by_aggregates = FALSE, shuffle_members = FALSE, shuffle_pairs = FALSE, factor_name = "A", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_13795[['error']]),
     xpectr::strip("Adding these dimensions would overwrite existing columns: A."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13795[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing pair_extremes(data = df, col = NULL, unequal...
