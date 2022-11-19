@@ -166,7 +166,7 @@ test_that("fuzz testing create_n_fn()", {
   xpectr::set_test_seed(42)
 
   # We can't check function definitions when running covr::*
-  if (require(covr))
+  if (requireNamespace("covr", quietly = TRUE))
     testthat::skip_if(covr::in_covr())
 
   # Create three vectors

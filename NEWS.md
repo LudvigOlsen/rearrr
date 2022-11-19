@@ -1,6 +1,8 @@
 
 # rearrr 0.3.2
 
+* Makes use of suggested packages conditional on their presence.
+
 * Makes testing conditional on the availability of `xpectr`.
 
 * Makes tests compatible with the upcoming release of `purrr v1`. (#1)

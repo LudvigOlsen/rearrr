@@ -29,7 +29,7 @@
 #' library(rearrr)
 #' library(dplyr)
 #' library(purrr)
-#' library(ggplot2)
+#' has_ggplot <- require(ggplot2)  # Attach if installed
 #'
 #' # Set seed
 #' set.seed(1)
@@ -45,10 +45,12 @@
 #' df_circ
 #'
 #' # Plot circle
-#' df_circ %>%
-#'   ggplot(aes(x = .circle_x, y = y, color = .degrees)) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_circ %>%
+#'     ggplot(aes(x = .circle_x, y = y, color = .degrees)) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 #'
 #' #
 #' # Grouped circularization
@@ -71,10 +73,12 @@
 #'   )
 #'
 #' # Plot circles
-#' df_circ %>%
-#'   ggplot(aes(x = .circle_x, y = y, color = g)) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_circ %>%
+#'     ggplot(aes(x = .circle_x, y = y, color = g)) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 #'
 #' #
 #' # Specifying minimum value
@@ -85,10 +89,12 @@
 #' df_circ
 #'
 #' # Plot circle
-#' df_circ %>%
-#'   ggplot(aes(x = .circle_x, y = y, color = .degrees)) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_circ %>%
+#'     ggplot(aes(x = .circle_x, y = y, color = .degrees)) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 #'
 #' #
 #' # Multiple circles by contraction
@@ -114,13 +120,15 @@
 #' )
 #' df_expanded
 #'
-#' df_expanded %>%
-#'   ggplot(aes(
-#'     x = .circle_x_expanded, y = y_expanded,
-#'     color = .degrees, alpha = .multiplier
-#'   )) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_expanded %>%
+#'     ggplot(aes(
+#'       x = .circle_x_expanded, y = y_expanded,
+#'       color = .degrees, alpha = .multiplier
+#'     )) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 circularize <- function(data,
                         y_col = NULL,
                         .min = NULL,

@@ -331,6 +331,9 @@ rotate_2d(
 #> 10    10 0.0618          8.17        4.20   <dbl [2]>       60
 ```
 
+    #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    #> ℹ Please use `linewidth` instead.
+
 <img src="man/figures/README-unnamed-chunk-19-1.png" width="552" style="display: block; margin: auto;" />
 
 3-dimensional rotation:

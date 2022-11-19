@@ -88,7 +88,7 @@
 #' library(rearrr)
 #' library(dplyr)
 #' library(purrr)
-#' library(ggplot2)
+#' has_ggplot <- require(ggplot2)  # Attach if installed
 #'
 #' # Set seed
 #' set.seed(1)
@@ -154,19 +154,21 @@
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
-#' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
-#'   geom_vline(
-#'     xintercept = df_expanded[[".origin"]][[1]][[1]],
-#'     size = 0.2, alpha = .4, linetype = "dashed"
-#'   ) +
-#'   geom_hline(
-#'     yintercept = df_expanded[[".origin"]][[1]][[2]],
-#'     size = 0.2, alpha = .4, linetype = "dashed"
-#'   ) +
-#'   geom_path(size = 0.2) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "Exponent")
+#' if (has_ggplot){
+#'   ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
+#'     geom_vline(
+#'       xintercept = df_expanded[[".origin"]][[1]][[1]],
+#'       size = 0.2, alpha = .4, linetype = "dashed"
+#'     ) +
+#'     geom_hline(
+#'       yintercept = df_expanded[[".origin"]][[1]][[2]],
+#'       size = 0.2, alpha = .4, linetype = "dashed"
+#'     ) +
+#'     geom_path(size = 0.2) +
+#'     geom_point() +
+#'     theme_minimal() +
+#'     labs(x = "x", y = "y", color = "Exponent")
+#' }
 #'
 #' # Expand x and y around the centroid using multiplication
 #' # To compare multiple multipliers, we wrap the
@@ -185,19 +187,21 @@
 #' df_expanded
 #'
 #' # Plot the expansions of x and y around the overall centroid
-#' ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multiplier))) +
-#'   geom_vline(
-#'     xintercept = df_expanded[[".origin"]][[1]][[1]],
-#'     size = 0.2, alpha = .4, linetype = "dashed"
-#'   ) +
-#'   geom_hline(
-#'     yintercept = df_expanded[[".origin"]][[1]][[2]],
-#'     size = 0.2, alpha = .4, linetype = "dashed"
-#'   ) +
-#'   geom_path(size = 0.2, alpha = .8) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "Multiplier")
+#' if (has_ggplot){
+#'   ggplot(df_expanded, aes(x = x_expanded, y = y_expanded, color = factor(.multiplier))) +
+#'     geom_vline(
+#'       xintercept = df_expanded[[".origin"]][[1]][[1]],
+#'       size = 0.2, alpha = .4, linetype = "dashed"
+#'     ) +
+#'     geom_hline(
+#'       yintercept = df_expanded[[".origin"]][[1]][[2]],
+#'       size = 0.2, alpha = .4, linetype = "dashed"
+#'     ) +
+#'     geom_path(size = 0.2, alpha = .8) +
+#'     geom_point() +
+#'     theme_minimal() +
+#'     labs(x = "x", y = "y", color = "Multiplier")
+#' }
 #'
 #' #
 #' # Contraction
@@ -214,11 +218,13 @@
 #'   )
 #'
 #' # Plot the clustered data point on top of the original data points
-#' ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))) +
-#'   geom_point(aes(x = x, y = y, color = factor(g)), alpha = 0.3, shape = 16) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "g")
+#' if (has_ggplot){
+#'   ggplot(df_contracted, aes(x = x_contracted, y = y_contracted, color = factor(g))) +
+#'     geom_point(aes(x = x, y = y, color = factor(g)), alpha = 0.3, shape = 16) +
+#'     geom_point() +
+#'     theme_minimal() +
+#'     labs(x = "x", y = "y", color = "g")
+#' }
 expand_distances <- function(data,
                              cols = NULL,
                              multiplier = NULL,

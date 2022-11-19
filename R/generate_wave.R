@@ -100,7 +100,7 @@ generate_cosine_wave <- function(ts,
 # # Attach packages
 # library(rearrr)
 # library(dplyr)
-# library(ggplot2)
+# has_ggplot <- require(ggplot2)  # Attach if installed
 #
 # # Set seed
 # set.seed(2)
@@ -113,16 +113,20 @@ generate_cosine_wave <- function(ts,
 # # Generate sine wave
 # df$sine <- rearrr:::generate_sine_wave(ts = df$x, freq = 1 / 50)
 #
-# df %>%
-#   ggplot(aes(x = x, y = sine)) +
-#   geom_path() +
-#   theme_minimal()
+# if (has_ggplot){
+#   df %>%
+#     ggplot(aes(x = x, y = sine)) +
+#     geom_path() +
+#     theme_minimal()
+# }
 #
 # # Generate cosine wave
 # df$cosine <- rearrr:::generate_cosine_wave(ts = df$x, freq = 1 / 50)
 #
-# df %>%
-#   ggplot(aes(x = x, y = cosine)) +
-#   geom_path() +
-#   theme_minimal()
+# if (has_ggplot){
+#   df %>%
+#     ggplot(aes(x = x, y = cosine)) +
+#     geom_path() +
+#     theme_minimal()
+# }
 # }

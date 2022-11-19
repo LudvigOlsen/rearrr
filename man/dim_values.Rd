@@ -123,7 +123,7 @@ of each group.
 library(rearrr)
 library(dplyr)
 library(purrr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(7)
@@ -182,13 +182,15 @@ df_dimmed <- df \%>\%
 # Plot the dimmed data such that the alpha (opacity) is
 # controlled by the dimming
 # (Note: This works because the `o` column is 1 for all values)
-ggplot(
-  data = df_dimmed,
-  aes(x = x, y = y, alpha = o_dimmed, color = .cluster)
-) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
+if (has_ggplot){
+  ggplot(
+    data = df_dimmed,
+    aes(x = x, y = y, alpha = o_dimmed, color = .cluster)
+  ) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "x", y = "y", color = "Cluster", alpha = "o_dimmed")
+}
 }
 \seealso{
 Other mutate functions: 

@@ -30,7 +30,6 @@ Suggests:
     covr,
     ggplot2,
     knitr,
-    plotly,
     testthat,
     tidyr,
     xpectr (>= 0.4.1)

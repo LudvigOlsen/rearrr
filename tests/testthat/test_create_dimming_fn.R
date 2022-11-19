@@ -4,7 +4,7 @@ context("create_dimming_fn()")
 test_that("create_dimming_fn()", {
 
   # We can't check function definitions when running covr::*
-  if (require(covr))
+  if (requireNamespace("covr", quietly = TRUE))
     testthat::skip_if(covr::in_covr())
 
   # Generate expectations for 'create_dimming_fn'

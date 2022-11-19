@@ -43,7 +43,7 @@ test_that("create_origin_fn()", {
 
 
   # We can't check function definitions when running covr::*
-  if (require(covr))
+  if (requireNamespace("covr", quietly = TRUE))
     testthat::skip_if(covr::in_covr())
 
   ## Testing 'median_origin_fn'                                             ####

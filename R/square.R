@@ -25,7 +25,7 @@
 #' library(rearrr)
 #' library(dplyr)
 #' library(purrr)
-#' library(ggplot2)
+#' has_ggplot <- require(ggplot2)  # Attach if installed
 #'
 #' # Set seed
 #' set.seed(1)
@@ -41,10 +41,12 @@
 #' df_sq
 #'
 #' # Plot square
-#' df_sq %>%
-#'   ggplot(aes(x = .square_x, y = y, color = .edge)) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_sq %>%
+#'     ggplot(aes(x = .square_x, y = y, color = .edge)) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 #'
 #' #
 #' # Grouped squaring
@@ -67,10 +69,12 @@
 #'   )
 #'
 #' # Plot squares
-#' df_sq %>%
-#'   ggplot(aes(x = .square_x, y = y, color = g)) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_sq %>%
+#'     ggplot(aes(x = .square_x, y = y, color = g)) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 #'
 #' #
 #' # Specifying minimum value
@@ -81,10 +85,12 @@
 #' df_sq
 #'
 #' # Plot square
-#' df_sq %>%
-#'   ggplot(aes(x = .square_x, y = y, color = .edge)) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_sq %>%
+#'     ggplot(aes(x = .square_x, y = y, color = .edge)) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 #'
 #' #
 #' # Multiple squares by contraction
@@ -110,13 +116,15 @@
 #' )
 #' df_expanded
 #'
-#' df_expanded %>%
-#'   ggplot(aes(
-#'     x = .square_x_expanded, y = y_expanded,
-#'     color = .edge, alpha = .multiplier
-#'   )) +
-#'   geom_point() +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   df_expanded %>%
+#'     ggplot(aes(
+#'       x = .square_x_expanded, y = y_expanded,
+#'       color = .edge, alpha = .multiplier
+#'     )) +
+#'     geom_point() +
+#'     theme_minimal()
+#' }
 square <- function(data,
                    y_col = NULL,
                    .min = NULL,

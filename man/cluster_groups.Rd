@@ -73,7 +73,7 @@ Transform values such that the elements in each group move closer to their centr
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(2)
@@ -115,16 +115,18 @@ df_clustered <- cluster_groups(
 
 # Plot the clusters over the original data points
 # As we work with random data, the cluster might overlap
-ggplot(
-  df_clustered,
-  aes(x = x_clustered, y = y_clustered, color = factor(g))
-) +
-  # Original data
-  geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
-  # Clustered data
-  geom_point() +
-  theme_minimal() +
-  labs(x = "x", y = "y", color = "g")
+if (has_ggplot){
+  ggplot(
+    df_clustered,
+    aes(x = x_clustered, y = y_clustered, color = factor(g))
+  ) +
+    # Original data
+    geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
+    # Clustered data
+    geom_point() +
+    theme_minimal() +
+    labs(x = "x", y = "y", color = "g")
+}
 
 #
 # Maintain original group centroids
@@ -139,16 +141,18 @@ df_clustered <- cluster_groups(
 
 # Plot the clusters over the original data points
 # As we work with random data, the cluster might overlap
-ggplot(
-  df_clustered,
-  aes(x = x_clustered, y = y_clustered, color = factor(g))
-) +
-  # Original data
-  geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
-  # Clustered data
-  geom_point() +
-  theme_minimal() +
-  labs(x = "x", y = "y", color = "g")
+if (has_ggplot){
+  ggplot(
+    df_clustered,
+    aes(x = x_clustered, y = y_clustered, color = factor(g))
+  ) +
+    # Original data
+    geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
+    # Clustered data
+    geom_point() +
+    theme_minimal() +
+    labs(x = "x", y = "y", color = "g")
+}
 
 #
 # Three dimensions

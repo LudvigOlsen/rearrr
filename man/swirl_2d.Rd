@@ -103,7 +103,7 @@ of each group.
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(4)
@@ -144,11 +144,13 @@ df_swirled <- swirl_2d(
 df_swirled
 
 # Plot swirls
-df_swirled \%>\%
-  ggplot(aes(x = x_swirled, y = y_swirled, color = factor(.radius))) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "x", y = "y", color = ".radius")
+if (has_ggplot){
+  df_swirled \%>\%
+    ggplot(aes(x = x_swirled, y = y_swirled, color = factor(.radius))) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "x", y = "y", color = ".radius")
+}
 }
 
 #
@@ -166,11 +168,13 @@ df_swirled <- swirl_2d(
 )
 
 # Plot swirls
-df_swirled \%>\%
-  ggplot(aes(x = r1_swirled, y = r2_swirled)) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "r1", y = "r2")
+if (has_ggplot){
+  df_swirled \%>\%
+    ggplot(aes(x = r1_swirled, y = r2_swirled)) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "r1", y = "r2")
+}
 }
 \seealso{
 Other mutate functions: 

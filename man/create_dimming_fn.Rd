@@ -45,7 +45,7 @@ With the default values, the returned function is:
 \examples{
 # Attach packages
 library(rearrr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(1)
@@ -73,10 +73,12 @@ df <- data.frame(
 df$x_dimmed <- non_smoothed_dimming_fn(df$x, df$d)
 
 # Plot the dimming
-ggplot(df, aes(x=d, y=x_dimmed)) +
-  geom_point() +
-  geom_line() +
-  theme_minimal()
+if (has_ggplot){
+  ggplot(df, aes(x=d, y=x_dimmed)) +
+    geom_point() +
+    geom_line() +
+    theme_minimal()
+}
 }
 \seealso{
 Other function creators: 

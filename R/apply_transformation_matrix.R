@@ -55,7 +55,7 @@
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
-#' library(ggplot2)
+#' has_ggplot <- require(ggplot2)  # Attach if installed
 #'
 #' # Set seed
 #' set.seed(3)
@@ -93,11 +93,13 @@
 #'
 #' # Plot the rotation
 #' # z wasn't changed so we plot x and y
-#' res %>%
-#'   ggplot(aes(x = x, y = y)) +
-#'   geom_point() +
-#'   geom_point(aes(x = x_transformed, y = y_transformed)) +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   res %>%
+#'     ggplot(aes(x = x, y = y)) +
+#'     geom_point() +
+#'     geom_point(aes(x = x_transformed, y = y_transformed)) +
+#'     theme_minimal()
+#' }
 #'
 #' # Apply rotation matrix to grouped data frame
 #' # Around centroids
@@ -110,11 +112,13 @@
 #' )
 #'
 #' # Plot the rotation
-#' res %>%
-#'   ggplot(aes(x = x, y = y, color = g)) +
-#'   geom_point() +
-#'   geom_point(aes(x = x_transformed, y = y_transformed)) +
-#'   theme_minimal()
+#' if (has_ggplot){
+#'   res %>%
+#'     ggplot(aes(x = x, y = y, color = g)) +
+#'     geom_point() +
+#'     geom_point(aes(x = x_transformed, y = y_transformed)) +
+#'     theme_minimal()
+#' }
 apply_transformation_matrix <- function(data,
                                         mat,
                                         cols,

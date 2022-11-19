@@ -38,7 +38,7 @@
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
-#' has_ggplot <- require(ggplot2)
+#' has_ggplot <- require(ggplot2)  # Attach if installed
 #'
 #' # Set seed
 #' set.seed(1)
@@ -63,7 +63,7 @@
 #' # Plot points with degrees
 #' # Degrees are measured counterclockwise around the
 #' # positive side of the x-axis
-#' if (isTRUE(has_ggplot)){
+#' if (has_ggplot){
 #'   df_angles %>%
 #'     ggplot(aes(x = x, y = y, color = .degrees)) +
 #'     geom_segment(aes(x = 0.5, xend = 1, y = 0.5, yend = 0.5), color = "magenta") +

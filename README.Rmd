@@ -4,14 +4,16 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  dpi = 92,
-  fig.retina = 2
-)
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+if (requireNamespace("knitr", quietly = TRUE)){
+  knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    fig.path = "man/figures/README-",
+    dpi = 92,
+    fig.retina = 2
+  )
+}
 
 # Get minimum R requirement 
 dep <- as.vector(read.dcf('DESCRIPTION')[, 'Depends'])
@@ -162,8 +164,8 @@ xpectr::set_test_seed(1)
 
 ```{r include=FALSE}
 library(knitr)        # kable()
-library(tidyr)        # gather()
-library(ggplot2)
+has_tidyr <- require(tidyr)        # gather()
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 vec <- 1:10
 random_sample <- runif(10)
@@ -183,8 +185,10 @@ orderings <- data.frame(
 ) 
 
 # Convert to long format for plotting
-orderings <- orderings %>% 
-  tidyr::gather(key = "Method", value = "Value", 2:(ncol(orderings))) 
+if (has_tidyr){
+  orderings <- orderings %>% 
+    tidyr::gather(key = "Method", value = "Value", 2:(ncol(orderings))) 
+}
 
 gg_line_alpha <- .4
 gg_base_line_size <- .3
@@ -214,16 +218,20 @@ center_min(data = 1:10)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot centering methods
-orderings %>% 
-  dplyr::filter(Method %in% c("center_min", "center_max")) %>% 
-  ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_colour_brewer(palette = "Dark2")
+if (has_ggplot && has_tidyr){
+  
+  # Plot centering methods
+  orderings %>% 
+    dplyr::filter(Method %in% c("center_min", "center_max")) %>% 
+    ggplot(aes(x = Position, y = Value, color = Method)) + 
+    geom_line(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_colour_brewer(palette = "Dark2")
+  
+}
 ```
 
 ### Position min/max
@@ -237,16 +245,20 @@ position_min(data = 1:10, position = 3)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot positioning methods
-orderings %>% 
-  dplyr::filter(Method %in% c("position_min", "position_max")) %>% 
-  ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_colour_brewer(palette = "Dark2")
+if (has_ggplot && has_tidyr){
+
+  # Plot positioning methods  
+  orderings %>% 
+    dplyr::filter(Method %in% c("position_min", "position_max")) %>% 
+    ggplot(aes(x = Position, y = Value, color = Method)) + 
+    geom_line(alpha = gg_line_alpha) + 
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_colour_brewer(palette = "Dark2")
+
+}
 ```
 
 ### Pair extremes
@@ -256,16 +268,20 @@ pair_extremes(data = 1:10)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot extreme pairing
-orderings %>% 
-  dplyr::filter(Method == "pair_extremes") %>% 
-  ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_colour_brewer(palette = "Dark2")
+if (has_ggplot && has_tidyr){
+  
+  # Plot extreme pairing
+  orderings %>% 
+    dplyr::filter(Method == "pair_extremes") %>% 
+    ggplot(aes(x = Position, y = Value, color = Method)) + 
+    geom_line(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_colour_brewer(palette = "Dark2")
+    
+}
 ```
 
 ### Closest to / furthest from
@@ -283,16 +299,20 @@ furthest_from_vec(data = 1:10, origin = 5)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot distanced order
-orderings %>% 
-  dplyr::filter(Method %in% c("closest_to", "furthest_from")) %>% 
-  ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_colour_brewer(palette = "Dark2")
+if (has_ggplot && has_tidyr){
+  
+  # Plot distanced order
+  orderings %>% 
+    dplyr::filter(Method %in% c("closest_to", "furthest_from")) %>% 
+    ggplot(aes(x = Position, y = Value, color = Method)) + 
+    geom_line(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_colour_brewer(palette = "Dark2")
+    
+}
 ```
 
 ### Reverse windows
@@ -304,16 +324,20 @@ rev_windows_vec(data = 1:10, window_size = 3)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot windowed reversing
-orderings %>% 
-  dplyr::filter(Method == "rev_windows") %>% 
-  ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_colour_brewer(palette = "Dark2")
+if (has_ggplot && has_tidyr){
+    
+  # Plot windowed reversing
+  orderings %>% 
+    dplyr::filter(Method == "rev_windows") %>% 
+    ggplot(aes(x = Position, y = Value, color = Method)) + 
+    geom_line(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_y_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_colour_brewer(palette = "Dark2")
+    
+}
 ```
 
 ### Shuffle Hierarchy
@@ -359,16 +383,20 @@ rotate_2d(
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
 rotate_df <- rotate_2d(random_sample, degrees = c(0, 72, 144, 216, 288), origin_fn = centroid)
 
-# Plot rotated values
-rotate_df %>% 
-  ggplot(aes(x = Index_rotated, y = Value_rotated, color = factor(.degrees))) +
-  geom_hline(yintercept = mean(random_sample), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_vline(xintercept = mean(seq_len(length(random_sample))), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_path(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "Index", y="Value", color="Degrees")
+if (has_ggplot){
+  
+  # Plot rotated values
+  rotate_df %>% 
+    ggplot(aes(x = Index_rotated, y = Value_rotated, color = factor(.degrees))) +
+    geom_hline(yintercept = mean(random_sample), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+    geom_vline(xintercept = mean(seq_len(length(random_sample))), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+    geom_path(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "Index", y="Value", color="Degrees")
+    
+}
 
 ```
 
@@ -409,16 +437,20 @@ rotate_df <- df %>%
            z_deg = c(0, 72, 144, 216, 288),
            origin_fn = centroid)
 
-# Plot rotated values
-rotate_df %>% 
-  ggplot(aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
-  geom_path(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
+if (has_ggplot){
+    
+  # Plot rotated values
+  rotate_df %>% 
+    ggplot(aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
+    geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype="dashed") +
+    geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype="dashed") +
+    geom_path(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
+    
+}
 ```
 
 
@@ -445,13 +477,17 @@ df_swirled <- swirl_2d(
 
 orig <- df_swirled$.origin[[1]]
 
-# Plot swirls
-ggswirl1 <- df_swirled %>%
-  ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = ".radius")
+if (has_ggplot){
+    
+  # Plot swirls
+  ggswirl1 <- df_swirled %>%
+    ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = ".radius")
+
+}
 
 df_swirled <- df_swirled %>% 
   rotate_2d(degrees = (1:36) * 10, 
@@ -460,13 +496,17 @@ df_swirled <- df_swirled %>%
            suffix = "",
            origin = orig)
 
-# Plot rotated swirls
-ggswirl2 <- df_swirled %>%
-  ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = ".radius")
+if (has_ggplot){
+  
+  # Plot rotated swirls
+  ggswirl2 <- df_swirled %>%
+    ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = ".radius")
+
+}
 
 # Expand values ^2
 df_swirled <- df_swirled %>% 
@@ -477,34 +517,42 @@ df_swirled <- df_swirled %>%
     origin = orig,
     suffix = "")
 
-# Plot expanded swirls
-ggswirl3 <- df_swirled %>%
-  ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = ".radius")
+if (has_ggplot){
+  
+  # Plot expanded swirls
+  ggswirl3 <- df_swirled %>%
+    ggplot(aes(x = Index, y = Value, color = factor(.radius))) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = ".radius")
+
+}
 
 # Dim values
 df_swirled <- df_swirled %>% 
   mutate(o = 1) %>% 
   dim_values(cols = c("Index", "Value", "o"), origin = c(orig, 1), suffix = "")
 
-# Plot rotated swirls
-ggswirl4 <- df_swirled %>%
-  ggplot(aes(x = Index, y = Value, alpha = o, color = factor(.radius))) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = ".radius", alpha = "opacity (for D)")
+if (has_ggplot){
+  
+  # Plot rotated swirls
+  ggswirl4 <- df_swirled %>%
+    ggplot(aes(x = Index, y = Value, alpha = o, color = factor(.radius))) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = ".radius", alpha = "opacity (for D)")
+  
+  combined <- (ggswirl1 + ggswirl2) / (ggswirl3 + ggswirl4) & theme(legend.position = "bottom")
+  combined <- combined + plot_layout(guides = "collect")
+  combined + 
+    plot_annotation(title = "2d swirls with rotation, expansion and dimming",
+                    subtitle = "A: 2d swirls,  B: Rotated A, C: Expanded B, D: Dimmed C",
+                    caption = "Distances in A are scaled by d^1.6",
+                    tag_levels = 'A')
 
-combined <- (ggswirl1 + ggswirl2) / (ggswirl3 + ggswirl4) & theme(legend.position = "bottom")
-combined <- combined + plot_layout(guides = "collect")
-combined + 
-  plot_annotation(title = "2d swirls with rotation, expansion and dimming",
-                  subtitle = "A: 2d swirls,  B: Rotated A, C: Expanded B, D: Dimmed C",
-                  caption = "Distances in A are scaled by d^1.6",
-                  tag_levels = 'A')
+}
 
 ```
 
@@ -556,13 +604,18 @@ df_swirled <- swirl_3d(
   origin_fn = centroid
 )
 
-ggswirl_3d_1 <- df_swirled %>% 
-  ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_path(alpha = gg_line_alpha) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+if (has_ggplot){
+  
+  ggswirl_3d_1 <- df_swirled %>% 
+    ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+    geom_path(alpha = gg_line_alpha) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+
+}
+
 
 # 2nd plot
 
@@ -577,13 +630,17 @@ df_swirled <- swirl_3d(
   origin_fn = centroid
 )
 
-ggswirl_3d_2 <- df_swirled %>% 
-  ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_path(alpha = gg_line_alpha) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+if (has_ggplot){
+  
+  ggswirl_3d_2 <- df_swirled %>% 
+    ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+    geom_path(alpha = gg_line_alpha) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+
+}
 
 # 3rd plot
 
@@ -601,13 +658,17 @@ df_swirled <- swirl_3d(
   }
 )
 
-ggswirl_3d_3 <- df_swirled %>% 
-  ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_path(alpha = gg_line_alpha) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+if (has_ggplot){
+  
+  ggswirl_3d_3 <- df_swirled %>% 
+    ggplot(aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+    geom_path(alpha = gg_line_alpha) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+
+}
 
 # 4th plot
 
@@ -634,21 +695,24 @@ df_rotated <- df_swirled %>%
     suffix = "",
     origin = df_swirled$.origin[[1]])
 
+if (has_ggplot){
+  
+  ggswirl_3d_4 <- df_rotated %>% 
+    ggplot(aes(x = r1_swirled, y = r2_swirled, color = .degrees_str,  alpha = o_swirled)) +
+    geom_point(show.legend = FALSE) +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    # scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "r1", y = "r2", color = "radius", alpha = "o (opacity)")
+  
+  combined <- (ggswirl_3d_1 + ggswirl_3d_2) / (ggswirl_3d_3 + ggswirl_3d_4) & theme(legend.position = "none")
+  # combined <- combined + plot_layout(guides = "collect")
+  combined + 
+    plot_annotation(title = "3d swirls",
+                    subtitle = "ABC: 3d swirls, D: rotated 3d swirls",
+                    caption = "Distances in C are scaled by d^0.81",
+                    tag_levels = 'A')
 
-ggswirl_3d_4 <- df_rotated %>% 
-  ggplot(aes(x = r1_swirled, y = r2_swirled, color = .degrees_str,  alpha = o_swirled)) +
-  geom_point(show.legend = FALSE) +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  # scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "r1", y = "r2", color = "radius", alpha = "o (opacity)")
-
-combined <- (ggswirl_3d_1 + ggswirl_3d_2) / (ggswirl_3d_3 + ggswirl_3d_4) & theme(legend.position = "none")
-# combined <- combined + plot_layout(guides = "collect")
-combined + 
-  plot_annotation(title = "3d swirls",
-                  subtitle = "ABC: 3d swirls, D: rotated 3d swirls",
-                  caption = "Distances in C are scaled by d^0.81",
-                  tag_levels = 'A')
+}
 ```
 
 <div style="width: 100%; text-align: center; display: block; padding-top:20px;">
@@ -687,17 +751,21 @@ expand_df <- purrr::map_dfr(
   }
 )
 
-# Plot rotated values
-expand_df %>% 
-  ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
-  geom_hline(yintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_vline(xintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
-  geom_path(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y="y", color="Exponent")
+if (has_ggplot){
+  
+  # Plot rotated values
+  expand_df %>% 
+    ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.exponent))) +
+    geom_hline(yintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+    geom_vline(xintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype="dashed") +
+    geom_path(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y="y", color="Exponent")
 
+}
+  
 xpectr::set_test_seed(36) # for next section
 ```
 
@@ -730,16 +798,20 @@ expand_df <- purrr::map2_dfr(
   }
 )
 
-# Plot rotated values
-expand_df %>% 
-  ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.multipliers_str))) +
-  geom_hline(yintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype = "dashed") +
-  geom_vline(xintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype = "dashed") +
-  geom_path(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = "Multiplier")
+if (has_ggplot){
+  
+  # Plot rotated values
+  expand_df %>% 
+    ggplot(aes(x = x_expanded, y = y_expanded, color = factor(.multipliers_str))) +
+    geom_hline(yintercept = mean(random_y), size = 0.2, alpha = gg_line_alpha, linetype = "dashed") +
+    geom_vline(xintercept = mean(random_x), size = 0.2, alpha = gg_line_alpha, linetype = "dashed") +
+    geom_path(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = "Multiplier")
+    
+}
 
 ```
 
@@ -767,15 +839,19 @@ cluster_groups(
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
 df_clustered <- cluster_groups(df, cols = c("x", "y"), group_col = "g")
 
-ggplot(df_clustered, aes(x = x_clustered, y = y_clustered, color = factor(g))) +
-  # Original data
-  geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
-  # Clustered data
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = "g", caption = "Semi-transparent points are the original data points.")
+if (has_ggplot){
+  
+  ggplot(df_clustered, aes(x = x_clustered, y = y_clustered, color = factor(g))) +
+    # Original data
+    geom_point(aes(x = x, y = y), alpha = 0.3, size = 0.8) +
+    # Clustered data
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = "g", caption = "Semi-transparent points are the original data points.")
 
+}
+  
 df_clustered <- df_clustered %>% 
   dplyr::select(x_clustered, y_clustered, g)
 ```
@@ -803,11 +879,15 @@ df_dimmed <- df_clustered %>%
   dplyr::group_by(g) %>% 
   dim_values(cols = c("x_clustered", "y_clustered", "o"), origin_fn = most_centered)
 
-ggplot(df_dimmed, aes(x = x_clustered, y = y_clustered, alpha = o_dimmed, color = factor(g))) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = "x", y = "y", color = "g", alpha = "o_dimmed")
+if (has_ggplot){
+  
+  ggplot(df_dimmed, aes(x = x_clustered, y = y_clustered, alpha = o_dimmed, color = factor(g))) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = "x", y = "y", color = "g", alpha = "o_dimmed")
+  
+}
 ```
 
 ### Flip values
@@ -824,15 +904,19 @@ flip_values(
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.width=6, fig.height=3.5}
-# Plot flipped values
-orderings %>% 
-  dplyr::filter(Method %in% c("random_sample", "flipped_median")) %>% 
-  ggplot(aes(x = Position, y = Value, color = Method)) + 
-  geom_line(alpha = gg_line_alpha) + 
-  geom_point() + 
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
-  scale_colour_brewer(palette = "Dark2")
+if (has_ggplot && has_tidyr){
+    
+  # Plot flipped values
+  orderings %>% 
+    dplyr::filter(Method %in% c("random_sample", "flipped_median")) %>% 
+    ggplot(aes(x = Position, y = Value, color = Method)) + 
+    geom_line(alpha = gg_line_alpha) + 
+    geom_point() + 
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+    scale_colour_brewer(palette = "Dark2")
+    
+}
 ```
 
 
@@ -854,12 +938,16 @@ df <- data.frame(
 
 df_circ <- circularize(df, y_col = "y")
 
-ggcirc_1 <- df_circ %>%
-  ggplot(aes(x = .circle_x, y = y, color = .degrees)) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_distiller(palette = "Dark2") +
-  labs(x = ".circle_x", y = "y")
+if (has_ggplot){
+  
+  ggcirc_1 <- df_circ %>%
+    ggplot(aes(x = .circle_x, y = y, color = .degrees)) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_distiller(palette = "Dark2") +
+    labs(x = ".circle_x", y = "y")
+
+}
 
 df_circ_expanded <- purrr::map_dfr(
   .x = 1:10/10,
@@ -871,19 +959,23 @@ df_circ_expanded <- purrr::map_dfr(
       origin_fn = centroid)
   })
 
-ggcirc_2 <- df_circ_expanded %>%
-  ggplot(aes(x = .circle_x_expanded, y = y_expanded, 
-             color = .degrees, alpha = 0.8*.multiplier^2)) +
-  geom_point(aes(size = 0.8*.multiplier^2)) +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_distiller(palette = "Dark2") + 
-  labs(x = ".circle_x", y = "y")
+if (has_ggplot){
+  
+  ggcirc_2 <- df_circ_expanded %>%
+    ggplot(aes(x = .circle_x_expanded, y = y_expanded, 
+               color = .degrees, alpha = 0.8*.multiplier^2)) +
+    geom_point(aes(size = 0.8*.multiplier^2)) +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_distiller(palette = "Dark2") + 
+    labs(x = ".circle_x", y = "y")
+  
+  combined <- (ggcirc_1 + ggcirc_2) & theme(legend.position = "none")
+  combined + 
+    plot_annotation(title = "Circles",
+                    subtitle = "A: circularized y-values, B: contracted circles",
+                    tag_levels = 'A')
 
-combined <- (ggcirc_1 + ggcirc_2) & theme(legend.position = "none")
-combined + 
-  plot_annotation(title = "Circles",
-                  subtitle = "A: circularized y-values, B: contracted circles",
-                  tag_levels = 'A')
+}
 
 ```
 
@@ -907,12 +999,16 @@ df <- data.frame(
 
 df_hex <- hexagonalize(df, y_col = "y")
 
-gghex_1 <- df_hex %>%
-  ggplot(aes(x = .hexagon_x, y = y, color = .edge)) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = ".hexagon_x", y = "y")
+if (has_ggplot){
+  
+  gghex_1 <- df_hex %>%
+    ggplot(aes(x = .hexagon_x, y = y, color = .edge)) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = ".hexagon_x", y = "y")
+
+}
 
 df_hex_expanded <- purrr::map_dfr(
   .x = 1:5/10*2,
@@ -925,19 +1021,23 @@ df_hex_expanded <- purrr::map_dfr(
       origin_fn = centroid)
   })
 
-gghex_2 <- df_hex_expanded %>%
-  ggplot(aes(x = .hexagon_x_expanded, y = y_expanded, 
-             color = .edge, alpha = 0.8*.exponent^2)) +
-  geom_point(aes(size = 0.8*.exponent^2)) +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = ".hexagon_x", y = "y")
+if (has_ggplot){
 
-combined <- (gghex_1 + gghex_2) & theme(legend.position = "none")
-combined + 
-  plot_annotation(title = "Hexagons",
-                  subtitle = "A: hexagonalized y-values, B: contracted hexagons",
-                  tag_levels = 'A')
+  gghex_2 <- df_hex_expanded %>%
+    ggplot(aes(x = .hexagon_x_expanded, y = y_expanded, 
+               color = .edge, alpha = 0.8*.exponent^2)) +
+    geom_point(aes(size = 0.8*.exponent^2)) +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = ".hexagon_x", y = "y")
+  
+  combined <- (gghex_1 + gghex_2) & theme(legend.position = "none")
+  combined + 
+    plot_annotation(title = "Hexagons",
+                    subtitle = "A: hexagonalized y-values, B: contracted hexagons",
+                    tag_levels = 'A')
+
+}
 
 ```
 
@@ -955,12 +1055,16 @@ square(runif(200))
 
 df_sq <- square(df, y_col = "y")
 
-ggsq_1 <- df_sq %>%
-  ggplot(aes(x = .square_x, y = y, color = .edge)) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = ".square_x", y = "y")
+if (has_ggplot){
+  
+  ggsq_1 <- df_sq %>%
+    ggplot(aes(x = .square_x, y = y, color = .edge)) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = ".square_x", y = "y")
+
+}
 
 df_sq_expanded <- purrr::map_dfr(
   .x = c(1, 0.75, 0.5, 0.25, 0.125),
@@ -980,19 +1084,23 @@ df_sq_expanded <- purrr::map_dfr(
     origin_col_name = NULL
   )
 
-ggsq_2 <- df_sq_expanded %>%
-  ggplot(aes(x = .square_x_expanded, y = y_expanded, 
-             color = .edge, alpha = 0.8*.multiplier^2)) +
-  geom_point(aes(size = 0.8*.multiplier^2)) +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = ".square_x", y = "y")
+if (has_ggplot){
 
-combined <- (ggsq_1 + ggsq_2) & theme(legend.position = "none")
-combined + 
-  plot_annotation(title = "Squares",
-                  subtitle = "A: squared y-values, B: contracted and swirled squares",
-                  tag_levels = 'A')
+  ggsq_2 <- df_sq_expanded %>%
+    ggplot(aes(x = .square_x_expanded, y = y_expanded, 
+               color = .edge, alpha = 0.8*.multiplier^2)) +
+    geom_point(aes(size = 0.8*.multiplier^2)) +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = ".square_x", y = "y")
+  
+  combined <- (ggsq_1 + ggsq_2) & theme(legend.position = "none")
+  combined + 
+    plot_annotation(title = "Squares",
+                    subtitle = "A: squared y-values, B: contracted and swirled squares",
+                    tag_levels = 'A')
+
+}
 
 ```
 
@@ -1016,12 +1124,16 @@ df <- data.frame(
 
 df_tri <- triangularize(df, y_col = "y")
 
-ggtri_1 <- df_tri %>%
-  ggplot(aes(x = .triangle_x, y = y, color = .edge)) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") +
-  labs(x = ".triangle_x", y = "y")
+if (has_ggplot){
+  
+  ggtri_1 <- df_tri %>%
+    ggplot(aes(x = .triangle_x, y = y, color = .edge)) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") +
+    labs(x = ".triangle_x", y = "y")
+
+}
 
 origin <- centroid(df_tri$.triangle_x, df_tri$y)
 df_tri_expanded <- purrr::map_dfr(
@@ -1043,19 +1155,23 @@ df_tri_expanded <- purrr::map_dfr(
     origin = origin
   )
 
-ggtri_2 <- df_tri_expanded %>%
-  ggplot(aes(x = .triangle_x_expanded, y = y_expanded, 
-             color = .edge, alpha = 0.8*.exponent^2)) +
-  geom_point() +
-  theme_minimal(base_line_size = gg_base_line_size) + 
-  scale_colour_brewer(palette = "Dark2") + 
-  labs(x = ".triangle_x", y = "y")
+if (has_ggplot){
 
-combined <- (ggtri_1 + ggtri_2) & theme(legend.position = "none")
-combined + 
-  plot_annotation(title = "Triangles",
-                  subtitle = "A: triangularized y-values, B: expanded and rotated triangles",
-                  tag_levels = 'A')
+  ggtri_2 <- df_tri_expanded %>%
+    ggplot(aes(x = .triangle_x_expanded, y = y_expanded, 
+               color = .edge, alpha = 0.8*.exponent^2)) +
+    geom_point() +
+    theme_minimal(base_line_size = gg_base_line_size) + 
+    scale_colour_brewer(palette = "Dark2") + 
+    labs(x = ".triangle_x", y = "y")
+  
+  combined <- (ggtri_1 + ggtri_2) & theme(legend.position = "none")
+  combined + 
+    plot_annotation(title = "Triangles",
+                    subtitle = "A: triangularized y-values, B: expanded and rotated triangles",
+                    tag_levels = 'A')
+
+}
 
 ```
 
@@ -1086,14 +1202,19 @@ xpectr::set_test_seed(10)
 df_clusters <- generate_clusters(
   num_rows = 50, num_cols = 5,
   num_clusters = 5, compactness = 1.6
-  ) 
-df_clusters %>% 
-  ggplot(
-    aes(x = D1, y = D2, color = .cluster)) +
-    geom_point() +
-    theme_minimal(base_line_size = gg_base_line_size) + 
-    scale_colour_brewer(palette = "Dark2") + 
-    labs(x = "D1", y = "D2", color = "Cluster")
+) 
+
+if (has_ggplot){
+  
+  df_clusters %>% 
+    ggplot(
+      aes(x = D1, y = D2, color = .cluster)) +
+      geom_point() +
+      theme_minimal(base_line_size = gg_base_line_size) + 
+      scale_colour_brewer(palette = "Dark2") + 
+      labs(x = "D1", y = "D2", color = "Cluster")
+  
+}
 
 ```
 
