@@ -1,4 +1,6 @@
 
+# rearrr 0.3.2.9000
+
 # rearrr 0.3.2
 
 * Makes use of suggested packages conditional on their presence.
