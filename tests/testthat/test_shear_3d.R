@@ -330,13 +330,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_16569 <- xpectr::capture_side_effects(shear_3d(data = dplyr::group_by(df, g), x_col = "x", y_col = "y", z_col = "z", x_shear = 10, y_shear = 0, z_shear = 10, suffix = "", origin = NULL, origin_fn = centroid, keep_original = FALSE, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_16569[['error']]),
     xpectr::strip("1 assertions failed:\n * Exactly 2 of {x_shear, y_shear, z_shear} must be non-null."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_16569[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "y", y_col = "y"...
@@ -435,13 +435,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19400 <- xpectr::capture_side_effects(shear_3d(data = df, x_col = "x", y_col = "y", z_col = "uhh", x_shear = 1, y_shear = 0, z_shear = NULL, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * These names in the 'col(s)' argument were not found in 'data': uhh."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "x", y_col = "y"...
@@ -712,13 +712,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_10824 <- xpectr::capture_side_effects(shear_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_shear = NULL, y_shear = 0, z_shear = NULL, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_10824[['error']]),
     xpectr::strip("1 assertions failed:\n * Exactly 2 of {x_shear, y_shear, z_shear} must be non-null."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10824[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "x", y_col = "y"...
@@ -946,13 +946,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_17375 <- xpectr::capture_side_effects(shear_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_shear = 1, y_shear = NULL, z_shear = NULL, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_17375[['error']]),
     xpectr::strip("1 assertions failed:\n * Exactly 2 of {x_shear, y_shear, z_shear} must be non-null."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_17375[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "x", y_col = "y"...
@@ -961,13 +961,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_18110 <- xpectr::capture_side_effects(shear_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_shear = 1, y_shear = 0, z_shear = 1, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_18110[['error']]),
     xpectr::strip("1 assertions failed:\n * Exactly 2 of {x_shear, y_shear, z_shear} must be non-null."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18110[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "x", y_col = "y"...
@@ -1312,13 +1312,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_14317 <- xpectr::capture_side_effects(shear_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_shear = 1, y_shear = 0, z_shear = NULL, suffix = "", origin = NULL, origin_fn = NULL, keep_original = FALSE, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_14317[['error']]),
     xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14317[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "x", y_col = "y"...
@@ -1397,13 +1397,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_18877 <- xpectr::capture_side_effects(shear_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_shear = 1, y_shear = 0, z_shear = NULL, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = NULL, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_18877[['error']]),
     xpectr::strip("1 assertions failed:\n * Variable 'keep_original': Must be of type 'logical flag', not 'NULL'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_18877[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "x", y_col = "y"...
@@ -1687,13 +1687,13 @@ test_that("fuzz testing shear_3d()", {
   # Testing side effects
   # Assigning side effects
   side_effects_10389 <- xpectr::capture_side_effects(shear_3d(data = df, x_col = "x", y_col = "y", z_col = "z", x_shear = 1, y_shear = 0, z_shear = NULL, suffix = "", origin = c(0, 0, 0), origin_fn = NULL, keep_original = FALSE, shear_col_name = ".shear", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_10389[['error']]),
     xpectr::strip("Adding these dimensions would overwrite existing columns: x, y, z."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_10389[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing shear_3d(data = df, x_col = "x", y_col = "y"...

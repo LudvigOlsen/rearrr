@@ -534,13 +534,13 @@ test_that("fuzz testing rev_windows()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19400 <- xpectr::capture_side_effects(rev_windows(data = df, window_size = 3, factor_name = "A", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("1 assertions failed:\n * The column 'A' already exists and 'overwrite' is disabled."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing rev_windows(data = df, window_size = 3, fact...

@@ -110,7 +110,7 @@ of each group.
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(4)
@@ -151,13 +151,15 @@ df_swirled <- swirl_3d(
 df_swirled
 
 # Plot swirls
-ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_path(alpha = .4) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+if (has_ggplot){
+  ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+    geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_path(alpha = .4) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+}
 
 \dontrun{
 # Plot 3d with plotly
@@ -186,13 +188,15 @@ df_swirled <- swirl_3d(
 df_swirled
 
 # Plot swirls
-ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_path(alpha = .4) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+if (has_ggplot){
+  ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+    geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_path(alpha = .4) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+}
 
 \dontrun{
 # Plot 3d with plotly
@@ -222,13 +226,15 @@ df_swirled <- swirl_3d(
 )
 
 # Plot swirls
-ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
-  geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_path(alpha = .4) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+if (has_ggplot){
+  ggplot(df_swirled, aes(x = x_swirled, y = y_swirled, color = .radius_str, alpha = z_swirled)) +
+    geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_path(alpha = .4) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "x", y = "y", color = "radius", alpha = "z (opacity)")
+}
 }
 
 \dontrun{
@@ -276,20 +282,22 @@ df_rotated <- df_swirled \%>\%
   )
 
 # Plot rotated swirls
-ggplot(
-  df_rotated,
-  aes(
-    x = r1_swirled,
-    y = r2_swirled,
-    color = .degrees_str,
-    alpha = o_swirled
-  )
-) +
-  geom_vline(xintercept = mean(df$r1), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_hline(yintercept = mean(df$r2), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_point(show.legend = FALSE) +
-  theme_minimal() +
-  labs(x = "r1", y = "r2", color = "radius", alpha = "o (opacity)")
+if (has_ggplot){
+  ggplot(
+    df_rotated,
+    aes(
+      x = r1_swirled,
+      y = r2_swirled,
+      color = .degrees_str,
+      alpha = o_swirled
+    )
+  ) +
+    geom_vline(xintercept = mean(df$r1), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_hline(yintercept = mean(df$r2), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_point(show.legend = FALSE) +
+    theme_minimal() +
+    labs(x = "r1", y = "r2", color = "radius", alpha = "o (opacity)")
+}
 }
 }
 \seealso{

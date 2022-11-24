@@ -813,13 +813,13 @@ test_that("distance()", {
   # Testing side effects
   # Assigning side effects
   side_effects_14749 <- xpectr::capture_side_effects(distance(data = df, cols = c("x", "y", "z"), origin = NULL, origin_fn = median, distance_col_name = ".distance", origin_col_name = ".origin"), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_14749[['error']]),
     xpectr::strip("output of 'origin_fn' must have same length as 'cols' (3) but had length 1."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14749[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing distance(data = df, cols = c("x", "y", "z"),...
@@ -858,13 +858,13 @@ test_that("distance()", {
   # Testing side effects
   # Assigning side effects
   side_effects_11387 <- xpectr::capture_side_effects(distance(data = df, cols = c("x", "y", "z"), origin = NULL, origin_fn = NULL, distance_col_name = ".distance", origin_col_name = ".origin"), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_11387[['error']]),
     xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_11387[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing distance(data = df, cols = c("x", "y", "z"),...

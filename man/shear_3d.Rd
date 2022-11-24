@@ -113,7 +113,7 @@ Given \code{`y_shear`} and \code{`z_shear`}:\tabular{llll}{
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(1)
@@ -138,11 +138,13 @@ df_sheared <- shear_3d(
 # Plot sheared data
 # Black: original points
 # Red: sheared points
-df_sheared \%>\%
-  ggplot(aes(x = x, y = y)) +
-  geom_point() +
-  geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
-  theme_minimal()
+if (has_ggplot){
+  df_sheared \%>\%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+    theme_minimal()
+}
 
 \dontrun{
 # Plot 3d with plotly
@@ -171,11 +173,13 @@ df_sheared <- shear_3d(
 # Plot sheared data
 # Black: original points
 # Red: sheared points
-df_sheared \%>\%
-  ggplot(aes(x = x, y = y)) +
-  geom_point() +
-  geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
-  theme_minimal()
+if (has_ggplot){
+  df_sheared \%>\%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+    theme_minimal()
+}
 
 \dontrun{
 # Plot 3d with plotly
@@ -202,10 +206,12 @@ df_sheared <- shear_3d(
 )
 
 # Plot sheared data
-df_sheared \%>\%
-  ggplot(aes(x = x_sheared, y = y_sheared, color = .shear_str)) +
-  geom_point() +
-  theme_minimal()
+if (has_ggplot){
+  df_sheared \%>\%
+    ggplot(aes(x = x_sheared, y = y_sheared, color = .shear_str)) +
+    geom_point() +
+    theme_minimal()
+}
 
 \dontrun{
 # Plot 3d with plotly

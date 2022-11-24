@@ -48,7 +48,7 @@
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
-#' library(ggplot2)
+#' has_ggplot <- require(ggplot2)  # Attach if installed
 #'
 #' # Set seed
 #' set.seed(3)
@@ -78,13 +78,15 @@
 #' df_rotated
 #'
 #' # Plot rotations
-#' ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_line(alpha = .4) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
+#' if (has_ggplot){
+#'   ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
+#'     geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+#'     geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
+#'     geom_line(alpha = .4) +
+#'     geom_point() +
+#'     theme_minimal() +
+#'     labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
+#' }
 #'
 #' \dontrun{
 #' # Plot 3d with plotly
@@ -113,14 +115,15 @@
 #' df_rotated
 #'
 #' # Plot rotations
-#' ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
-#'   geom_line(alpha = .4) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
-#'
+#' if (has_ggplot){
+#'   ggplot(df_rotated, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
+#'     geom_vline(xintercept = mean(df$x), size = 0.2, alpha = .4, linetype = "dashed") +
+#'     geom_hline(yintercept = mean(df$y), size = 0.2, alpha = .4, linetype = "dashed") +
+#'     geom_line(alpha = .4) +
+#'     geom_point() +
+#'     theme_minimal() +
+#'     labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
+#' }
 #' }
 #' \dontrun{
 #' # Plot 3d with plotly
@@ -149,11 +152,12 @@
 #'   )
 #'
 #' # Plot A and A rotated around group centroids
-#' ggplot(df_grouped, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
-#'   geom_point() +
-#'   theme_minimal() +
-#'   labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
-#'
+#' if (has_ggplot){
+#'   ggplot(df_grouped, aes(x = x_rotated, y = y_rotated, color = .degrees_str, alpha = z_rotated)) +
+#'     geom_point() +
+#'     theme_minimal() +
+#'     labs(x = "x", y = "y", color = "degrees", alpha = "z (opacity)")
+#' }
 #' }
 #' \dontrun{
 #' # Plot 3d with plotly

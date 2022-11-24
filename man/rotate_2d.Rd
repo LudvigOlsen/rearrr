@@ -96,7 +96,7 @@ As specified at \href{https://en.wikipedia.org/wiki/Rotation_matrix}{Wikipedia/R
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(1)
@@ -122,13 +122,15 @@ df_rotated <- df \%>\%
 df_rotated
 
 # Plot A and A rotated around overall centroid
-ggplot(df_rotated, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
-  geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype = "dashed") +
-  geom_line(alpha = .4) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "Index", y = "Value", color = "Degrees")
+if (has_ggplot){
+  ggplot(df_rotated, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
+    geom_hline(yintercept = mean(df$A), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_vline(xintercept = mean(df$Index), size = 0.2, alpha = .4, linetype = "dashed") +
+    geom_line(alpha = .4) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "Index", y = "Value", color = "Degrees")
+}
 
 # Rotate around group centroids
 df_grouped <- df \%>\%
@@ -142,10 +144,12 @@ df_grouped <- df \%>\%
 df_grouped
 
 # Plot A and A rotated around group centroids
-ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "Index", y = "Value", color = "Degrees")
+if (has_ggplot){
+  ggplot(df_grouped, aes(x = Index_rotated, y = A_rotated, color = factor(.degrees))) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "Index", y = "Value", color = "Degrees")
+}
 }
 \seealso{
 Other mutate functions: 

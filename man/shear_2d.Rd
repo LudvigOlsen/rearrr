@@ -95,7 +95,7 @@ of each group.
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Create a data frame
 df <- data.frame(
@@ -117,11 +117,13 @@ df_sheared <- shear_2d(
 # Plot sheared data
 # Black: original points
 # Red: sheared points
-df_sheared \%>\%
-  ggplot(aes(x = x, y = y)) +
-  geom_point() +
-  geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
-  theme_minimal()
+if (has_ggplot){
+  df_sheared \%>\%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+    theme_minimal()
+}
 
 # Shear in both dimensions
 df_sheared <- shear_2d(
@@ -136,11 +138,13 @@ df_sheared <- shear_2d(
 # Plot sheared data
 # Black: original points
 # Red: sheared points
-df_sheared \%>\%
-  ggplot(aes(x = x, y = y)) +
-  geom_point() +
-  geom_point(aes(x = x_sheared,y = y_sheared, color = "red")) +
-  theme_minimal()
+if (has_ggplot){
+  df_sheared \%>\%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_point(aes(x = x_sheared,y = y_sheared, color = "red")) +
+    theme_minimal()
+}
 
 # Shear grouped data frame
 # Affects the calculated origin
@@ -155,11 +159,13 @@ df_sheared <- shear_2d(
 # Plot sheared data
 # Black: original points
 # Red: sheared points
-df_sheared \%>\%
-  ggplot(aes(x = x, y = y)) +
-  geom_point() +
-  geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
-  theme_minimal()
+if (has_ggplot){
+  df_sheared \%>\%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_point(aes(x = x_sheared, y = y_sheared, color = "red")) +
+    theme_minimal()
+}
 
 # Shear a vector with multiple shearing factors
 shear_2d(

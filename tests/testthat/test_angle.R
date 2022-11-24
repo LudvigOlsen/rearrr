@@ -527,13 +527,13 @@ test_that("fuzz testing angle()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19400 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = c(0, 0, 0), origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19400[['error']]),
     xpectr::strip("'origin' must have either length 1 or same length as 'c(x_col, y_col)' (2) but had length 3."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19400[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing angle(data = df, x_col = "x", y_col = "y", o...
@@ -631,13 +631,13 @@ test_that("fuzz testing angle()", {
   # Testing side effects
   # Assigning side effects
   side_effects_15603 <- xpectr::capture_side_effects(angle(data = df, x_col = "x", y_col = "y", origin = NULL, origin_fn = NULL, degrees_col_name = ".degrees", origin_col_name = ".origin", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_15603[['error']]),
     xpectr::strip("1 assertions failed:\n * At least one of {'origin', 'origin_fn'} must be specified (not 'NULL')."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_15603[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing angle(data = df, x_col = "x", y_col = "y", o...

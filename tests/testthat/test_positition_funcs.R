@@ -439,13 +439,13 @@ test_that("fuzz testing position_max()", {
   # Testing side effects
   # Assigning side effects
   side_effects_14577 <- xpectr::capture_side_effects(position_max(data = df, col = NULL, position = 7, shuffle_sides = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_14577[['error']]),
     xpectr::strip("'position' was higher than the number of rows in 'data'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing position_max(data = df, col = NULL, position...
@@ -1104,13 +1104,13 @@ test_that("fuzz testing position_min()", {
   # Testing side effects
   # Assigning side effects
   side_effects_14577 <- xpectr::capture_side_effects(position_min(data = df, col = NULL, position = 7, shuffle_sides = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_14577[['error']]),
     xpectr::strip("'position' was higher than the number of rows in 'data'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_14577[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing position_min(data = df, col = NULL, position...

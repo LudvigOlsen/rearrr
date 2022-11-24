@@ -605,3 +605,11 @@ is_checkmate_v2_1 <- function(){
   v <- get_pkg_version("checkmate")
   v$major == 2 && v$minor >= 1
 }
+
+is_purr_v1_or_pre1_dev <- function(){
+  v <- get_pkg_version("purrr")
+  #current dev version is called 0.9000.0.9000
+  v$major == 1 || v$major == 0 && v$minor == 9000
+}
+
+purrr_error <- ifelse(is_purr_v1_or_pre1_dev(), "rlangerror", "simpleError")

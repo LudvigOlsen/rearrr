@@ -683,13 +683,13 @@ test_that("testing to_unit_length()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19148 <- xpectr::capture_side_effects(to_unit_length(df, cols = c("x", "y"), suffix = "", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19148[['error']]),
     xpectr::strip("Adding these dimensions would overwrite existing columns: x, y."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
   ## Finished testing 'to_unit_length(df, cols = c("x", "y"), suffi...'     ####
 

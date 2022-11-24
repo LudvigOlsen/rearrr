@@ -85,7 +85,7 @@ Changes the values to :
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(1)
@@ -134,18 +134,22 @@ df <- df \%>\%
               origin_fn = NULL, origin_col_name = NULL)
 
 # Plot A and A flipped around its median
-ggplot(df, aes(x = Index, y = A)) +
-  geom_line(aes(color = "A")) +
-  geom_line(aes(y = A_flip_median, color = "Flipped A (median)")) +
-  geom_hline(aes(color = "Median A", yintercept = median(A))) +
-  theme_minimal()
+if (has_ggplot){
+  ggplot(df, aes(x = Index, y = A)) +
+    geom_line(aes(color = "A")) +
+    geom_line(aes(y = A_flip_median, color = "Flipped A (median)")) +
+    geom_hline(aes(color = "Median A", yintercept = median(A))) +
+    theme_minimal()
+}
 
 # Plot A and A flipped around the value 3
-ggplot(df, aes(x = Index, y = A)) +
-  geom_line(aes(color = "A")) +
-  geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
-  geom_hline(aes(color = "3", yintercept = 3)) +
-  theme_minimal()
+if (has_ggplot){
+  ggplot(df, aes(x = Index, y = A)) +
+    geom_line(aes(color = "A")) +
+    geom_line(aes(y = A_flip_3, color = "Flipped A (3)")) +
+    geom_hline(aes(color = "3", yintercept = 3)) +
+    theme_minimal()
+}
 }
 \seealso{
 Other mutate functions: 

@@ -1,4 +1,6 @@
 library(testthat)
 library(rearrr)
 
-test_check("rearrr")
+if (require("xpectr")) {
+  test_check("rearrr")
+}

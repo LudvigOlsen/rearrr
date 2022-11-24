@@ -1180,13 +1180,13 @@ test_that("fuzz testing roll_values()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19888 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = 20, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19888[['error']]),
     xpectr::strip("'.min' was greater than '.max'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19888[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing roll_values(data = df, cols = c("w", "d"), a...
@@ -1325,13 +1325,13 @@ test_that("fuzz testing roll_values()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19057 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = -10, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = TRUE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19057[['error']]),
     xpectr::strip("'.min' was greater than '.max'."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19057[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing roll_values(data = df, cols = c("w", "d"), a...
@@ -1882,13 +1882,13 @@ test_that("fuzz testing roll_values()", {
   # Testing side effects
   # Assigning side effects
   side_effects_13334 <- xpectr::capture_side_effects(roll_values(data = df, cols = c("w", "d"), add = 2, .min = NULL, .max = NULL, between = 0, na.rm = FALSE, suffix = "", keep_original = FALSE, range_col_name = ".range", overwrite = FALSE), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_13334[['error']]),
     xpectr::strip("Adding these dimensions would overwrite existing columns: w, d."),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_13334[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
 
   # Testing roll_values(data = df, cols = c("w", "d"), a...

@@ -166,7 +166,8 @@ test_that("fuzz testing create_n_fn()", {
   xpectr::set_test_seed(42)
 
   # We can't check function definitions when running covr::*
-  testthat::skip_if(covr::in_covr())
+  if (requireNamespace("covr", quietly = TRUE))
+    testthat::skip_if(covr::in_covr())
 
   # Create three vectors
   x <- runif(10)
@@ -838,13 +839,13 @@ test_that("testing quantile_index()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19148 <- xpectr::capture_side_effects(quantile_index(x, y, z, prob = -0.6, type = 10), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19148[['error']]),
     xpectr::strip("'probs' outside [0,1]"),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
   ## Finished testing 'quantile_index(x, y, z, prob = -0.6, type = 10)'     ####
 
@@ -855,13 +856,13 @@ test_that("testing quantile_index()", {
   # Testing side effects
   # Assigning side effects
   side_effects_19148 <- xpectr::capture_side_effects(quantile_index(x, y, z, prob = 0.6, type = 10), reset_seed = TRUE)
-  expect_equal(
+  expect_match(
     xpectr::strip(side_effects_19148[['error']]),
     xpectr::strip("object 'a' not found"),
     fixed = TRUE)
   expect_equal(
     xpectr::strip(side_effects_19148[['error_class']]),
-    xpectr::strip(c("simpleError", "error", "condition")),
+    xpectr::strip(c(purrr_error, "error", "condition")),
     fixed = TRUE)
   ## Finished testing 'quantile_index(x, y, z, prob = 0.6, type = 10)'      ####
 

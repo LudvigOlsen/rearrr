@@ -55,8 +55,7 @@ Generates \code{data.frame} (\code{tibble}) with clustered groups.
 # Attach packages
 library(rearrr)
 library(dplyr)
-library(ggplot2)
-library(plotly)
+has_ggplot <- require(ggplot2)  # Attach if installed
 
 # Set seed
 set.seed(10)
@@ -68,16 +67,18 @@ generate_clusters(num_rows = 20, num_cols = 5, num_clusters = 6, compactness = 2
 # Generate clusters and plot them
 # Tip: Call this multiple times
 # to see the behavior of `generate_clusters()`
-generate_clusters(
-  num_rows = 50, num_cols = 2,
-  num_clusters = 5, compactness = 1.6
-) \%>\%
-  ggplot(
-    aes(x = D1, y = D2, color = .cluster)
-  ) +
-  geom_point() +
-  theme_minimal() +
-  labs(x = "D1", y = "D2", color = "Cluster")
+if (has_ggplot){
+  generate_clusters(
+    num_rows = 50, num_cols = 2,
+    num_clusters = 5, compactness = 1.6
+  ) \%>\%
+    ggplot(
+      aes(x = D1, y = D2, color = .cluster)
+    ) +
+    geom_point() +
+    theme_minimal() +
+    labs(x = "D1", y = "D2", color = "Cluster")
+}
 
 #
 # Plot clusters in 3d view
