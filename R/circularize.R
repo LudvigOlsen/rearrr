@@ -25,6 +25,7 @@
 #' @family forming functions
 #' @inheritParams multi_mutator_
 #' @examples
+#' \donttest{
 #' # Attach packages
 #' library(rearrr)
 #' library(dplyr)
@@ -128,6 +129,7 @@
 #'     )) +
 #'     geom_point() +
 #'     theme_minimal()
+#' }
 #' }
 circularize <- function(data,
                         y_col = NULL,

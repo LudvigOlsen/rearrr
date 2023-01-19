@@ -1,4 +1,6 @@
 
+# rearrr 0.3.3.9000
+
 # rearrr 0.3.3
 
 * Makes tests compatible with `purrr v1.0.1`. (#2)
