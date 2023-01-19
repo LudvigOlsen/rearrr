@@ -1,6 +1,6 @@
 Package: rearrr
 Title: Rearranging Data
-Version: 0.3.3
+Version: 0.3.3.9000
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
