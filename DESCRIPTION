@@ -5,7 +5,8 @@ Authors@R:
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
              role = c("aut", "cre"),
-             email = "r-pkgs@ludvigolsen.dk"))
+             email = "r-pkgs@ludvigolsen.dk",
+             comment = c(ORCID = "0009-0006-6798-7454", Twitter = "@ludvigolsen")))
 Description: Arrange data by a set of methods. Use rearrangers to reorder
     data points and mutators to change their values. From basic utilities,
     to centering the greatest value, to swirling in 3-dimensional space,
