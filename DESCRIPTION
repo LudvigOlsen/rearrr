@@ -1,6 +1,6 @@
 Package: rearrr
 Title: Rearranging Data
-Version: 0.3.3.9000
+Version: 0.3.4
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
@@ -33,9 +33,9 @@ Suggests:
     knitr,
     testthat,
     tidyr,
-    xpectr (>= 0.4.1)
+    xpectr (>= 0.4.3)
 RdMacros: 
     lifecycle
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
