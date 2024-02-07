@@ -1,4 +1,6 @@
 
+# rearrr 0.3.4.9000
+
 # rearrr 0.3.4
 
 * Updated documentation per CRAN requirements.
