@@ -5,7 +5,7 @@
 # rearrr
 
 **Rearrrange Data**  
-**Authors:** [Ludvig R. Olsen](https://ludvigolsen.dk/) (
+**Authors:** [Ludvig R. Olsen](https://www.ludvigolsen.dk/) (
 <r-pkgs@ludvigolsen.dk> )
 <a href='https://twitter.com/ludvigolsen'><img src='man/figures/icons8-twitter.svg' height="17" /></a><br/>
 **License:** [MIT](https://opensource.org/license/mit/) <br/>
