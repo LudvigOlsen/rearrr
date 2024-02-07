@@ -181,8 +181,8 @@ plotly::plot_ly(
 Other mutate functions: 
 \code{\link{apply_transformation_matrix}()},
 \code{\link{dim_values}()},
-\code{\link{expand_distances_each}()},
 \code{\link{expand_distances}()},
+\code{\link{expand_distances_each}()},
 \code{\link{flip_values}()},
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},

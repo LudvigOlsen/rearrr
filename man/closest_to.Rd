@@ -173,8 +173,8 @@ Other rearrange functions:
 Other distance functions: 
 \code{\link{dim_values}()},
 \code{\link{distance}()},
-\code{\link{expand_distances_each}()},
 \code{\link{expand_distances}()},
+\code{\link{expand_distances_each}()},
 \code{\link{furthest_from}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}
