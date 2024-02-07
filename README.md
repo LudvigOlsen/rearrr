@@ -5,10 +5,10 @@
 # rearrr
 
 **Rearrrange Data**  
-**Authors:** [Ludvig R. Olsen](http://ludvigolsen.dk/) (
+**Authors:** [Ludvig R. Olsen](https://ludvigolsen.dk/) (
 <r-pkgs@ludvigolsen.dk> )
 <a href='https://twitter.com/ludvigolsen'><img src='man/figures/icons8-twitter.svg' height="17" /></a><br/>
-**License:** [MIT](https://opensource.org/licenses/MIT) <br/>
+**License:** [MIT](https://opensource.org/license/mit/) <br/>
 **Started:** April 2020
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/rearrr)](https://cran.r-project.org/package=rearrr)
@@ -133,41 +133,41 @@ measuring functions) are listed at the bottom of the readme.
 
 ## Table of Contents
 
--   [rearrr](#rearrr)
-    -   [Overview](#overview)
-        -   [Install](#install)
-        -   [Rearrangers](#rearrangers)
-        -   [Mutators](#mutators)
-        -   [Formers](#formers)
-        -   [Pipelines](#pipelines)
-        -   [Generators](#generators)
-    -   [Attach packages](#attach-packages)
-    -   [Rearranger examples](#rearranger-examples)
-        -   [Center min/max](#center-min/max)
-        -   [Position min/max](#position-min/max)
-        -   [Pair extremes](#pair-extremes)
-        -   [Closest to / furthest from](#closest-to-/-furthest-from)
-        -   [Reverse windows](#reverse-windows)
-        -   [Shuffle Hierarchy](#shuffle-hierarchy)
-    -   [Mutator examples](#mutator-examples)
-        -   [Rotate values](#rotate-values)
-        -   [Swirl values](#swirl-values)
-        -   [Expand distances](#expand-distances)
-        -   [Cluster groups](#cluster-groups)
-        -   [Dim values](#dim-values)
-        -   [Flip values](#flip-values)
-    -   [Forming examples](#forming-examples)
-        -   [Circularize points](#circularize-points)
-        -   [Hexagonalize points](#hexagonalize-points)
-        -   [Square points](#square-points)
-        -   [Triangularize points](#triangularize-points)
-    -   [Generators](#generators)
-        -   [Generate clusters](#generate-clusters)
-    -   [Utilities](#utilities)
-        -   [Converters](#converters)
-        -   [Scalers](#scalers)
-        -   [Measuring functions](#measuring-functions)
-        -   [Helper functions](#helper-functions)
+- [rearrr](#rearrr)
+  - [Overview](#overview)
+    - [Install](#install)
+    - [Rearrangers](#rearrangers)
+    - [Mutators](#mutators)
+    - [Formers](#formers)
+    - [Pipelines](#pipelines)
+    - [Generators](#generators)
+  - [Attach packages](#attach-packages)
+  - [Rearranger examples](#rearranger-examples)
+    - [Center min/max](#center-min/max)
+    - [Position min/max](#position-min/max)
+    - [Pair extremes](#pair-extremes)
+    - [Closest to / furthest from](#closest-to-/-furthest-from)
+    - [Reverse windows](#reverse-windows)
+    - [Shuffle Hierarchy](#shuffle-hierarchy)
+  - [Mutator examples](#mutator-examples)
+    - [Rotate values](#rotate-values)
+    - [Swirl values](#swirl-values)
+    - [Expand distances](#expand-distances)
+    - [Cluster groups](#cluster-groups)
+    - [Dim values](#dim-values)
+    - [Flip values](#flip-values)
+  - [Forming examples](#forming-examples)
+    - [Circularize points](#circularize-points)
+    - [Hexagonalize points](#hexagonalize-points)
+    - [Square points](#square-points)
+    - [Triangularize points](#triangularize-points)
+  - [Generators](#generators)
+    - [Generate clusters](#generate-clusters)
+  - [Utilities](#utilities)
+    - [Converters](#converters)
+    - [Scalers](#scalers)
+    - [Measuring functions](#measuring-functions)
+    - [Helper functions](#helper-functions)
 
 ## Attach packages
 
@@ -333,6 +333,9 @@ rotate_2d(
 
     #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
     #> ℹ Please use `linewidth` instead.
+    #> This warning is displayed once every 8 hours.
+    #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    #> generated.
 
 <img src="man/figures/README-unnamed-chunk-19-1.png" width="552" style="display: block; margin: auto;" />
 
@@ -362,21 +365,20 @@ rotate_3d(
   origin_fn = centroid
 )
 #> # A tibble: 12 × 9
-#>        x     y     z x_rotated y_rotated z_rotated .origin   .degrees  .degree…¹
-#>    <int> <dbl> <dbl>     <dbl>     <dbl>     <dbl> <list>    <list>    <chr>    
-#>  1     1     1 0.168    15.3        9.54    5.96   <dbl [3]> <dbl [3]> x=45,y=9…
-#>  2     2     2 0.808    14.3       10.2     4.96   <dbl [3]> <dbl [3]> x=45,y=9…
-#>  3     3     3 0.385    13.3        9.76    3.96   <dbl [3]> <dbl [3]> x=45,y=9…
-#>  4     4     4 0.328    12.3        9.70    2.96   <dbl [3]> <dbl [3]> x=45,y=9…
-#>  5     5     9 0.602     7.33       9.97    1.96   <dbl [3]> <dbl [3]> x=45,y=9…
-#>  6     6    10 0.604     6.33       9.98    0.962  <dbl [3]> <dbl [3]> x=45,y=9…
-#>  7     7    11 0.125     5.33       9.50   -0.0384 <dbl [3]> <dbl [3]> x=45,y=9…
-#>  8     8    12 0.295     4.33       9.67   -1.04   <dbl [3]> <dbl [3]> x=45,y=9…
-#>  9     9    15 0.578     1.33       9.95   -2.04   <dbl [3]> <dbl [3]> x=45,y=9…
-#> 10    10    16 0.631     0.333     10.0    -3.04   <dbl [3]> <dbl [3]> x=45,y=9…
-#> 11    11    17 0.512    -0.667      9.88   -4.04   <dbl [3]> <dbl [3]> x=45,y=9…
-#> 12    12    18 0.505    -1.67       9.88   -5.04   <dbl [3]> <dbl [3]> x=45,y=9…
-#> # … with abbreviated variable name ¹​.degrees_str
+#>        x     y     z x_rotated y_rotated z_rotated .origin .degrees .degrees_str
+#>    <int> <dbl> <dbl>     <dbl>     <dbl>     <dbl> <list>  <list>   <chr>       
+#>  1     1     1 0.168    15.3        9.54    5.96   <dbl>   <dbl>    x=45,y=90,z…
+#>  2     2     2 0.808    14.3       10.2     4.96   <dbl>   <dbl>    x=45,y=90,z…
+#>  3     3     3 0.385    13.3        9.76    3.96   <dbl>   <dbl>    x=45,y=90,z…
+#>  4     4     4 0.328    12.3        9.70    2.96   <dbl>   <dbl>    x=45,y=90,z…
+#>  5     5     9 0.602     7.33       9.97    1.96   <dbl>   <dbl>    x=45,y=90,z…
+#>  6     6    10 0.604     6.33       9.98    0.962  <dbl>   <dbl>    x=45,y=90,z…
+#>  7     7    11 0.125     5.33       9.50   -0.0384 <dbl>   <dbl>    x=45,y=90,z…
+#>  8     8    12 0.295     4.33       9.67   -1.04   <dbl>   <dbl>    x=45,y=90,z…
+#>  9     9    15 0.578     1.33       9.95   -2.04   <dbl>   <dbl>    x=45,y=90,z…
+#> 10    10    16 0.631     0.333     10.0    -3.04   <dbl>   <dbl>    x=45,y=90,z…
+#> 11    11    17 0.512    -0.667      9.88   -4.04   <dbl>   <dbl>    x=45,y=90,z…
+#> 12    12    18 0.505    -1.67       9.88   -5.04   <dbl>   <dbl>    x=45,y=90,z…
 ```
 
 <img src="man/figures/README-unnamed-chunk-21-1.png" width="552" style="display: block; margin: auto;" />
@@ -401,11 +403,10 @@ swirl_2d(data = rep(1, 50), radius = 95, origin = c(0, 0))
 #>  8     8     1         7.45           3.07 <dbl [2]>    15.3       95
 #>  9     9     1         8.30           3.61 <dbl [2]>    17.2       95
 #> 10    10     1         9.13           4.21 <dbl [2]>    19.0       95
-#> # … with 40 more rows
+#> # ℹ 40 more rows
 ```
 
-<div
-style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/swirl2d_patchwork_plot.png' width="630" />
 
@@ -451,11 +452,10 @@ swirl_3d(
 #>  8         8    -2.05      11.1  <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
 #>  9         9    -3.80      12.1  <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
 #> 10        10    -5.82      12.9  <dbl [3]> <dbl [3]> <dbl [3]> x=45,y=0,z=0
-#> # … with 40 more rows
+#> # ℹ 40 more rows
 ```
 
-<div
-style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/swirl3d_patchwork_plot.png' width="630" />
 
@@ -549,7 +549,7 @@ cluster_groups(
 #>  8 0.295 0.224       0.358       0.419     1
 #>  9 0.578 0.128       0.408       0.401     1
 #> 10 0.631 0.280       0.418       0.429     1
-#> # … with 40 more rows
+#> # ℹ 40 more rows
 ```
 
 <img src="man/figures/README-unnamed-chunk-31-1.png" width="552" style="display: block; margin: auto;" />
@@ -582,7 +582,7 @@ df_clustered %>%
 #>  8       0.358       0.419     1     1    0.889 <dbl [2]>
 #>  9       0.408       0.401     1     1    0.943 <dbl [2]>
 #> 10       0.418       0.429     1     1    1     <dbl [2]>
-#> # … with 40 more rows
+#> # ℹ 40 more rows
 ```
 
 <img src="man/figures/README-unnamed-chunk-33-1.png" width="552" style="display: block; margin: auto;" />
@@ -635,11 +635,10 @@ circularize(runif(200))
 #>  8 0.402     -0.484    192.  <dbl [2]>
 #>  9 0.0791     0.256    301.  <dbl [2]>
 #> 10 0.313     -0.457    203.  <dbl [2]>
-#> # … with 190 more rows
+#> # ℹ 190 more rows
 ```
 
-<div
-style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/circles_patchwork_plot.png' width="630" />
 
@@ -662,11 +661,10 @@ hexagonalize(runif(200))
 #>  8 0.543     0.413   2    
 #>  9 0.862     0.234   1    
 #> 10 0.984    -0.0222  6    
-#> # … with 190 more rows
+#> # ℹ 190 more rows
 ```
 
-<div
-style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/hexagons_patchwork_plot.png' width="630" />
 
@@ -689,11 +687,10 @@ square(runif(200))
 #>  8 0.205    0.200  2    
 #>  9 0.970    0.0297 1    
 #> 10 0.801   -0.199  4    
-#> # … with 190 more rows
+#> # ℹ 190 more rows
 ```
 
-<div
-style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/squares_patchwork_plot.png' width="630" />
 
@@ -716,11 +713,10 @@ triangularize(runif(200))
 #>  8 0.642         0.350 1    
 #>  9 0.584         0.409 1    
 #> 10 0.741         0     3    
-#> # … with 190 more rows
+#> # ℹ 190 more rows
 ```
 
-<div
-style="width: 100%; text-align: center; display: block; padding-top:20px;">
+<div style="width: 100%; text-align: center; display: block; padding-top:20px;">
 
 <img src='https://raw.githubusercontent.com/LudvigOlsen/readme_plots/master/rearrr_plots/patchwork_examples/triangles_patchwork_plot.png' width="630" />
 
@@ -750,7 +746,7 @@ generate_clusters(
 #>  8 0.273 0.592 0.559 0.0944 0.987 1       
 #>  9 0.336 0.569 0.618 0.212  0.670 1       
 #> 10 0.302 0.605 0.545 0.0601 0.938 1       
-#> # … with 40 more rows
+#> # ℹ 40 more rows
 ```
 
 <img src="man/figures/README-unnamed-chunk-46-1.png" width="552" style="display: block; margin: auto;" />
