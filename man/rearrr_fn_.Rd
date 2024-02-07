@@ -4,7 +4,15 @@
 \alias{rearrr_fn_}
 \title{Parent function for documentation inheritance}
 \usage{
-rearrr_fn_(data, origin_fn, check_fn, allowed_types, force_df, min_dims)
+rearrr_fn_(
+  data,
+  origin_fn,
+  check_fn,
+  allowed_types,
+  force_df,
+  min_dims,
+  overwrite
+)
 }
 \arguments{
 \item{data}{\code{data.frame} or \code{vector}.}

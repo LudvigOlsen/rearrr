@@ -486,7 +486,6 @@ extreme_triplet_grouping_rearranger_ <- function(data,
 #'
 #' @inheritParams rearranger_
 #' @param window_size Size of the windows. (Logical)
-#' @param keep_windows Whether to keep the factor with window identifiers. (Logical)
 #' @param factor_name Name of the factor with window identifiers.
 #'  If \code{`NULL`}, no column is added.
 #' @keywords internal

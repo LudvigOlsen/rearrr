@@ -196,8 +196,8 @@ if (has_ggplot){
 Other mutate functions: 
 \code{\link{apply_transformation_matrix}()},
 \code{\link{cluster_groups}()},
-\code{\link{expand_distances_each}()},
 \code{\link{expand_distances}()},
+\code{\link{expand_distances_each}()},
 \code{\link{flip_values}()},
 \code{\link{roll_values}()},
 \code{\link{rotate_2d}()},
@@ -210,8 +210,8 @@ Other mutate functions:
 Other distance functions: 
 \code{\link{closest_to}()},
 \code{\link{distance}()},
-\code{\link{expand_distances_each}()},
 \code{\link{expand_distances}()},
+\code{\link{expand_distances_each}()},
 \code{\link{furthest_from}()},
 \code{\link{swirl_2d}()},
 \code{\link{swirl_3d}()}

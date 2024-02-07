@@ -20,8 +20,6 @@ rev_windows_rearranger_(
 If \code{`NULL`}, no column is added.}
 
 \item{overwrite}{Whether to allow overwriting of existing columns. (Logical)}
-
-\item{keep_windows}{Whether to keep the factor with window identifiers. (Logical)}
 }
 \value{
 The sorted \code{data.frame} (\code{tibble}) / \code{vector}.
