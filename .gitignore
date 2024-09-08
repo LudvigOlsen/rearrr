@@ -43,3 +43,5 @@ inst/doc
 
 revdep/*.noindex/
 
+
+.DS_Store
