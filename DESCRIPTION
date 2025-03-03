@@ -1,12 +1,12 @@
 Package: rearrr
 Title: Rearranging Data
-Version: 0.3.4.9000
+Version: 0.3.5
 Authors@R: 
     c(person(given = "Ludvig Renbo",
              family = "Olsen",
              role = c("aut", "cre"),
              email = "r-pkgs@ludvigolsen.dk",
-             comment = c(ORCID = "0009-0006-6798-7454", Twitter = "@ludvigolsen")))
+             comment = c(ORCID = "0009-0006-6798-7454")))
 Description: Arrange data by a set of methods. Use rearrangers to reorder
     data points and mutators to change their values. From basic utilities,
     to centering the greatest value, to swirling in 3-dimensional space,
@@ -38,4 +38,4 @@ RdMacros:
     lifecycle
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

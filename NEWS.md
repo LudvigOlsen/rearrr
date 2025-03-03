@@ -1,5 +1,9 @@
 
-# rearrr 0.3.4.9000
+# rearrr 0.3.5
+
+* Replaces use of `dplyr::all_equal()` with `all.equal()`.
+
+* Fixes test of `quantile_index()`.
 
 # rearrr 0.3.4
 
