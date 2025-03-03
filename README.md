@@ -1,5 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- # rearrr <a href='https://github.com/LudvigOlsen/rearrr'><img src='man/figures/rearrr_logo_242x280_250dpi.png' align="right" height="140" /></a> -->
 
 # rearrr
@@ -8,7 +9,7 @@
 **Authors:** [Ludvig R. Olsen](https://www.ludvigolsen.dk/) (
 <r-pkgs@ludvigolsen.dk> )
 <a href='https://twitter.com/ludvigolsen'><img src='man/figures/icons8-twitter.svg' height="17" /></a><br/>
-**License:** [MIT](https://opensource.org/license/mit/) <br/>
+**License:** [MIT](https://opensource.org/license/mit) <br/>
 **Started:** April 2020
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/rearrr)](https://cran.r-project.org/package=rearrr)
@@ -66,57 +67,59 @@ Development version:
 > `devtools::install_github("LudvigOlsen/rearrr")`
 
 <!-- ## Vignettes   -->
+
 <!-- `rearrr` contains a number of vignettes with relevant use cases and descriptions:   -->
+
 <!-- > `vignette(package = "rearrr")` # for an overview    -->
 
 ### Rearrangers
 
-| Function              | Description                                                                             |
-|:----------------------|:----------------------------------------------------------------------------------------|
-| `center_max()`        | Center the highest value with values decreasing around it.                              |
-| `center_min()`        | Center the lowest value with values increasing around it.                               |
-| `position_max()`      | Position the highest value with values decreasing around it.                            |
-| `position_min()`      | Position the lowest value with values increasing around it.                             |
-| `pair_extremes()`     | Arrange as lowest, highest, 2nd lowest, 2nd highest, etc.                               |
-| `triplet_extremes()`  | Arrange as lowest, most middle, highest, 2nd lowest, 2nd most middle, 2nd highest, etc. |
-| `closest_to()`        | Order values by shortest distance to an origin.                                         |
-| `furthest_from()`     | Order values by longest distance to an origin.                                          |
-| `rev_windows()`       | Reverse order window-wise.                                                              |
-| `roll_elements()`     | Rolls/shifts positions of elements.                                                     |
-| `shuffle_hierarchy()` | Shuffle multi-column hierarchy of groups.                                               |
+| Function | Description |
+|:---|:---|
+| `center_max()` | Center the highest value with values decreasing around it. |
+| `center_min()` | Center the lowest value with values increasing around it. |
+| `position_max()` | Position the highest value with values decreasing around it. |
+| `position_min()` | Position the lowest value with values increasing around it. |
+| `pair_extremes()` | Arrange as lowest, highest, 2nd lowest, 2nd highest, etc. |
+| `triplet_extremes()` | Arrange as lowest, most middle, highest, 2nd lowest, 2nd most middle, 2nd highest, etc. |
+| `closest_to()` | Order values by shortest distance to an origin. |
+| `furthest_from()` | Order values by longest distance to an origin. |
+| `rev_windows()` | Reverse order window-wise. |
+| `roll_elements()` | Rolls/shifts positions of elements. |
+| `shuffle_hierarchy()` | Shuffle multi-column hierarchy of groups. |
 
 ### Mutators
 
-| Function                        | Description                                                           | Dimensions   |
-|:--------------------------------|:----------------------------------------------------------------------|:-------------|
-| `rotate_2d()`, `rotate_3d()`    | Rotate values around an origin in 2 or 3 dimensions.                  | 2 or 3       |
-| `swirl_2d()`, `swirl_3d()`      | Swirl values around an origin in 2 or 3 dimensions.                   | 2 or 3       |
-| `shear_2d()`, `shear_3d()`      | Shear values around an origin in 2 or 3 dimensions.                   | 2 or 3       |
-| `expand_distances()`            | Expand distances to an origin.                                        | n            |
-| `expand_distances_each()`       | Expand distances to an origin separately for each dimension.          | n            |
-| `cluster_groups()`              | Move data points into clusters around group centroids.                | n            |
-| `dim_values()`                  | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
-| `flip_values()`                 | Flip the values around an origin.                                     | n            |
-| `roll_values()`                 | Shifts values and wraps to a range.                                   | n            |
-| `wrap_to_range()`               | Wraps values to a range.                                              | n            |
-| `transfer_centroids()`          | Transfer centroids from one `data.frame` to another.                  | n            |
-| `apply_transformation_matrix()` | Apply transformation `matrix` to `data.frame` columns.                | n            |
+| Function | Description | Dimensions |
+|:---|:---|:---|
+| `rotate_2d()`, `rotate_3d()` | Rotate values around an origin in 2 or 3 dimensions. | 2 or 3 |
+| `swirl_2d()`, `swirl_3d()` | Swirl values around an origin in 2 or 3 dimensions. | 2 or 3 |
+| `shear_2d()`, `shear_3d()` | Shear values around an origin in 2 or 3 dimensions. | 2 or 3 |
+| `expand_distances()` | Expand distances to an origin. | n |
+| `expand_distances_each()` | Expand distances to an origin separately for each dimension. | n |
+| `cluster_groups()` | Move data points into clusters around group centroids. | n |
+| `dim_values()` | Dim values of a dimension by the distance to an n-dimensional origin. | n (alters 1) |
+| `flip_values()` | Flip the values around an origin. | n |
+| `roll_values()` | Shifts values and wraps to a range. | n |
+| `wrap_to_range()` | Wraps values to a range. | n |
+| `transfer_centroids()` | Transfer centroids from one `data.frame` to another. | n |
+| `apply_transformation_matrix()` | Apply transformation `matrix` to `data.frame` columns. | n |
 
 ### Formers
 
-| Function          | Description                                                     |
-|:------------------|:----------------------------------------------------------------|
-| `circularize()`   | Create x-coordinates for y-coordinates so they form a circle.   |
-| `hexagonalize()`  | Create x-coordinates for y-coordinates so they form a hexagon.  |
-| `square()`        | Create x-coordinates for y-coordinates so they form a square.   |
+| Function | Description |
+|:---|:---|
+| `circularize()` | Create x-coordinates for y-coordinates so they form a circle. |
+| `hexagonalize()` | Create x-coordinates for y-coordinates so they form a hexagon. |
+| `square()` | Create x-coordinates for y-coordinates so they form a square. |
 | `triangularize()` | Create x-coordinates for y-coordinates so they form a triangle. |
 
 ### Pipelines
 
-| Class                 | Description                                                              |
-|:----------------------|:-------------------------------------------------------------------------|
-| `Pipeline`            | Chain multiple transformations.                                          |
-| `GeneratedPipeline`   | Chain multiple transformations and generate argument values per group.   |
+| Class | Description |
+|:---|:---|
+| `Pipeline` | Chain multiple transformations. |
+| `GeneratedPipeline` | Chain multiple transformations and generate argument values per group. |
 | `FixedGroupsPipeline` | Chain multiple transformations with different argument values per group. |
 
 ### Generators
@@ -762,28 +765,28 @@ generate_clusters(
 
 ### Scalers
 
-| Function           | Description                                               |
-|:-------------------|:----------------------------------------------------------|
-| `min_max_scale()`  | Scale values to a range.                                  |
+| Function | Description |
+|:---|:---|
+| `min_max_scale()` | Scale values to a range. |
 | `to_unit_length()` | Scale vectors to unit length *row-wise* or *column-wise*. |
 
 ### Measuring functions
 
-| Function          | Description                                                     |
-|:------------------|:----------------------------------------------------------------|
-| `distance()`      | Calculates distance to an origin.                               |
-| `angle()`         | Calculates angle between points and an origin.                  |
+| Function | Description |
+|:---|:---|
+| `distance()` | Calculates distance to an origin. |
+| `angle()` | Calculates angle between points and an origin. |
 | `vector_length()` | Calculates vector length/magnitude *row-wise* or *column-wise*. |
 
 ### Helper functions
 
-| Function             | Description                                                          |
-|:---------------------|:---------------------------------------------------------------------|
+| Function | Description |
+|:---|:---|
 | `create_origin_fn()` | Creates function for finding origin coordinates (like `centroid()`). |
-| `centroid()`         | Calculates the mean of each supplied vector/column.                  |
-| `most_centered()`    | Finds coordinates of data point closest to the centroid.             |
-| `is_most_centered()` | Indicates whether a data point is the most centered.                 |
-| `midrange()`         | Calculates the midrange of each supplied vector/column.              |
-| `create_n_fn()`      | Creates function for finding the number of positions to move.        |
-| `median_index()`     | Calculates median index of each supplied vector.                     |
-| `quantile_index()`   | Calculates quantile of indices for each supplied vector.             |
+| `centroid()` | Calculates the mean of each supplied vector/column. |
+| `most_centered()` | Finds coordinates of data point closest to the centroid. |
+| `is_most_centered()` | Indicates whether a data point is the most centered. |
+| `midrange()` | Calculates the midrange of each supplied vector/column. |
+| `create_n_fn()` | Creates function for finding the number of positions to move. |
+| `median_index()` | Calculates median index of each supplied vector. |
+| `quantile_index()` | Calculates quantile of indices for each supplied vector. |
