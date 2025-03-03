@@ -151,7 +151,7 @@ transfer_centroids <- function(to_data,
 
   # Make sure the group columns are the same in
   # both summaries
-  if (!dplyr::all_equal(
+  if (!all.equal(
     as.data.frame(from_group_columns, stringsAsFactors = FALSE),
     as.data.frame(to_group_columns, stringsAsFactors = FALSE),
     ignore_row_order = FALSE
