@@ -13,11 +13,16 @@ apply_coordinate_fn_ <- function(dim_vectors,
                                  dim_var_name,
                                  grp_id,
                                  allow_len_one = FALSE,
+                                 allow_non_numerics = FALSE,
                                  extra_args = NULL) {
 
   # Check arguments ####
   assert_collection <- checkmate::makeAssertCollection()
-  checkmate::assert_list(dim_vectors, types = "numeric", any.missing = FALSE, min.len = 1, add = assert_collection)
+  if (isTRUE(allow_non_numerics)){
+    checkmate::assert_list(dim_vectors, any.missing = FALSE, min.len = 1, add = assert_collection)
+  } else {
+    checkmate::assert_list(dim_vectors, types = "numeric", any.missing = FALSE, min.len = 1, add = assert_collection)
+  }
   checkmate::assert_numeric(coordinates, any.missing = FALSE, null.ok = TRUE, min.len = 1, add = assert_collection)
   checkmate::assert_function(fn, null.ok = TRUE, add = assert_collection)
   checkmate::assert_number(num_dims, lower = 1, add = assert_collection)

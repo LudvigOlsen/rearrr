@@ -231,6 +231,7 @@ roll_elements_rearranger_method_ <- function(data,
     dim_var_name = "cols",
     grp_id = grp_id,
     allow_len_one = TRUE,
+    allow_non_numerics = TRUE,
     extra_args = n_fn_args
   )
 

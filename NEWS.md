@@ -1,4 +1,8 @@
 
+# rearrr 0.3.5.9000
+
+* Fix: `roll_elements()` now works on non-numeric vectors/columns.
+
 # rearrr 0.3.5
 
 * Replaces use of `dplyr::all_equal()` with `all.equal()`.
